@@ -1,0 +1,17 @@
+#eclipse
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+.classpath
+.settings
+/bin/
+/target/
+
+#other
+*~
