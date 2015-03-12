@@ -1,29 +1,16 @@
 package main.java;
 
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.mllib.linalg.Vector;
-
 /**
  * 
- * A dummy implementation of a Layer. Just passes the data through.
+ * A dummy implementation of a Layer. Just passes the data through, using Dummy(Learner,Extractor,Pooler).
  *
+ * @author Arttu Voutilainen
+ * 
  */
-public class DummyLayer implements DeepLearningLayer {
+public class DummyLayer extends BaseLayer {
 
-	@Override
-	public JavaRDD<Vector> learnFeatures(JavaRDD<Vector> data) {
-		return data;
-	}
-
-	@Override
-	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data,
-			JavaRDD<Vector> features) {
-		return data;
-	}
-
-	@Override
-	public JavaRDD<Vector> pool(JavaRDD<Vector> data) {
-		return data;
+	public DummyLayer() {
+		super(new DummyLearner(), new DummyExtractor(), new DummyPooler());
 	}
 
 }

@@ -5,8 +5,12 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.Vector;
 
+/**
+ * Main class.
+ * 
+ */
 public class DeepLearningMain {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
     	JavaSparkContext sc = new JavaSparkContext(conf);
     	String inputFile = args[0];
@@ -15,7 +19,7 @@ public class DeepLearningMain {
 		
 		// The main loop could loop over this kind of stuff (and handle the saving of features and so on)
 		DeepLearningLayer layer1 = new DummyLayer();
-		JavaRDD<Vector> features = layer1.learnFeatures(data);
+		Vector[] features = layer1.learnFeatures(data);
 		JavaRDD<Vector> represent = layer1.extractFeatures(data, features);
 		JavaRDD<Vector> pooled = layer1.pool(represent);
 		
