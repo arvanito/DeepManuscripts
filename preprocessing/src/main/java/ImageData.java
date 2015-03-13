@@ -1,7 +1,5 @@
 package main.java;
 
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.input.PortableDataStream;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.highgui.Highgui;
@@ -71,7 +69,7 @@ public class ImageData implements Serializable {
      */
     public void decompress() {
         if (state == ImageDataState.COMPRESSED) {
-            image = Highgui.imdecode(new MatOfByte(compressed_img), Highgui.IMREAD_GRAYSCALE);
+            image = Highgui.imdecode(compressed_img, Highgui.IMREAD_GRAYSCALE);
             state = ImageDataState.UNCOMPRESSED;
         }
     }
