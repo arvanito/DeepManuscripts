@@ -6,7 +6,7 @@ import org.apache.spark.mllib.linalg.Vector;
 /**
  * 
  * A base implementation of a Layer. The constructor is given instances of the three classes,
- * Learner, Extractor and Pooler. For feature extraction, we use the 'call'-function of the Pooler class,
+ * Learner, Extractor and Pooler. For feature learning, we use the 'call'-function of the Learner class,
  * and for feature extraction and pooling we map the data through the respective classes.  
  * 
  * @author Arttu Voutilainen
