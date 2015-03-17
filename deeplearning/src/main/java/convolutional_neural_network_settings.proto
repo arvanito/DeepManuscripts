@@ -1,43 +1,33 @@
 syntax="proto2";
-//#  learning_rate=0.1, 
-//#  n_epochs=2,
-//#  dataset='mnist.pkl.gz',
-//#  batch_size=50
-//#  poolsize 2 x 2
-//#  Layer1 conv
-//#     20, 5x5
-//#  Layer2 conv
-//#     50, 5x5
-//#  Layer3 full
-//#     500 tanh
-//#  Layer4 full - last
-//#     10 
-//# Cost negative log likelihood
 
-message ConvolutionalLayer {
-       required int32 num_filters = 1;
-       required int32 filter_w = 2;
-       optional int32 rank = 3;
-}
-message HiddenLayer {
-       required int32 num_outputs = 1;
-  //      # make this an enum
-       required string activation_function = 2;
-}
-message LastLayer {
-        required int32 num_outputs = 1;
-        required string activation_function = 2;
-}    
-message CNNSettings {
-    optional float learning_rate = 1;
-    optional int32 n_epochs = 2;
-    required string dataset = 3;
-    optional int32 batch_size = 4;
-    optional int32 poolsize = 5;
-   
-    repeated ConvolutionalLayer conv_layer = 6;
-    repeated HiddenLayer hidden_layer = 7;
-    required LastLayer last_layer = 8;
-    required string cost_function = 9;
+message KMeans {
+        required int32 number_of_clusters = 1;
+} 
 
+message Autoencoders {
+        required int32 number_of_units = 1;
+}
+
+message FeatureExtractionLayer {
+  required int32 num_outputs = 1;
+}
+
+message PoolLayer {
+  required int32 pool_size = 1;
+  enum PoolType {
+    MAX = 0;
+    AVERAGE = 1;
+  }
+  optional PoolType pool_type = 2 [default = MAX];
+}
+
+message BaseLayer {
+  optional KMeans kmeans_layer = 1;
+  optional Autoencoders autoencoders_layer = 2;
+  required FeatureExtractionLayer feature_extraction_layer = 3;
+  required PoolLayer pool_layer = 4;
+}   
+
+message ManuscriptsConfig {
+    repeated BaseLayer base_layer = 1;
 }

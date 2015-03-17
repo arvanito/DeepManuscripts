@@ -12,28 +12,24 @@ import org.apache.spark.mllib.linalg.Vector;
 
 import com.google.protobuf.TextFormat;
 
-import main.java.ConvolutionalNeuralNetworkSettings.CNNSettings;
-import main.java.ConvolutionalNeuralNetworkSettings.ConvolutionalLayer;
+import main.java.ConvolutionalNeuralNetworkSettings.ManuscriptsConfig;
+import main.java.ConvolutionalNeuralNetworkSettings.BaseLayer;
 
 public class DeepLearningMain {
 	public static void loadSettings(String prototxt_file) {
 		// TODO return the settings structure
 		try {
-			CNNSettings.Builder builder = CNNSettings.newBuilder();
+			ManuscriptsConfig.Builder builder = ManuscriptsConfig.newBuilder();
 			//BufferedReader reader = new BufferedReader(new FileReader(prototxt_file));
 			FileInputStream fs = new FileInputStream(prototxt_file);
 			InputStreamReader reader = new InputStreamReader(fs);
 			TextFormat.merge(reader, builder);
 			
 			// Settings file created
-			CNNSettings settings = builder.build();
-			if (settings.hasLearningRate()) {
-				System.out.printf("learning rate is %f\n", settings.getLearningRate());
-			}
-			System.out.printf("nbr conv layers %d\n", settings.getConvLayerCount());
-			for (ConvolutionalLayer convlayer: settings.getConvLayerList()) {
-				System.out.printf("Num filters %d, Filter size %d\n", 
-						convlayer.getNumFilters(), convlayer.getFilterW());
+			ManuscriptsConfig settings = builder.build();
+			System.out.printf("# base layers is %d\n", settings.getBaseLayerCount());
+			
+			for (BaseLayer blayer: settings.getBaseLayerList()) {
 			}
 			
 			reader.close();
