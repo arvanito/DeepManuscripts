@@ -11,4 +11,12 @@ import org.apache.spark.mllib.linalg.Vector;
  */
 public interface Pooler extends Function<Vector,Vector>{
 
+	/**
+	 * Main method that implements pooling and non-linear activation.
+	 * This method will be passed to a map call and applied independently to each data point.
+	 * 
+	 * @param data A Vector representing one data point
+	 * @return A Vector after applying pooling and non-linear activation
+	**/
+	public Vector call(Vector data) throws Exception;
 }
