@@ -9,7 +9,16 @@ message Autoencoders {
 }
 
 message FeatureExtractionLayer {
-  required int32 num_outputs = 1;
+  // FeatureExtractor needs to know the dimensions of the input and feature matrices, as it only gets vectors.
+  // If input and feature dimensions match, we do a matrix multiply extraction.
+  // If feature dimensions <= input dimensions (and one is strictly smaller) we do convolution
+  // Else we throw some exception.
+  // The output dimensions (dimensions of the matrices that are appended into the result vector)
+  // can be calculated from the input dimensions.
+  required int32 input_dim1 = 1;
+  required int32 input_dim2 = 2;
+  required int32 feature_dim1 = 3;
+  required int32 feature_dim2 = 4;
 }
 
 message PoolLayer {
