@@ -39,4 +39,12 @@ public class BaseLayer implements DeepLearningLayer {
 		return data.map(pool);
 	}
 
+    @Override
+	public JavaRDD<Vector> execute(JavaRDD<Vector> data) throws Exception {
+		Vector[] features = learnFeatures(data);
+		JavaRDD<Vector> represent = extractFeatures(data, features);
+		JavaRDD<Vector> pooled = pool(represent);
+		return pooled;
+	}
+
 }

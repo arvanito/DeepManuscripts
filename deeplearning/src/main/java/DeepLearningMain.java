@@ -56,13 +56,11 @@ public class DeepLearningMain {
     	String outputFile = args[1];
 		JavaRDD<Vector> data = sc.textFile(inputFile).map(new Parse());
 		
-		// The main loop could loop over this kind of stuff (and handle the saving of features and so on)
+		// The main loop calls execute() on each of the layers
 		DeepLearningLayer layer1 = new DummyLayer();
-		Vector[] features = layer1.learnFeatures(data);
-		JavaRDD<Vector> represent = layer1.extractFeatures(data, features);
-		JavaRDD<Vector> pooled = layer1.pool(represent);
+		JavaRDD<Vector> result = layer1.execute(data);
+		result.saveAsTextFile(outputFile);
 		
-		pooled.saveAsTextFile(outputFile);
 		sc.close();
 	}
 }
