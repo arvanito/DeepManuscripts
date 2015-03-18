@@ -31,12 +31,21 @@ public class BaseLayer implements DeepLearningLayer {
 
 	@Override
 	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, Vector[] features) {
+		extract.setFeatures(features);
 		return data.map(extract);
 	}
 
 	@Override
 	public JavaRDD<Vector> pool(JavaRDD<Vector> data) {
 		return data.map(pool);
+	}
+
+    @Override
+	public JavaRDD<Vector> execute(JavaRDD<Vector> data) throws Exception {
+		Vector[] features = learnFeatures(data);
+		JavaRDD<Vector> represent = extractFeatures(data, features);
+		JavaRDD<Vector> pooled = pool(represent);
+		return pooled;
 	}
 
 }

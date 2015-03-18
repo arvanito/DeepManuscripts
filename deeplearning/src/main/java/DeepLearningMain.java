@@ -10,15 +10,15 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.Vector;
 
-/**
- * Main class.
- * 
- */
 import com.google.protobuf.TextFormat;
 
 import main.java.DeepModelSettings.ManuscriptsConfig;
 import main.java.DeepModelSettings.BaseLayer;
 
+/**
+ * Main class.
+ * 
+ */
 public class DeepLearningMain {
 	public static void loadSettings(String prototxt_file) {
 		// TODO return the settings structure
@@ -56,13 +56,11 @@ public class DeepLearningMain {
     	String outputFile = args[1];
 		JavaRDD<Vector> data = sc.textFile(inputFile).map(new Parse());
 		
-		// The main loop could loop over this kind of stuff (and handle the saving of features and so on)
+		// The main loop calls execute() on each of the layers
 		DeepLearningLayer layer1 = new DummyLayer();
-		Vector[] features = layer1.learnFeatures(data);
-		JavaRDD<Vector> represent = layer1.extractFeatures(data, features);
-		JavaRDD<Vector> pooled = layer1.pool(represent);
+		JavaRDD<Vector> result = layer1.execute(data);
+		result.saveAsTextFile(outputFile);
 		
-		pooled.saveAsTextFile(outputFile);
 		sc.close();
 	}
 }

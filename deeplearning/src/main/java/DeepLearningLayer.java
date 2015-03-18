@@ -39,4 +39,13 @@ public interface DeepLearningLayer {
 	 * @return An RDD of the pooled Vectors
 	 */
 	public JavaRDD<Vector> pool(JavaRDD<Vector> data);
+
+     /**
+	 * Execute all of this layer for the given data.
+	 *
+	 * @param data An RDD containing the original data
+	 * @return An RDD containing a new representation of the data
+	 * @throws Exception
+	 */
+	public JavaRDD<Vector> execute(JavaRDD<Vector> data) throws Exception;
 }

@@ -11,6 +11,12 @@ import org.apache.spark.mllib.linalg.Vector;
  */
 public interface Extractor extends Function<Vector, Vector> {
 
+	/**
+	 * Set features to be used by this extractor.
+	 *
+	 * @param features The features this extractor will use
+	 */
+	public void setFeatures(Vector[] features);
 
 	/**
 	 * Main method that is called by passing it to a map call. 
