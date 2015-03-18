@@ -1,14 +1,14 @@
 syntax="proto2";
 
-message KMeans {
+message ConfigKMeans {
         required int32 number_of_clusters = 1;
 } 
 
-message Autoencoders {
+message ConfigAutoencoders {
         required int32 number_of_units = 1;
 }
 
-message FeatureExtractionLayer {
+message ConfigFeatureExtractor {
   // FeatureExtractor needs to know the dimensions of the input and feature matrices, as it only gets vectors.
   // If input and feature dimensions match, we do a matrix multiply extraction.
   // If feature dimensions <= input dimensions (and one is strictly smaller) we do convolution
@@ -21,7 +21,7 @@ message FeatureExtractionLayer {
   required int32 feature_dim2 = 4;
 }
 
-message PoolLayer {
+message ConfigPooler {
   required int32 pool_size = 1;
   enum PoolType {
     MAX = 0;
@@ -30,13 +30,13 @@ message PoolLayer {
   optional PoolType pool_type = 2 [default = MAX];
 }
 
-message BaseLayer {
-  optional KMeans kmeans_layer = 1;
-  optional Autoencoders autoencoders_layer = 2;
-  required FeatureExtractionLayer feature_extraction_layer = 3;
-  required PoolLayer pool_layer = 4;
+message ConfigBaseLayer {
+  optional ConfigKMeans config_kmeans = 1;
+  optional ConfigAutoencoders config_autoencoders = 2;
+  required ConfigFeatureExtractor config_feature_extractor = 3;
+  required ConfigPooler config_pooler = 4;
 }   
 
-message ManuscriptsConfig {
-    repeated BaseLayer base_layer = 1;
+message ConfigManuscripts {
+    repeated ConfigBaseLayer config_layer = 1;
 }

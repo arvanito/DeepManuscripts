@@ -7,8 +7,8 @@ public final class DeepModelSettings {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface KMeansOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:KMeans)
+  public interface ConfigKMeansOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:ConfigKMeans)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -21,25 +21,25 @@ public final class DeepModelSettings {
     int getNumberOfClusters();
   }
   /**
-   * Protobuf type {@code KMeans}
+   * Protobuf type {@code ConfigKMeans}
    */
-  public static final class KMeans extends
+  public static final class ConfigKMeans extends
       com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:KMeans)
-      KMeansOrBuilder {
-    // Use KMeans.newBuilder() to construct.
-    private KMeans(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:ConfigKMeans)
+      ConfigKMeansOrBuilder {
+    // Use ConfigKMeans.newBuilder() to construct.
+    private ConfigKMeans(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private KMeans(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private ConfigKMeans(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final KMeans defaultInstance;
-    public static KMeans getDefaultInstance() {
+    private static final ConfigKMeans defaultInstance;
+    public static ConfigKMeans getDefaultInstance() {
       return defaultInstance;
     }
 
-    public KMeans getDefaultInstanceForType() {
+    public ConfigKMeans getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -49,7 +49,7 @@ public final class DeepModelSettings {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private KMeans(
+    private ConfigKMeans(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -91,28 +91,28 @@ public final class DeepModelSettings {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return DeepModelSettings.internal_static_KMeans_descriptor;
+      return DeepModelSettings.internal_static_ConfigKMeans_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return DeepModelSettings.internal_static_KMeans_fieldAccessorTable
+      return DeepModelSettings.internal_static_ConfigKMeans_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              DeepModelSettings.KMeans.class, DeepModelSettings.KMeans.Builder.class);
+              DeepModelSettings.ConfigKMeans.class, DeepModelSettings.ConfigKMeans.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<KMeans> PARSER =
-        new com.google.protobuf.AbstractParser<KMeans>() {
-      public KMeans parsePartialFrom(
+    public static com.google.protobuf.Parser<ConfigKMeans> PARSER =
+        new com.google.protobuf.AbstractParser<ConfigKMeans>() {
+      public ConfigKMeans parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new KMeans(input, extensionRegistry);
+        return new ConfigKMeans(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<KMeans> getParserForType() {
+    public com.google.protobuf.Parser<ConfigKMeans> getParserForType() {
       return PARSER;
     }
 
@@ -180,53 +180,53 @@ public final class DeepModelSettings {
       return super.writeReplace();
     }
 
-    public static DeepModelSettings.KMeans parseFrom(
+    public static DeepModelSettings.ConfigKMeans parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static DeepModelSettings.KMeans parseFrom(
+    public static DeepModelSettings.ConfigKMeans parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static DeepModelSettings.KMeans parseFrom(byte[] data)
+    public static DeepModelSettings.ConfigKMeans parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static DeepModelSettings.KMeans parseFrom(
+    public static DeepModelSettings.ConfigKMeans parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static DeepModelSettings.KMeans parseFrom(java.io.InputStream input)
+    public static DeepModelSettings.ConfigKMeans parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static DeepModelSettings.KMeans parseFrom(
+    public static DeepModelSettings.ConfigKMeans parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static DeepModelSettings.KMeans parseDelimitedFrom(java.io.InputStream input)
+    public static DeepModelSettings.ConfigKMeans parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static DeepModelSettings.KMeans parseDelimitedFrom(
+    public static DeepModelSettings.ConfigKMeans parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static DeepModelSettings.KMeans parseFrom(
+    public static DeepModelSettings.ConfigKMeans parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static DeepModelSettings.KMeans parseFrom(
+    public static DeepModelSettings.ConfigKMeans parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -235,7 +235,7 @@ public final class DeepModelSettings {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(DeepModelSettings.KMeans prototype) {
+    public static Builder newBuilder(DeepModelSettings.ConfigKMeans prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -247,25 +247,25 @@ public final class DeepModelSettings {
       return builder;
     }
     /**
-     * Protobuf type {@code KMeans}
+     * Protobuf type {@code ConfigKMeans}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:KMeans)
-        DeepModelSettings.KMeansOrBuilder {
+        // @@protoc_insertion_point(builder_implements:ConfigKMeans)
+        DeepModelSettings.ConfigKMeansOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return DeepModelSettings.internal_static_KMeans_descriptor;
+        return DeepModelSettings.internal_static_ConfigKMeans_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return DeepModelSettings.internal_static_KMeans_fieldAccessorTable
+        return DeepModelSettings.internal_static_ConfigKMeans_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                DeepModelSettings.KMeans.class, DeepModelSettings.KMeans.Builder.class);
+                DeepModelSettings.ConfigKMeans.class, DeepModelSettings.ConfigKMeans.Builder.class);
       }
 
-      // Construct using DeepModelSettings.KMeans.newBuilder()
+      // Construct using DeepModelSettings.ConfigKMeans.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -296,23 +296,23 @@ public final class DeepModelSettings {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return DeepModelSettings.internal_static_KMeans_descriptor;
+        return DeepModelSettings.internal_static_ConfigKMeans_descriptor;
       }
 
-      public DeepModelSettings.KMeans getDefaultInstanceForType() {
-        return DeepModelSettings.KMeans.getDefaultInstance();
+      public DeepModelSettings.ConfigKMeans getDefaultInstanceForType() {
+        return DeepModelSettings.ConfigKMeans.getDefaultInstance();
       }
 
-      public DeepModelSettings.KMeans build() {
-        DeepModelSettings.KMeans result = buildPartial();
+      public DeepModelSettings.ConfigKMeans build() {
+        DeepModelSettings.ConfigKMeans result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public DeepModelSettings.KMeans buildPartial() {
-        DeepModelSettings.KMeans result = new DeepModelSettings.KMeans(this);
+      public DeepModelSettings.ConfigKMeans buildPartial() {
+        DeepModelSettings.ConfigKMeans result = new DeepModelSettings.ConfigKMeans(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -325,16 +325,16 @@ public final class DeepModelSettings {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof DeepModelSettings.KMeans) {
-          return mergeFrom((DeepModelSettings.KMeans)other);
+        if (other instanceof DeepModelSettings.ConfigKMeans) {
+          return mergeFrom((DeepModelSettings.ConfigKMeans)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(DeepModelSettings.KMeans other) {
-        if (other == DeepModelSettings.KMeans.getDefaultInstance()) return this;
+      public Builder mergeFrom(DeepModelSettings.ConfigKMeans other) {
+        if (other == DeepModelSettings.ConfigKMeans.getDefaultInstance()) return this;
         if (other.hasNumberOfClusters()) {
           setNumberOfClusters(other.getNumberOfClusters());
         }
@@ -354,11 +354,11 @@ public final class DeepModelSettings {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        DeepModelSettings.KMeans parsedMessage = null;
+        DeepModelSettings.ConfigKMeans parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (DeepModelSettings.KMeans) e.getUnfinishedMessage();
+          parsedMessage = (DeepModelSettings.ConfigKMeans) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -401,19 +401,19 @@ public final class DeepModelSettings {
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:KMeans)
+      // @@protoc_insertion_point(builder_scope:ConfigKMeans)
     }
 
     static {
-      defaultInstance = new KMeans(true);
+      defaultInstance = new ConfigKMeans(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:KMeans)
+    // @@protoc_insertion_point(class_scope:ConfigKMeans)
   }
 
-  public interface AutoencodersOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:Autoencoders)
+  public interface ConfigAutoencodersOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:ConfigAutoencoders)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -426,25 +426,25 @@ public final class DeepModelSettings {
     int getNumberOfUnits();
   }
   /**
-   * Protobuf type {@code Autoencoders}
+   * Protobuf type {@code ConfigAutoencoders}
    */
-  public static final class Autoencoders extends
+  public static final class ConfigAutoencoders extends
       com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:Autoencoders)
-      AutoencodersOrBuilder {
-    // Use Autoencoders.newBuilder() to construct.
-    private Autoencoders(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:ConfigAutoencoders)
+      ConfigAutoencodersOrBuilder {
+    // Use ConfigAutoencoders.newBuilder() to construct.
+    private ConfigAutoencoders(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private Autoencoders(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private ConfigAutoencoders(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final Autoencoders defaultInstance;
-    public static Autoencoders getDefaultInstance() {
+    private static final ConfigAutoencoders defaultInstance;
+    public static ConfigAutoencoders getDefaultInstance() {
       return defaultInstance;
     }
 
-    public Autoencoders getDefaultInstanceForType() {
+    public ConfigAutoencoders getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -454,7 +454,7 @@ public final class DeepModelSettings {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private Autoencoders(
+    private ConfigAutoencoders(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -496,28 +496,28 @@ public final class DeepModelSettings {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return DeepModelSettings.internal_static_Autoencoders_descriptor;
+      return DeepModelSettings.internal_static_ConfigAutoencoders_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return DeepModelSettings.internal_static_Autoencoders_fieldAccessorTable
+      return DeepModelSettings.internal_static_ConfigAutoencoders_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              DeepModelSettings.Autoencoders.class, DeepModelSettings.Autoencoders.Builder.class);
+              DeepModelSettings.ConfigAutoencoders.class, DeepModelSettings.ConfigAutoencoders.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<Autoencoders> PARSER =
-        new com.google.protobuf.AbstractParser<Autoencoders>() {
-      public Autoencoders parsePartialFrom(
+    public static com.google.protobuf.Parser<ConfigAutoencoders> PARSER =
+        new com.google.protobuf.AbstractParser<ConfigAutoencoders>() {
+      public ConfigAutoencoders parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Autoencoders(input, extensionRegistry);
+        return new ConfigAutoencoders(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<Autoencoders> getParserForType() {
+    public com.google.protobuf.Parser<ConfigAutoencoders> getParserForType() {
       return PARSER;
     }
 
@@ -585,53 +585,53 @@ public final class DeepModelSettings {
       return super.writeReplace();
     }
 
-    public static DeepModelSettings.Autoencoders parseFrom(
+    public static DeepModelSettings.ConfigAutoencoders parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static DeepModelSettings.Autoencoders parseFrom(
+    public static DeepModelSettings.ConfigAutoencoders parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static DeepModelSettings.Autoencoders parseFrom(byte[] data)
+    public static DeepModelSettings.ConfigAutoencoders parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static DeepModelSettings.Autoencoders parseFrom(
+    public static DeepModelSettings.ConfigAutoencoders parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static DeepModelSettings.Autoencoders parseFrom(java.io.InputStream input)
+    public static DeepModelSettings.ConfigAutoencoders parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static DeepModelSettings.Autoencoders parseFrom(
+    public static DeepModelSettings.ConfigAutoencoders parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static DeepModelSettings.Autoencoders parseDelimitedFrom(java.io.InputStream input)
+    public static DeepModelSettings.ConfigAutoencoders parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static DeepModelSettings.Autoencoders parseDelimitedFrom(
+    public static DeepModelSettings.ConfigAutoencoders parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static DeepModelSettings.Autoencoders parseFrom(
+    public static DeepModelSettings.ConfigAutoencoders parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static DeepModelSettings.Autoencoders parseFrom(
+    public static DeepModelSettings.ConfigAutoencoders parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -640,7 +640,7 @@ public final class DeepModelSettings {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(DeepModelSettings.Autoencoders prototype) {
+    public static Builder newBuilder(DeepModelSettings.ConfigAutoencoders prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -652,25 +652,25 @@ public final class DeepModelSettings {
       return builder;
     }
     /**
-     * Protobuf type {@code Autoencoders}
+     * Protobuf type {@code ConfigAutoencoders}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:Autoencoders)
-        DeepModelSettings.AutoencodersOrBuilder {
+        // @@protoc_insertion_point(builder_implements:ConfigAutoencoders)
+        DeepModelSettings.ConfigAutoencodersOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return DeepModelSettings.internal_static_Autoencoders_descriptor;
+        return DeepModelSettings.internal_static_ConfigAutoencoders_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return DeepModelSettings.internal_static_Autoencoders_fieldAccessorTable
+        return DeepModelSettings.internal_static_ConfigAutoencoders_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                DeepModelSettings.Autoencoders.class, DeepModelSettings.Autoencoders.Builder.class);
+                DeepModelSettings.ConfigAutoencoders.class, DeepModelSettings.ConfigAutoencoders.Builder.class);
       }
 
-      // Construct using DeepModelSettings.Autoencoders.newBuilder()
+      // Construct using DeepModelSettings.ConfigAutoencoders.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -701,23 +701,23 @@ public final class DeepModelSettings {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return DeepModelSettings.internal_static_Autoencoders_descriptor;
+        return DeepModelSettings.internal_static_ConfigAutoencoders_descriptor;
       }
 
-      public DeepModelSettings.Autoencoders getDefaultInstanceForType() {
-        return DeepModelSettings.Autoencoders.getDefaultInstance();
+      public DeepModelSettings.ConfigAutoencoders getDefaultInstanceForType() {
+        return DeepModelSettings.ConfigAutoencoders.getDefaultInstance();
       }
 
-      public DeepModelSettings.Autoencoders build() {
-        DeepModelSettings.Autoencoders result = buildPartial();
+      public DeepModelSettings.ConfigAutoencoders build() {
+        DeepModelSettings.ConfigAutoencoders result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public DeepModelSettings.Autoencoders buildPartial() {
-        DeepModelSettings.Autoencoders result = new DeepModelSettings.Autoencoders(this);
+      public DeepModelSettings.ConfigAutoencoders buildPartial() {
+        DeepModelSettings.ConfigAutoencoders result = new DeepModelSettings.ConfigAutoencoders(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -730,16 +730,16 @@ public final class DeepModelSettings {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof DeepModelSettings.Autoencoders) {
-          return mergeFrom((DeepModelSettings.Autoencoders)other);
+        if (other instanceof DeepModelSettings.ConfigAutoencoders) {
+          return mergeFrom((DeepModelSettings.ConfigAutoencoders)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(DeepModelSettings.Autoencoders other) {
-        if (other == DeepModelSettings.Autoencoders.getDefaultInstance()) return this;
+      public Builder mergeFrom(DeepModelSettings.ConfigAutoencoders other) {
+        if (other == DeepModelSettings.ConfigAutoencoders.getDefaultInstance()) return this;
         if (other.hasNumberOfUnits()) {
           setNumberOfUnits(other.getNumberOfUnits());
         }
@@ -759,11 +759,11 @@ public final class DeepModelSettings {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        DeepModelSettings.Autoencoders parsedMessage = null;
+        DeepModelSettings.ConfigAutoencoders parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (DeepModelSettings.Autoencoders) e.getUnfinishedMessage();
+          parsedMessage = (DeepModelSettings.ConfigAutoencoders) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -806,50 +806,95 @@ public final class DeepModelSettings {
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:Autoencoders)
+      // @@protoc_insertion_point(builder_scope:ConfigAutoencoders)
     }
 
     static {
-      defaultInstance = new Autoencoders(true);
+      defaultInstance = new ConfigAutoencoders(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:Autoencoders)
+    // @@protoc_insertion_point(class_scope:ConfigAutoencoders)
   }
 
-  public interface FeatureExtractionLayerOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:FeatureExtractionLayer)
+  public interface ConfigFeatureExtractorOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:ConfigFeatureExtractor)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>required int32 num_outputs = 1;</code>
+     * <code>required int32 input_dim1 = 1;</code>
+     *
+     * <pre>
+     * FeatureExtractor needs to know the dimensions of the input and feature matrices, as it only gets vectors.
+     * If input and feature dimensions match, we do a matrix multiply extraction.
+     * If feature dimensions &lt;= input dimensions (and one is strictly smaller) we do convolution
+     * Else we throw some exception.
+     * The output dimensions (dimensions of the matrices that are appended into the result vector)
+     * can be calculated from the input dimensions.
+     * </pre>
      */
-    boolean hasNumOutputs();
+    boolean hasInputDim1();
     /**
-     * <code>required int32 num_outputs = 1;</code>
+     * <code>required int32 input_dim1 = 1;</code>
+     *
+     * <pre>
+     * FeatureExtractor needs to know the dimensions of the input and feature matrices, as it only gets vectors.
+     * If input and feature dimensions match, we do a matrix multiply extraction.
+     * If feature dimensions &lt;= input dimensions (and one is strictly smaller) we do convolution
+     * Else we throw some exception.
+     * The output dimensions (dimensions of the matrices that are appended into the result vector)
+     * can be calculated from the input dimensions.
+     * </pre>
      */
-    int getNumOutputs();
+    int getInputDim1();
+
+    /**
+     * <code>required int32 input_dim2 = 2;</code>
+     */
+    boolean hasInputDim2();
+    /**
+     * <code>required int32 input_dim2 = 2;</code>
+     */
+    int getInputDim2();
+
+    /**
+     * <code>required int32 feature_dim1 = 3;</code>
+     */
+    boolean hasFeatureDim1();
+    /**
+     * <code>required int32 feature_dim1 = 3;</code>
+     */
+    int getFeatureDim1();
+
+    /**
+     * <code>required int32 feature_dim2 = 4;</code>
+     */
+    boolean hasFeatureDim2();
+    /**
+     * <code>required int32 feature_dim2 = 4;</code>
+     */
+    int getFeatureDim2();
   }
   /**
-   * Protobuf type {@code FeatureExtractionLayer}
+   * Protobuf type {@code ConfigFeatureExtractor}
    */
-  public static final class FeatureExtractionLayer extends
+  public static final class ConfigFeatureExtractor extends
       com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:FeatureExtractionLayer)
-      FeatureExtractionLayerOrBuilder {
-    // Use FeatureExtractionLayer.newBuilder() to construct.
-    private FeatureExtractionLayer(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:ConfigFeatureExtractor)
+      ConfigFeatureExtractorOrBuilder {
+    // Use ConfigFeatureExtractor.newBuilder() to construct.
+    private ConfigFeatureExtractor(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private FeatureExtractionLayer(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private ConfigFeatureExtractor(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final FeatureExtractionLayer defaultInstance;
-    public static FeatureExtractionLayer getDefaultInstance() {
+    private static final ConfigFeatureExtractor defaultInstance;
+    public static ConfigFeatureExtractor getDefaultInstance() {
       return defaultInstance;
     }
 
-    public FeatureExtractionLayer getDefaultInstanceForType() {
+    public ConfigFeatureExtractor getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -859,7 +904,7 @@ public final class DeepModelSettings {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private FeatureExtractionLayer(
+    private ConfigFeatureExtractor(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -884,7 +929,22 @@ public final class DeepModelSettings {
             }
             case 8: {
               bitField0_ |= 0x00000001;
-              numOutputs_ = input.readInt32();
+              inputDim1_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              inputDim2_ = input.readInt32();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              featureDim1_ = input.readInt32();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              featureDim2_ = input.readInt32();
               break;
             }
           }
@@ -901,49 +961,115 @@ public final class DeepModelSettings {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return DeepModelSettings.internal_static_FeatureExtractionLayer_descriptor;
+      return DeepModelSettings.internal_static_ConfigFeatureExtractor_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return DeepModelSettings.internal_static_FeatureExtractionLayer_fieldAccessorTable
+      return DeepModelSettings.internal_static_ConfigFeatureExtractor_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              DeepModelSettings.FeatureExtractionLayer.class, DeepModelSettings.FeatureExtractionLayer.Builder.class);
+              DeepModelSettings.ConfigFeatureExtractor.class, DeepModelSettings.ConfigFeatureExtractor.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<FeatureExtractionLayer> PARSER =
-        new com.google.protobuf.AbstractParser<FeatureExtractionLayer>() {
-      public FeatureExtractionLayer parsePartialFrom(
+    public static com.google.protobuf.Parser<ConfigFeatureExtractor> PARSER =
+        new com.google.protobuf.AbstractParser<ConfigFeatureExtractor>() {
+      public ConfigFeatureExtractor parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new FeatureExtractionLayer(input, extensionRegistry);
+        return new ConfigFeatureExtractor(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<FeatureExtractionLayer> getParserForType() {
+    public com.google.protobuf.Parser<ConfigFeatureExtractor> getParserForType() {
       return PARSER;
     }
 
     private int bitField0_;
-    public static final int NUM_OUTPUTS_FIELD_NUMBER = 1;
-    private int numOutputs_;
+    public static final int INPUT_DIM1_FIELD_NUMBER = 1;
+    private int inputDim1_;
     /**
-     * <code>required int32 num_outputs = 1;</code>
+     * <code>required int32 input_dim1 = 1;</code>
+     *
+     * <pre>
+     * FeatureExtractor needs to know the dimensions of the input and feature matrices, as it only gets vectors.
+     * If input and feature dimensions match, we do a matrix multiply extraction.
+     * If feature dimensions &lt;= input dimensions (and one is strictly smaller) we do convolution
+     * Else we throw some exception.
+     * The output dimensions (dimensions of the matrices that are appended into the result vector)
+     * can be calculated from the input dimensions.
+     * </pre>
      */
-    public boolean hasNumOutputs() {
+    public boolean hasInputDim1() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required int32 num_outputs = 1;</code>
+     * <code>required int32 input_dim1 = 1;</code>
+     *
+     * <pre>
+     * FeatureExtractor needs to know the dimensions of the input and feature matrices, as it only gets vectors.
+     * If input and feature dimensions match, we do a matrix multiply extraction.
+     * If feature dimensions &lt;= input dimensions (and one is strictly smaller) we do convolution
+     * Else we throw some exception.
+     * The output dimensions (dimensions of the matrices that are appended into the result vector)
+     * can be calculated from the input dimensions.
+     * </pre>
      */
-    public int getNumOutputs() {
-      return numOutputs_;
+    public int getInputDim1() {
+      return inputDim1_;
+    }
+
+    public static final int INPUT_DIM2_FIELD_NUMBER = 2;
+    private int inputDim2_;
+    /**
+     * <code>required int32 input_dim2 = 2;</code>
+     */
+    public boolean hasInputDim2() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required int32 input_dim2 = 2;</code>
+     */
+    public int getInputDim2() {
+      return inputDim2_;
+    }
+
+    public static final int FEATURE_DIM1_FIELD_NUMBER = 3;
+    private int featureDim1_;
+    /**
+     * <code>required int32 feature_dim1 = 3;</code>
+     */
+    public boolean hasFeatureDim1() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required int32 feature_dim1 = 3;</code>
+     */
+    public int getFeatureDim1() {
+      return featureDim1_;
+    }
+
+    public static final int FEATURE_DIM2_FIELD_NUMBER = 4;
+    private int featureDim2_;
+    /**
+     * <code>required int32 feature_dim2 = 4;</code>
+     */
+    public boolean hasFeatureDim2() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required int32 feature_dim2 = 4;</code>
+     */
+    public int getFeatureDim2() {
+      return featureDim2_;
     }
 
     private void initFields() {
-      numOutputs_ = 0;
+      inputDim1_ = 0;
+      inputDim2_ = 0;
+      featureDim1_ = 0;
+      featureDim2_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -951,7 +1077,19 @@ public final class DeepModelSettings {
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
-      if (!hasNumOutputs()) {
+      if (!hasInputDim1()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasInputDim2()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasFeatureDim1()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasFeatureDim2()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -963,7 +1101,16 @@ public final class DeepModelSettings {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, numOutputs_);
+        output.writeInt32(1, inputDim1_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(2, inputDim2_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, featureDim1_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(4, featureDim2_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -976,7 +1123,19 @@ public final class DeepModelSettings {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, numOutputs_);
+          .computeInt32Size(1, inputDim1_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, inputDim2_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, featureDim1_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, featureDim2_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -990,53 +1149,53 @@ public final class DeepModelSettings {
       return super.writeReplace();
     }
 
-    public static DeepModelSettings.FeatureExtractionLayer parseFrom(
+    public static DeepModelSettings.ConfigFeatureExtractor parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static DeepModelSettings.FeatureExtractionLayer parseFrom(
+    public static DeepModelSettings.ConfigFeatureExtractor parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static DeepModelSettings.FeatureExtractionLayer parseFrom(byte[] data)
+    public static DeepModelSettings.ConfigFeatureExtractor parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static DeepModelSettings.FeatureExtractionLayer parseFrom(
+    public static DeepModelSettings.ConfigFeatureExtractor parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static DeepModelSettings.FeatureExtractionLayer parseFrom(java.io.InputStream input)
+    public static DeepModelSettings.ConfigFeatureExtractor parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static DeepModelSettings.FeatureExtractionLayer parseFrom(
+    public static DeepModelSettings.ConfigFeatureExtractor parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static DeepModelSettings.FeatureExtractionLayer parseDelimitedFrom(java.io.InputStream input)
+    public static DeepModelSettings.ConfigFeatureExtractor parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static DeepModelSettings.FeatureExtractionLayer parseDelimitedFrom(
+    public static DeepModelSettings.ConfigFeatureExtractor parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static DeepModelSettings.FeatureExtractionLayer parseFrom(
+    public static DeepModelSettings.ConfigFeatureExtractor parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static DeepModelSettings.FeatureExtractionLayer parseFrom(
+    public static DeepModelSettings.ConfigFeatureExtractor parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1045,7 +1204,7 @@ public final class DeepModelSettings {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(DeepModelSettings.FeatureExtractionLayer prototype) {
+    public static Builder newBuilder(DeepModelSettings.ConfigFeatureExtractor prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -1057,25 +1216,25 @@ public final class DeepModelSettings {
       return builder;
     }
     /**
-     * Protobuf type {@code FeatureExtractionLayer}
+     * Protobuf type {@code ConfigFeatureExtractor}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:FeatureExtractionLayer)
-        DeepModelSettings.FeatureExtractionLayerOrBuilder {
+        // @@protoc_insertion_point(builder_implements:ConfigFeatureExtractor)
+        DeepModelSettings.ConfigFeatureExtractorOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return DeepModelSettings.internal_static_FeatureExtractionLayer_descriptor;
+        return DeepModelSettings.internal_static_ConfigFeatureExtractor_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return DeepModelSettings.internal_static_FeatureExtractionLayer_fieldAccessorTable
+        return DeepModelSettings.internal_static_ConfigFeatureExtractor_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                DeepModelSettings.FeatureExtractionLayer.class, DeepModelSettings.FeatureExtractionLayer.Builder.class);
+                DeepModelSettings.ConfigFeatureExtractor.class, DeepModelSettings.ConfigFeatureExtractor.Builder.class);
       }
 
-      // Construct using DeepModelSettings.FeatureExtractionLayer.newBuilder()
+      // Construct using DeepModelSettings.ConfigFeatureExtractor.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1095,8 +1254,14 @@ public final class DeepModelSettings {
 
       public Builder clear() {
         super.clear();
-        numOutputs_ = 0;
+        inputDim1_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
+        inputDim2_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        featureDim1_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        featureDim2_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -1106,54 +1271,87 @@ public final class DeepModelSettings {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return DeepModelSettings.internal_static_FeatureExtractionLayer_descriptor;
+        return DeepModelSettings.internal_static_ConfigFeatureExtractor_descriptor;
       }
 
-      public DeepModelSettings.FeatureExtractionLayer getDefaultInstanceForType() {
-        return DeepModelSettings.FeatureExtractionLayer.getDefaultInstance();
+      public DeepModelSettings.ConfigFeatureExtractor getDefaultInstanceForType() {
+        return DeepModelSettings.ConfigFeatureExtractor.getDefaultInstance();
       }
 
-      public DeepModelSettings.FeatureExtractionLayer build() {
-        DeepModelSettings.FeatureExtractionLayer result = buildPartial();
+      public DeepModelSettings.ConfigFeatureExtractor build() {
+        DeepModelSettings.ConfigFeatureExtractor result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public DeepModelSettings.FeatureExtractionLayer buildPartial() {
-        DeepModelSettings.FeatureExtractionLayer result = new DeepModelSettings.FeatureExtractionLayer(this);
+      public DeepModelSettings.ConfigFeatureExtractor buildPartial() {
+        DeepModelSettings.ConfigFeatureExtractor result = new DeepModelSettings.ConfigFeatureExtractor(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.numOutputs_ = numOutputs_;
+        result.inputDim1_ = inputDim1_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.inputDim2_ = inputDim2_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.featureDim1_ = featureDim1_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.featureDim2_ = featureDim2_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof DeepModelSettings.FeatureExtractionLayer) {
-          return mergeFrom((DeepModelSettings.FeatureExtractionLayer)other);
+        if (other instanceof DeepModelSettings.ConfigFeatureExtractor) {
+          return mergeFrom((DeepModelSettings.ConfigFeatureExtractor)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(DeepModelSettings.FeatureExtractionLayer other) {
-        if (other == DeepModelSettings.FeatureExtractionLayer.getDefaultInstance()) return this;
-        if (other.hasNumOutputs()) {
-          setNumOutputs(other.getNumOutputs());
+      public Builder mergeFrom(DeepModelSettings.ConfigFeatureExtractor other) {
+        if (other == DeepModelSettings.ConfigFeatureExtractor.getDefaultInstance()) return this;
+        if (other.hasInputDim1()) {
+          setInputDim1(other.getInputDim1());
+        }
+        if (other.hasInputDim2()) {
+          setInputDim2(other.getInputDim2());
+        }
+        if (other.hasFeatureDim1()) {
+          setFeatureDim1(other.getFeatureDim1());
+        }
+        if (other.hasFeatureDim2()) {
+          setFeatureDim2(other.getFeatureDim2());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasNumOutputs()) {
+        if (!hasInputDim1()) {
+          
+          return false;
+        }
+        if (!hasInputDim2()) {
+          
+          return false;
+        }
+        if (!hasFeatureDim1()) {
+          
+          return false;
+        }
+        if (!hasFeatureDim2()) {
           
           return false;
         }
@@ -1164,11 +1362,11 @@ public final class DeepModelSettings {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        DeepModelSettings.FeatureExtractionLayer parsedMessage = null;
+        DeepModelSettings.ConfigFeatureExtractor parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (DeepModelSettings.FeatureExtractionLayer) e.getUnfinishedMessage();
+          parsedMessage = (DeepModelSettings.ConfigFeatureExtractor) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -1179,51 +1377,183 @@ public final class DeepModelSettings {
       }
       private int bitField0_;
 
-      private int numOutputs_ ;
+      private int inputDim1_ ;
       /**
-       * <code>required int32 num_outputs = 1;</code>
+       * <code>required int32 input_dim1 = 1;</code>
+       *
+       * <pre>
+       * FeatureExtractor needs to know the dimensions of the input and feature matrices, as it only gets vectors.
+       * If input and feature dimensions match, we do a matrix multiply extraction.
+       * If feature dimensions &lt;= input dimensions (and one is strictly smaller) we do convolution
+       * Else we throw some exception.
+       * The output dimensions (dimensions of the matrices that are appended into the result vector)
+       * can be calculated from the input dimensions.
+       * </pre>
        */
-      public boolean hasNumOutputs() {
+      public boolean hasInputDim1() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required int32 num_outputs = 1;</code>
+       * <code>required int32 input_dim1 = 1;</code>
+       *
+       * <pre>
+       * FeatureExtractor needs to know the dimensions of the input and feature matrices, as it only gets vectors.
+       * If input and feature dimensions match, we do a matrix multiply extraction.
+       * If feature dimensions &lt;= input dimensions (and one is strictly smaller) we do convolution
+       * Else we throw some exception.
+       * The output dimensions (dimensions of the matrices that are appended into the result vector)
+       * can be calculated from the input dimensions.
+       * </pre>
        */
-      public int getNumOutputs() {
-        return numOutputs_;
+      public int getInputDim1() {
+        return inputDim1_;
       }
       /**
-       * <code>required int32 num_outputs = 1;</code>
+       * <code>required int32 input_dim1 = 1;</code>
+       *
+       * <pre>
+       * FeatureExtractor needs to know the dimensions of the input and feature matrices, as it only gets vectors.
+       * If input and feature dimensions match, we do a matrix multiply extraction.
+       * If feature dimensions &lt;= input dimensions (and one is strictly smaller) we do convolution
+       * Else we throw some exception.
+       * The output dimensions (dimensions of the matrices that are appended into the result vector)
+       * can be calculated from the input dimensions.
+       * </pre>
        */
-      public Builder setNumOutputs(int value) {
+      public Builder setInputDim1(int value) {
         bitField0_ |= 0x00000001;
-        numOutputs_ = value;
+        inputDim1_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 num_outputs = 1;</code>
+       * <code>required int32 input_dim1 = 1;</code>
+       *
+       * <pre>
+       * FeatureExtractor needs to know the dimensions of the input and feature matrices, as it only gets vectors.
+       * If input and feature dimensions match, we do a matrix multiply extraction.
+       * If feature dimensions &lt;= input dimensions (and one is strictly smaller) we do convolution
+       * Else we throw some exception.
+       * The output dimensions (dimensions of the matrices that are appended into the result vector)
+       * can be calculated from the input dimensions.
+       * </pre>
        */
-      public Builder clearNumOutputs() {
+      public Builder clearInputDim1() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        numOutputs_ = 0;
+        inputDim1_ = 0;
         onChanged();
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:FeatureExtractionLayer)
+      private int inputDim2_ ;
+      /**
+       * <code>required int32 input_dim2 = 2;</code>
+       */
+      public boolean hasInputDim2() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required int32 input_dim2 = 2;</code>
+       */
+      public int getInputDim2() {
+        return inputDim2_;
+      }
+      /**
+       * <code>required int32 input_dim2 = 2;</code>
+       */
+      public Builder setInputDim2(int value) {
+        bitField0_ |= 0x00000002;
+        inputDim2_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 input_dim2 = 2;</code>
+       */
+      public Builder clearInputDim2() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        inputDim2_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int featureDim1_ ;
+      /**
+       * <code>required int32 feature_dim1 = 3;</code>
+       */
+      public boolean hasFeatureDim1() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required int32 feature_dim1 = 3;</code>
+       */
+      public int getFeatureDim1() {
+        return featureDim1_;
+      }
+      /**
+       * <code>required int32 feature_dim1 = 3;</code>
+       */
+      public Builder setFeatureDim1(int value) {
+        bitField0_ |= 0x00000004;
+        featureDim1_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 feature_dim1 = 3;</code>
+       */
+      public Builder clearFeatureDim1() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        featureDim1_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int featureDim2_ ;
+      /**
+       * <code>required int32 feature_dim2 = 4;</code>
+       */
+      public boolean hasFeatureDim2() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required int32 feature_dim2 = 4;</code>
+       */
+      public int getFeatureDim2() {
+        return featureDim2_;
+      }
+      /**
+       * <code>required int32 feature_dim2 = 4;</code>
+       */
+      public Builder setFeatureDim2(int value) {
+        bitField0_ |= 0x00000008;
+        featureDim2_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 feature_dim2 = 4;</code>
+       */
+      public Builder clearFeatureDim2() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        featureDim2_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:ConfigFeatureExtractor)
     }
 
     static {
-      defaultInstance = new FeatureExtractionLayer(true);
+      defaultInstance = new ConfigFeatureExtractor(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:FeatureExtractionLayer)
+    // @@protoc_insertion_point(class_scope:ConfigFeatureExtractor)
   }
 
-  public interface PoolLayerOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:PoolLayer)
+  public interface ConfigPoolerOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:ConfigPooler)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -1236,34 +1566,34 @@ public final class DeepModelSettings {
     int getPoolSize();
 
     /**
-     * <code>optional .PoolLayer.PoolType pool_type = 2 [default = MAX];</code>
+     * <code>optional .ConfigPooler.PoolType pool_type = 2 [default = MAX];</code>
      */
     boolean hasPoolType();
     /**
-     * <code>optional .PoolLayer.PoolType pool_type = 2 [default = MAX];</code>
+     * <code>optional .ConfigPooler.PoolType pool_type = 2 [default = MAX];</code>
      */
-    DeepModelSettings.PoolLayer.PoolType getPoolType();
+    DeepModelSettings.ConfigPooler.PoolType getPoolType();
   }
   /**
-   * Protobuf type {@code PoolLayer}
+   * Protobuf type {@code ConfigPooler}
    */
-  public static final class PoolLayer extends
+  public static final class ConfigPooler extends
       com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:PoolLayer)
-      PoolLayerOrBuilder {
-    // Use PoolLayer.newBuilder() to construct.
-    private PoolLayer(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:ConfigPooler)
+      ConfigPoolerOrBuilder {
+    // Use ConfigPooler.newBuilder() to construct.
+    private ConfigPooler(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private PoolLayer(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private ConfigPooler(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final PoolLayer defaultInstance;
-    public static PoolLayer getDefaultInstance() {
+    private static final ConfigPooler defaultInstance;
+    public static ConfigPooler getDefaultInstance() {
       return defaultInstance;
     }
 
-    public PoolLayer getDefaultInstanceForType() {
+    public ConfigPooler getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -1273,7 +1603,7 @@ public final class DeepModelSettings {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private PoolLayer(
+    private ConfigPooler(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1303,7 +1633,7 @@ public final class DeepModelSettings {
             }
             case 16: {
               int rawValue = input.readEnum();
-              DeepModelSettings.PoolLayer.PoolType value = DeepModelSettings.PoolLayer.PoolType.valueOf(rawValue);
+              DeepModelSettings.ConfigPooler.PoolType value = DeepModelSettings.ConfigPooler.PoolType.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(2, rawValue);
               } else {
@@ -1326,33 +1656,33 @@ public final class DeepModelSettings {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return DeepModelSettings.internal_static_PoolLayer_descriptor;
+      return DeepModelSettings.internal_static_ConfigPooler_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return DeepModelSettings.internal_static_PoolLayer_fieldAccessorTable
+      return DeepModelSettings.internal_static_ConfigPooler_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              DeepModelSettings.PoolLayer.class, DeepModelSettings.PoolLayer.Builder.class);
+              DeepModelSettings.ConfigPooler.class, DeepModelSettings.ConfigPooler.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<PoolLayer> PARSER =
-        new com.google.protobuf.AbstractParser<PoolLayer>() {
-      public PoolLayer parsePartialFrom(
+    public static com.google.protobuf.Parser<ConfigPooler> PARSER =
+        new com.google.protobuf.AbstractParser<ConfigPooler>() {
+      public ConfigPooler parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PoolLayer(input, extensionRegistry);
+        return new ConfigPooler(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<PoolLayer> getParserForType() {
+    public com.google.protobuf.Parser<ConfigPooler> getParserForType() {
       return PARSER;
     }
 
     /**
-     * Protobuf enum {@code PoolLayer.PoolType}
+     * Protobuf enum {@code ConfigPooler.PoolType}
      */
     public enum PoolType
         implements com.google.protobuf.ProtocolMessageEnum {
@@ -1408,7 +1738,7 @@ public final class DeepModelSettings {
       }
       public static final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptor() {
-        return DeepModelSettings.PoolLayer.getDescriptor().getEnumTypes().get(0);
+        return DeepModelSettings.ConfigPooler.getDescriptor().getEnumTypes().get(0);
       }
 
       private static final PoolType[] VALUES = values();
@@ -1430,7 +1760,7 @@ public final class DeepModelSettings {
         this.value = value;
       }
 
-      // @@protoc_insertion_point(enum_scope:PoolLayer.PoolType)
+      // @@protoc_insertion_point(enum_scope:ConfigPooler.PoolType)
     }
 
     private int bitField0_;
@@ -1450,23 +1780,23 @@ public final class DeepModelSettings {
     }
 
     public static final int POOL_TYPE_FIELD_NUMBER = 2;
-    private DeepModelSettings.PoolLayer.PoolType poolType_;
+    private DeepModelSettings.ConfigPooler.PoolType poolType_;
     /**
-     * <code>optional .PoolLayer.PoolType pool_type = 2 [default = MAX];</code>
+     * <code>optional .ConfigPooler.PoolType pool_type = 2 [default = MAX];</code>
      */
     public boolean hasPoolType() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional .PoolLayer.PoolType pool_type = 2 [default = MAX];</code>
+     * <code>optional .ConfigPooler.PoolType pool_type = 2 [default = MAX];</code>
      */
-    public DeepModelSettings.PoolLayer.PoolType getPoolType() {
+    public DeepModelSettings.ConfigPooler.PoolType getPoolType() {
       return poolType_;
     }
 
     private void initFields() {
       poolSize_ = 0;
-      poolType_ = DeepModelSettings.PoolLayer.PoolType.MAX;
+      poolType_ = DeepModelSettings.ConfigPooler.PoolType.MAX;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1520,53 +1850,53 @@ public final class DeepModelSettings {
       return super.writeReplace();
     }
 
-    public static DeepModelSettings.PoolLayer parseFrom(
+    public static DeepModelSettings.ConfigPooler parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static DeepModelSettings.PoolLayer parseFrom(
+    public static DeepModelSettings.ConfigPooler parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static DeepModelSettings.PoolLayer parseFrom(byte[] data)
+    public static DeepModelSettings.ConfigPooler parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static DeepModelSettings.PoolLayer parseFrom(
+    public static DeepModelSettings.ConfigPooler parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static DeepModelSettings.PoolLayer parseFrom(java.io.InputStream input)
+    public static DeepModelSettings.ConfigPooler parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static DeepModelSettings.PoolLayer parseFrom(
+    public static DeepModelSettings.ConfigPooler parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static DeepModelSettings.PoolLayer parseDelimitedFrom(java.io.InputStream input)
+    public static DeepModelSettings.ConfigPooler parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static DeepModelSettings.PoolLayer parseDelimitedFrom(
+    public static DeepModelSettings.ConfigPooler parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static DeepModelSettings.PoolLayer parseFrom(
+    public static DeepModelSettings.ConfigPooler parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static DeepModelSettings.PoolLayer parseFrom(
+    public static DeepModelSettings.ConfigPooler parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1575,7 +1905,7 @@ public final class DeepModelSettings {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(DeepModelSettings.PoolLayer prototype) {
+    public static Builder newBuilder(DeepModelSettings.ConfigPooler prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -1587,25 +1917,25 @@ public final class DeepModelSettings {
       return builder;
     }
     /**
-     * Protobuf type {@code PoolLayer}
+     * Protobuf type {@code ConfigPooler}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:PoolLayer)
-        DeepModelSettings.PoolLayerOrBuilder {
+        // @@protoc_insertion_point(builder_implements:ConfigPooler)
+        DeepModelSettings.ConfigPoolerOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return DeepModelSettings.internal_static_PoolLayer_descriptor;
+        return DeepModelSettings.internal_static_ConfigPooler_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return DeepModelSettings.internal_static_PoolLayer_fieldAccessorTable
+        return DeepModelSettings.internal_static_ConfigPooler_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                DeepModelSettings.PoolLayer.class, DeepModelSettings.PoolLayer.Builder.class);
+                DeepModelSettings.ConfigPooler.class, DeepModelSettings.ConfigPooler.Builder.class);
       }
 
-      // Construct using DeepModelSettings.PoolLayer.newBuilder()
+      // Construct using DeepModelSettings.ConfigPooler.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1627,7 +1957,7 @@ public final class DeepModelSettings {
         super.clear();
         poolSize_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
-        poolType_ = DeepModelSettings.PoolLayer.PoolType.MAX;
+        poolType_ = DeepModelSettings.ConfigPooler.PoolType.MAX;
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
@@ -1638,23 +1968,23 @@ public final class DeepModelSettings {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return DeepModelSettings.internal_static_PoolLayer_descriptor;
+        return DeepModelSettings.internal_static_ConfigPooler_descriptor;
       }
 
-      public DeepModelSettings.PoolLayer getDefaultInstanceForType() {
-        return DeepModelSettings.PoolLayer.getDefaultInstance();
+      public DeepModelSettings.ConfigPooler getDefaultInstanceForType() {
+        return DeepModelSettings.ConfigPooler.getDefaultInstance();
       }
 
-      public DeepModelSettings.PoolLayer build() {
-        DeepModelSettings.PoolLayer result = buildPartial();
+      public DeepModelSettings.ConfigPooler build() {
+        DeepModelSettings.ConfigPooler result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public DeepModelSettings.PoolLayer buildPartial() {
-        DeepModelSettings.PoolLayer result = new DeepModelSettings.PoolLayer(this);
+      public DeepModelSettings.ConfigPooler buildPartial() {
+        DeepModelSettings.ConfigPooler result = new DeepModelSettings.ConfigPooler(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -1671,16 +2001,16 @@ public final class DeepModelSettings {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof DeepModelSettings.PoolLayer) {
-          return mergeFrom((DeepModelSettings.PoolLayer)other);
+        if (other instanceof DeepModelSettings.ConfigPooler) {
+          return mergeFrom((DeepModelSettings.ConfigPooler)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(DeepModelSettings.PoolLayer other) {
-        if (other == DeepModelSettings.PoolLayer.getDefaultInstance()) return this;
+      public Builder mergeFrom(DeepModelSettings.ConfigPooler other) {
+        if (other == DeepModelSettings.ConfigPooler.getDefaultInstance()) return this;
         if (other.hasPoolSize()) {
           setPoolSize(other.getPoolSize());
         }
@@ -1703,11 +2033,11 @@ public final class DeepModelSettings {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        DeepModelSettings.PoolLayer parsedMessage = null;
+        DeepModelSettings.ConfigPooler parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (DeepModelSettings.PoolLayer) e.getUnfinishedMessage();
+          parsedMessage = (DeepModelSettings.ConfigPooler) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -1750,23 +2080,23 @@ public final class DeepModelSettings {
         return this;
       }
 
-      private DeepModelSettings.PoolLayer.PoolType poolType_ = DeepModelSettings.PoolLayer.PoolType.MAX;
+      private DeepModelSettings.ConfigPooler.PoolType poolType_ = DeepModelSettings.ConfigPooler.PoolType.MAX;
       /**
-       * <code>optional .PoolLayer.PoolType pool_type = 2 [default = MAX];</code>
+       * <code>optional .ConfigPooler.PoolType pool_type = 2 [default = MAX];</code>
        */
       public boolean hasPoolType() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional .PoolLayer.PoolType pool_type = 2 [default = MAX];</code>
+       * <code>optional .ConfigPooler.PoolType pool_type = 2 [default = MAX];</code>
        */
-      public DeepModelSettings.PoolLayer.PoolType getPoolType() {
+      public DeepModelSettings.ConfigPooler.PoolType getPoolType() {
         return poolType_;
       }
       /**
-       * <code>optional .PoolLayer.PoolType pool_type = 2 [default = MAX];</code>
+       * <code>optional .ConfigPooler.PoolType pool_type = 2 [default = MAX];</code>
        */
-      public Builder setPoolType(DeepModelSettings.PoolLayer.PoolType value) {
+      public Builder setPoolType(DeepModelSettings.ConfigPooler.PoolType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1776,102 +2106,102 @@ public final class DeepModelSettings {
         return this;
       }
       /**
-       * <code>optional .PoolLayer.PoolType pool_type = 2 [default = MAX];</code>
+       * <code>optional .ConfigPooler.PoolType pool_type = 2 [default = MAX];</code>
        */
       public Builder clearPoolType() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        poolType_ = DeepModelSettings.PoolLayer.PoolType.MAX;
+        poolType_ = DeepModelSettings.ConfigPooler.PoolType.MAX;
         onChanged();
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:PoolLayer)
+      // @@protoc_insertion_point(builder_scope:ConfigPooler)
     }
 
     static {
-      defaultInstance = new PoolLayer(true);
+      defaultInstance = new ConfigPooler(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:PoolLayer)
+    // @@protoc_insertion_point(class_scope:ConfigPooler)
   }
 
-  public interface BaseLayerOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:BaseLayer)
+  public interface ConfigBaseLayerOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:ConfigBaseLayer)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>optional .KMeans kmeans_layer = 1;</code>
+     * <code>optional .ConfigKMeans config_kmeans = 1;</code>
      */
-    boolean hasKmeansLayer();
+    boolean hasConfigKmeans();
     /**
-     * <code>optional .KMeans kmeans_layer = 1;</code>
+     * <code>optional .ConfigKMeans config_kmeans = 1;</code>
      */
-    DeepModelSettings.KMeans getKmeansLayer();
+    DeepModelSettings.ConfigKMeans getConfigKmeans();
     /**
-     * <code>optional .KMeans kmeans_layer = 1;</code>
+     * <code>optional .ConfigKMeans config_kmeans = 1;</code>
      */
-    DeepModelSettings.KMeansOrBuilder getKmeansLayerOrBuilder();
+    DeepModelSettings.ConfigKMeansOrBuilder getConfigKmeansOrBuilder();
 
     /**
-     * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+     * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
      */
-    boolean hasAutoencodersLayer();
+    boolean hasConfigAutoencoders();
     /**
-     * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+     * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
      */
-    DeepModelSettings.Autoencoders getAutoencodersLayer();
+    DeepModelSettings.ConfigAutoencoders getConfigAutoencoders();
     /**
-     * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+     * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
      */
-    DeepModelSettings.AutoencodersOrBuilder getAutoencodersLayerOrBuilder();
+    DeepModelSettings.ConfigAutoencodersOrBuilder getConfigAutoencodersOrBuilder();
 
     /**
-     * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+     * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
      */
-    boolean hasFeatureExtractionLayer();
+    boolean hasConfigFeatureExtractor();
     /**
-     * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+     * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
      */
-    DeepModelSettings.FeatureExtractionLayer getFeatureExtractionLayer();
+    DeepModelSettings.ConfigFeatureExtractor getConfigFeatureExtractor();
     /**
-     * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+     * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
      */
-    DeepModelSettings.FeatureExtractionLayerOrBuilder getFeatureExtractionLayerOrBuilder();
+    DeepModelSettings.ConfigFeatureExtractorOrBuilder getConfigFeatureExtractorOrBuilder();
 
     /**
-     * <code>required .PoolLayer pool_layer = 4;</code>
+     * <code>required .ConfigPooler config_pooler = 4;</code>
      */
-    boolean hasPoolLayer();
+    boolean hasConfigPooler();
     /**
-     * <code>required .PoolLayer pool_layer = 4;</code>
+     * <code>required .ConfigPooler config_pooler = 4;</code>
      */
-    DeepModelSettings.PoolLayer getPoolLayer();
+    DeepModelSettings.ConfigPooler getConfigPooler();
     /**
-     * <code>required .PoolLayer pool_layer = 4;</code>
+     * <code>required .ConfigPooler config_pooler = 4;</code>
      */
-    DeepModelSettings.PoolLayerOrBuilder getPoolLayerOrBuilder();
+    DeepModelSettings.ConfigPoolerOrBuilder getConfigPoolerOrBuilder();
   }
   /**
-   * Protobuf type {@code BaseLayer}
+   * Protobuf type {@code ConfigBaseLayer}
    */
-  public static final class BaseLayer extends
+  public static final class ConfigBaseLayer extends
       com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:BaseLayer)
-      BaseLayerOrBuilder {
-    // Use BaseLayer.newBuilder() to construct.
-    private BaseLayer(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:ConfigBaseLayer)
+      ConfigBaseLayerOrBuilder {
+    // Use ConfigBaseLayer.newBuilder() to construct.
+    private ConfigBaseLayer(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private BaseLayer(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private ConfigBaseLayer(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final BaseLayer defaultInstance;
-    public static BaseLayer getDefaultInstance() {
+    private static final ConfigBaseLayer defaultInstance;
+    public static ConfigBaseLayer getDefaultInstance() {
       return defaultInstance;
     }
 
-    public BaseLayer getDefaultInstanceForType() {
+    public ConfigBaseLayer getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -1881,7 +2211,7 @@ public final class DeepModelSettings {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private BaseLayer(
+    private ConfigBaseLayer(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1905,53 +2235,53 @@ public final class DeepModelSettings {
               break;
             }
             case 10: {
-              DeepModelSettings.KMeans.Builder subBuilder = null;
+              DeepModelSettings.ConfigKMeans.Builder subBuilder = null;
               if (((bitField0_ & 0x00000001) == 0x00000001)) {
-                subBuilder = kmeansLayer_.toBuilder();
+                subBuilder = configKmeans_.toBuilder();
               }
-              kmeansLayer_ = input.readMessage(DeepModelSettings.KMeans.PARSER, extensionRegistry);
+              configKmeans_ = input.readMessage(DeepModelSettings.ConfigKMeans.PARSER, extensionRegistry);
               if (subBuilder != null) {
-                subBuilder.mergeFrom(kmeansLayer_);
-                kmeansLayer_ = subBuilder.buildPartial();
+                subBuilder.mergeFrom(configKmeans_);
+                configKmeans_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000001;
               break;
             }
             case 18: {
-              DeepModelSettings.Autoencoders.Builder subBuilder = null;
+              DeepModelSettings.ConfigAutoencoders.Builder subBuilder = null;
               if (((bitField0_ & 0x00000002) == 0x00000002)) {
-                subBuilder = autoencodersLayer_.toBuilder();
+                subBuilder = configAutoencoders_.toBuilder();
               }
-              autoencodersLayer_ = input.readMessage(DeepModelSettings.Autoencoders.PARSER, extensionRegistry);
+              configAutoencoders_ = input.readMessage(DeepModelSettings.ConfigAutoencoders.PARSER, extensionRegistry);
               if (subBuilder != null) {
-                subBuilder.mergeFrom(autoencodersLayer_);
-                autoencodersLayer_ = subBuilder.buildPartial();
+                subBuilder.mergeFrom(configAutoencoders_);
+                configAutoencoders_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000002;
               break;
             }
             case 26: {
-              DeepModelSettings.FeatureExtractionLayer.Builder subBuilder = null;
+              DeepModelSettings.ConfigFeatureExtractor.Builder subBuilder = null;
               if (((bitField0_ & 0x00000004) == 0x00000004)) {
-                subBuilder = featureExtractionLayer_.toBuilder();
+                subBuilder = configFeatureExtractor_.toBuilder();
               }
-              featureExtractionLayer_ = input.readMessage(DeepModelSettings.FeatureExtractionLayer.PARSER, extensionRegistry);
+              configFeatureExtractor_ = input.readMessage(DeepModelSettings.ConfigFeatureExtractor.PARSER, extensionRegistry);
               if (subBuilder != null) {
-                subBuilder.mergeFrom(featureExtractionLayer_);
-                featureExtractionLayer_ = subBuilder.buildPartial();
+                subBuilder.mergeFrom(configFeatureExtractor_);
+                configFeatureExtractor_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000004;
               break;
             }
             case 34: {
-              DeepModelSettings.PoolLayer.Builder subBuilder = null;
+              DeepModelSettings.ConfigPooler.Builder subBuilder = null;
               if (((bitField0_ & 0x00000008) == 0x00000008)) {
-                subBuilder = poolLayer_.toBuilder();
+                subBuilder = configPooler_.toBuilder();
               }
-              poolLayer_ = input.readMessage(DeepModelSettings.PoolLayer.PARSER, extensionRegistry);
+              configPooler_ = input.readMessage(DeepModelSettings.ConfigPooler.PARSER, extensionRegistry);
               if (subBuilder != null) {
-                subBuilder.mergeFrom(poolLayer_);
-                poolLayer_ = subBuilder.buildPartial();
+                subBuilder.mergeFrom(configPooler_);
+                configPooler_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000008;
               break;
@@ -1970,121 +2300,121 @@ public final class DeepModelSettings {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return DeepModelSettings.internal_static_BaseLayer_descriptor;
+      return DeepModelSettings.internal_static_ConfigBaseLayer_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return DeepModelSettings.internal_static_BaseLayer_fieldAccessorTable
+      return DeepModelSettings.internal_static_ConfigBaseLayer_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              DeepModelSettings.BaseLayer.class, DeepModelSettings.BaseLayer.Builder.class);
+              DeepModelSettings.ConfigBaseLayer.class, DeepModelSettings.ConfigBaseLayer.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<BaseLayer> PARSER =
-        new com.google.protobuf.AbstractParser<BaseLayer>() {
-      public BaseLayer parsePartialFrom(
+    public static com.google.protobuf.Parser<ConfigBaseLayer> PARSER =
+        new com.google.protobuf.AbstractParser<ConfigBaseLayer>() {
+      public ConfigBaseLayer parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new BaseLayer(input, extensionRegistry);
+        return new ConfigBaseLayer(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<BaseLayer> getParserForType() {
+    public com.google.protobuf.Parser<ConfigBaseLayer> getParserForType() {
       return PARSER;
     }
 
     private int bitField0_;
-    public static final int KMEANS_LAYER_FIELD_NUMBER = 1;
-    private DeepModelSettings.KMeans kmeansLayer_;
+    public static final int CONFIG_KMEANS_FIELD_NUMBER = 1;
+    private DeepModelSettings.ConfigKMeans configKmeans_;
     /**
-     * <code>optional .KMeans kmeans_layer = 1;</code>
+     * <code>optional .ConfigKMeans config_kmeans = 1;</code>
      */
-    public boolean hasKmeansLayer() {
+    public boolean hasConfigKmeans() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>optional .KMeans kmeans_layer = 1;</code>
+     * <code>optional .ConfigKMeans config_kmeans = 1;</code>
      */
-    public DeepModelSettings.KMeans getKmeansLayer() {
-      return kmeansLayer_;
+    public DeepModelSettings.ConfigKMeans getConfigKmeans() {
+      return configKmeans_;
     }
     /**
-     * <code>optional .KMeans kmeans_layer = 1;</code>
+     * <code>optional .ConfigKMeans config_kmeans = 1;</code>
      */
-    public DeepModelSettings.KMeansOrBuilder getKmeansLayerOrBuilder() {
-      return kmeansLayer_;
+    public DeepModelSettings.ConfigKMeansOrBuilder getConfigKmeansOrBuilder() {
+      return configKmeans_;
     }
 
-    public static final int AUTOENCODERS_LAYER_FIELD_NUMBER = 2;
-    private DeepModelSettings.Autoencoders autoencodersLayer_;
+    public static final int CONFIG_AUTOENCODERS_FIELD_NUMBER = 2;
+    private DeepModelSettings.ConfigAutoencoders configAutoencoders_;
     /**
-     * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+     * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
      */
-    public boolean hasAutoencodersLayer() {
+    public boolean hasConfigAutoencoders() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+     * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
      */
-    public DeepModelSettings.Autoencoders getAutoencodersLayer() {
-      return autoencodersLayer_;
+    public DeepModelSettings.ConfigAutoencoders getConfigAutoencoders() {
+      return configAutoencoders_;
     }
     /**
-     * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+     * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
      */
-    public DeepModelSettings.AutoencodersOrBuilder getAutoencodersLayerOrBuilder() {
-      return autoencodersLayer_;
+    public DeepModelSettings.ConfigAutoencodersOrBuilder getConfigAutoencodersOrBuilder() {
+      return configAutoencoders_;
     }
 
-    public static final int FEATURE_EXTRACTION_LAYER_FIELD_NUMBER = 3;
-    private DeepModelSettings.FeatureExtractionLayer featureExtractionLayer_;
+    public static final int CONFIG_FEATURE_EXTRACTOR_FIELD_NUMBER = 3;
+    private DeepModelSettings.ConfigFeatureExtractor configFeatureExtractor_;
     /**
-     * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+     * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
      */
-    public boolean hasFeatureExtractionLayer() {
+    public boolean hasConfigFeatureExtractor() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+     * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
      */
-    public DeepModelSettings.FeatureExtractionLayer getFeatureExtractionLayer() {
-      return featureExtractionLayer_;
+    public DeepModelSettings.ConfigFeatureExtractor getConfigFeatureExtractor() {
+      return configFeatureExtractor_;
     }
     /**
-     * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+     * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
      */
-    public DeepModelSettings.FeatureExtractionLayerOrBuilder getFeatureExtractionLayerOrBuilder() {
-      return featureExtractionLayer_;
+    public DeepModelSettings.ConfigFeatureExtractorOrBuilder getConfigFeatureExtractorOrBuilder() {
+      return configFeatureExtractor_;
     }
 
-    public static final int POOL_LAYER_FIELD_NUMBER = 4;
-    private DeepModelSettings.PoolLayer poolLayer_;
+    public static final int CONFIG_POOLER_FIELD_NUMBER = 4;
+    private DeepModelSettings.ConfigPooler configPooler_;
     /**
-     * <code>required .PoolLayer pool_layer = 4;</code>
+     * <code>required .ConfigPooler config_pooler = 4;</code>
      */
-    public boolean hasPoolLayer() {
+    public boolean hasConfigPooler() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required .PoolLayer pool_layer = 4;</code>
+     * <code>required .ConfigPooler config_pooler = 4;</code>
      */
-    public DeepModelSettings.PoolLayer getPoolLayer() {
-      return poolLayer_;
+    public DeepModelSettings.ConfigPooler getConfigPooler() {
+      return configPooler_;
     }
     /**
-     * <code>required .PoolLayer pool_layer = 4;</code>
+     * <code>required .ConfigPooler config_pooler = 4;</code>
      */
-    public DeepModelSettings.PoolLayerOrBuilder getPoolLayerOrBuilder() {
-      return poolLayer_;
+    public DeepModelSettings.ConfigPoolerOrBuilder getConfigPoolerOrBuilder() {
+      return configPooler_;
     }
 
     private void initFields() {
-      kmeansLayer_ = DeepModelSettings.KMeans.getDefaultInstance();
-      autoencodersLayer_ = DeepModelSettings.Autoencoders.getDefaultInstance();
-      featureExtractionLayer_ = DeepModelSettings.FeatureExtractionLayer.getDefaultInstance();
-      poolLayer_ = DeepModelSettings.PoolLayer.getDefaultInstance();
+      configKmeans_ = DeepModelSettings.ConfigKMeans.getDefaultInstance();
+      configAutoencoders_ = DeepModelSettings.ConfigAutoencoders.getDefaultInstance();
+      configFeatureExtractor_ = DeepModelSettings.ConfigFeatureExtractor.getDefaultInstance();
+      configPooler_ = DeepModelSettings.ConfigPooler.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2092,31 +2422,31 @@ public final class DeepModelSettings {
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
-      if (!hasFeatureExtractionLayer()) {
+      if (!hasConfigFeatureExtractor()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasPoolLayer()) {
+      if (!hasConfigPooler()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (hasKmeansLayer()) {
-        if (!getKmeansLayer().isInitialized()) {
+      if (hasConfigKmeans()) {
+        if (!getConfigKmeans().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
       }
-      if (hasAutoencodersLayer()) {
-        if (!getAutoencodersLayer().isInitialized()) {
+      if (hasConfigAutoencoders()) {
+        if (!getConfigAutoencoders().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
       }
-      if (!getFeatureExtractionLayer().isInitialized()) {
+      if (!getConfigFeatureExtractor().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!getPoolLayer().isInitialized()) {
+      if (!getConfigPooler().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -2128,16 +2458,16 @@ public final class DeepModelSettings {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeMessage(1, kmeansLayer_);
+        output.writeMessage(1, configKmeans_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(2, autoencodersLayer_);
+        output.writeMessage(2, configAutoencoders_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeMessage(3, featureExtractionLayer_);
+        output.writeMessage(3, configFeatureExtractor_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeMessage(4, poolLayer_);
+        output.writeMessage(4, configPooler_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -2150,19 +2480,19 @@ public final class DeepModelSettings {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, kmeansLayer_);
+          .computeMessageSize(1, configKmeans_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, autoencodersLayer_);
+          .computeMessageSize(2, configAutoencoders_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, featureExtractionLayer_);
+          .computeMessageSize(3, configFeatureExtractor_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, poolLayer_);
+          .computeMessageSize(4, configPooler_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2176,53 +2506,53 @@ public final class DeepModelSettings {
       return super.writeReplace();
     }
 
-    public static DeepModelSettings.BaseLayer parseFrom(
+    public static DeepModelSettings.ConfigBaseLayer parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static DeepModelSettings.BaseLayer parseFrom(
+    public static DeepModelSettings.ConfigBaseLayer parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static DeepModelSettings.BaseLayer parseFrom(byte[] data)
+    public static DeepModelSettings.ConfigBaseLayer parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static DeepModelSettings.BaseLayer parseFrom(
+    public static DeepModelSettings.ConfigBaseLayer parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static DeepModelSettings.BaseLayer parseFrom(java.io.InputStream input)
+    public static DeepModelSettings.ConfigBaseLayer parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static DeepModelSettings.BaseLayer parseFrom(
+    public static DeepModelSettings.ConfigBaseLayer parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static DeepModelSettings.BaseLayer parseDelimitedFrom(java.io.InputStream input)
+    public static DeepModelSettings.ConfigBaseLayer parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static DeepModelSettings.BaseLayer parseDelimitedFrom(
+    public static DeepModelSettings.ConfigBaseLayer parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static DeepModelSettings.BaseLayer parseFrom(
+    public static DeepModelSettings.ConfigBaseLayer parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static DeepModelSettings.BaseLayer parseFrom(
+    public static DeepModelSettings.ConfigBaseLayer parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -2231,7 +2561,7 @@ public final class DeepModelSettings {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(DeepModelSettings.BaseLayer prototype) {
+    public static Builder newBuilder(DeepModelSettings.ConfigBaseLayer prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -2243,25 +2573,25 @@ public final class DeepModelSettings {
       return builder;
     }
     /**
-     * Protobuf type {@code BaseLayer}
+     * Protobuf type {@code ConfigBaseLayer}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:BaseLayer)
-        DeepModelSettings.BaseLayerOrBuilder {
+        // @@protoc_insertion_point(builder_implements:ConfigBaseLayer)
+        DeepModelSettings.ConfigBaseLayerOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return DeepModelSettings.internal_static_BaseLayer_descriptor;
+        return DeepModelSettings.internal_static_ConfigBaseLayer_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return DeepModelSettings.internal_static_BaseLayer_fieldAccessorTable
+        return DeepModelSettings.internal_static_ConfigBaseLayer_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                DeepModelSettings.BaseLayer.class, DeepModelSettings.BaseLayer.Builder.class);
+                DeepModelSettings.ConfigBaseLayer.class, DeepModelSettings.ConfigBaseLayer.Builder.class);
       }
 
-      // Construct using DeepModelSettings.BaseLayer.newBuilder()
+      // Construct using DeepModelSettings.ConfigBaseLayer.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -2273,10 +2603,10 @@ public final class DeepModelSettings {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getKmeansLayerFieldBuilder();
-          getAutoencodersLayerFieldBuilder();
-          getFeatureExtractionLayerFieldBuilder();
-          getPoolLayerFieldBuilder();
+          getConfigKmeansFieldBuilder();
+          getConfigAutoencodersFieldBuilder();
+          getConfigFeatureExtractorFieldBuilder();
+          getConfigPoolerFieldBuilder();
         }
       }
       private static Builder create() {
@@ -2285,28 +2615,28 @@ public final class DeepModelSettings {
 
       public Builder clear() {
         super.clear();
-        if (kmeansLayerBuilder_ == null) {
-          kmeansLayer_ = DeepModelSettings.KMeans.getDefaultInstance();
+        if (configKmeansBuilder_ == null) {
+          configKmeans_ = DeepModelSettings.ConfigKMeans.getDefaultInstance();
         } else {
-          kmeansLayerBuilder_.clear();
+          configKmeansBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000001);
-        if (autoencodersLayerBuilder_ == null) {
-          autoencodersLayer_ = DeepModelSettings.Autoencoders.getDefaultInstance();
+        if (configAutoencodersBuilder_ == null) {
+          configAutoencoders_ = DeepModelSettings.ConfigAutoencoders.getDefaultInstance();
         } else {
-          autoencodersLayerBuilder_.clear();
+          configAutoencodersBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000002);
-        if (featureExtractionLayerBuilder_ == null) {
-          featureExtractionLayer_ = DeepModelSettings.FeatureExtractionLayer.getDefaultInstance();
+        if (configFeatureExtractorBuilder_ == null) {
+          configFeatureExtractor_ = DeepModelSettings.ConfigFeatureExtractor.getDefaultInstance();
         } else {
-          featureExtractionLayerBuilder_.clear();
+          configFeatureExtractorBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000004);
-        if (poolLayerBuilder_ == null) {
-          poolLayer_ = DeepModelSettings.PoolLayer.getDefaultInstance();
+        if (configPoolerBuilder_ == null) {
+          configPooler_ = DeepModelSettings.ConfigPooler.getDefaultInstance();
         } else {
-          poolLayerBuilder_.clear();
+          configPoolerBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000008);
         return this;
@@ -2318,56 +2648,56 @@ public final class DeepModelSettings {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return DeepModelSettings.internal_static_BaseLayer_descriptor;
+        return DeepModelSettings.internal_static_ConfigBaseLayer_descriptor;
       }
 
-      public DeepModelSettings.BaseLayer getDefaultInstanceForType() {
-        return DeepModelSettings.BaseLayer.getDefaultInstance();
+      public DeepModelSettings.ConfigBaseLayer getDefaultInstanceForType() {
+        return DeepModelSettings.ConfigBaseLayer.getDefaultInstance();
       }
 
-      public DeepModelSettings.BaseLayer build() {
-        DeepModelSettings.BaseLayer result = buildPartial();
+      public DeepModelSettings.ConfigBaseLayer build() {
+        DeepModelSettings.ConfigBaseLayer result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public DeepModelSettings.BaseLayer buildPartial() {
-        DeepModelSettings.BaseLayer result = new DeepModelSettings.BaseLayer(this);
+      public DeepModelSettings.ConfigBaseLayer buildPartial() {
+        DeepModelSettings.ConfigBaseLayer result = new DeepModelSettings.ConfigBaseLayer(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        if (kmeansLayerBuilder_ == null) {
-          result.kmeansLayer_ = kmeansLayer_;
+        if (configKmeansBuilder_ == null) {
+          result.configKmeans_ = configKmeans_;
         } else {
-          result.kmeansLayer_ = kmeansLayerBuilder_.build();
+          result.configKmeans_ = configKmeansBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        if (autoencodersLayerBuilder_ == null) {
-          result.autoencodersLayer_ = autoencodersLayer_;
+        if (configAutoencodersBuilder_ == null) {
+          result.configAutoencoders_ = configAutoencoders_;
         } else {
-          result.autoencodersLayer_ = autoencodersLayerBuilder_.build();
+          result.configAutoencoders_ = configAutoencodersBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        if (featureExtractionLayerBuilder_ == null) {
-          result.featureExtractionLayer_ = featureExtractionLayer_;
+        if (configFeatureExtractorBuilder_ == null) {
+          result.configFeatureExtractor_ = configFeatureExtractor_;
         } else {
-          result.featureExtractionLayer_ = featureExtractionLayerBuilder_.build();
+          result.configFeatureExtractor_ = configFeatureExtractorBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        if (poolLayerBuilder_ == null) {
-          result.poolLayer_ = poolLayer_;
+        if (configPoolerBuilder_ == null) {
+          result.configPooler_ = configPooler_;
         } else {
-          result.poolLayer_ = poolLayerBuilder_.build();
+          result.configPooler_ = configPoolerBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -2375,58 +2705,58 @@ public final class DeepModelSettings {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof DeepModelSettings.BaseLayer) {
-          return mergeFrom((DeepModelSettings.BaseLayer)other);
+        if (other instanceof DeepModelSettings.ConfigBaseLayer) {
+          return mergeFrom((DeepModelSettings.ConfigBaseLayer)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(DeepModelSettings.BaseLayer other) {
-        if (other == DeepModelSettings.BaseLayer.getDefaultInstance()) return this;
-        if (other.hasKmeansLayer()) {
-          mergeKmeansLayer(other.getKmeansLayer());
+      public Builder mergeFrom(DeepModelSettings.ConfigBaseLayer other) {
+        if (other == DeepModelSettings.ConfigBaseLayer.getDefaultInstance()) return this;
+        if (other.hasConfigKmeans()) {
+          mergeConfigKmeans(other.getConfigKmeans());
         }
-        if (other.hasAutoencodersLayer()) {
-          mergeAutoencodersLayer(other.getAutoencodersLayer());
+        if (other.hasConfigAutoencoders()) {
+          mergeConfigAutoencoders(other.getConfigAutoencoders());
         }
-        if (other.hasFeatureExtractionLayer()) {
-          mergeFeatureExtractionLayer(other.getFeatureExtractionLayer());
+        if (other.hasConfigFeatureExtractor()) {
+          mergeConfigFeatureExtractor(other.getConfigFeatureExtractor());
         }
-        if (other.hasPoolLayer()) {
-          mergePoolLayer(other.getPoolLayer());
+        if (other.hasConfigPooler()) {
+          mergeConfigPooler(other.getConfigPooler());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasFeatureExtractionLayer()) {
+        if (!hasConfigFeatureExtractor()) {
           
           return false;
         }
-        if (!hasPoolLayer()) {
+        if (!hasConfigPooler()) {
           
           return false;
         }
-        if (hasKmeansLayer()) {
-          if (!getKmeansLayer().isInitialized()) {
+        if (hasConfigKmeans()) {
+          if (!getConfigKmeans().isInitialized()) {
             
             return false;
           }
         }
-        if (hasAutoencodersLayer()) {
-          if (!getAutoencodersLayer().isInitialized()) {
+        if (hasConfigAutoencoders()) {
+          if (!getConfigAutoencoders().isInitialized()) {
             
             return false;
           }
         }
-        if (!getFeatureExtractionLayer().isInitialized()) {
+        if (!getConfigFeatureExtractor().isInitialized()) {
           
           return false;
         }
-        if (!getPoolLayer().isInitialized()) {
+        if (!getConfigPooler().isInitialized()) {
           
           return false;
         }
@@ -2437,11 +2767,11 @@ public final class DeepModelSettings {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        DeepModelSettings.BaseLayer parsedMessage = null;
+        DeepModelSettings.ConfigBaseLayer parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (DeepModelSettings.BaseLayer) e.getUnfinishedMessage();
+          parsedMessage = (DeepModelSettings.ConfigBaseLayer) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -2452,529 +2782,529 @@ public final class DeepModelSettings {
       }
       private int bitField0_;
 
-      private DeepModelSettings.KMeans kmeansLayer_ = DeepModelSettings.KMeans.getDefaultInstance();
+      private DeepModelSettings.ConfigKMeans configKmeans_ = DeepModelSettings.ConfigKMeans.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          DeepModelSettings.KMeans, DeepModelSettings.KMeans.Builder, DeepModelSettings.KMeansOrBuilder> kmeansLayerBuilder_;
+          DeepModelSettings.ConfigKMeans, DeepModelSettings.ConfigKMeans.Builder, DeepModelSettings.ConfigKMeansOrBuilder> configKmeansBuilder_;
       /**
-       * <code>optional .KMeans kmeans_layer = 1;</code>
+       * <code>optional .ConfigKMeans config_kmeans = 1;</code>
        */
-      public boolean hasKmeansLayer() {
+      public boolean hasConfigKmeans() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>optional .KMeans kmeans_layer = 1;</code>
+       * <code>optional .ConfigKMeans config_kmeans = 1;</code>
        */
-      public DeepModelSettings.KMeans getKmeansLayer() {
-        if (kmeansLayerBuilder_ == null) {
-          return kmeansLayer_;
+      public DeepModelSettings.ConfigKMeans getConfigKmeans() {
+        if (configKmeansBuilder_ == null) {
+          return configKmeans_;
         } else {
-          return kmeansLayerBuilder_.getMessage();
+          return configKmeansBuilder_.getMessage();
         }
       }
       /**
-       * <code>optional .KMeans kmeans_layer = 1;</code>
+       * <code>optional .ConfigKMeans config_kmeans = 1;</code>
        */
-      public Builder setKmeansLayer(DeepModelSettings.KMeans value) {
-        if (kmeansLayerBuilder_ == null) {
+      public Builder setConfigKmeans(DeepModelSettings.ConfigKMeans value) {
+        if (configKmeansBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          kmeansLayer_ = value;
+          configKmeans_ = value;
           onChanged();
         } else {
-          kmeansLayerBuilder_.setMessage(value);
+          configKmeansBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000001;
         return this;
       }
       /**
-       * <code>optional .KMeans kmeans_layer = 1;</code>
+       * <code>optional .ConfigKMeans config_kmeans = 1;</code>
        */
-      public Builder setKmeansLayer(
-          DeepModelSettings.KMeans.Builder builderForValue) {
-        if (kmeansLayerBuilder_ == null) {
-          kmeansLayer_ = builderForValue.build();
+      public Builder setConfigKmeans(
+          DeepModelSettings.ConfigKMeans.Builder builderForValue) {
+        if (configKmeansBuilder_ == null) {
+          configKmeans_ = builderForValue.build();
           onChanged();
         } else {
-          kmeansLayerBuilder_.setMessage(builderForValue.build());
+          configKmeansBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000001;
         return this;
       }
       /**
-       * <code>optional .KMeans kmeans_layer = 1;</code>
+       * <code>optional .ConfigKMeans config_kmeans = 1;</code>
        */
-      public Builder mergeKmeansLayer(DeepModelSettings.KMeans value) {
-        if (kmeansLayerBuilder_ == null) {
+      public Builder mergeConfigKmeans(DeepModelSettings.ConfigKMeans value) {
+        if (configKmeansBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
-              kmeansLayer_ != DeepModelSettings.KMeans.getDefaultInstance()) {
-            kmeansLayer_ =
-              DeepModelSettings.KMeans.newBuilder(kmeansLayer_).mergeFrom(value).buildPartial();
+              configKmeans_ != DeepModelSettings.ConfigKMeans.getDefaultInstance()) {
+            configKmeans_ =
+              DeepModelSettings.ConfigKMeans.newBuilder(configKmeans_).mergeFrom(value).buildPartial();
           } else {
-            kmeansLayer_ = value;
+            configKmeans_ = value;
           }
           onChanged();
         } else {
-          kmeansLayerBuilder_.mergeFrom(value);
+          configKmeansBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000001;
         return this;
       }
       /**
-       * <code>optional .KMeans kmeans_layer = 1;</code>
+       * <code>optional .ConfigKMeans config_kmeans = 1;</code>
        */
-      public Builder clearKmeansLayer() {
-        if (kmeansLayerBuilder_ == null) {
-          kmeansLayer_ = DeepModelSettings.KMeans.getDefaultInstance();
+      public Builder clearConfigKmeans() {
+        if (configKmeansBuilder_ == null) {
+          configKmeans_ = DeepModelSettings.ConfigKMeans.getDefaultInstance();
           onChanged();
         } else {
-          kmeansLayerBuilder_.clear();
+          configKmeansBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
       /**
-       * <code>optional .KMeans kmeans_layer = 1;</code>
+       * <code>optional .ConfigKMeans config_kmeans = 1;</code>
        */
-      public DeepModelSettings.KMeans.Builder getKmeansLayerBuilder() {
+      public DeepModelSettings.ConfigKMeans.Builder getConfigKmeansBuilder() {
         bitField0_ |= 0x00000001;
         onChanged();
-        return getKmeansLayerFieldBuilder().getBuilder();
+        return getConfigKmeansFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .KMeans kmeans_layer = 1;</code>
+       * <code>optional .ConfigKMeans config_kmeans = 1;</code>
        */
-      public DeepModelSettings.KMeansOrBuilder getKmeansLayerOrBuilder() {
-        if (kmeansLayerBuilder_ != null) {
-          return kmeansLayerBuilder_.getMessageOrBuilder();
+      public DeepModelSettings.ConfigKMeansOrBuilder getConfigKmeansOrBuilder() {
+        if (configKmeansBuilder_ != null) {
+          return configKmeansBuilder_.getMessageOrBuilder();
         } else {
-          return kmeansLayer_;
+          return configKmeans_;
         }
       }
       /**
-       * <code>optional .KMeans kmeans_layer = 1;</code>
+       * <code>optional .ConfigKMeans config_kmeans = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
-          DeepModelSettings.KMeans, DeepModelSettings.KMeans.Builder, DeepModelSettings.KMeansOrBuilder> 
-          getKmeansLayerFieldBuilder() {
-        if (kmeansLayerBuilder_ == null) {
-          kmeansLayerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              DeepModelSettings.KMeans, DeepModelSettings.KMeans.Builder, DeepModelSettings.KMeansOrBuilder>(
-                  getKmeansLayer(),
+          DeepModelSettings.ConfigKMeans, DeepModelSettings.ConfigKMeans.Builder, DeepModelSettings.ConfigKMeansOrBuilder> 
+          getConfigKmeansFieldBuilder() {
+        if (configKmeansBuilder_ == null) {
+          configKmeansBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              DeepModelSettings.ConfigKMeans, DeepModelSettings.ConfigKMeans.Builder, DeepModelSettings.ConfigKMeansOrBuilder>(
+                  getConfigKmeans(),
                   getParentForChildren(),
                   isClean());
-          kmeansLayer_ = null;
+          configKmeans_ = null;
         }
-        return kmeansLayerBuilder_;
+        return configKmeansBuilder_;
       }
 
-      private DeepModelSettings.Autoencoders autoencodersLayer_ = DeepModelSettings.Autoencoders.getDefaultInstance();
+      private DeepModelSettings.ConfigAutoencoders configAutoencoders_ = DeepModelSettings.ConfigAutoencoders.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          DeepModelSettings.Autoencoders, DeepModelSettings.Autoencoders.Builder, DeepModelSettings.AutoencodersOrBuilder> autoencodersLayerBuilder_;
+          DeepModelSettings.ConfigAutoencoders, DeepModelSettings.ConfigAutoencoders.Builder, DeepModelSettings.ConfigAutoencodersOrBuilder> configAutoencodersBuilder_;
       /**
-       * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+       * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
        */
-      public boolean hasAutoencodersLayer() {
+      public boolean hasConfigAutoencoders() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+       * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
        */
-      public DeepModelSettings.Autoencoders getAutoencodersLayer() {
-        if (autoencodersLayerBuilder_ == null) {
-          return autoencodersLayer_;
+      public DeepModelSettings.ConfigAutoencoders getConfigAutoencoders() {
+        if (configAutoencodersBuilder_ == null) {
+          return configAutoencoders_;
         } else {
-          return autoencodersLayerBuilder_.getMessage();
+          return configAutoencodersBuilder_.getMessage();
         }
       }
       /**
-       * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+       * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
        */
-      public Builder setAutoencodersLayer(DeepModelSettings.Autoencoders value) {
-        if (autoencodersLayerBuilder_ == null) {
+      public Builder setConfigAutoencoders(DeepModelSettings.ConfigAutoencoders value) {
+        if (configAutoencodersBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          autoencodersLayer_ = value;
+          configAutoencoders_ = value;
           onChanged();
         } else {
-          autoencodersLayerBuilder_.setMessage(value);
+          configAutoencodersBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000002;
         return this;
       }
       /**
-       * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+       * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
        */
-      public Builder setAutoencodersLayer(
-          DeepModelSettings.Autoencoders.Builder builderForValue) {
-        if (autoencodersLayerBuilder_ == null) {
-          autoencodersLayer_ = builderForValue.build();
+      public Builder setConfigAutoencoders(
+          DeepModelSettings.ConfigAutoencoders.Builder builderForValue) {
+        if (configAutoencodersBuilder_ == null) {
+          configAutoencoders_ = builderForValue.build();
           onChanged();
         } else {
-          autoencodersLayerBuilder_.setMessage(builderForValue.build());
+          configAutoencodersBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000002;
         return this;
       }
       /**
-       * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+       * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
        */
-      public Builder mergeAutoencodersLayer(DeepModelSettings.Autoencoders value) {
-        if (autoencodersLayerBuilder_ == null) {
+      public Builder mergeConfigAutoencoders(DeepModelSettings.ConfigAutoencoders value) {
+        if (configAutoencodersBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
-              autoencodersLayer_ != DeepModelSettings.Autoencoders.getDefaultInstance()) {
-            autoencodersLayer_ =
-              DeepModelSettings.Autoencoders.newBuilder(autoencodersLayer_).mergeFrom(value).buildPartial();
+              configAutoencoders_ != DeepModelSettings.ConfigAutoencoders.getDefaultInstance()) {
+            configAutoencoders_ =
+              DeepModelSettings.ConfigAutoencoders.newBuilder(configAutoencoders_).mergeFrom(value).buildPartial();
           } else {
-            autoencodersLayer_ = value;
+            configAutoencoders_ = value;
           }
           onChanged();
         } else {
-          autoencodersLayerBuilder_.mergeFrom(value);
+          configAutoencodersBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000002;
         return this;
       }
       /**
-       * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+       * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
        */
-      public Builder clearAutoencodersLayer() {
-        if (autoencodersLayerBuilder_ == null) {
-          autoencodersLayer_ = DeepModelSettings.Autoencoders.getDefaultInstance();
+      public Builder clearConfigAutoencoders() {
+        if (configAutoencodersBuilder_ == null) {
+          configAutoencoders_ = DeepModelSettings.ConfigAutoencoders.getDefaultInstance();
           onChanged();
         } else {
-          autoencodersLayerBuilder_.clear();
+          configAutoencodersBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       /**
-       * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+       * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
        */
-      public DeepModelSettings.Autoencoders.Builder getAutoencodersLayerBuilder() {
+      public DeepModelSettings.ConfigAutoencoders.Builder getConfigAutoencodersBuilder() {
         bitField0_ |= 0x00000002;
         onChanged();
-        return getAutoencodersLayerFieldBuilder().getBuilder();
+        return getConfigAutoencodersFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+       * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
        */
-      public DeepModelSettings.AutoencodersOrBuilder getAutoencodersLayerOrBuilder() {
-        if (autoencodersLayerBuilder_ != null) {
-          return autoencodersLayerBuilder_.getMessageOrBuilder();
+      public DeepModelSettings.ConfigAutoencodersOrBuilder getConfigAutoencodersOrBuilder() {
+        if (configAutoencodersBuilder_ != null) {
+          return configAutoencodersBuilder_.getMessageOrBuilder();
         } else {
-          return autoencodersLayer_;
+          return configAutoencoders_;
         }
       }
       /**
-       * <code>optional .Autoencoders autoencoders_layer = 2;</code>
+       * <code>optional .ConfigAutoencoders config_autoencoders = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
-          DeepModelSettings.Autoencoders, DeepModelSettings.Autoencoders.Builder, DeepModelSettings.AutoencodersOrBuilder> 
-          getAutoencodersLayerFieldBuilder() {
-        if (autoencodersLayerBuilder_ == null) {
-          autoencodersLayerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              DeepModelSettings.Autoencoders, DeepModelSettings.Autoencoders.Builder, DeepModelSettings.AutoencodersOrBuilder>(
-                  getAutoencodersLayer(),
+          DeepModelSettings.ConfigAutoencoders, DeepModelSettings.ConfigAutoencoders.Builder, DeepModelSettings.ConfigAutoencodersOrBuilder> 
+          getConfigAutoencodersFieldBuilder() {
+        if (configAutoencodersBuilder_ == null) {
+          configAutoencodersBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              DeepModelSettings.ConfigAutoencoders, DeepModelSettings.ConfigAutoencoders.Builder, DeepModelSettings.ConfigAutoencodersOrBuilder>(
+                  getConfigAutoencoders(),
                   getParentForChildren(),
                   isClean());
-          autoencodersLayer_ = null;
+          configAutoencoders_ = null;
         }
-        return autoencodersLayerBuilder_;
+        return configAutoencodersBuilder_;
       }
 
-      private DeepModelSettings.FeatureExtractionLayer featureExtractionLayer_ = DeepModelSettings.FeatureExtractionLayer.getDefaultInstance();
+      private DeepModelSettings.ConfigFeatureExtractor configFeatureExtractor_ = DeepModelSettings.ConfigFeatureExtractor.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          DeepModelSettings.FeatureExtractionLayer, DeepModelSettings.FeatureExtractionLayer.Builder, DeepModelSettings.FeatureExtractionLayerOrBuilder> featureExtractionLayerBuilder_;
+          DeepModelSettings.ConfigFeatureExtractor, DeepModelSettings.ConfigFeatureExtractor.Builder, DeepModelSettings.ConfigFeatureExtractorOrBuilder> configFeatureExtractorBuilder_;
       /**
-       * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+       * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
        */
-      public boolean hasFeatureExtractionLayer() {
+      public boolean hasConfigFeatureExtractor() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+       * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
        */
-      public DeepModelSettings.FeatureExtractionLayer getFeatureExtractionLayer() {
-        if (featureExtractionLayerBuilder_ == null) {
-          return featureExtractionLayer_;
+      public DeepModelSettings.ConfigFeatureExtractor getConfigFeatureExtractor() {
+        if (configFeatureExtractorBuilder_ == null) {
+          return configFeatureExtractor_;
         } else {
-          return featureExtractionLayerBuilder_.getMessage();
+          return configFeatureExtractorBuilder_.getMessage();
         }
       }
       /**
-       * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+       * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
        */
-      public Builder setFeatureExtractionLayer(DeepModelSettings.FeatureExtractionLayer value) {
-        if (featureExtractionLayerBuilder_ == null) {
+      public Builder setConfigFeatureExtractor(DeepModelSettings.ConfigFeatureExtractor value) {
+        if (configFeatureExtractorBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          featureExtractionLayer_ = value;
+          configFeatureExtractor_ = value;
           onChanged();
         } else {
-          featureExtractionLayerBuilder_.setMessage(value);
+          configFeatureExtractorBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000004;
         return this;
       }
       /**
-       * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+       * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
        */
-      public Builder setFeatureExtractionLayer(
-          DeepModelSettings.FeatureExtractionLayer.Builder builderForValue) {
-        if (featureExtractionLayerBuilder_ == null) {
-          featureExtractionLayer_ = builderForValue.build();
+      public Builder setConfigFeatureExtractor(
+          DeepModelSettings.ConfigFeatureExtractor.Builder builderForValue) {
+        if (configFeatureExtractorBuilder_ == null) {
+          configFeatureExtractor_ = builderForValue.build();
           onChanged();
         } else {
-          featureExtractionLayerBuilder_.setMessage(builderForValue.build());
+          configFeatureExtractorBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000004;
         return this;
       }
       /**
-       * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+       * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
        */
-      public Builder mergeFeatureExtractionLayer(DeepModelSettings.FeatureExtractionLayer value) {
-        if (featureExtractionLayerBuilder_ == null) {
+      public Builder mergeConfigFeatureExtractor(DeepModelSettings.ConfigFeatureExtractor value) {
+        if (configFeatureExtractorBuilder_ == null) {
           if (((bitField0_ & 0x00000004) == 0x00000004) &&
-              featureExtractionLayer_ != DeepModelSettings.FeatureExtractionLayer.getDefaultInstance()) {
-            featureExtractionLayer_ =
-              DeepModelSettings.FeatureExtractionLayer.newBuilder(featureExtractionLayer_).mergeFrom(value).buildPartial();
+              configFeatureExtractor_ != DeepModelSettings.ConfigFeatureExtractor.getDefaultInstance()) {
+            configFeatureExtractor_ =
+              DeepModelSettings.ConfigFeatureExtractor.newBuilder(configFeatureExtractor_).mergeFrom(value).buildPartial();
           } else {
-            featureExtractionLayer_ = value;
+            configFeatureExtractor_ = value;
           }
           onChanged();
         } else {
-          featureExtractionLayerBuilder_.mergeFrom(value);
+          configFeatureExtractorBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000004;
         return this;
       }
       /**
-       * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+       * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
        */
-      public Builder clearFeatureExtractionLayer() {
-        if (featureExtractionLayerBuilder_ == null) {
-          featureExtractionLayer_ = DeepModelSettings.FeatureExtractionLayer.getDefaultInstance();
+      public Builder clearConfigFeatureExtractor() {
+        if (configFeatureExtractorBuilder_ == null) {
+          configFeatureExtractor_ = DeepModelSettings.ConfigFeatureExtractor.getDefaultInstance();
           onChanged();
         } else {
-          featureExtractionLayerBuilder_.clear();
+          configFeatureExtractorBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
       /**
-       * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+       * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
        */
-      public DeepModelSettings.FeatureExtractionLayer.Builder getFeatureExtractionLayerBuilder() {
+      public DeepModelSettings.ConfigFeatureExtractor.Builder getConfigFeatureExtractorBuilder() {
         bitField0_ |= 0x00000004;
         onChanged();
-        return getFeatureExtractionLayerFieldBuilder().getBuilder();
+        return getConfigFeatureExtractorFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+       * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
        */
-      public DeepModelSettings.FeatureExtractionLayerOrBuilder getFeatureExtractionLayerOrBuilder() {
-        if (featureExtractionLayerBuilder_ != null) {
-          return featureExtractionLayerBuilder_.getMessageOrBuilder();
+      public DeepModelSettings.ConfigFeatureExtractorOrBuilder getConfigFeatureExtractorOrBuilder() {
+        if (configFeatureExtractorBuilder_ != null) {
+          return configFeatureExtractorBuilder_.getMessageOrBuilder();
         } else {
-          return featureExtractionLayer_;
+          return configFeatureExtractor_;
         }
       }
       /**
-       * <code>required .FeatureExtractionLayer feature_extraction_layer = 3;</code>
+       * <code>required .ConfigFeatureExtractor config_feature_extractor = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
-          DeepModelSettings.FeatureExtractionLayer, DeepModelSettings.FeatureExtractionLayer.Builder, DeepModelSettings.FeatureExtractionLayerOrBuilder> 
-          getFeatureExtractionLayerFieldBuilder() {
-        if (featureExtractionLayerBuilder_ == null) {
-          featureExtractionLayerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              DeepModelSettings.FeatureExtractionLayer, DeepModelSettings.FeatureExtractionLayer.Builder, DeepModelSettings.FeatureExtractionLayerOrBuilder>(
-                  getFeatureExtractionLayer(),
+          DeepModelSettings.ConfigFeatureExtractor, DeepModelSettings.ConfigFeatureExtractor.Builder, DeepModelSettings.ConfigFeatureExtractorOrBuilder> 
+          getConfigFeatureExtractorFieldBuilder() {
+        if (configFeatureExtractorBuilder_ == null) {
+          configFeatureExtractorBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              DeepModelSettings.ConfigFeatureExtractor, DeepModelSettings.ConfigFeatureExtractor.Builder, DeepModelSettings.ConfigFeatureExtractorOrBuilder>(
+                  getConfigFeatureExtractor(),
                   getParentForChildren(),
                   isClean());
-          featureExtractionLayer_ = null;
+          configFeatureExtractor_ = null;
         }
-        return featureExtractionLayerBuilder_;
+        return configFeatureExtractorBuilder_;
       }
 
-      private DeepModelSettings.PoolLayer poolLayer_ = DeepModelSettings.PoolLayer.getDefaultInstance();
+      private DeepModelSettings.ConfigPooler configPooler_ = DeepModelSettings.ConfigPooler.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          DeepModelSettings.PoolLayer, DeepModelSettings.PoolLayer.Builder, DeepModelSettings.PoolLayerOrBuilder> poolLayerBuilder_;
+          DeepModelSettings.ConfigPooler, DeepModelSettings.ConfigPooler.Builder, DeepModelSettings.ConfigPoolerOrBuilder> configPoolerBuilder_;
       /**
-       * <code>required .PoolLayer pool_layer = 4;</code>
+       * <code>required .ConfigPooler config_pooler = 4;</code>
        */
-      public boolean hasPoolLayer() {
+      public boolean hasConfigPooler() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>required .PoolLayer pool_layer = 4;</code>
+       * <code>required .ConfigPooler config_pooler = 4;</code>
        */
-      public DeepModelSettings.PoolLayer getPoolLayer() {
-        if (poolLayerBuilder_ == null) {
-          return poolLayer_;
+      public DeepModelSettings.ConfigPooler getConfigPooler() {
+        if (configPoolerBuilder_ == null) {
+          return configPooler_;
         } else {
-          return poolLayerBuilder_.getMessage();
+          return configPoolerBuilder_.getMessage();
         }
       }
       /**
-       * <code>required .PoolLayer pool_layer = 4;</code>
+       * <code>required .ConfigPooler config_pooler = 4;</code>
        */
-      public Builder setPoolLayer(DeepModelSettings.PoolLayer value) {
-        if (poolLayerBuilder_ == null) {
+      public Builder setConfigPooler(DeepModelSettings.ConfigPooler value) {
+        if (configPoolerBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          poolLayer_ = value;
+          configPooler_ = value;
           onChanged();
         } else {
-          poolLayerBuilder_.setMessage(value);
+          configPoolerBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000008;
         return this;
       }
       /**
-       * <code>required .PoolLayer pool_layer = 4;</code>
+       * <code>required .ConfigPooler config_pooler = 4;</code>
        */
-      public Builder setPoolLayer(
-          DeepModelSettings.PoolLayer.Builder builderForValue) {
-        if (poolLayerBuilder_ == null) {
-          poolLayer_ = builderForValue.build();
+      public Builder setConfigPooler(
+          DeepModelSettings.ConfigPooler.Builder builderForValue) {
+        if (configPoolerBuilder_ == null) {
+          configPooler_ = builderForValue.build();
           onChanged();
         } else {
-          poolLayerBuilder_.setMessage(builderForValue.build());
+          configPoolerBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000008;
         return this;
       }
       /**
-       * <code>required .PoolLayer pool_layer = 4;</code>
+       * <code>required .ConfigPooler config_pooler = 4;</code>
        */
-      public Builder mergePoolLayer(DeepModelSettings.PoolLayer value) {
-        if (poolLayerBuilder_ == null) {
+      public Builder mergeConfigPooler(DeepModelSettings.ConfigPooler value) {
+        if (configPoolerBuilder_ == null) {
           if (((bitField0_ & 0x00000008) == 0x00000008) &&
-              poolLayer_ != DeepModelSettings.PoolLayer.getDefaultInstance()) {
-            poolLayer_ =
-              DeepModelSettings.PoolLayer.newBuilder(poolLayer_).mergeFrom(value).buildPartial();
+              configPooler_ != DeepModelSettings.ConfigPooler.getDefaultInstance()) {
+            configPooler_ =
+              DeepModelSettings.ConfigPooler.newBuilder(configPooler_).mergeFrom(value).buildPartial();
           } else {
-            poolLayer_ = value;
+            configPooler_ = value;
           }
           onChanged();
         } else {
-          poolLayerBuilder_.mergeFrom(value);
+          configPoolerBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000008;
         return this;
       }
       /**
-       * <code>required .PoolLayer pool_layer = 4;</code>
+       * <code>required .ConfigPooler config_pooler = 4;</code>
        */
-      public Builder clearPoolLayer() {
-        if (poolLayerBuilder_ == null) {
-          poolLayer_ = DeepModelSettings.PoolLayer.getDefaultInstance();
+      public Builder clearConfigPooler() {
+        if (configPoolerBuilder_ == null) {
+          configPooler_ = DeepModelSettings.ConfigPooler.getDefaultInstance();
           onChanged();
         } else {
-          poolLayerBuilder_.clear();
+          configPoolerBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
       /**
-       * <code>required .PoolLayer pool_layer = 4;</code>
+       * <code>required .ConfigPooler config_pooler = 4;</code>
        */
-      public DeepModelSettings.PoolLayer.Builder getPoolLayerBuilder() {
+      public DeepModelSettings.ConfigPooler.Builder getConfigPoolerBuilder() {
         bitField0_ |= 0x00000008;
         onChanged();
-        return getPoolLayerFieldBuilder().getBuilder();
+        return getConfigPoolerFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .PoolLayer pool_layer = 4;</code>
+       * <code>required .ConfigPooler config_pooler = 4;</code>
        */
-      public DeepModelSettings.PoolLayerOrBuilder getPoolLayerOrBuilder() {
-        if (poolLayerBuilder_ != null) {
-          return poolLayerBuilder_.getMessageOrBuilder();
+      public DeepModelSettings.ConfigPoolerOrBuilder getConfigPoolerOrBuilder() {
+        if (configPoolerBuilder_ != null) {
+          return configPoolerBuilder_.getMessageOrBuilder();
         } else {
-          return poolLayer_;
+          return configPooler_;
         }
       }
       /**
-       * <code>required .PoolLayer pool_layer = 4;</code>
+       * <code>required .ConfigPooler config_pooler = 4;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
-          DeepModelSettings.PoolLayer, DeepModelSettings.PoolLayer.Builder, DeepModelSettings.PoolLayerOrBuilder> 
-          getPoolLayerFieldBuilder() {
-        if (poolLayerBuilder_ == null) {
-          poolLayerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              DeepModelSettings.PoolLayer, DeepModelSettings.PoolLayer.Builder, DeepModelSettings.PoolLayerOrBuilder>(
-                  getPoolLayer(),
+          DeepModelSettings.ConfigPooler, DeepModelSettings.ConfigPooler.Builder, DeepModelSettings.ConfigPoolerOrBuilder> 
+          getConfigPoolerFieldBuilder() {
+        if (configPoolerBuilder_ == null) {
+          configPoolerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              DeepModelSettings.ConfigPooler, DeepModelSettings.ConfigPooler.Builder, DeepModelSettings.ConfigPoolerOrBuilder>(
+                  getConfigPooler(),
                   getParentForChildren(),
                   isClean());
-          poolLayer_ = null;
+          configPooler_ = null;
         }
-        return poolLayerBuilder_;
+        return configPoolerBuilder_;
       }
 
-      // @@protoc_insertion_point(builder_scope:BaseLayer)
+      // @@protoc_insertion_point(builder_scope:ConfigBaseLayer)
     }
 
     static {
-      defaultInstance = new BaseLayer(true);
+      defaultInstance = new ConfigBaseLayer(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:BaseLayer)
+    // @@protoc_insertion_point(class_scope:ConfigBaseLayer)
   }
 
-  public interface ManuscriptsConfigOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:ManuscriptsConfig)
+  public interface ConfigManuscriptsOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:ConfigManuscripts)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>repeated .BaseLayer base_layer = 1;</code>
+     * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
      */
-    java.util.List<DeepModelSettings.BaseLayer> 
-        getBaseLayerList();
+    java.util.List<DeepModelSettings.ConfigBaseLayer> 
+        getConfigLayerList();
     /**
-     * <code>repeated .BaseLayer base_layer = 1;</code>
+     * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
      */
-    DeepModelSettings.BaseLayer getBaseLayer(int index);
+    DeepModelSettings.ConfigBaseLayer getConfigLayer(int index);
     /**
-     * <code>repeated .BaseLayer base_layer = 1;</code>
+     * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
      */
-    int getBaseLayerCount();
+    int getConfigLayerCount();
     /**
-     * <code>repeated .BaseLayer base_layer = 1;</code>
+     * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
      */
-    java.util.List<? extends DeepModelSettings.BaseLayerOrBuilder> 
-        getBaseLayerOrBuilderList();
+    java.util.List<? extends DeepModelSettings.ConfigBaseLayerOrBuilder> 
+        getConfigLayerOrBuilderList();
     /**
-     * <code>repeated .BaseLayer base_layer = 1;</code>
+     * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
      */
-    DeepModelSettings.BaseLayerOrBuilder getBaseLayerOrBuilder(
+    DeepModelSettings.ConfigBaseLayerOrBuilder getConfigLayerOrBuilder(
         int index);
   }
   /**
-   * Protobuf type {@code ManuscriptsConfig}
+   * Protobuf type {@code ConfigManuscripts}
    */
-  public static final class ManuscriptsConfig extends
+  public static final class ConfigManuscripts extends
       com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:ManuscriptsConfig)
-      ManuscriptsConfigOrBuilder {
-    // Use ManuscriptsConfig.newBuilder() to construct.
-    private ManuscriptsConfig(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:ConfigManuscripts)
+      ConfigManuscriptsOrBuilder {
+    // Use ConfigManuscripts.newBuilder() to construct.
+    private ConfigManuscripts(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private ManuscriptsConfig(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private ConfigManuscripts(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final ManuscriptsConfig defaultInstance;
-    public static ManuscriptsConfig getDefaultInstance() {
+    private static final ConfigManuscripts defaultInstance;
+    public static ConfigManuscripts getDefaultInstance() {
       return defaultInstance;
     }
 
-    public ManuscriptsConfig getDefaultInstanceForType() {
+    public ConfigManuscripts getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -2984,7 +3314,7 @@ public final class DeepModelSettings {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private ManuscriptsConfig(
+    private ConfigManuscripts(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -3009,10 +3339,10 @@ public final class DeepModelSettings {
             }
             case 10: {
               if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                baseLayer_ = new java.util.ArrayList<DeepModelSettings.BaseLayer>();
+                configLayer_ = new java.util.ArrayList<DeepModelSettings.ConfigBaseLayer>();
                 mutable_bitField0_ |= 0x00000001;
               }
-              baseLayer_.add(input.readMessage(DeepModelSettings.BaseLayer.PARSER, extensionRegistry));
+              configLayer_.add(input.readMessage(DeepModelSettings.ConfigBaseLayer.PARSER, extensionRegistry));
               break;
             }
           }
@@ -3024,7 +3354,7 @@ public final class DeepModelSettings {
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          baseLayer_ = java.util.Collections.unmodifiableList(baseLayer_);
+          configLayer_ = java.util.Collections.unmodifiableList(configLayer_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -3032,68 +3362,68 @@ public final class DeepModelSettings {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return DeepModelSettings.internal_static_ManuscriptsConfig_descriptor;
+      return DeepModelSettings.internal_static_ConfigManuscripts_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return DeepModelSettings.internal_static_ManuscriptsConfig_fieldAccessorTable
+      return DeepModelSettings.internal_static_ConfigManuscripts_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              DeepModelSettings.ManuscriptsConfig.class, DeepModelSettings.ManuscriptsConfig.Builder.class);
+              DeepModelSettings.ConfigManuscripts.class, DeepModelSettings.ConfigManuscripts.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<ManuscriptsConfig> PARSER =
-        new com.google.protobuf.AbstractParser<ManuscriptsConfig>() {
-      public ManuscriptsConfig parsePartialFrom(
+    public static com.google.protobuf.Parser<ConfigManuscripts> PARSER =
+        new com.google.protobuf.AbstractParser<ConfigManuscripts>() {
+      public ConfigManuscripts parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ManuscriptsConfig(input, extensionRegistry);
+        return new ConfigManuscripts(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<ManuscriptsConfig> getParserForType() {
+    public com.google.protobuf.Parser<ConfigManuscripts> getParserForType() {
       return PARSER;
     }
 
-    public static final int BASE_LAYER_FIELD_NUMBER = 1;
-    private java.util.List<DeepModelSettings.BaseLayer> baseLayer_;
+    public static final int CONFIG_LAYER_FIELD_NUMBER = 1;
+    private java.util.List<DeepModelSettings.ConfigBaseLayer> configLayer_;
     /**
-     * <code>repeated .BaseLayer base_layer = 1;</code>
+     * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
      */
-    public java.util.List<DeepModelSettings.BaseLayer> getBaseLayerList() {
-      return baseLayer_;
+    public java.util.List<DeepModelSettings.ConfigBaseLayer> getConfigLayerList() {
+      return configLayer_;
     }
     /**
-     * <code>repeated .BaseLayer base_layer = 1;</code>
+     * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
      */
-    public java.util.List<? extends DeepModelSettings.BaseLayerOrBuilder> 
-        getBaseLayerOrBuilderList() {
-      return baseLayer_;
+    public java.util.List<? extends DeepModelSettings.ConfigBaseLayerOrBuilder> 
+        getConfigLayerOrBuilderList() {
+      return configLayer_;
     }
     /**
-     * <code>repeated .BaseLayer base_layer = 1;</code>
+     * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
      */
-    public int getBaseLayerCount() {
-      return baseLayer_.size();
+    public int getConfigLayerCount() {
+      return configLayer_.size();
     }
     /**
-     * <code>repeated .BaseLayer base_layer = 1;</code>
+     * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
      */
-    public DeepModelSettings.BaseLayer getBaseLayer(int index) {
-      return baseLayer_.get(index);
+    public DeepModelSettings.ConfigBaseLayer getConfigLayer(int index) {
+      return configLayer_.get(index);
     }
     /**
-     * <code>repeated .BaseLayer base_layer = 1;</code>
+     * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
      */
-    public DeepModelSettings.BaseLayerOrBuilder getBaseLayerOrBuilder(
+    public DeepModelSettings.ConfigBaseLayerOrBuilder getConfigLayerOrBuilder(
         int index) {
-      return baseLayer_.get(index);
+      return configLayer_.get(index);
     }
 
     private void initFields() {
-      baseLayer_ = java.util.Collections.emptyList();
+      configLayer_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3101,8 +3431,8 @@ public final class DeepModelSettings {
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
-      for (int i = 0; i < getBaseLayerCount(); i++) {
-        if (!getBaseLayer(i).isInitialized()) {
+      for (int i = 0; i < getConfigLayerCount(); i++) {
+        if (!getConfigLayer(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -3114,8 +3444,8 @@ public final class DeepModelSettings {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      for (int i = 0; i < baseLayer_.size(); i++) {
-        output.writeMessage(1, baseLayer_.get(i));
+      for (int i = 0; i < configLayer_.size(); i++) {
+        output.writeMessage(1, configLayer_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -3126,9 +3456,9 @@ public final class DeepModelSettings {
       if (size != -1) return size;
 
       size = 0;
-      for (int i = 0; i < baseLayer_.size(); i++) {
+      for (int i = 0; i < configLayer_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, baseLayer_.get(i));
+          .computeMessageSize(1, configLayer_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3142,53 +3472,53 @@ public final class DeepModelSettings {
       return super.writeReplace();
     }
 
-    public static DeepModelSettings.ManuscriptsConfig parseFrom(
+    public static DeepModelSettings.ConfigManuscripts parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static DeepModelSettings.ManuscriptsConfig parseFrom(
+    public static DeepModelSettings.ConfigManuscripts parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static DeepModelSettings.ManuscriptsConfig parseFrom(byte[] data)
+    public static DeepModelSettings.ConfigManuscripts parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static DeepModelSettings.ManuscriptsConfig parseFrom(
+    public static DeepModelSettings.ConfigManuscripts parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static DeepModelSettings.ManuscriptsConfig parseFrom(java.io.InputStream input)
+    public static DeepModelSettings.ConfigManuscripts parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static DeepModelSettings.ManuscriptsConfig parseFrom(
+    public static DeepModelSettings.ConfigManuscripts parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static DeepModelSettings.ManuscriptsConfig parseDelimitedFrom(java.io.InputStream input)
+    public static DeepModelSettings.ConfigManuscripts parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static DeepModelSettings.ManuscriptsConfig parseDelimitedFrom(
+    public static DeepModelSettings.ConfigManuscripts parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static DeepModelSettings.ManuscriptsConfig parseFrom(
+    public static DeepModelSettings.ConfigManuscripts parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static DeepModelSettings.ManuscriptsConfig parseFrom(
+    public static DeepModelSettings.ConfigManuscripts parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -3197,7 +3527,7 @@ public final class DeepModelSettings {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(DeepModelSettings.ManuscriptsConfig prototype) {
+    public static Builder newBuilder(DeepModelSettings.ConfigManuscripts prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -3209,25 +3539,25 @@ public final class DeepModelSettings {
       return builder;
     }
     /**
-     * Protobuf type {@code ManuscriptsConfig}
+     * Protobuf type {@code ConfigManuscripts}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:ManuscriptsConfig)
-        DeepModelSettings.ManuscriptsConfigOrBuilder {
+        // @@protoc_insertion_point(builder_implements:ConfigManuscripts)
+        DeepModelSettings.ConfigManuscriptsOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return DeepModelSettings.internal_static_ManuscriptsConfig_descriptor;
+        return DeepModelSettings.internal_static_ConfigManuscripts_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return DeepModelSettings.internal_static_ManuscriptsConfig_fieldAccessorTable
+        return DeepModelSettings.internal_static_ConfigManuscripts_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                DeepModelSettings.ManuscriptsConfig.class, DeepModelSettings.ManuscriptsConfig.Builder.class);
+                DeepModelSettings.ConfigManuscripts.class, DeepModelSettings.ConfigManuscripts.Builder.class);
       }
 
-      // Construct using DeepModelSettings.ManuscriptsConfig.newBuilder()
+      // Construct using DeepModelSettings.ConfigManuscripts.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -3239,7 +3569,7 @@ public final class DeepModelSettings {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getBaseLayerFieldBuilder();
+          getConfigLayerFieldBuilder();
         }
       }
       private static Builder create() {
@@ -3248,11 +3578,11 @@ public final class DeepModelSettings {
 
       public Builder clear() {
         super.clear();
-        if (baseLayerBuilder_ == null) {
-          baseLayer_ = java.util.Collections.emptyList();
+        if (configLayerBuilder_ == null) {
+          configLayer_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000001);
         } else {
-          baseLayerBuilder_.clear();
+          configLayerBuilder_.clear();
         }
         return this;
       }
@@ -3263,71 +3593,71 @@ public final class DeepModelSettings {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return DeepModelSettings.internal_static_ManuscriptsConfig_descriptor;
+        return DeepModelSettings.internal_static_ConfigManuscripts_descriptor;
       }
 
-      public DeepModelSettings.ManuscriptsConfig getDefaultInstanceForType() {
-        return DeepModelSettings.ManuscriptsConfig.getDefaultInstance();
+      public DeepModelSettings.ConfigManuscripts getDefaultInstanceForType() {
+        return DeepModelSettings.ConfigManuscripts.getDefaultInstance();
       }
 
-      public DeepModelSettings.ManuscriptsConfig build() {
-        DeepModelSettings.ManuscriptsConfig result = buildPartial();
+      public DeepModelSettings.ConfigManuscripts build() {
+        DeepModelSettings.ConfigManuscripts result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public DeepModelSettings.ManuscriptsConfig buildPartial() {
-        DeepModelSettings.ManuscriptsConfig result = new DeepModelSettings.ManuscriptsConfig(this);
+      public DeepModelSettings.ConfigManuscripts buildPartial() {
+        DeepModelSettings.ConfigManuscripts result = new DeepModelSettings.ConfigManuscripts(this);
         int from_bitField0_ = bitField0_;
-        if (baseLayerBuilder_ == null) {
+        if (configLayerBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            baseLayer_ = java.util.Collections.unmodifiableList(baseLayer_);
+            configLayer_ = java.util.Collections.unmodifiableList(configLayer_);
             bitField0_ = (bitField0_ & ~0x00000001);
           }
-          result.baseLayer_ = baseLayer_;
+          result.configLayer_ = configLayer_;
         } else {
-          result.baseLayer_ = baseLayerBuilder_.build();
+          result.configLayer_ = configLayerBuilder_.build();
         }
         onBuilt();
         return result;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof DeepModelSettings.ManuscriptsConfig) {
-          return mergeFrom((DeepModelSettings.ManuscriptsConfig)other);
+        if (other instanceof DeepModelSettings.ConfigManuscripts) {
+          return mergeFrom((DeepModelSettings.ConfigManuscripts)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(DeepModelSettings.ManuscriptsConfig other) {
-        if (other == DeepModelSettings.ManuscriptsConfig.getDefaultInstance()) return this;
-        if (baseLayerBuilder_ == null) {
-          if (!other.baseLayer_.isEmpty()) {
-            if (baseLayer_.isEmpty()) {
-              baseLayer_ = other.baseLayer_;
+      public Builder mergeFrom(DeepModelSettings.ConfigManuscripts other) {
+        if (other == DeepModelSettings.ConfigManuscripts.getDefaultInstance()) return this;
+        if (configLayerBuilder_ == null) {
+          if (!other.configLayer_.isEmpty()) {
+            if (configLayer_.isEmpty()) {
+              configLayer_ = other.configLayer_;
               bitField0_ = (bitField0_ & ~0x00000001);
             } else {
-              ensureBaseLayerIsMutable();
-              baseLayer_.addAll(other.baseLayer_);
+              ensureConfigLayerIsMutable();
+              configLayer_.addAll(other.configLayer_);
             }
             onChanged();
           }
         } else {
-          if (!other.baseLayer_.isEmpty()) {
-            if (baseLayerBuilder_.isEmpty()) {
-              baseLayerBuilder_.dispose();
-              baseLayerBuilder_ = null;
-              baseLayer_ = other.baseLayer_;
+          if (!other.configLayer_.isEmpty()) {
+            if (configLayerBuilder_.isEmpty()) {
+              configLayerBuilder_.dispose();
+              configLayerBuilder_ = null;
+              configLayer_ = other.configLayer_;
               bitField0_ = (bitField0_ & ~0x00000001);
-              baseLayerBuilder_ = 
+              configLayerBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getBaseLayerFieldBuilder() : null;
+                   getConfigLayerFieldBuilder() : null;
             } else {
-              baseLayerBuilder_.addAllMessages(other.baseLayer_);
+              configLayerBuilder_.addAllMessages(other.configLayer_);
             }
           }
         }
@@ -3336,8 +3666,8 @@ public final class DeepModelSettings {
       }
 
       public final boolean isInitialized() {
-        for (int i = 0; i < getBaseLayerCount(); i++) {
-          if (!getBaseLayer(i).isInitialized()) {
+        for (int i = 0; i < getConfigLayerCount(); i++) {
+          if (!getConfigLayer(i).isInitialized()) {
             
             return false;
           }
@@ -3349,11 +3679,11 @@ public final class DeepModelSettings {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        DeepModelSettings.ManuscriptsConfig parsedMessage = null;
+        DeepModelSettings.ConfigManuscripts parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (DeepModelSettings.ManuscriptsConfig) e.getUnfinishedMessage();
+          parsedMessage = (DeepModelSettings.ConfigManuscripts) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -3364,287 +3694,287 @@ public final class DeepModelSettings {
       }
       private int bitField0_;
 
-      private java.util.List<DeepModelSettings.BaseLayer> baseLayer_ =
+      private java.util.List<DeepModelSettings.ConfigBaseLayer> configLayer_ =
         java.util.Collections.emptyList();
-      private void ensureBaseLayerIsMutable() {
+      private void ensureConfigLayerIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          baseLayer_ = new java.util.ArrayList<DeepModelSettings.BaseLayer>(baseLayer_);
+          configLayer_ = new java.util.ArrayList<DeepModelSettings.ConfigBaseLayer>(configLayer_);
           bitField0_ |= 0x00000001;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilder<
-          DeepModelSettings.BaseLayer, DeepModelSettings.BaseLayer.Builder, DeepModelSettings.BaseLayerOrBuilder> baseLayerBuilder_;
+          DeepModelSettings.ConfigBaseLayer, DeepModelSettings.ConfigBaseLayer.Builder, DeepModelSettings.ConfigBaseLayerOrBuilder> configLayerBuilder_;
 
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public java.util.List<DeepModelSettings.BaseLayer> getBaseLayerList() {
-        if (baseLayerBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(baseLayer_);
+      public java.util.List<DeepModelSettings.ConfigBaseLayer> getConfigLayerList() {
+        if (configLayerBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(configLayer_);
         } else {
-          return baseLayerBuilder_.getMessageList();
+          return configLayerBuilder_.getMessageList();
         }
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public int getBaseLayerCount() {
-        if (baseLayerBuilder_ == null) {
-          return baseLayer_.size();
+      public int getConfigLayerCount() {
+        if (configLayerBuilder_ == null) {
+          return configLayer_.size();
         } else {
-          return baseLayerBuilder_.getCount();
+          return configLayerBuilder_.getCount();
         }
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public DeepModelSettings.BaseLayer getBaseLayer(int index) {
-        if (baseLayerBuilder_ == null) {
-          return baseLayer_.get(index);
+      public DeepModelSettings.ConfigBaseLayer getConfigLayer(int index) {
+        if (configLayerBuilder_ == null) {
+          return configLayer_.get(index);
         } else {
-          return baseLayerBuilder_.getMessage(index);
+          return configLayerBuilder_.getMessage(index);
         }
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public Builder setBaseLayer(
-          int index, DeepModelSettings.BaseLayer value) {
-        if (baseLayerBuilder_ == null) {
+      public Builder setConfigLayer(
+          int index, DeepModelSettings.ConfigBaseLayer value) {
+        if (configLayerBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureBaseLayerIsMutable();
-          baseLayer_.set(index, value);
+          ensureConfigLayerIsMutable();
+          configLayer_.set(index, value);
           onChanged();
         } else {
-          baseLayerBuilder_.setMessage(index, value);
+          configLayerBuilder_.setMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public Builder setBaseLayer(
-          int index, DeepModelSettings.BaseLayer.Builder builderForValue) {
-        if (baseLayerBuilder_ == null) {
-          ensureBaseLayerIsMutable();
-          baseLayer_.set(index, builderForValue.build());
+      public Builder setConfigLayer(
+          int index, DeepModelSettings.ConfigBaseLayer.Builder builderForValue) {
+        if (configLayerBuilder_ == null) {
+          ensureConfigLayerIsMutable();
+          configLayer_.set(index, builderForValue.build());
           onChanged();
         } else {
-          baseLayerBuilder_.setMessage(index, builderForValue.build());
+          configLayerBuilder_.setMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public Builder addBaseLayer(DeepModelSettings.BaseLayer value) {
-        if (baseLayerBuilder_ == null) {
+      public Builder addConfigLayer(DeepModelSettings.ConfigBaseLayer value) {
+        if (configLayerBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureBaseLayerIsMutable();
-          baseLayer_.add(value);
+          ensureConfigLayerIsMutable();
+          configLayer_.add(value);
           onChanged();
         } else {
-          baseLayerBuilder_.addMessage(value);
+          configLayerBuilder_.addMessage(value);
         }
         return this;
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public Builder addBaseLayer(
-          int index, DeepModelSettings.BaseLayer value) {
-        if (baseLayerBuilder_ == null) {
+      public Builder addConfigLayer(
+          int index, DeepModelSettings.ConfigBaseLayer value) {
+        if (configLayerBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureBaseLayerIsMutable();
-          baseLayer_.add(index, value);
+          ensureConfigLayerIsMutable();
+          configLayer_.add(index, value);
           onChanged();
         } else {
-          baseLayerBuilder_.addMessage(index, value);
+          configLayerBuilder_.addMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public Builder addBaseLayer(
-          DeepModelSettings.BaseLayer.Builder builderForValue) {
-        if (baseLayerBuilder_ == null) {
-          ensureBaseLayerIsMutable();
-          baseLayer_.add(builderForValue.build());
+      public Builder addConfigLayer(
+          DeepModelSettings.ConfigBaseLayer.Builder builderForValue) {
+        if (configLayerBuilder_ == null) {
+          ensureConfigLayerIsMutable();
+          configLayer_.add(builderForValue.build());
           onChanged();
         } else {
-          baseLayerBuilder_.addMessage(builderForValue.build());
+          configLayerBuilder_.addMessage(builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public Builder addBaseLayer(
-          int index, DeepModelSettings.BaseLayer.Builder builderForValue) {
-        if (baseLayerBuilder_ == null) {
-          ensureBaseLayerIsMutable();
-          baseLayer_.add(index, builderForValue.build());
+      public Builder addConfigLayer(
+          int index, DeepModelSettings.ConfigBaseLayer.Builder builderForValue) {
+        if (configLayerBuilder_ == null) {
+          ensureConfigLayerIsMutable();
+          configLayer_.add(index, builderForValue.build());
           onChanged();
         } else {
-          baseLayerBuilder_.addMessage(index, builderForValue.build());
+          configLayerBuilder_.addMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public Builder addAllBaseLayer(
-          java.lang.Iterable<? extends DeepModelSettings.BaseLayer> values) {
-        if (baseLayerBuilder_ == null) {
-          ensureBaseLayerIsMutable();
+      public Builder addAllConfigLayer(
+          java.lang.Iterable<? extends DeepModelSettings.ConfigBaseLayer> values) {
+        if (configLayerBuilder_ == null) {
+          ensureConfigLayerIsMutable();
           com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, baseLayer_);
+              values, configLayer_);
           onChanged();
         } else {
-          baseLayerBuilder_.addAllMessages(values);
+          configLayerBuilder_.addAllMessages(values);
         }
         return this;
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public Builder clearBaseLayer() {
-        if (baseLayerBuilder_ == null) {
-          baseLayer_ = java.util.Collections.emptyList();
+      public Builder clearConfigLayer() {
+        if (configLayerBuilder_ == null) {
+          configLayer_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000001);
           onChanged();
         } else {
-          baseLayerBuilder_.clear();
+          configLayerBuilder_.clear();
         }
         return this;
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public Builder removeBaseLayer(int index) {
-        if (baseLayerBuilder_ == null) {
-          ensureBaseLayerIsMutable();
-          baseLayer_.remove(index);
+      public Builder removeConfigLayer(int index) {
+        if (configLayerBuilder_ == null) {
+          ensureConfigLayerIsMutable();
+          configLayer_.remove(index);
           onChanged();
         } else {
-          baseLayerBuilder_.remove(index);
+          configLayerBuilder_.remove(index);
         }
         return this;
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public DeepModelSettings.BaseLayer.Builder getBaseLayerBuilder(
+      public DeepModelSettings.ConfigBaseLayer.Builder getConfigLayerBuilder(
           int index) {
-        return getBaseLayerFieldBuilder().getBuilder(index);
+        return getConfigLayerFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public DeepModelSettings.BaseLayerOrBuilder getBaseLayerOrBuilder(
+      public DeepModelSettings.ConfigBaseLayerOrBuilder getConfigLayerOrBuilder(
           int index) {
-        if (baseLayerBuilder_ == null) {
-          return baseLayer_.get(index);  } else {
-          return baseLayerBuilder_.getMessageOrBuilder(index);
+        if (configLayerBuilder_ == null) {
+          return configLayer_.get(index);  } else {
+          return configLayerBuilder_.getMessageOrBuilder(index);
         }
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public java.util.List<? extends DeepModelSettings.BaseLayerOrBuilder> 
-           getBaseLayerOrBuilderList() {
-        if (baseLayerBuilder_ != null) {
-          return baseLayerBuilder_.getMessageOrBuilderList();
+      public java.util.List<? extends DeepModelSettings.ConfigBaseLayerOrBuilder> 
+           getConfigLayerOrBuilderList() {
+        if (configLayerBuilder_ != null) {
+          return configLayerBuilder_.getMessageOrBuilderList();
         } else {
-          return java.util.Collections.unmodifiableList(baseLayer_);
+          return java.util.Collections.unmodifiableList(configLayer_);
         }
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public DeepModelSettings.BaseLayer.Builder addBaseLayerBuilder() {
-        return getBaseLayerFieldBuilder().addBuilder(
-            DeepModelSettings.BaseLayer.getDefaultInstance());
+      public DeepModelSettings.ConfigBaseLayer.Builder addConfigLayerBuilder() {
+        return getConfigLayerFieldBuilder().addBuilder(
+            DeepModelSettings.ConfigBaseLayer.getDefaultInstance());
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public DeepModelSettings.BaseLayer.Builder addBaseLayerBuilder(
+      public DeepModelSettings.ConfigBaseLayer.Builder addConfigLayerBuilder(
           int index) {
-        return getBaseLayerFieldBuilder().addBuilder(
-            index, DeepModelSettings.BaseLayer.getDefaultInstance());
+        return getConfigLayerFieldBuilder().addBuilder(
+            index, DeepModelSettings.ConfigBaseLayer.getDefaultInstance());
       }
       /**
-       * <code>repeated .BaseLayer base_layer = 1;</code>
+       * <code>repeated .ConfigBaseLayer config_layer = 1;</code>
        */
-      public java.util.List<DeepModelSettings.BaseLayer.Builder> 
-           getBaseLayerBuilderList() {
-        return getBaseLayerFieldBuilder().getBuilderList();
+      public java.util.List<DeepModelSettings.ConfigBaseLayer.Builder> 
+           getConfigLayerBuilderList() {
+        return getConfigLayerFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          DeepModelSettings.BaseLayer, DeepModelSettings.BaseLayer.Builder, DeepModelSettings.BaseLayerOrBuilder> 
-          getBaseLayerFieldBuilder() {
-        if (baseLayerBuilder_ == null) {
-          baseLayerBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              DeepModelSettings.BaseLayer, DeepModelSettings.BaseLayer.Builder, DeepModelSettings.BaseLayerOrBuilder>(
-                  baseLayer_,
+          DeepModelSettings.ConfigBaseLayer, DeepModelSettings.ConfigBaseLayer.Builder, DeepModelSettings.ConfigBaseLayerOrBuilder> 
+          getConfigLayerFieldBuilder() {
+        if (configLayerBuilder_ == null) {
+          configLayerBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              DeepModelSettings.ConfigBaseLayer, DeepModelSettings.ConfigBaseLayer.Builder, DeepModelSettings.ConfigBaseLayerOrBuilder>(
+                  configLayer_,
                   ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
                   isClean());
-          baseLayer_ = null;
+          configLayer_ = null;
         }
-        return baseLayerBuilder_;
+        return configLayerBuilder_;
       }
 
-      // @@protoc_insertion_point(builder_scope:ManuscriptsConfig)
+      // @@protoc_insertion_point(builder_scope:ConfigManuscripts)
     }
 
     static {
-      defaultInstance = new ManuscriptsConfig(true);
+      defaultInstance = new ConfigManuscripts(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:ManuscriptsConfig)
+    // @@protoc_insertion_point(class_scope:ConfigManuscripts)
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_KMeans_descriptor;
+    internal_static_ConfigKMeans_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_KMeans_fieldAccessorTable;
+      internal_static_ConfigKMeans_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Autoencoders_descriptor;
+    internal_static_ConfigAutoencoders_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_Autoencoders_fieldAccessorTable;
+      internal_static_ConfigAutoencoders_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_FeatureExtractionLayer_descriptor;
+    internal_static_ConfigFeatureExtractor_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_FeatureExtractionLayer_fieldAccessorTable;
+      internal_static_ConfigFeatureExtractor_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_PoolLayer_descriptor;
+    internal_static_ConfigPooler_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_PoolLayer_fieldAccessorTable;
+      internal_static_ConfigPooler_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_BaseLayer_descriptor;
+    internal_static_ConfigBaseLayer_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_BaseLayer_fieldAccessorTable;
+      internal_static_ConfigBaseLayer_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_ManuscriptsConfig_descriptor;
+    internal_static_ConfigManuscripts_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_ManuscriptsConfig_fieldAccessorTable;
+      internal_static_ConfigManuscripts_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -3654,19 +3984,22 @@ public final class DeepModelSettings {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\031deep_model_settings.proto\"$\n\006KMeans\022\032\n" +
-      "\022number_of_clusters\030\001 \002(\005\"\'\n\014Autoencoder" +
-      "s\022\027\n\017number_of_units\030\001 \002(\005\"-\n\026FeatureExt" +
-      "ractionLayer\022\023\n\013num_outputs\030\001 \002(\005\"m\n\tPoo" +
-      "lLayer\022\021\n\tpool_size\030\001 \002(\005\022+\n\tpool_type\030\002" +
-      " \001(\0162\023.PoolLayer.PoolType:\003MAX\" \n\010PoolTy" +
-      "pe\022\007\n\003MAX\020\000\022\013\n\007AVERAGE\020\001\"\260\001\n\tBaseLayer\022\035" +
-      "\n\014kmeans_layer\030\001 \001(\0132\007.KMeans\022)\n\022autoenc" +
-      "oders_layer\030\002 \001(\0132\r.Autoencoders\0229\n\030feat" +
-      "ure_extraction_layer\030\003 \002(\0132\027.FeatureExtr",
-      "actionLayer\022\036\n\npool_layer\030\004 \002(\0132\n.PoolLa" +
-      "yer\"3\n\021ManuscriptsConfig\022\036\n\nbase_layer\030\001" +
-      " \003(\0132\n.BaseLayer"
+      "\n\031deep_model_settings.proto\"*\n\014ConfigKMe" +
+      "ans\022\032\n\022number_of_clusters\030\001 \002(\005\"-\n\022Confi" +
+      "gAutoencoders\022\027\n\017number_of_units\030\001 \002(\005\"l" +
+      "\n\026ConfigFeatureExtractor\022\022\n\ninput_dim1\030\001" +
+      " \002(\005\022\022\n\ninput_dim2\030\002 \002(\005\022\024\n\014feature_dim1" +
+      "\030\003 \002(\005\022\024\n\014feature_dim2\030\004 \002(\005\"s\n\014ConfigPo" +
+      "oler\022\021\n\tpool_size\030\001 \002(\005\022.\n\tpool_type\030\002 \001" +
+      "(\0162\026.ConfigPooler.PoolType:\003MAX\" \n\010PoolT" +
+      "ype\022\007\n\003MAX\020\000\022\013\n\007AVERAGE\020\001\"\312\001\n\017ConfigBase" +
+      "Layer\022$\n\rconfig_kmeans\030\001 \001(\0132\r.ConfigKMe",
+      "ans\0220\n\023config_autoencoders\030\002 \001(\0132\023.Confi" +
+      "gAutoencoders\0229\n\030config_feature_extracto" +
+      "r\030\003 \002(\0132\027.ConfigFeatureExtractor\022$\n\rconf" +
+      "ig_pooler\030\004 \002(\0132\r.ConfigPooler\";\n\021Config" +
+      "Manuscripts\022&\n\014config_layer\030\001 \003(\0132\020.Conf" +
+      "igBaseLayer"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3680,42 +4013,42 @@ public final class DeepModelSettings {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_KMeans_descriptor =
+    internal_static_ConfigKMeans_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_KMeans_fieldAccessorTable = new
+    internal_static_ConfigKMeans_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_KMeans_descriptor,
+        internal_static_ConfigKMeans_descriptor,
         new java.lang.String[] { "NumberOfClusters", });
-    internal_static_Autoencoders_descriptor =
+    internal_static_ConfigAutoencoders_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_Autoencoders_fieldAccessorTable = new
+    internal_static_ConfigAutoencoders_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_Autoencoders_descriptor,
+        internal_static_ConfigAutoencoders_descriptor,
         new java.lang.String[] { "NumberOfUnits", });
-    internal_static_FeatureExtractionLayer_descriptor =
+    internal_static_ConfigFeatureExtractor_descriptor =
       getDescriptor().getMessageTypes().get(2);
-    internal_static_FeatureExtractionLayer_fieldAccessorTable = new
+    internal_static_ConfigFeatureExtractor_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_FeatureExtractionLayer_descriptor,
-        new java.lang.String[] { "NumOutputs", });
-    internal_static_PoolLayer_descriptor =
+        internal_static_ConfigFeatureExtractor_descriptor,
+        new java.lang.String[] { "InputDim1", "InputDim2", "FeatureDim1", "FeatureDim2", });
+    internal_static_ConfigPooler_descriptor =
       getDescriptor().getMessageTypes().get(3);
-    internal_static_PoolLayer_fieldAccessorTable = new
+    internal_static_ConfigPooler_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_PoolLayer_descriptor,
+        internal_static_ConfigPooler_descriptor,
         new java.lang.String[] { "PoolSize", "PoolType", });
-    internal_static_BaseLayer_descriptor =
+    internal_static_ConfigBaseLayer_descriptor =
       getDescriptor().getMessageTypes().get(4);
-    internal_static_BaseLayer_fieldAccessorTable = new
+    internal_static_ConfigBaseLayer_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_BaseLayer_descriptor,
-        new java.lang.String[] { "KmeansLayer", "AutoencodersLayer", "FeatureExtractionLayer", "PoolLayer", });
-    internal_static_ManuscriptsConfig_descriptor =
+        internal_static_ConfigBaseLayer_descriptor,
+        new java.lang.String[] { "ConfigKmeans", "ConfigAutoencoders", "ConfigFeatureExtractor", "ConfigPooler", });
+    internal_static_ConfigManuscripts_descriptor =
       getDescriptor().getMessageTypes().get(5);
-    internal_static_ManuscriptsConfig_fieldAccessorTable = new
+    internal_static_ConfigManuscripts_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_ManuscriptsConfig_descriptor,
-        new java.lang.String[] { "BaseLayer", });
+        internal_static_ConfigManuscripts_descriptor,
+        new java.lang.String[] { "ConfigLayer", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

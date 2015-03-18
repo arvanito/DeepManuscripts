@@ -1,26 +1,29 @@
-base_layer {
-  kmeans_layer {
+config_layer {
+  config_kmeans {
     number_of_clusters: 10
   }
-  feature_extraction_layer {
+  config_feature_extractor {
     input_dim1: 128
     input_dim2: 32
     feature_dim1: 32
     feature_dim2: 32
   }
-  pool_layer {
+  config_pooler {
     pool_size: 2
   }  
 }
 
-base_layer {
-  autoencoders_layer {
+config_layer {
+  config_autoencoders {
     number_of_units: 10
   }
-  feature_extraction_layer {
-  	num_outputs: 10
+  config_feature_extractor {
+    input_dim1: 128
+    input_dim2: 32
+    feature_dim1: 32
+    feature_dim2: 32
   }
-  pool_layer {
+  config_pooler {
     pool_size: 2
   }  
 }

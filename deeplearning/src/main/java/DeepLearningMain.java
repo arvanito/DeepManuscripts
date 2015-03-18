@@ -9,11 +9,9 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.Vector;
-
 import com.google.protobuf.TextFormat;
 
-import main.java.DeepModelSettings.ManuscriptsConfig;
-import main.java.DeepModelSettings.BaseLayer;
+import main.java.DeepModelSettings.*;
 
 /**
  * Main class.
@@ -23,17 +21,25 @@ public class DeepLearningMain {
 	public static void loadSettings(String prototxt_file) {
 		// TODO return the settings structure
 		try {
-			ManuscriptsConfig.Builder builder = ManuscriptsConfig.newBuilder();
+			ConfigManuscripts.Builder builder = ConfigManuscripts.newBuilder();
 			//BufferedReader reader = new BufferedReader(new FileReader(prototxt_file));
 			FileInputStream fs = new FileInputStream(prototxt_file);
 			InputStreamReader reader = new InputStreamReader(fs);
 			TextFormat.merge(reader, builder);
 			
 			// Settings file created
-			ManuscriptsConfig settings = builder.build();
-			System.out.printf("# base layers is %d\n", settings.getBaseLayerCount());
+			ConfigManuscripts settings = builder.build();
+			System.out.printf("# base layers is %d\n", settings.getConfigLayerCount());
 			
-			for (BaseLayer blayer: settings.getBaseLayerList()) {
+			for (ConfigBaseLayer blayer: settings.getConfigLayerList()) {
+				if (blayer.hasConfigKmeans()) {
+					System.out.printf("Kmeans clusters %d\n", blayer.getConfigKmeans().getNumberOfClusters());
+				}
+				if (blayer.hasConfigAutoencoders()) {
+					System.out.printf("Autoencoders units %d\n", blayer.getConfigAutoencoders().getNumberOfUnits());
+				}
+				ConfigPooler cpooler = blayer.getConfigPooler();
+				System.out.printf("Pool size %d\n", cpooler.getPoolSize());
 			}
 			
 			reader.close();
