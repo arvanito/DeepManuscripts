@@ -1,5 +1,7 @@
 syntax="proto2";
 
+package main.java;
+
 message ConfigKMeans {
         required int32 number_of_clusters = 1;
 } 
