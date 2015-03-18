@@ -31,6 +31,7 @@ public class BaseLayer implements DeepLearningLayer {
 
 	@Override
 	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, Vector[] features) {
+		extract.setFeatures(features);
 		return data.map(extract);
 	}
 

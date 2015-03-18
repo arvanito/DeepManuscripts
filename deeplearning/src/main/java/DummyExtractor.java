@@ -18,4 +18,8 @@ public class DummyExtractor implements Extractor {
 		return data;
 	}
 
+	@Override
+	public void setFeatures(Vector[] features) {
+	}
+
 }
