@@ -1,0 +1,26 @@
+base_layer {
+  kmeans_layer {
+    number_of_clusters: 10
+  }
+  feature_extraction_layer {
+    input_dim1: 128
+    input_dim2: 32
+    feature_dim1: 32
+    feature_dim2: 32
+  }
+  pool_layer {
+    pool_size: 2
+  }  
+}
+
+base_layer {
+  autoencoders_layer {
+    number_of_units: 10
+  }
+  feature_extraction_layer {
+  	num_outputs: 10
+  }
+  pool_layer {
+    pool_size: 2
+  }  
+}

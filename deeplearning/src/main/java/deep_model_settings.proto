@@ -1,0 +1,42 @@
+syntax="proto2";
+
+message KMeans {
+        required int32 number_of_clusters = 1;
+} 
+
+message Autoencoders {
+        required int32 number_of_units = 1;
+}
+
+message FeatureExtractionLayer {
+  // FeatureExtractor needs to know the dimensions of the input and feature matrices, as it only gets vectors.
+  // If input and feature dimensions match, we do a matrix multiply extraction.
+  // If feature dimensions <= input dimensions (and one is strictly smaller) we do convolution
+  // Else we throw some exception.
+  // The output dimensions (dimensions of the matrices that are appended into the result vector)
+  // can be calculated from the input dimensions.
+  required int32 input_dim1 = 1;
+  required int32 input_dim2 = 2;
+  required int32 feature_dim1 = 3;
+  required int32 feature_dim2 = 4;
+}
+
+message PoolLayer {
+  required int32 pool_size = 1;
+  enum PoolType {
+    MAX = 0;
+    AVERAGE = 1;
+  }
+  optional PoolType pool_type = 2 [default = MAX];
+}
+
+message BaseLayer {
+  optional KMeans kmeans_layer = 1;
+  optional Autoencoders autoencoders_layer = 2;
+  required FeatureExtractionLayer feature_extraction_layer = 3;
+  required PoolLayer pool_layer = 4;
+}   
+
+message ManuscriptsConfig {
+    repeated BaseLayer base_layer = 1;
+}
