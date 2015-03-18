@@ -12,8 +12,8 @@ import org.apache.spark.mllib.linalg.Vector;
 
 import com.google.protobuf.TextFormat;
 
-import main.java.ConvolutionalNeuralNetworkSettings.ManuscriptsConfig;
-import main.java.ConvolutionalNeuralNetworkSettings.BaseLayer;
+import main.java.DeepModelSettings.ManuscriptsConfig;
+import main.java.DeepModelSettings.BaseLayer;
 
 public class DeepLearningMain {
 	public static void loadSettings(String prototxt_file) {
