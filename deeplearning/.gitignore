@@ -13,5 +13,8 @@ tmp/**/*
 /bin/
 /target/
 
+#mac
+.DS_Store
+
 #other
 *~
