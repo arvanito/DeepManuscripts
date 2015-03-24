@@ -79,6 +79,40 @@ public class PreProcessZCA implements PreProcessor {
 	
 	
 	/**
+	 * Method that performs ZCA whitening on the data.
+	 * 
+	 * @param mat Input distributed RowMatrix
+	 * @param e Parameter for eigenvalue normalization
+	 * @return ZCA matrix of type DenseMatrix
+	 */
+	public DenseMatrix performZCA(RowMatrix mat, double e) {
+		
+		// compute SVD of the data Matrix
+		// the right singular Vectors are the eigenvectors of the covariance, do the integer casting here!!!
+		SingularValueDecomposition<RowMatrix, Matrix> svd = mat.computeSVD((int) mat.numCols(), true, 1.0E-9d);
+		DenseMatrix V = (DenseMatrix) svd.V();		// right singular Vectors
+		DenseVector s = (DenseVector) svd.s();		// singular values
+		
+		// the eigenvalues of the covariance are the squares of the singular values
+		// add a regularizer and compute the square root
+		long n = mat.numRows();	
+		int ss = s.size();
+		double[] l = new double[ss];
+		for (int i = 0; i < ss; i++) {
+			l[i] = (s.apply(i) * s.apply(i)) / (n - 1);
+			l[i] = 1.0 / Math.sqrt(l[i] + e);
+		}
+
+		// compute the ZCA matrix by V * Lambda * V'
+		DenseMatrix ZCA = new DenseMatrix(ss, ss, new double[ss*ss]);
+		BLAS.gemm(false, true, 1.0, Matrices.diag(Vectors.dense(l)), V, 0.0, ZCA);
+		BLAS.gemm(false, false, 1.0, V, ZCA, 0.0, ZCA);
+		
+		return ZCA;
+	}
+	
+	
+	/**
 	 * Main method that preprocesses the dataset. 
 	 * 
 	 * @param data Input distributed dataset
@@ -118,40 +152,6 @@ public class PreProcessZCA implements PreProcessor {
 		data = new JavaRDD<Vector>(rowData.rows(), data.classTag());
 
 		return data;
-	}
-
-	
-	/**
-	 * Method that performs ZCA whitening on the data.
-	 * 
-	 * @param mat Input distributed RowMatrix
-	 * @param e Parameter for eigenvalue normalization
-	 * @return ZCA matrix of type DenseMatrix
-	 */
-	public DenseMatrix performZCA(RowMatrix mat, double e) {
-		
-		// compute SVD of the data Matrix
-		// the right singular Vectors are the eigenvectors of the covariance, do the integer casting here!!!
-		SingularValueDecomposition<RowMatrix, Matrix> svd = mat.computeSVD((int) mat.numCols(), true, 1.0E-9d);
-		DenseMatrix V = (DenseMatrix) svd.V();		// right singular Vectors
-		DenseVector s = (DenseVector) svd.s();		// singular values
-		
-		// the eigenvalues of the covariance are the squares of the singular values
-		// add a regularizer and compute the square root
-		long n = mat.numRows();	
-		int ss = s.size();
-		double[] l = new double[ss];
-		for (int i = 0; i < ss; i++) {
-			l[i] = (s.apply(i) * s.apply(i)) / (n - 1);
-			l[i] = 1.0 / Math.sqrt(l[i] + e);
-		}
-
-		// compute the ZCA matrix by V * Lambda * V'
-		DenseMatrix ZCA = new DenseMatrix(ss, ss, new double[ss*ss]);
-		BLAS.gemm(false, true, 1.0, Matrices.diag(Vectors.dense(l)), V, 0.0, ZCA);
-		BLAS.gemm(false, false, 1.0, V, ZCA, 0.0, ZCA);
-		
-		return ZCA;
 	}
 	
 }
