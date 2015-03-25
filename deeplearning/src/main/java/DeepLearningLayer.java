@@ -1,5 +1,7 @@
 package main.java;
 
+import main.java.DeepModelSettings.ConfigBaseLayer;
+
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.linalg.Vector;
 
@@ -11,25 +13,38 @@ import org.apache.spark.mllib.linalg.Vector;
  * 
  */
 public interface DeepLearningLayer {
+	
+	/**
+	 * Preprocesses data using ZCA whitening.
+	 * 
+	 * @param data An RDD containing the input data for preprocessing
+	 * @return Preprocessed data
+	 */
+	public JavaRDD<Vector> preProcess(JavaRDD<Vector> data);
+	
+	
 	/**
 	 * Takes in data, does for example K-means clustering and returns the features (like cluster centroids).
 	 * 
 	 * @param data An RDD containing the data on which learning is to happen
-	 * @return An RDD consisting of the learned features as Vectors
+	 * @return An Vector array of the learned features
 	 * @throws Exception 
 	 */
 	public Vector[] learnFeatures(JavaRDD<Vector> data) throws Exception;
+	
 	
 	/**
 	 * Extracts a given set of features from a given set of data. Returns one Vector per input data Vector,
 	 * so for example convolution will have to reshape the resulting matrices (from one input data Vector) 
 	 * into vectors and append them into one big Vector. 
 	 * 
-	 * @param data An RDD of Vectors, from which the features are to be extracted.
+	 * @param data An RDD of Vectors, from which the features are to be extracted
+	 * @param configLayer Current layer configuration extracted from the protocol buffer description
 	 * @param features An RDD of Vectors, where each Vector is a feature
 	 * @return An RDD of extracted features, where each Vector corresponds to one Vector in data
 	 */
-	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, Vector[] features);
+	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, ConfigBaseLayer configLayer, Vector[] features);
+	
 	
 	/**
 	 * Pools data to reduce dimensionality. Probably requires some knowledge of the input Vector's structure
@@ -40,6 +55,7 @@ public interface DeepLearningLayer {
 	 */
 	public JavaRDD<Vector> pool(JavaRDD<Vector> data);
 
+	
      /**
 	 * Execute all of this layer for the given data.
 	 *
@@ -48,4 +64,6 @@ public interface DeepLearningLayer {
 	 * @throws Exception
 	 */
 	public JavaRDD<Vector> execute(JavaRDD<Vector> data) throws Exception;
+
+
 }

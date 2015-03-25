@@ -1,5 +1,12 @@
 syntax="proto2";
 
+package main.java;
+
+message ConfigPreprocess {
+		required double eps_1 = 1;
+		required double eps_2 = 2;
+}
+
 message ConfigKMeans {
         required int32 number_of_clusters = 1;
 } 
@@ -31,10 +38,11 @@ message ConfigPooler {
 }
 
 message ConfigBaseLayer {
-  optional ConfigKMeans config_kmeans = 1;
-  optional ConfigAutoencoders config_autoencoders = 2;
-  required ConfigFeatureExtractor config_feature_extractor = 3;
-  required ConfigPooler config_pooler = 4;
+  optional ConfigPreprocess config_preprocess = 1;
+  optional ConfigKMeans config_kmeans = 2;
+  optional ConfigAutoencoders config_autoencoders = 3;
+  required ConfigFeatureExtractor config_feature_extractor = 4;
+  required ConfigPooler config_pooler = 5;
 }   
 
 message ConfigManuscripts {

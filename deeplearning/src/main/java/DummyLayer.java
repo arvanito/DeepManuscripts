@@ -1,5 +1,7 @@
 package main.java;
 
+import main.java.DeepModelSettings.ConfigBaseLayer;
+
 /**
  * 
  * A dummy implementation of a Layer. Just passes the data through, using Dummy(Learner,Extractor,Pooler).
@@ -9,8 +11,8 @@ package main.java;
  */
 public class DummyLayer extends BaseLayer {
 
-	public DummyLayer() {
-		super(new DummyLearner(), new DummyExtractor(), new DummyPooler());
+	public DummyLayer(ConfigBaseLayer configLayer) {
+		super(configLayer, new PreProcessZCA(), new DummyLearner(), new DummyExtractor(), new DummyPooler());
 	}
 
 }
