@@ -11,7 +11,7 @@ import org.opencv.core.Mat;
 public class TestMain {
 
     //Load OpenCV JNI
-    static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
+    //static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
 
     public static void main(String[] args) {
         String inputFile, outputFile;
@@ -25,9 +25,11 @@ public class TestMain {
         }else {
             conf = new SparkConf().setAppName("DeepManuscript preprocessing");
             sc = new JavaSparkContext(conf);
+            sc.addFile("hdfs:///projects/deep-learning/lib/lib"+Core.NATIVE_LIBRARY_NAME);
             inputFile = args[0];
             outputFile = args[1];
         }
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         //Get a handle for each file in the input directory
         JavaPairRDD<String,PortableDataStream> dataStream  = sc.binaryFiles(inputFile);
@@ -36,12 +38,12 @@ public class TestMain {
         JavaPairRDD<String,ImageData> dataImages = dataStream.mapValues( new Function<PortableDataStream, ImageData>() {
             public ImageData call(PortableDataStream portableDataStream) throws Exception {
                 return new ImageData(portableDataStream.toArray());
-            } } );
+            } });
 
         //Get the number of pixels for each image
-        JavaPairRDD<String,Integer> pixelsNumber = dataImages.mapValues( new Function<ImageData, Integer>() {
+        JavaPairRDD<String, Integer> pixelsNumber = dataImages.mapValues(new Function<ImageData, Integer>() {
             public Integer call(ImageData im) {
-                    Mat m =im.getImage(); //Decompress and return a pointer to the uncompressed image representation
+                Mat m = im.getImage(); //Decompress and return a pointer to the uncompressed image representation
                     return m.cols()*m.rows();
             } } );
 
