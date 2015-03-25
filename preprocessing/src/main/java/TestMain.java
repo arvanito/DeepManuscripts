@@ -1,17 +1,48 @@
 package main.java;
 
 import org.apache.spark.SparkConf;
+import org.apache.spark.SparkFiles;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.input.PortableDataStream;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import scala.Tuple2;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class TestMain {
 
-    //Load OpenCV JNI
-    //static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
+    static final String openCVLibName = System.mapLibraryName(Core.NATIVE_LIBRARY_NAME);
+    static final String openCVLibFullPath = "hdfs:///projects/deep-learning/lib/"+ openCVLibName;
+
+    /**
+     * Load OpenCV library, first try in local directory, if it does not work, switch to the file uploaded by the driver
+     */
+    static public void loadLibrary() {
+        try {
+            System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+            System.out.println("OpenCV found in java.library.path");
+        }catch (UnsatisfiedLinkError e) {
+            System.out.println("OpenCV not found in java.library.path");
+            System.out.print("Trying SparkFiles...");
+            try {
+                System.load(SparkFiles.get(openCVLibName));
+                System.out.println("SUCCESS");
+            }catch (Exception e2) {
+                System.out.println("FAILURE");
+            }
+        }
+    }
+
+    //For worker nodes, will probably fail on driver node
+    //static {
+    //    loadLibrary();
+    //}
 
     public static void main(String[] args) {
         String inputFile, outputFile;
@@ -25,14 +56,27 @@ public class TestMain {
         }else {
             conf = new SparkConf().setAppName("DeepManuscript preprocessing");
             sc = new JavaSparkContext(conf);
-            sc.addFile("hdfs:///projects/deep-learning/lib/lib"+Core.NATIVE_LIBRARY_NAME);
+            //Send OpenCV native lib to all worker
+            sc.addFile(openCVLibFullPath);
             inputFile = args[0];
             outputFile = args[1];
         }
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        //Get a handle for each file in the input directory
+        //Get a handle for every file in the directory
         JavaPairRDD<String,PortableDataStream> dataStream  = sc.binaryFiles(inputFile);
+
+        //Stupid (until I find better) way to load the library, apply an identity mapPartitions thingy that loads it
+        loadLibrary();
+        dataStream = dataStream.mapPartitionsToPair(new PairFlatMapFunction<Iterator<Tuple2<String,PortableDataStream>>, String, PortableDataStream>() {
+            @Override
+            public Iterable<Tuple2<String, PortableDataStream>> call(Iterator<Tuple2<String, PortableDataStream>> input) throws Exception {
+                loadLibrary();
+                List<Tuple2<String, PortableDataStream> > l = new ArrayList<>();
+                while(input.hasNext())
+                    l.add(input.next());
+                return l;
+            }
+        });
 
         //Convert the PortableDataStream to ImageData representations
         JavaPairRDD<String,ImageData> dataImages = dataStream.mapValues( new Function<PortableDataStream, ImageData>() {
