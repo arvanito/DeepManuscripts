@@ -8,37 +8,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by benoit on 25/03/2015.
+ * Static class for image processing related functions
  */
-public class ProcessImageFunctions {
+public class ImageFunctions {
     /**
      * Extract patches from a given image. Size is defined by configuration file.
-     * @param img ImageData containing the image to be processed
+     * @param imgMat ImageData containing the image to be processed
      * @param nbPatches Number of patches to be extracted from the image
      * @return list of extracted patches represented in a vector form
      */
-    static public List<Vector> extractPatches(ImageData img, int nbPatches) {
-        List<Vector> results = new ArrayList<Vector>();
+    static public List<Vector> extractPatches(Mat imgMat, int nbPatches) {
+        List<Vector> results = new ArrayList<>();
+        int imgHorizontalSize = imgMat.cols();
+        int imgVerticalSize = imgMat.rows();
         //TODO get size from config file
-        Mat imgMat = img.getImage();
-        int imgHorizontalSize = imgMat.rows();
-        int imgVerticalSize = imgMat.cols();
         int patchHorizontalSize = 5;
         int patchVerticalSize = 5;
-        double[] patchData = new double[patchHorizontalSize*patchVerticalSize];
-        byte[] lineData = new byte[patchHorizontalSize];
         //extraction loop
         for(int n=0;n<nbPatches;n++) {
+            double[] patchData = new double[patchHorizontalSize*patchVerticalSize];
+            byte[] lineData = new byte[patchHorizontalSize];
             //find random left top corner
             int iCol = (int)Math.round(Math.random()*(imgHorizontalSize-patchHorizontalSize));
             int iRow = (int)Math.round(Math.random()*(imgVerticalSize-patchVerticalSize));
+            System.out.println("r,c:"+iRow+","+iCol);
             //extract from the corner line by line
             for(int i=0;i<patchVerticalSize;i++) {
                 //extract line from OpenCV
-                imgMat.get(iRow + i, iCol, lineData);
+                System.out.println(imgMat.get(iRow + i, iCol, lineData));
+                System.out.println(lineData[0]);
                 //cast from byte to double
+                //TODO TO BE IMPROVED
                 for(int j=0;j<patchHorizontalSize;j++)
-                    patchData[i*patchHorizontalSize+j]=(double)lineData[j];
+                    patchData[i*patchHorizontalSize+j]=(lineData[j]>=0? lineData[j] : 256+lineData[j]);
             }
             //
             results.add(new DenseVector(patchData));

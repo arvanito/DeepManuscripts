@@ -5,8 +5,8 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.input.PortableDataStream;
+import org.apache.spark.mllib.linalg.Vector;
 import org.opencv.core.Core;
-import org.opencv.core.Mat;
 
 public class TestMain {
 
@@ -38,15 +38,22 @@ public class TestMain {
                 return new ImageData(portableDataStream.toArray());
             } } );
 
+        //Extract patches
+        JavaPairRDD<String, Vector> patches = dataImages.flatMapValues(new Function<ImageData, Iterable<Vector> >() {
+            public Iterable<Vector> call(ImageData im) {
+                return ImageFunctions.extractPatches(im.getImage(), 10);
+            }
+        });
+
         //Get the number of pixels for each image
-        JavaPairRDD<String,Integer> pixelsNumber = dataImages.mapValues( new Function<ImageData, Integer>() {
+/*        JavaPairRDD<String,Integer> pixelsNumber = dataImages.mapValues( new Function<ImageData, Integer>() {
             public Integer call(ImageData im) {
                     Mat m =im.getImage(); //Decompress and return a pointer to the uncompressed image representation
                     return m.cols()*m.rows();
-            } } );
+            } } );*/
 
         //Save result
-        pixelsNumber.saveAsTextFile(outputFile);
+        patches.saveAsTextFile(outputFile);
         sc.close();
     }
 }
