@@ -18,7 +18,7 @@ public interface Extractor extends Function<Vector, Vector> {
 	 * 
 	 * @param configLayer The configuration for the BaseLayer
 	 */
-	public void setConfigLayer(ConfigBaseLayer configLayer);
+	//public void setConfigLayer(ConfigBaseLayer configLayer);
 	
 	
 	/**

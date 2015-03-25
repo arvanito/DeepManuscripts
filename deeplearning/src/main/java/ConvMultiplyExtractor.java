@@ -12,7 +12,7 @@ import org.apache.spark.mllib.linalg.Vector;
  * Class for feature extraction using multiplication for the first layer of learning.
  * Extraction of overlapping patches and multiplication. Equivalent to convolution.
  * 
- * @author Nikolaos Arvanitopoulo
+ * @author Nikolaos Arvanitopoulos
  *
  */
 
@@ -72,7 +72,7 @@ public class ConvMultiplyExtractor implements Extractor {
 	 * 
 	 * @param configLayer The ConfigBaseLayer object
 	 */
-	@Override
+	//@Override
 	public void setConfigLayer(ConfigBaseLayer configLayer) {
 		this.configLayer = configLayer;
 	}

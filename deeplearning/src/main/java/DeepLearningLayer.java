@@ -1,5 +1,7 @@
 package main.java;
 
+import main.java.DeepModelSettings.ConfigBaseLayer;
+
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.linalg.Vector;
 

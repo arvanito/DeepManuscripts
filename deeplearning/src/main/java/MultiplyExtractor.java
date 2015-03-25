@@ -71,7 +71,7 @@ public class MultiplyExtractor implements Extractor {
 	 * 
 	 * @param configLayer The ConfigBaseLayer object
 	 */
-	@Override
+	//@Override
 	public void setConfigLayer(ConfigBaseLayer configLayer) {
 		this.configLayer = configLayer;
 	}
