@@ -18,7 +18,7 @@ public interface Extractor extends Function<Vector, Vector> {
 	 * 
 	 * @param configLayer The configuration for the BaseLayer
 	 */
-	//public void setConfigLayer(ConfigBaseLayer configLayer);
+	public void setConfigLayer(ConfigBaseLayer configLayer);
 	
 	
 	/**
@@ -36,7 +36,7 @@ public interface Extractor extends Function<Vector, Vector> {
 	 *
 	 * @param data Vector representing one data point
 	 * @return A new representation of the input after applying the feature extraction
-	**/
+	 */
 	public Vector call(Vector data) throws Exception;
 
 }

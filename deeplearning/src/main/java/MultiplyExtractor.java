@@ -71,7 +71,7 @@ public class MultiplyExtractor implements Extractor {
 	 * 
 	 * @param configLayer The ConfigBaseLayer object
 	 */
-	//@Override
+	@Override
 	public void setConfigLayer(ConfigBaseLayer configLayer) {
 		this.configLayer = configLayer;
 	}
@@ -136,7 +136,7 @@ public class MultiplyExtractor implements Extractor {
 			dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
 			dataDense = MatrixOps.localVecSubtractMean(dataDense, zcaMean);
 			BLAS.gemv(true, 1.0, zca, dataDense, 0.0, dataDense);
-		} 
+		}
 	
 		// multiply the matrix of the learned features with the preprocessed data point
 		BLAS.gemv(false, 1.0, D, dataDense, 0.0, dataDense);

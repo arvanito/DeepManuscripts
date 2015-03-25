@@ -27,11 +27,12 @@ public interface DeepLearningLayer {
 	 * so for example convolution will have to reshape the resulting matrices (from one input data Vector) 
 	 * into vectors and append them into one big Vector. 
 	 * 
-	 * @param data An RDD of Vectors, from which the features are to be extracted.
+	 * @param data An RDD of Vectors, from which the features are to be extracted
+	 * @param configLayer Current layer configuration extracted from the protocol buffer description
 	 * @param features An RDD of Vectors, where each Vector is a feature
 	 * @return An RDD of extracted features, where each Vector corresponds to one Vector in data
 	 */
-	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, Vector[] features);
+	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, ConfigBaseLayer configLayer, Vector[] features);
 	
 	/**
 	 * Pools data to reduce dimensionality. Probably requires some knowledge of the input Vector's structure

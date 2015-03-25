@@ -23,6 +23,8 @@ import org.apache.spark.mllib.stat.MultivariateStatisticalSummary;
  */
 public class PreProcessZCA implements PreProcessor {
 
+	private static final long serialVersionUID = 2534694814224730024L;
+
 	private ConfigBaseLayer configLayer;
 	private DenseVector mean;
 	private DenseMatrix ZCA;
@@ -109,6 +111,29 @@ public class PreProcessZCA implements PreProcessor {
 		BLAS.gemm(false, false, 1.0, V, ZCA, 0.0, ZCA);
 		
 		return ZCA;
+	}
+	
+	
+	/**
+	 * Method that preprocessed input data with learned mean vector and ZCA matrix.
+	 * 
+	 * @param data Input data in Vector format
+	 * @return Preprocessed output
+	 */
+	@Override
+	public Vector call(Vector data) {		
+		
+		DenseVector dataDense = (DenseVector) data;
+		
+		// epsilon for pre-processing
+		double eps1 = configLayer.getConfigPreprocess().getEps1();
+		
+		// preprocess the data point with contrast normalization and ZCA whitening
+		dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
+		dataDense = MatrixOps.localVecSubtractMean(dataDense, mean);
+		BLAS.gemv(true, 1.0, ZCA, dataDense, 0.0, dataDense);
+		
+		return dataDense;
 	}
 	
 	

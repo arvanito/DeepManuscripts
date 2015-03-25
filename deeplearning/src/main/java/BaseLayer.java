@@ -1,5 +1,7 @@
 package main.java;
 
+import main.java.DeepModelSettings.ConfigBaseLayer;
+
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.linalg.Vector;
 
@@ -14,15 +16,30 @@ import org.apache.spark.mllib.linalg.Vector;
  */
 public class BaseLayer implements DeepLearningLayer {
 
+	ConfigBaseLayer configLayer;
+	//PreProcessor preprocess;
 	Learner learn;
 	Extractor extract;
 	Pooler pool;
 	
-	public BaseLayer(Learner learn, Extractor extract, Pooler pool) {
+	
+	public BaseLayer(ConfigBaseLayer configLayer, Learner learn, Extractor extract, Pooler pool) {
+		this.configLayer = configLayer;
+		
+		//this.preprocess = preprocess;
 		this.learn = learn;
 		this.extract = extract;
 		this.pool = pool;
 	}
+	
+	
+	/*
+	 @Override
+	 public JavaRDD<Vector> preProcess(JavaRDD<Vector> data) {
+	 	return preprocess.preprocessData(data);
+	 }
+	 */
+	
 	
 	@Override
 	public Vector[] learnFeatures(JavaRDD<Vector> data) throws Exception {
@@ -30,7 +47,8 @@ public class BaseLayer implements DeepLearningLayer {
 	}
 
 	@Override
-	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, Vector[] features) {
+	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, ConfigBaseLayer configLayer, Vector[] features) {
+		extract.setConfigLayer(configLayer);
 		extract.setFeatures(features);
 		return data.map(extract);
 	}
@@ -43,7 +61,7 @@ public class BaseLayer implements DeepLearningLayer {
     @Override
 	public JavaRDD<Vector> execute(JavaRDD<Vector> data) throws Exception {
 		Vector[] features = learnFeatures(data);
-		JavaRDD<Vector> represent = extractFeatures(data, features);
+		JavaRDD<Vector> represent = extractFeatures(data, configLayer, features);
 		JavaRDD<Vector> pooled = pool(represent);
 		return pooled;
 	}
