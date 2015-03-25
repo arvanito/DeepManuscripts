@@ -4,6 +4,11 @@
     <artifactId>DeepManuscriptPreprocessing</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <opencv.version>2.4.11</opencv.version>
+        <opencv.lib.basename>libopencv_java2411</opencv.lib.basename>
+    </properties>
 
     <repositories>
         <repository>
@@ -49,7 +54,7 @@
                 <version>2.1</version>
                 <executions>
                     <execution>
-                        <id>copy</id>
+                        <id>copy-native</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy</goal>
@@ -64,6 +69,21 @@
                                     <classifier>${lib.classifier}</classifier>
                                     <destFileName>${opencv.lib.basename}.${lib.type}</destFileName>
                                 </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/native</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-lib</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
                                 <artifactItem>
                                     <groupId>org.opencv</groupId>
                                     <artifactId>opencv</artifactId>
@@ -125,8 +145,4 @@
         </profile>
     </profiles>
 
-    <properties>
-        <opencv.version>2.4.11</opencv.version>
-        <opencv.lib.basename>libopencv_java2411</opencv.lib.basename>
-    </properties>
 </project>
