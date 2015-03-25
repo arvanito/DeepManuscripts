@@ -16,17 +16,24 @@ import org.apache.spark.mllib.linalg.Vector;
 public interface PreProcessor extends Function<Vector, Vector>{
 
 	/**
+	 * Method that sets the layer configuration.
+	 * 
+	 * @param configLayer Layer configuration object
+	 */
+	public void setConfigLayer(ConfigBaseLayer configLayer);
+	
+	
+	/**
 	 * Main method that runs a preprocessing pipeline on the data points.
 	 * 
 	 * @param data Input data points in a distributed dataset
-	 * @param configLayer Layer configuration
 	 * @return preprocessed distributed dataset
 	 */
-	public JavaRDD<Vector> preprocessData(JavaRDD<Vector> data, ConfigBaseLayer configLayer);
-
+	public JavaRDD<Vector> preprocessData(JavaRDD<Vector> data);
+	
 	
 	/**
-	 * Method that preprocessed data in parallel. 
+	 * Method that preprocesses data in parallel. 
 	 * 
 	 * @param data Input data in Vector format
 	 * @return Preprocessed output

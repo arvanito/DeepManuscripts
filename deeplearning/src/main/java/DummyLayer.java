@@ -12,7 +12,7 @@ import main.java.DeepModelSettings.ConfigBaseLayer;
 public class DummyLayer extends BaseLayer {
 
 	public DummyLayer(ConfigBaseLayer configLayer) {
-		super(configLayer, new DummyLearner(), new DummyExtractor(), new DummyPooler());
+		super(configLayer, new PreProcessZCA(), new DummyLearner(), new DummyExtractor(), new DummyPooler());
 	}
 
 }

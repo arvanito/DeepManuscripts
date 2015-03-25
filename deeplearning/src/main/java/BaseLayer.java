@@ -17,28 +17,28 @@ import org.apache.spark.mllib.linalg.Vector;
 public class BaseLayer implements DeepLearningLayer {
 
 	ConfigBaseLayer configLayer;
-	//PreProcessor preprocess;
+	
+	PreProcessor preprocess;
 	Learner learn;
 	Extractor extract;
 	Pooler pool;
 	
 	
-	public BaseLayer(ConfigBaseLayer configLayer, Learner learn, Extractor extract, Pooler pool) {
+	public BaseLayer(ConfigBaseLayer configLayer, PreProcessor preprocess, Learner learn, Extractor extract, Pooler pool) {
 		this.configLayer = configLayer;
 		
-		//this.preprocess = preprocess;
+		this.preprocess = preprocess;
 		this.learn = learn;
 		this.extract = extract;
 		this.pool = pool;
 	}
 	
 	
-	/*
+
 	 @Override
 	 public JavaRDD<Vector> preProcess(JavaRDD<Vector> data) {
 	 	return preprocess.preprocessData(data);
 	 }
-	 */
 	
 	
 	@Override
@@ -58,10 +58,16 @@ public class BaseLayer implements DeepLearningLayer {
 		return data.map(pool);
 	}
 
+	//TODO:: Input two datasets, one is patche-based and the other is larger parts of the image.
     @Override
 	public JavaRDD<Vector> execute(JavaRDD<Vector> data) throws Exception {
-		Vector[] features = learnFeatures(data);
-		JavaRDD<Vector> represent = extractFeatures(data, configLayer, features);
+    	JavaRDD<Vector> preprocessed = preProcess(data);
+		Vector[] features = learnFeatures(preprocessed);
+		
+		// TODO:: do preprocessing on the second dataset
+		//JavaRDD<Vector> preprocessedBig = dataBig.map(preprocess);
+		
+		JavaRDD<Vector> represent = extractFeatures(preprocessed, configLayer, features);
 		JavaRDD<Vector> pooled = pool(represent);
 		return pooled;
 	}

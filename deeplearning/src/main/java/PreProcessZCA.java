@@ -61,6 +61,17 @@ public class PreProcessZCA implements PreProcessor {
 	
 	
 	/**
+	 * Method that sets the layer configuration.
+	 * 
+	 * @param configLayer The layer configuration object
+	 */
+	@Override
+	public void setConfigLayer(ConfigBaseLayer configLayer) {
+		this.configLayer = configLayer;
+	}
+	
+	
+	/**
 	 * Setter for the mean vector.
 	 * 
 	 * @param mean Mean vector
@@ -115,29 +126,6 @@ public class PreProcessZCA implements PreProcessor {
 	
 	
 	/**
-	 * Method that preprocessed input data with learned mean vector and ZCA matrix.
-	 * 
-	 * @param data Input data in Vector format
-	 * @return Preprocessed output
-	 */
-	@Override
-	public Vector call(Vector data) {		
-		
-		DenseVector dataDense = (DenseVector) data;
-		
-		// epsilon for pre-processing
-		double eps1 = configLayer.getConfigPreprocess().getEps1();
-		
-		// preprocess the data point with contrast normalization and ZCA whitening
-		dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
-		dataDense = MatrixOps.localVecSubtractMean(dataDense, mean);
-		BLAS.gemv(true, 1.0, ZCA, dataDense, 0.0, dataDense);
-		
-		return dataDense;
-	}
-	
-	
-	/**
 	 * Main method that preprocesses the dataset. 
 	 * 
 	 * @param data Input distributed dataset
@@ -145,8 +133,7 @@ public class PreProcessZCA implements PreProcessor {
 	 * @return Preprocessed distributed dataset
 	 */
 	@Override
-	public JavaRDD<Vector> preprocessData(JavaRDD<Vector> data,
-			ConfigBaseLayer configLayer) {
+	public JavaRDD<Vector> preprocessData(JavaRDD<Vector> data) {
 
 		// assign eps1 for pre-processing
 		double eps1 = configLayer.getConfigPreprocess().getEps1();
@@ -168,7 +155,7 @@ public class PreProcessZCA implements PreProcessor {
 		// create distributed Matrix from centralized data, input to ZCA
 		rowData = new RowMatrix(data.rdd());
 		
-		// perform ZCA whitening and project the data onto the decorrelated space
+		// perform ZCA whitening and project the data to decorrelate them
 		DenseMatrix ZCA = performZCA(rowData, configLayer.getConfigPreprocess().getEps2());
 		rowData = rowData.multiply(ZCA);
 		setZCA(ZCA);
@@ -177,6 +164,29 @@ public class PreProcessZCA implements PreProcessor {
 		data = new JavaRDD<Vector>(rowData.rows(), data.classTag());
 
 		return data;
+	}
+	
+	
+	/**
+	 * Method that preprocesses input data with the learned mean vector and ZCA matrix.
+	 * 
+	 * @param data Input data in Vector format
+	 * @return Preprocessed output
+	 */
+	@Override
+	public Vector call(Vector data) {		
+		
+		DenseVector dataDense = (DenseVector) data;
+		
+		// epsilon for pre-processing
+		double eps1 = configLayer.getConfigPreprocess().getEps1();
+		
+		// preprocess the data point with contrast normalization and ZCA whitening
+		dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
+		dataDense = MatrixOps.localVecSubtractMean(dataDense, mean);
+		BLAS.gemv(true, 1.0, ZCA, dataDense, 0.0, dataDense);
+		
+		return dataDense;
 	}
 	
 }
