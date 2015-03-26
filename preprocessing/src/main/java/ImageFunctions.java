@@ -22,8 +22,8 @@ public class ImageFunctions {
         int imgHorizontalSize = imgMat.cols();
         int imgVerticalSize = imgMat.rows();
         //TODO get size from config file
-        int patchHorizontalSize = 5;
-        int patchVerticalSize = 5;
+        int patchHorizontalSize = 9;
+        int patchVerticalSize = 9;
         //extraction loop
         for(int n=0;n<nbPatches;n++) {
             double[] patchData = new double[patchHorizontalSize*patchVerticalSize];

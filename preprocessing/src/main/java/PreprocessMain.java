@@ -25,6 +25,7 @@ public class PreprocessMain {
 
     public static void main(String[] args) {
         String inputFile, outputFile;
+        int nbPatches;
         SparkConf conf;
         JavaSparkContext sc;
         if(args[0].equals("--local")) {
@@ -32,6 +33,7 @@ public class PreprocessMain {
             sc = new JavaSparkContext(conf);
             inputFile = args[1];
             outputFile = args[2];
+            nbPatches = Integer.valueOf(args[3]);
         }else {
             conf = new SparkConf().setAppName("DeepManuscript preprocessing");
             sc = new JavaSparkContext(conf);
@@ -39,6 +41,7 @@ public class PreprocessMain {
             sc.addFile(OpenCV.openCVLibFullPath);
             inputFile = args[0];
             outputFile = args[1];
+            nbPatches = Integer.valueOf(args[2]);
         }
 
         //Get a handle for each file in the input directory
@@ -67,9 +70,10 @@ public class PreprocessMain {
         //TODO
 
         //Extract patches
+        final int nbPatchesPerImg = (int)(nbPatches/dataImages.count());
         JavaPairRDD<String, Vector> patches = dataImages.flatMapValues(new Function<ImageData, Iterable<Vector> >() {
             public Iterable<Vector> call(ImageData im) {
-                return ImageFunctions.extractPatches(im.getImage(), 10);
+                return ImageFunctions.extractPatches(im.getImage(), nbPatchesPerImg);
             }
         });
 
