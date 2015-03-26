@@ -41,6 +41,10 @@ Similar commands, but with `--class main.java.PreprocessMain` instead of `--clas
 
 The output should be some `part-*` files containing `Vector` of the extracted patches.
 
+Example on the cluster in order to extract 1000 patches from the images of `nouvelles/Autrefois` :
+
+`spark-submit --master yarn-cluster --num-executors 20 --class main.java.PreprocessMain --jars lib/opencv-2.4.11.jar DeepManuscriptPreprocessing-0.0.1.jar /projects/deep-learning/data/nouvelles/Autrefois/*.tif /projects/deep-learning/preprocess-output 1000`
+
 ### OpenCV compilation (DEPRECATED NOW) ###
 
 Because we need image processing tools, OpenCV is a very good choice. However we can not just add the library to the `pom.xml` of Maven (or if someone can find a way... tell me).
