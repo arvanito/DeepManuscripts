@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Static class for image processing related functions
  */
-public class ImageFunctions {
+public class ImageFunctions {	
     /**
      * Extract patches from a given image. Size is defined by configuration file.
      * @param imgMat ImageData containing the image to be processed
@@ -22,8 +22,8 @@ public class ImageFunctions {
         int imgHorizontalSize = imgMat.cols();
         int imgVerticalSize = imgMat.rows();
         //TODO get size from config file
-        int patchHorizontalSize = 9;
-        int patchVerticalSize = 9;
+        int patchHorizontalSize = 96;
+        int patchVerticalSize = 96;
         //extraction loop
         for(int n=0;n<nbPatches;n++) {
             double[] patchData = new double[patchHorizontalSize*patchVerticalSize];
@@ -38,7 +38,7 @@ public class ImageFunctions {
                 //cast from byte to double
                 //TODO TO BE IMPROVED
                 for(int j=0;j<patchHorizontalSize;j++)
-                    patchData[i*patchHorizontalSize+j]=(lineData[j]>=0? lineData[j] : 256+lineData[j]);
+                    patchData[i+patchVerticalSize*j]=(lineData[j]>=0? lineData[j] : 256+lineData[j]);
             }
             //
             results.add(new DenseVector(patchData));
