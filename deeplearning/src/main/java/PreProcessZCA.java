@@ -29,6 +29,11 @@ public class PreProcessZCA implements PreProcessor {
 	private DenseVector mean;
 	private DenseMatrix ZCA;
 	
+	// checks if we are doing convolutional preprocessing or not
+	// TODO: Initialize it somewhere!
+	boolean conv;
+	
+	
 	
 	/**
 	 * Getter method for the ConfigBaseLayer object.
@@ -181,10 +186,24 @@ public class PreProcessZCA implements PreProcessor {
 		// epsilon for pre-processing
 		double eps1 = configLayer.getConfigPreprocess().getEps1();
 		
-		// preprocess the data point with contrast normalization and ZCA whitening
-		dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
-		dataDense = MatrixOps.localVecSubtractMean(dataDense, mean);
-		BLAS.gemv(true, 1.0, ZCA, dataDense, 0.0, dataDense);
+		// preprocess data depending on the conv flag
+		if (conv == false) {
+			// preprocess the data point with contrast normalization and ZCA whitening
+			dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
+			dataDense = MatrixOps.localVecSubtractMean(dataDense, mean);
+			BLAS.gemv(true, 1.0, ZCA, dataDense, 0.0, dataDense);
+		} else {
+			// reshape data vector to a matrix and extract all overlapping patches
+			int[] dims = {configLayer.getConfigFeatureExtractor().getInputDim1(), configLayer.getConfigFeatureExtractor().getInputDim2()};
+			int[] rfSize = {configLayer.getConfigFeatureExtractor().getFeatureDim1(), configLayer.getConfigFeatureExtractor().getFeatureDim2()};
+			DenseMatrix M = MatrixOps.reshapeVec2Mat((DenseVector) data, dims);	
+			DenseMatrix patches = MatrixOps.im2colT(M, rfSize);
+		
+			// preprocess the data point with contrast normalization and ZCA whitening
+			patches = MatrixOps.localMatContrastNorm(patches, eps1);
+			patches = MatrixOps.localMatSubtractMean(patches, mean);
+			BLAS.gemm(false, false, 1.0, patches, ZCA, 0.0, patches);
+		}
 		
 		return dataDense;
 	}
