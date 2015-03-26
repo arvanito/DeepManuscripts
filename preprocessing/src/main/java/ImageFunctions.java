@@ -31,12 +31,10 @@ public class ImageFunctions {
             //find random left top corner
             int iCol = (int)Math.round(Math.random()*(imgHorizontalSize-patchHorizontalSize));
             int iRow = (int)Math.round(Math.random()*(imgVerticalSize-patchVerticalSize));
-            System.out.println("r,c:"+iRow+","+iCol);
             //extract from the corner line by line
             for(int i=0;i<patchVerticalSize;i++) {
                 //extract line from OpenCV
-                System.out.println(imgMat.get(iRow + i, iCol, lineData));
-                System.out.println(lineData[0]);
+                imgMat.get(iRow + i, iCol, lineData);
                 //cast from byte to double
                 //TODO TO BE IMPROVED
                 for(int j=0;j<patchHorizontalSize;j++)
