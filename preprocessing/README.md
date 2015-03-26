@@ -35,6 +35,12 @@ After running the `mvn package`, you can just go to the `target` directory and :
 
 The native library is on HDFS and get sent to the nodes during the execution. But we need to specify the jar that get sent as well.
 
+## Extracting patches ##
+
+Similar commands, but with `--class main.java.PreprocessMain` instead of `--class main.java.TestMain`, and with the parameters `<input-folder> <output-folder> <nb-patches>`.
+
+The output should be some `part-*` files containing `Vector` of the extracted patches.
+
 ### OpenCV compilation (DEPRECATED NOW) ###
 
 Because we need image processing tools, OpenCV is a very good choice. However we can not just add the library to the `pom.xml` of Maven (or if someone can find a way... tell me).
