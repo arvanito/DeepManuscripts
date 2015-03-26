@@ -107,18 +107,16 @@ public class MultiplyExtractor implements Extractor {
 	@Override
 	public Vector call(Vector data) throws Exception {
 		
-		/** Get necessary parameters for the feature extraction process **/
-		
 		// number of features learned
-		int numFeatures = 0;
+		/*int numFeatures = 0;
 		if (configLayer.hasConfigKmeans()) {
 			numFeatures = configLayer.getConfigKmeans().getNumberOfClusters();
 		} else if (configLayer.hasConfigAutoencoders()) {
 			numFeatures = configLayer.getConfigAutoencoders().getNumberOfUnits();
-		}
+		}*/
 		
 		// filters, convert from Vector[] to DenseMatrix
-		DenseMatrix D = MatrixOps.convertVectors2Mat(features, numFeatures);
+		DenseMatrix D = MatrixOps.convertVectors2Mat(features);
 
 		// get necessary data from the PreProcessor
 		DenseVector dataDense = (DenseVector) data;

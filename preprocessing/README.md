@@ -2,7 +2,40 @@
 
 ## Setup (by Benoit, on MacOS 10.9) ##
 
-### OpenCV ###
+Things are way simpler now!
+
+In the preprocessing directory, just run `mvn package`, this will download from [a repository I created](https://github.com/Atanahel/opencv-maven-repo) the jar and native library of OpenCV. Only the versions for MacOS-64 and Linux-64 are available though.
+
+The results are in `target` with the corresponding compiled jar, OpenCV jar is in `target/lib` and OpenCV native is in `target/native`.
+
+## Installation test ##
+
+### Running locally ###
+
+When you program on your machine :
+
+1.  Import the maven project to your favorite IDE.
+1.  Have a folder `<input-folder>` with some image files in it.
+1.  Create a `Run` configuration based on `TestMain`.
+1.  Set the VM argument to `-Djava.library.path=target/native`
+1.  Set the program argument of the configuration to `--local <input-folder> <output-folder>`.
+1.  Click Run.
+1.  You should get some `part-*` files with the names of the images in the input folder and the number of pixels of each image.
+
+The IDE should get the jar from maven but needs help to find the native library hence the VM parameter.
+
+### Running on the cluster ###
+
+After running the `mvn package`, you can just go to the `target` directory and :
+
+1.  Have a folder `<input-folder>` in HDFS with some image files in it.
+1.  Go to the `target` directory where the jar file was compiled.
+1.  Run `spark-submit --master <your-choice> --class main.java.TestMain --jars lib/opencv-2.4.11.jar DeepManuscriptPreprocessing-0.0.1.jar <input-folder> <output-folder>`.
+1.  You should get some `part-*` files with the names of the images in the input folder and the number of pixels of each image.
+
+The native library is on HDFS and get sent to the nodes during the execution. But we need to specify the jar that get sent as well.
+
+### OpenCV compilation (DEPRECATED NOW) ###
 
 Because we need image processing tools, OpenCV is a very good choice. However we can not just add the library to the `pom.xml` of Maven (or if someone can find a way... tell me).
 
@@ -22,20 +55,3 @@ If you want to compile it yourself on Mac/Linux, you first need `cmake` and `ant
 1. `make -j8` to parallelize making process with 8 threads.
 
 You should have the jar as something like `opencv-build/bin/opencv-2411.jar` and the native library in `opencv-build/lib`.
-
-### Installation test ###
-
-(Refer to the detailled guide by Artu for project creation, I use IntelliJ but it should not matter)
-
-1.   Locate the `<path-to-opencv-jar-file>` and the `<directory-containing-opencv-jni-libs>`.
-1.   In your project configuration, add an external library. You need to set the jar file and the directory containing the native library.
-1.   Have a folder `<input-folder>` with some image files in it.
-1.  Run the example, two possible ways :
-    * From the IDE only for local and testing purpose.
-        1.  Create a `Run` configuration based on `TestMain`.
-        1.  Set the arguments of the configuration to `--local <input-folder> <output-folder>`.
-        1.  Click Run.
-    * With `spark-submit`
-        1.   Compile the files to `<your-jar-file>`.
-        1.   Run `spark-submit --master local --class main.java.TestMain --jars <path-to-opencv-jar-file> --driver-library-path <directory-containing-opencv-jni-libs> <your-jar-file> <input-folder> <output-folder>`.
-1.   You should get some `part-*` files with the names of the images in the input folder and the number of pixels of each image.

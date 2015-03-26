@@ -3,19 +3,21 @@
     <groupId>EPFL</groupId>
     <artifactId>DeepManuscriptPreprocessing</artifactId>
     <version>0.0.1</version>
-    <build>
-        <sourceDirectory>src</sourceDirectory>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <opencv.version>2.4.11</opencv.version>
+        <opencv.lib.basename>libopencv_java2411</opencv.lib.basename>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>my-opencv-repo</id>
+            <name>Benoit's Git based repo containing OpenCV 2.4.11</name>
+            <url>https://github.com/Atanahel/opencv-maven-repo/raw/master/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -27,5 +29,120 @@
             <artifactId>spark-mllib_2.10</artifactId>
             <version>1.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.opencv</groupId>
+            <artifactId>opencv</artifactId>
+            <version>${opencv.version}</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-native</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.opencv</groupId>
+                                    <artifactId>opencv</artifactId>
+                                    <version>${opencv.version}</version>
+                                    <type>${lib.type}</type>
+                                    <classifier>${lib.classifier}</classifier>
+                                    <destFileName>${opencv.lib.basename}.${lib.type}</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/native</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-lib</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.opencv</groupId>
+                                    <artifactId>opencv</artifactId>
+                                    <version>${opencv.version}</version>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemProperties>
+                        <property>
+                            <name>java.library.path</name>
+                            <value>${project.build.directory}/lib</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+            </plugin>-->
+        </plugins>
+    </build>
+
+    <!-- Build Type -->
+    <profiles>
+        <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                    <arch>amd64</arch>
+                </os>
+            </activation>
+            <properties>
+                <build.type>linux</build.type>
+                <lib.type>so</lib.type>
+                <lib.classifier>natives-linux-amd64</lib.classifier>
+            </properties>
+        </profile>
+        <profile>
+            <id>mac</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                    <arch>x86_64</arch>
+                </os>
+            </activation>
+            <properties>
+                <build.type>mac</build.type>
+                <lib.type>dylib</lib.type>
+                <lib.classifier>natives-mac-x86_64</lib.classifier>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>

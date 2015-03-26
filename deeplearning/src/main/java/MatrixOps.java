@@ -23,11 +23,12 @@ public class MatrixOps {
 	 * Method that converts an array of Vectors to a DenseMatrix.
 	 * 
 	 * @param V Array of type Vector that represents the learned features
-	 * @param k Number of features learned
 	 * @return A matrix of type DenseMatrix that contains in each row one learned feature
 	 */
-	public static DenseMatrix convertVectors2Mat(Vector[] V, int k) {
+	public static DenseMatrix convertVectors2Mat(Vector[] V) {
 
+		int k = V.length;
+		
 		int s = V[0].size();
 		double[] out = new double[s*k];
 		

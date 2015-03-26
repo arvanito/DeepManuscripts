@@ -13,14 +13,25 @@ import org.apache.spark.mllib.linalg.Vector;
  * 
  */
 public interface DeepLearningLayer {
+	
+	/**
+	 * Preprocesses data using ZCA whitening.
+	 * 
+	 * @param data An RDD containing the input data for preprocessing
+	 * @return Preprocessed data
+	 */
+	public JavaRDD<Vector> preProcess(JavaRDD<Vector> data);
+	
+	
 	/**
 	 * Takes in data, does for example K-means clustering and returns the features (like cluster centroids).
 	 * 
 	 * @param data An RDD containing the data on which learning is to happen
-	 * @return An RDD consisting of the learned features as Vectors
+	 * @return An Vector array of the learned features
 	 * @throws Exception 
 	 */
 	public Vector[] learnFeatures(JavaRDD<Vector> data) throws Exception;
+	
 	
 	/**
 	 * Extracts a given set of features from a given set of data. Returns one Vector per input data Vector,
@@ -34,6 +45,7 @@ public interface DeepLearningLayer {
 	 */
 	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, ConfigBaseLayer configLayer, Vector[] features);
 	
+	
 	/**
 	 * Pools data to reduce dimensionality. Probably requires some knowledge of the input Vector's structure
 	 * (like "this is 1000 times 32x32 matrices"). 
@@ -43,6 +55,7 @@ public interface DeepLearningLayer {
 	 */
 	public JavaRDD<Vector> pool(JavaRDD<Vector> data);
 
+	
      /**
 	 * Execute all of this layer for the given data.
 	 *
@@ -51,4 +64,6 @@ public interface DeepLearningLayer {
 	 * @throws Exception
 	 */
 	public JavaRDD<Vector> execute(JavaRDD<Vector> data) throws Exception;
+
+
 }

@@ -29,6 +29,11 @@ public class PreProcessZCA implements PreProcessor {
 	private DenseVector mean;
 	private DenseMatrix ZCA;
 	
+	// checks if we are doing convolutional preprocessing or not
+	// TODO: Initialize it somewhere!
+	boolean conv;
+	
+	
 	
 	/**
 	 * Getter method for the ConfigBaseLayer object.
@@ -57,6 +62,17 @@ public class PreProcessZCA implements PreProcessor {
 	 */
 	public DenseMatrix getZCA() {
 		return ZCA;
+	}
+	
+	
+	/**
+	 * Method that sets the layer configuration.
+	 * 
+	 * @param configLayer The layer configuration object
+	 */
+	@Override
+	public void setConfigLayer(ConfigBaseLayer configLayer) {
+		this.configLayer = configLayer;
 	}
 	
 	
@@ -115,29 +131,6 @@ public class PreProcessZCA implements PreProcessor {
 	
 	
 	/**
-	 * Method that preprocessed input data with learned mean vector and ZCA matrix.
-	 * 
-	 * @param data Input data in Vector format
-	 * @return Preprocessed output
-	 */
-	@Override
-	public Vector call(Vector data) {		
-		
-		DenseVector dataDense = (DenseVector) data;
-		
-		// epsilon for pre-processing
-		double eps1 = configLayer.getConfigPreprocess().getEps1();
-		
-		// preprocess the data point with contrast normalization and ZCA whitening
-		dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
-		dataDense = MatrixOps.localVecSubtractMean(dataDense, mean);
-		BLAS.gemv(true, 1.0, ZCA, dataDense, 0.0, dataDense);
-		
-		return dataDense;
-	}
-	
-	
-	/**
 	 * Main method that preprocesses the dataset. 
 	 * 
 	 * @param data Input distributed dataset
@@ -145,8 +138,7 @@ public class PreProcessZCA implements PreProcessor {
 	 * @return Preprocessed distributed dataset
 	 */
 	@Override
-	public JavaRDD<Vector> preprocessData(JavaRDD<Vector> data,
-			ConfigBaseLayer configLayer) {
+	public JavaRDD<Vector> preprocessData(JavaRDD<Vector> data) {
 
 		// assign eps1 for pre-processing
 		double eps1 = configLayer.getConfigPreprocess().getEps1();
@@ -168,7 +160,7 @@ public class PreProcessZCA implements PreProcessor {
 		// create distributed Matrix from centralized data, input to ZCA
 		rowData = new RowMatrix(data.rdd());
 		
-		// perform ZCA whitening and project the data onto the decorrelated space
+		// perform ZCA whitening and project the data to decorrelate them
 		DenseMatrix ZCA = performZCA(rowData, configLayer.getConfigPreprocess().getEps2());
 		rowData = rowData.multiply(ZCA);
 		setZCA(ZCA);
@@ -177,6 +169,43 @@ public class PreProcessZCA implements PreProcessor {
 		data = new JavaRDD<Vector>(rowData.rows(), data.classTag());
 
 		return data;
+	}
+	
+	
+	/**
+	 * Method that preprocesses input data with the learned mean vector and ZCA matrix.
+	 * 
+	 * @param data Input data in Vector format
+	 * @return Preprocessed output
+	 */
+	@Override
+	public Vector call(Vector data) {		
+		
+		DenseVector dataDense = (DenseVector) data;
+		
+		// epsilon for pre-processing
+		double eps1 = configLayer.getConfigPreprocess().getEps1();
+		
+		// preprocess data depending on the conv flag
+		if (conv == false) {
+			// preprocess the data point with contrast normalization and ZCA whitening
+			dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
+			dataDense = MatrixOps.localVecSubtractMean(dataDense, mean);
+			BLAS.gemv(true, 1.0, ZCA, dataDense, 0.0, dataDense);
+		} else {
+			// reshape data vector to a matrix and extract all overlapping patches
+			int[] dims = {configLayer.getConfigFeatureExtractor().getInputDim1(), configLayer.getConfigFeatureExtractor().getInputDim2()};
+			int[] rfSize = {configLayer.getConfigFeatureExtractor().getFeatureDim1(), configLayer.getConfigFeatureExtractor().getFeatureDim2()};
+			DenseMatrix M = MatrixOps.reshapeVec2Mat((DenseVector) data, dims);	
+			DenseMatrix patches = MatrixOps.im2colT(M, rfSize);
+		
+			// preprocess the data point with contrast normalization and ZCA whitening
+			patches = MatrixOps.localMatContrastNorm(patches, eps1);
+			patches = MatrixOps.localMatSubtractMean(patches, mean);
+			BLAS.gemm(false, false, 1.0, patches, ZCA, 0.0, patches);
+		}
+		
+		return dataDense;
 	}
 	
 }
