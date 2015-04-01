@@ -4,6 +4,9 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.highgui.Highgui;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 
@@ -17,9 +20,9 @@ public class ImageData implements Serializable {
     private static final long serialVersionUID = -151442211116649858L;
 
     //Uncompressed representation
-    private Mat image;
+    transient private Mat image;
     //Compressed representation
-    private MatOfByte compressed_img;
+    transient private MatOfByte compressed_img;
 
     //Status of the representation
     public enum ImageDataState {UNCOMPRESSED, COMPRESSED, ERROR}
@@ -86,6 +89,45 @@ public class ImageData implements Serializable {
                 state = ImageDataState.COMPRESSED;
             }
         }
+    }
+
+    /**
+     * Serialization of Object
+     * @param out
+     * @throws IOException
+     */
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        //compress if not
+        compress();
+        //write normal fields
+        out.defaultWriteObject();
+        //write compressed data
+        byte[] data = compressed_img.toArray();
+        out.writeInt(data.length);
+        out.write(data);
+    }
+
+    /**
+     * Serialization of Object
+     * @param in
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        //read normal fields
+        in.defaultReadObject();
+        //read compressed data
+        int size = in.readInt();
+        System.out.println(size);
+        byte[] data = new byte[size];
+        int toBeRead=size;
+        while (toBeRead>0) {
+            int nRead = in.read(data, size-toBeRead, toBeRead);
+            if(nRead<0)
+                throw new IOException();
+            toBeRead-=nRead;
+        }
+        compressed_img = new MatOfByte(data);
     }
 
 }
