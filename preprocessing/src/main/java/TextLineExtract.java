@@ -41,6 +41,12 @@ public class TextLineExtract {
 		Double imgWidth = imgSize.width;
 		Double sliceWidth = Math.floor(imgWidth/Double.valueOf(s));
 		Mat imgBin = new Mat(imgHeight.intValue(), imgWidth.intValue(), CvType.CV_8U);
+		//Compute horizontal projection profiles for all edge image slices
+		int k = 1;
+		for(int i = 1; i < s+1 ; i++)
+		{
+			
+		}
 		return null;
 		
 	}
@@ -59,7 +65,7 @@ public class TextLineExtract {
 	public static void main(String[] args)
 	{
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
-		Mat img = Highgui.imread("/home/isinsu/Desktop/DeepManuscripts/preprocessing/input/im1.png");
+		Mat img = Highgui.imread("/home/isinsu/Desktop/DeepManuscripts/preprocessing/input/man1.jpg");
 		Mat img_edge = new Mat(); //edge map
 		System.out.println(Double.valueOf(3));
 		Imgproc.Canny(img, img_edge, 100, 200, 3,true);
