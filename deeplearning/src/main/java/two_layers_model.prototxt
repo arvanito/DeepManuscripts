@@ -1,7 +1,7 @@
 config_layer {
   config_preprocess {
-  	eps_1 = 0.1;
-  	eps_2 = 10;
+  	eps_1 : 0.1
+  	eps_2 : 10
   }
   config_kmeans {
     number_of_clusters: 10
