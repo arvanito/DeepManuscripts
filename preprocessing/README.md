@@ -6,15 +6,17 @@ Things are way simpler now!
 
 In the preprocessing directory, just run `mvn package`, this will download from [a repository I created](https://github.com/Atanahel/opencv-maven-repo) the jar and native library of OpenCV. Only the versions for MacOS-64 and Linux-64 are available though.
 
-The results are in `target` with the corresponding compiled jar, OpenCV jar is in `target/lib` and OpenCV native is in `target/native`.
+The result is in `target` with the corresponding compiled self-sufficient jar containing native and jar dependencies.
+
+Necessary jar and native dependencies are also copied to `target/lib` and `target/native` respectively.
 
 ## Installation test ##
 
 ### Running with spark-submit ###
 
-After running the `mvn package`, you can use the jar directly :
+After running the `mvn package` in the main directory, you can use the jar directly :
 
-1.  Have a folder `<input-folder>` in HDFS with some image files in it.
+1.  Have a folder `<input-folder>` with some image files in it.
 1.  Run `spark-submit --master <your-choice> --class main.java.TestMain target/DeepManuscriptPreprocessing-0.0.1.jar <input-folder> <output-folder>`.
 1.  You should get some `part-*` files with the names of the images in the input folder and the number of pixels of each image.
 
