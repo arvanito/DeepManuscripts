@@ -5,15 +5,9 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.input.PortableDataStream;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
 public class TestMain {
-
-    //Ultimately a static declaration like that should do the job
-    static {
-        NativeLibraryLoader.load(Core.NATIVE_LIBRARY_NAME);
-    }
 
     public static void main(String[] args) {
         String inputFile, outputFile;
