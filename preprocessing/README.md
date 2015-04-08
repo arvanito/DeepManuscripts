@@ -6,13 +6,25 @@ Things are way simpler now!
 
 In the preprocessing directory, just run `mvn package`, this will download from [a repository I created](https://github.com/Atanahel/opencv-maven-repo) the jar and native library of OpenCV. Only the versions for MacOS-64 and Linux-64 are available though.
 
-The results are in `target` with the corresponding compiled jar, OpenCV jar is in `target/lib` and OpenCV native is in `target/native`.
+The result is in `target` with the corresponding compiled self-sufficient jar containing native and jar dependencies.
+
+Necessary jar and native dependencies are also copied to `target/lib` and `target/native` respectively.
 
 ## Installation test ##
 
-### Running locally ###
+### Running with spark-submit ###
 
-When you program on your machine :
+After running the `mvn package` in the main directory, you can use the jar directly :
+
+1.  Have a folder `<input-folder>` with some image files in it.
+1.  Run `spark-submit --master <your-choice> --class main.java.TestMain target/DeepManuscriptPreprocessing-0.0.1.jar <input-folder> <output-folder>`.
+1.  You should get some `part-*` files with the names of the images in the input folder and the number of pixels of each image.
+
+The native library and the jar dependencies are packaged in the jar itself and get unpacked on each node.
+
+### Running locally with the IDE ###
+
+When you program on your machine and you want to be able to debug/test etc... :
 
 1.  Import the maven project to your favorite IDE.
 1.  Have a folder `<input-folder>` with some image files in it.
@@ -23,17 +35,6 @@ When you program on your machine :
 1.  You should get some `part-*` files with the names of the images in the input folder and the number of pixels of each image.
 
 The IDE should get the jar from maven but needs help to find the native library hence the VM parameter.
-
-### Running on the cluster ###
-
-After running the `mvn package`, you can just go to the `target` directory and :
-
-1.  Have a folder `<input-folder>` in HDFS with some image files in it.
-1.  Go to the `target` directory where the jar file was compiled.
-1.  Run `spark-submit --master <your-choice> --class main.java.TestMain --jars lib/opencv-2.4.11.jar DeepManuscriptPreprocessing-0.0.1.jar <input-folder> <output-folder>`.
-1.  You should get some `part-*` files with the names of the images in the input folder and the number of pixels of each image.
-
-The native library is on HDFS and get sent to the nodes during the execution. But we need to specify the jar that get sent as well.
 
 ## Extracting patches ##
 
