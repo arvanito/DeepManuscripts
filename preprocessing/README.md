@@ -44,7 +44,7 @@ The output should be some `part-*` files containing `Vector` of the extracted pa
 
 Example on the cluster in order to extract 1000 patches from the images of `nouvelles/Autrefois` :
 
-`spark-submit --master yarn-cluster --num-executors 20 --class main.java.PreprocessMain --jars lib/opencv-2.4.11.jar DeepManuscriptPreprocessing-0.0.1.jar /projects/deep-learning/data/nouvelles/Autrefois/*.tif /projects/deep-learning/preprocess-output 1000`
+`spark-submit --master yarn-cluster --num-executors 20 --class main.java.PreprocessMain DeepManuscriptPreprocessing-0.0.1.jar /projects/deep-learning/data/nouvelles/Autrefois/*.tif /projects/deep-learning/preprocess-output 1000`
 
 ### OpenCV compilation (DEPRECATED NOW) ###
 
