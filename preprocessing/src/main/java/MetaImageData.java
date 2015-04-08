@@ -30,7 +30,6 @@ public class MetaImageData implements Serializable {
      * Constructor Simple
      */
     public MetaImageData() {
-//        this.image = image; //Could be image.clone() for safety.
         state = ImageDataState.UNCOMPRESSED;
         compression_type = "XYZ";
     }
@@ -38,7 +37,6 @@ public class MetaImageData implements Serializable {
      * Constructor from ImageDataState
      */
     public MetaImageData(ImageDataState st) {
-        //this.compressed_img = new MatOfByte(data);
         state = st;
         compression_type = "XYZ";
     }
