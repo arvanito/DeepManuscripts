@@ -11,8 +11,7 @@ import java.io.Serializable;
 
 
 /**
- * Representation of some image data.
- * Because this class will be used by Spark RDD, it needs to implement Serializable.
+ * Representation of some image data parameters.
  * Two representations are kept, Compressed and Uncompressed. This should be transparent to external classes, but should allow
  * to drastically reduce drive and/or network bandwidth if data is moved.
  */
@@ -23,7 +22,8 @@ public class MetaImageData implements Serializable {
     private ImageDataState state;
     private String compression_type;
 
-    //Probably other image metadata needed (compression type, compression level, precision of data, number of channels)
+    //Probably more image metadata can be added: PageNo, LineNo, X_coord, Y_coord, width, height(of Bounding Box) 
+    //(compression type, compression level, precision of data, number of channels)
     
 
     /**
@@ -50,6 +50,9 @@ public class MetaImageData implements Serializable {
     public ImageDataState getStatus() {
         return state;
     }
+    /**
+     * Get the compression type.
+     */
     public String getCompressionType() {
     	return compression_type;
     }
@@ -64,7 +67,6 @@ public class MetaImageData implements Serializable {
         //out.defaultWriteObject();
         out.writeObject(compression_type);
         out.writeObject(state);
-        
     }
 
     /**
