@@ -41,7 +41,7 @@ message ConfigBaseLayer {
   optional ConfigPreprocess config_preprocess = 1;
   optional ConfigKMeans config_kmeans = 2;
   optional ConfigAutoencoders config_autoencoders = 3;
-  required ConfigFeatureExtractor config_feature_extractor = 4;
+  optional ConfigFeatureExtractor config_feature_extractor = 4;
   required ConfigPooler config_pooler = 5;
 }   
 

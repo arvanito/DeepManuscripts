@@ -2662,15 +2662,15 @@ public final class DeepModelSettings {
     main.java.DeepModelSettings.ConfigAutoencodersOrBuilder getConfigAutoencodersOrBuilder();
 
     /**
-     * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+     * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
      */
     boolean hasConfigFeatureExtractor();
     /**
-     * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+     * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
      */
     main.java.DeepModelSettings.ConfigFeatureExtractor getConfigFeatureExtractor();
     /**
-     * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+     * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
      */
     main.java.DeepModelSettings.ConfigFeatureExtractorOrBuilder getConfigFeatureExtractorOrBuilder();
 
@@ -2910,19 +2910,19 @@ public final class DeepModelSettings {
     public static final int CONFIG_FEATURE_EXTRACTOR_FIELD_NUMBER = 4;
     private main.java.DeepModelSettings.ConfigFeatureExtractor configFeatureExtractor_;
     /**
-     * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+     * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
      */
     public boolean hasConfigFeatureExtractor() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+     * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
      */
     public main.java.DeepModelSettings.ConfigFeatureExtractor getConfigFeatureExtractor() {
       return configFeatureExtractor_;
     }
     /**
-     * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+     * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
      */
     public main.java.DeepModelSettings.ConfigFeatureExtractorOrBuilder getConfigFeatureExtractorOrBuilder() {
       return configFeatureExtractor_;
@@ -2962,10 +2962,6 @@ public final class DeepModelSettings {
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
-      if (!hasConfigFeatureExtractor()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       if (!hasConfigPooler()) {
         memoizedIsInitialized = 0;
         return false;
@@ -2988,9 +2984,11 @@ public final class DeepModelSettings {
           return false;
         }
       }
-      if (!getConfigFeatureExtractor().isInitialized()) {
-        memoizedIsInitialized = 0;
-        return false;
+      if (hasConfigFeatureExtractor()) {
+        if (!getConfigFeatureExtractor().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (!getConfigPooler().isInitialized()) {
         memoizedIsInitialized = 0;
@@ -3303,10 +3301,6 @@ public final class DeepModelSettings {
       }
 
       public final boolean isInitialized() {
-        if (!hasConfigFeatureExtractor()) {
-          
-          return false;
-        }
         if (!hasConfigPooler()) {
           
           return false;
@@ -3329,9 +3323,11 @@ public final class DeepModelSettings {
             return false;
           }
         }
-        if (!getConfigFeatureExtractor().isInitialized()) {
-          
-          return false;
+        if (hasConfigFeatureExtractor()) {
+          if (!getConfigFeatureExtractor().isInitialized()) {
+            
+            return false;
+          }
         }
         if (!getConfigPooler().isInitialized()) {
           
@@ -3711,13 +3707,13 @@ public final class DeepModelSettings {
       private com.google.protobuf.SingleFieldBuilder<
           main.java.DeepModelSettings.ConfigFeatureExtractor, main.java.DeepModelSettings.ConfigFeatureExtractor.Builder, main.java.DeepModelSettings.ConfigFeatureExtractorOrBuilder> configFeatureExtractorBuilder_;
       /**
-       * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+       * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
        */
       public boolean hasConfigFeatureExtractor() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+       * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
        */
       public main.java.DeepModelSettings.ConfigFeatureExtractor getConfigFeatureExtractor() {
         if (configFeatureExtractorBuilder_ == null) {
@@ -3727,7 +3723,7 @@ public final class DeepModelSettings {
         }
       }
       /**
-       * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+       * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
        */
       public Builder setConfigFeatureExtractor(main.java.DeepModelSettings.ConfigFeatureExtractor value) {
         if (configFeatureExtractorBuilder_ == null) {
@@ -3743,7 +3739,7 @@ public final class DeepModelSettings {
         return this;
       }
       /**
-       * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+       * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
        */
       public Builder setConfigFeatureExtractor(
           main.java.DeepModelSettings.ConfigFeatureExtractor.Builder builderForValue) {
@@ -3757,7 +3753,7 @@ public final class DeepModelSettings {
         return this;
       }
       /**
-       * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+       * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
        */
       public Builder mergeConfigFeatureExtractor(main.java.DeepModelSettings.ConfigFeatureExtractor value) {
         if (configFeatureExtractorBuilder_ == null) {
@@ -3776,7 +3772,7 @@ public final class DeepModelSettings {
         return this;
       }
       /**
-       * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+       * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
        */
       public Builder clearConfigFeatureExtractor() {
         if (configFeatureExtractorBuilder_ == null) {
@@ -3789,7 +3785,7 @@ public final class DeepModelSettings {
         return this;
       }
       /**
-       * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+       * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
        */
       public main.java.DeepModelSettings.ConfigFeatureExtractor.Builder getConfigFeatureExtractorBuilder() {
         bitField0_ |= 0x00000008;
@@ -3797,7 +3793,7 @@ public final class DeepModelSettings {
         return getConfigFeatureExtractorFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+       * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
        */
       public main.java.DeepModelSettings.ConfigFeatureExtractorOrBuilder getConfigFeatureExtractorOrBuilder() {
         if (configFeatureExtractorBuilder_ != null) {
@@ -3807,7 +3803,7 @@ public final class DeepModelSettings {
         }
       }
       /**
-       * <code>required .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
+       * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           main.java.DeepModelSettings.ConfigFeatureExtractor, main.java.DeepModelSettings.ConfigFeatureExtractor.Builder, main.java.DeepModelSettings.ConfigFeatureExtractorOrBuilder> 
@@ -4697,7 +4693,7 @@ public final class DeepModelSettings {
       "igPreprocess\022.\n\rconfig_kmeans\030\002 \001(\0132\027.ma" +
       "in.java.ConfigKMeans\022:\n\023config_autoencod" +
       "ers\030\003 \001(\0132\035.main.java.ConfigAutoencoders" +
-      "\022C\n\030config_feature_extractor\030\004 \002(\0132!.mai" +
+      "\022C\n\030config_feature_extractor\030\004 \001(\0132!.mai" +
       "n.java.ConfigFeatureExtractor\022.\n\rconfig_" +
       "pooler\030\005 \002(\0132\027.main.java.ConfigPooler\"E\n" +
       "\021ConfigManuscripts\0220\n\014config_layer\030\001 \003(\013" +
