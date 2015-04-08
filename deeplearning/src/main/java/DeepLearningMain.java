@@ -58,7 +58,7 @@ public class DeepLearningMain {
 			reader.close();
 
 		} catch (IOException e) {
-			System.err.println("Input .prototxt file not found");
+			System.err.println("Input .prototxt parsing failed");
 			System.err.println(prototxt_file);
 			e.printStackTrace();
 			System.exit(1);
@@ -73,6 +73,7 @@ public class DeepLearningMain {
 		if (args.length > 2) {
 		    globalConfig = loadSettings(args[2]);
 		} else {
+			System.out.print("Usage: spark-submit --class main.java.DeepLearningMain --master local[1] target/DeepManuscriptLearning-0.0.1.jar <test_in.txt> <test_out> <config.prototxt>");
 			throw new Exception("No .prototxt file found!");
 		}
 		
