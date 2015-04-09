@@ -17,8 +17,8 @@ public class MaxPooler implements Pooler {
 	private static final long serialVersionUID = 1505267555549652215L;
 	protected ConfigPooler config;
 	// Only relevant for 2D input
-	protected int input_width;
-	protected int input_height;
+	protected int input_dim1;
+	protected int input_dim2;
 	/**
 	 *  The field is true if the input Vector to the method call
 	 *  comes from a 2D matrix
@@ -33,12 +33,10 @@ public class MaxPooler implements Pooler {
 		if (c.hasConfigFeatureExtractor()) {
 			ConfigFeatureExtractor cf = c.getConfigFeatureExtractor();
 			if (cf.getFeatureDim1() < cf.getInputDim1() ||
-			//	cf.getFeatureDim1() < cf.getInputDim2() ||		
-			//    cf.getFeatureDim2() < cf.getInputDim1() ||
 			    cf.getFeatureDim2() < cf.getInputDim2()) {
 				poolOver2DInput = true;
-				input_width = cf.getInputDim1() - cf.getFeatureDim1() + 1;
-				input_height = cf.getInputDim2() - cf.getFeatureDim2() + 1;
+				input_dim1 = cf.getInputDim1() - cf.getFeatureDim1() + 1;
+				input_dim2 = cf.getInputDim2() - cf.getFeatureDim2() + 1;
 			}
 		}
 	}
@@ -60,8 +58,6 @@ public class MaxPooler implements Pooler {
 	 * @return 1D vector with reduced size
 	 */
 	public Vector poolOver1D(Vector data)  {
-		//TODO(viviana) The pooler needs to know if the input vector comes from
-		//  a 2D or 1D data  
 		int pool_size = config.getPoolSize();
 		// The size of the new pooled vector
 		int n = data.size()/pool_size;
@@ -88,13 +84,41 @@ public class MaxPooler implements Pooler {
 	 * @return 1D vector with reduced size storing the pooled data
 	 */
 	public Vector poolOver2D(Vector data)  {
-		//TODO 
-		return data;
+		
+		int pool_size = config.getPoolSize();
+
+		int output_dim1 = (int)Math.floor((double)input_dim1 / pool_size);
+		int output_dim2 = (int)Math.floor((double)input_dim2 / pool_size);
+		double[] output = new double[output_dim1 * output_dim2];
+		
+		for (int i = 0; i < output_dim1; ++i) {
+			for (int j = 0; j < output_dim2; ++j) {
+				double maxPatch = -Double.MAX_VALUE;
+				for (int ki = 0; ki < pool_size; ++ki) {
+					for (int kj = 0; kj < pool_size; ++kj) {
+					  int lookup_i = i*pool_size + ki;
+					  int lookup_j = j*pool_size + kj;
+					  maxPatch = Math.max(maxPatch, data.apply(lookup_j*input_dim1 + lookup_i));
+					}
+				}
+				output[j*output_dim1 + i] = maxPatch;
+			}
+		}
+		return Vectors.dense(output);
 	}
 	public ConfigPooler getConfig() {
 		return config;
 	}
 	public void setConfig(ConfigPooler c) {
 		config = c;
+	}
+	public boolean isPoolOver2DInput() {
+		return poolOver2DInput;
+	}
+	public int getInputDim1() {
+		return input_dim1;
+	}
+	public int getInputDim2() {
+		return input_dim2;
 	}
 }
