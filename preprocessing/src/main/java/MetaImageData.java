@@ -20,7 +20,7 @@ public class MetaImageData implements Serializable {
     private static final long serialVersionUID = 2867139312558954772L;
     //Status of the representation
     public enum ImageDataState {UNCOMPRESSED, COMPRESSED, ERROR}
-    private ImageDataState state;
+    public ImageDataState state;
     private String compression_type;
 
     //Probably more image metadata can be added: PageNo, LineNo, X_coord, Y_coord, width, height(of Bounding Box) 
