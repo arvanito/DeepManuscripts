@@ -61,12 +61,12 @@ public class MetaImageData implements Serializable {
      * @param out
      * @throws IOException
      */
-    public void writeMetaObject(ObjectOutputStream out) throws IOException {
+    /*public void writeMetaObject(ObjectOutputStream out) throws IOException {
         //write normal fields
         //out.defaultWriteObject();
         out.writeObject(compression_type);
         out.writeObject(state);
-    }
+    }*/
 
     /**
      * Serialization of Object
@@ -74,12 +74,12 @@ public class MetaImageData implements Serializable {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void readMetaObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+    /*public void readMetaObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         //read normal fields
         //in.defaultReadObject();
         compression_type = (String) in.readObject();
         state = (ImageDataState) in.readObject();
         
-    }
+    }*/
 
 }
