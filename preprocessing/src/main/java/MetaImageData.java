@@ -16,7 +16,8 @@ import java.io.Serializable;
  * to drastically reduce drive and/or network bandwidth if data is moved.
  */
 public class MetaImageData implements Serializable {
-    private static final long serialVersionUID = -151442211116649858L;
+    //private static final long serialVersionUID = -151442211116649858L;
+    private static final long serialVersionUID = 2867139312558954772L;
     //Status of the representation
     public enum ImageDataState {UNCOMPRESSED, COMPRESSED, ERROR}
     private ImageDataState state;
