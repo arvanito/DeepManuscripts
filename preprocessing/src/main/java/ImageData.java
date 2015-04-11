@@ -26,7 +26,7 @@ public class ImageData extends MetaImageData implements Serializable{
 
     //Status of the representation
     //public enum ImageDataState {UNCOMPRESSED, COMPRESSED, ERROR}
-    private main.java.MetaImageData.ImageDataState state;
+    //private main.java.MetaImageData.ImageDataState state;
 
     //Probably other image metadata needed (compression type, compression level, precision of data, number of channels)
 
