@@ -105,7 +105,7 @@ public class ImageData extends MetaImageData implements Serializable{
         compress();
         //write normal fields
         out.defaultWriteObject();
-        super.writeMetaObject(out);
+        //super.writeMetaObject(out);
         //write compressed data
         byte[] data = compressed_img.toArray();
         out.writeInt(data.length);
@@ -121,7 +121,7 @@ public class ImageData extends MetaImageData implements Serializable{
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         //read normal fields
         in.defaultReadObject();
-        super.readMetaObject(in);
+        //super.readMetaObject(in);
         //read compressed data
         int size = in.readInt();
         System.out.println(size);
