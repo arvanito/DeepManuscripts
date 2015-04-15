@@ -126,9 +126,8 @@ public class SpectralClustering {
 		if (spectralType == 1) {
 			u = generalizedEigenvectorComputing(l);
 		}
-		Matrix y = rows(u);
 
-		return kmeans(y);
+		return kmeans(u);
 	}
 
 	private KMeansModel kmeans(Matrix y) {
