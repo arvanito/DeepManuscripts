@@ -240,6 +240,16 @@ public class MatrixOps {
 	
 	
 	/**
+	 * Method that reshapes a matrix to a vector.
+	 * 
+	 * @param v Matrix of type DenseMatrix to be reshaped
+	 * @return Output vector
+	 */
+	public static DenseVector reshapeMat2Vec(DenseMatrix M) {
+		return new DenseVector(M.toArray()); 
+	}
+	
+	/**
 	 * Method that reshapes a vector to a matrix.
 	 * 
 	 * @param v Vector of type DenseVector to be reshaped

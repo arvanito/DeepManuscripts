@@ -120,6 +120,10 @@ public class MultiplyExtractor implements Extractor {
 
 		// get necessary data from the PreProcessor
 		DenseVector dataDense = (DenseVector) data;
+		
+		// allocate memory for the output vector
+		DenseVector out = new DenseVector(new double[D.numRows()]);
+		
 		if (configLayer.hasConfigPreprocess()) {
 			// ZCA Matrix
 			DenseMatrix zca = preProcess.getZCA();
@@ -133,13 +137,12 @@ public class MultiplyExtractor implements Extractor {
 			// preprocess the data point with contrast normalization and ZCA whitening
 			dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
 			dataDense = MatrixOps.localVecSubtractMean(dataDense, zcaMean);
-			BLAS.gemv(true, 1.0, zca, dataDense, 0.0, dataDense);
+			BLAS.gemv(1.0, zca.transpose(), dataDense, 0.0, dataDense);
 		}
 	
 		// multiply the matrix of the learned features with the preprocessed data point
-		BLAS.gemv(false, 1.0, D, dataDense, 0.0, dataDense);
-				
-		return dataDense;
+		BLAS.gemv(1.0, D, dataDense, 0.0, out);
+		return out;
 	}
 
 }

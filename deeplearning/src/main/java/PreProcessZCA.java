@@ -123,8 +123,8 @@ public class PreProcessZCA implements PreProcessor {
 
 		// compute the ZCA matrix by V * Lambda * V'
 		DenseMatrix ZCA = new DenseMatrix(ss, ss, new double[ss*ss]);
-		BLAS.gemm(false, true, 1.0, Matrices.diag(Vectors.dense(l)), V, 0.0, ZCA);
-		BLAS.gemm(false, false, 1.0, V, ZCA, 0.0, ZCA);
+		BLAS.gemm(1.0, Matrices.diag(Vectors.dense(l)), V.transpose(), 0.0, ZCA);
+		BLAS.gemm(1.0, V, ZCA, 0.0, ZCA);
 		
 		return ZCA;
 	}
@@ -191,7 +191,7 @@ public class PreProcessZCA implements PreProcessor {
 			// preprocess the data point with contrast normalization and ZCA whitening
 			dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
 			dataDense = MatrixOps.localVecSubtractMean(dataDense, mean);
-			BLAS.gemv(true, 1.0, ZCA, dataDense, 0.0, dataDense);
+			BLAS.gemv(1.0, ZCA.transpose(), dataDense, 0.0, dataDense);
 		} else {
 			// reshape data vector to a matrix and extract all overlapping patches
 			int[] dims = {configLayer.getConfigFeatureExtractor().getInputDim1(), configLayer.getConfigFeatureExtractor().getInputDim2()};
@@ -202,7 +202,7 @@ public class PreProcessZCA implements PreProcessor {
 			// preprocess the data point with contrast normalization and ZCA whitening
 			patches = MatrixOps.localMatContrastNorm(patches, eps1);
 			patches = MatrixOps.localMatSubtractMean(patches, mean);
-			BLAS.gemm(false, false, 1.0, patches, ZCA, 0.0, patches);
+			BLAS.gemm(1.0, patches, ZCA, 0.0, patches);
 		}
 		
 		return dataDense;

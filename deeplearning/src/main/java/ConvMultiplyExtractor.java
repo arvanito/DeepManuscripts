@@ -127,6 +127,9 @@ public class ConvMultiplyExtractor implements Extractor {
 		DenseMatrix M = MatrixOps.reshapeVec2Mat((DenseVector) data, dims);	
 		DenseMatrix patches = MatrixOps.im2colT(M, rfSize);
 		
+		// allocate memory for the output vector
+		DenseMatrix out = new DenseMatrix(patches.numRows(),D.numCols(),new double[patches.numRows()*D.numCols()]);	
+		
 		// get necessary data from the PreProcessor
 		if (configLayer.hasConfigPreprocess()) {
 			// ZCA Matrix
@@ -141,13 +144,13 @@ public class ConvMultiplyExtractor implements Extractor {
 			// preprocess the data point with contrast normalization and ZCA whitening
 			patches = MatrixOps.localMatContrastNorm(patches, eps1);
 			patches = MatrixOps.localMatSubtractMean(patches, zcaMean);
-			BLAS.gemm(false, false, 1.0, patches, zca, 0.0, patches);
+			BLAS.gemm(1.0, patches, zca, 0.0, patches);
 		}
 	
 		// multiply the matrix of the learned features with the preprocessed data point
-		BLAS.gemm(false, true, 1.0, patches, D, 0.0, patches);
-				
-		return data;
+		BLAS.gemm(1.0, patches, D.transpose(), 0.0, out);
+		DenseVector outVec = MatrixOps.reshapeMat2Vec(out);
+		return outVec;
 	}
 	
 }

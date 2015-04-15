@@ -52,14 +52,14 @@ public class FFTConvolutionExtractor implements Extractor {
 		featureFFTs = new double[features.length][][][];
 		
 		if(mean != null) {
-			BLAS.gemv(false, 1.0, zca, mean, 0.0, mean); // whiten mean vector
+			BLAS.gemv(1.0, zca, mean, 0.0, mean); // whiten mean vector
 			featureAdds = new double[features.length];
 		}
 		
 		for(int i = 0; i < features.length; ++i) {
 			DenseVector feature = (DenseVector)features[i];
 			if(zca != null) {
-				BLAS.gemv(true, 1.0, zca, feature, 0.0, feature); // "de-whiten" features, instead of whitening data
+				BLAS.gemv(1.0, zca.transpose(), feature, 0.0, feature); // "de-whiten" features, instead of whitening data
 				featureAdds[i] = BLAS.dot(mean,feature); // the effect of the mean vector - to be added to each cell
 			}
 			featureFFTs[i] = FFT(pad(inputRows, inputCols, flip(vectorToMatrix(featureRows, featureCols, feature.toArray()))));
