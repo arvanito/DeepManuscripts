@@ -27,10 +27,10 @@ public class SpectralClustering {
 	int similarityGraphArgument;
 
 	/**
-	 * General constructor for Spectral Clustering
+	 * General constructor for Spectral Clustering.
 	 * 
 	 * @param input
-	 *            : Input similarity matrix. Must be square.
+	 *            : Input similarity matrix that will be used for the training. Must be square.
 	 * @param spectralType
 	 *            : Type of Spectral Clustering Algorithm that will be used:
 	 *            <ul>
@@ -81,9 +81,10 @@ public class SpectralClustering {
 	}
 
 	/**
-	 * Train the Spectral Clustering Algorithm
+	 * Train the Spectral Clustering Algorithm using the data provided by the Input Matrix.
+	 * To predict the cluster in which points are use the <a href ="https://spark.apache.org/docs/1.0.0/api/scala/index.html#org.apache.spark.mllib.clustering.KMeansModel">predict</a> methods from KMeansModel().
 	 * 
-	 * @return KneansModel.
+	 * @return A KneansModel train with the Input Matrix .
 	 */
 	public KMeansModel train() {
 		// Constructing similarity graphs
