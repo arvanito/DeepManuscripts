@@ -9,6 +9,7 @@ message ConfigPreprocess {
 
 message ConfigKMeans {
         required int32 number_of_clusters = 1;
+        required int32 number_of_iterations = 2;
 } 
 
 message ConfigAutoencoders {
