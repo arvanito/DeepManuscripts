@@ -476,6 +476,122 @@ public class TextLineExtract {
 	
 	public static Mat computeSeparatingSeams(Mat img, Mat L, Double sigma, Integer off)
 	{
+			
+		Mat img_blur = null;
+		Double ksize = 50.0;
+		Imgproc.GaussianBlur(img, img_blur, new Size(ksize, ksize), sigma);
+
+		Mat FXR = null;
+		Mat FYR = null;
+
+		Mat kernelx = new Mat(1,3, CvType.CV_32F){
+        		 {
+        		   put(1,0,1);
+        		 }
+        	 };
+         	Mat kernely = new Mat(3,1, CvType.CV_32F){
+        	         {
+       			   put(1,0,1);
+        	         }
+	         };
+		Imgproc.filter2D(img_blur, FXR, -1, kernelx);
+		Imgproc.filter2D(img_blur, FYR, -1, kernely);		
+		
+		Mat absFXR = null;
+		Core.absdiff(FXR, Scalar.all(0), absFXR);
+		Mat absFYR = null;
+		Core.absdiff(FYR, Scalar.all(0), absFYR);
+		Mat energy_map = null;
+		Core.add(absFXR, absFYR, energy_map);
+		Mat energy_map_t = energy_map.t();
+				
+		
+		Size s = energy_map_t.size();
+		Double n = s.height;
+		Integer l = L.size();
+		Mat sep_seams = Mat.zeros(new Size(n,l-1), CvType.CV_8U);
+		Mat new_energy = energy_map_t;
+				
+		Integer i,row,col;
+		for (i = 1; i < l; i++)
+		{
+			ArrayList<Integer> L_a = L.get(i);
+			ArrayList<Integer> L_b = L.get(i+1);
+		    
+		    Integer l_a =  L_a.size();
+		    Integer l_b =  L_b.size();
+		    
+		    Integer min_l = Math.min(l_a,l_b);
+		    
+		    for (row = 2; row <= min_l; row++)
+		    {	    	
+		    	for (col = L_a.get(row); col <=  L_b.get(row); col++)
+		    	{
+		            
+		            Integer left = Math.max(col-1, L_a.get(row-1));
+		            Integer right = Math.min(col+ 1, L_b.get(row+1));
+		            
+		            Mat temprow = new_energy.row(row-1).colRange(left, right);
+		            Double minpath = Core.minMaxLoc(temprow).minVal;
+
+		            byte tempbuff[] = new byte[(int) (new_energy.total() * new_energy.channels())];
+		            if (minpath == null)
+		            {
+		            	if (col>left)
+		            	{		            		
+		            		new_energy.put(row, col, new_energy.get(row-1, right, tempbuff));
+		            	}
+		            	else if (col<right) 
+		            	{
+		            		new_energy.put(row, col, new_energy.get(row-1, left, tempbuff));							
+				}
+		            }
+		            else
+		            {
+		            	new_energy.put(row, col, (new_energy.get(row-1, left, tempbuff)+minpath));
+		            }		            	
+		            
+		    	}
+		    }
+
+		   Integer min_index = (int) Core.minMaxLoc(new_energy.row(min_l).colRange(L_a.get(min_l), L_b.get(min_l))).minLoc.y;
+		   
+		   min_index = min_index + L_a.get(min_l) - 1;
+
+		   for (row = min_l-1; row>=1; row--)
+		   {
+			  Integer j = min_index;
+			  
+			  sep_seams.put(row+1, i, j);
+			  
+			  Integer left = Math.max(j-1, L_a.get(row));
+			  Integer right = Math.min(j+1, L_b.get(row));
+
+			  min_index = (int) Core.minMaxLoc(new_energy.row(row).colRange(left, right)).minLoc.y;
+			  
+			  if (min_index == null)
+			  {
+				  if (j>left)
+				  {
+					  min_index = right;
+				  }
+				  else if (j < right)
+				  {
+					  min_index = left;
+				  }
+			  }
+			  else
+			  {
+				  min_index = min_index + left - 1;
+			  }
+		   }
+
+		   sep_seams.put(l, i, min_index);
+		   
+		   new_energy = energy_map_t;
+		   
+		}
+		
 		return null;
 		
 	}
