@@ -1,8 +1,5 @@
 package main.java;
 
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.highgui.Highgui;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,49 +8,83 @@ import java.io.Serializable;
 
 
 /**
- * Representation of some image data parameters.
+ * Representation of some image data.
+ * Because this class will be used by Spark RDD, it needs to implement Serializable.
  * Two representations are kept, Compressed and Uncompressed. This should be transparent to external classes, but should allow
  * to drastically reduce drive and/or network bandwidth if data is moved.
  */
 public class MetaImageData implements Serializable {
-    //private static final long serialVersionUID = -151442211116649858L;
-    private static final long serialVersionUID = 2867139312558954772L;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2867139312558954772L;
+
     //Status of the representation
-    public enum ImageDataState {UNCOMPRESSED, COMPRESSED, ERROR}
-    public ImageDataState state;
-    private String compression_type;
+        
+    public ImageData Imgdata;
+    private Metadata metadata;
 
-    //Probably more image metadata can be added: PageNo, LineNo, X_coord, Y_coord, width, height(of Bounding Box) 
-    //(compression type, compression level, precision of data, number of channels)
+    //Probably other image metadata needed (compression type, compression level, precision of data, number of channels)
     
-
     /**
      * Constructor Simple
      */
-    public MetaImageData() {
-        state = ImageDataState.UNCOMPRESSED;
-        compression_type = "XYZ";
+    public MetaImageData(byte[] data,int x, int y, int w, int h) {
+    	this.Imgdata = new ImageData(data);
+    	this.metadata = new Metadata(x,y,w,h);
     }
-    /**
-     * Constructor from ImageDataState
-     */
-    public MetaImageData(ImageDataState st) {
-        state = st;
-        compression_type = "XYZ";
+    
+    
+    public void setX(int x) {
+        this.metadata.x_coord = x;
     }
-
-    /**
-     * Get the current compression status of the class.
-     * @return current status.
-     */
-    public ImageDataState getStatus() {
-        return state;
+    
+    public void setY(int x) {
+        this.metadata.y_coord = x;
     }
-    /**
-     * Get the compression type.
-     */
-    public String getCompressionType() {
-    	return compression_type;
+    
+    public void setWidth(int x) {
+        this.metadata.width = x;
+    }
+    
+    public void setHeight(int x) {
+        this.metadata.height = x;
+    }
+    
+    public int getX() {
+    	if(this.metadata.x_coord !=(Integer) null)
+    		return this.metadata.x_coord;
+    	else {
+    		System.out.println("X coordinate is NULL");
+    		return (Integer) null;
+    	}
+    }
+    
+    public int getY() {
+    	if(this.metadata.y_coord !=(Integer) null)
+    		return this.metadata.y_coord;
+    	else {
+    		System.out.println("Y coordinate is NULL");
+    		return (Integer) null;
+    	}
+    }
+    
+    public int getWidth() {
+    	if(this.metadata.width !=(Integer) null)
+    		return this.metadata.width;
+    	else {
+    		System.out.println("Width of the image is NULL");
+    		return (Integer) null;
+    	}
+    }
+    
+    public int getHeight() {
+    	if(this.metadata.height !=(Integer) null)
+    		return this.metadata.height;
+    	else {
+    		System.out.println("Height of the image is NULL");
+    		return (Integer) null;
+    	}
     }
 
     /**
@@ -61,12 +92,11 @@ public class MetaImageData implements Serializable {
      * @param out
      * @throws IOException
      */
-    /*public void writeMetaObject(ObjectOutputStream out) throws IOException {
+    public void writeObject(ObjectOutputStream out) throws IOException {
         //write normal fields
-        //out.defaultWriteObject();
-        out.writeObject(compression_type);
-        out.writeObject(state);
-    }*/
+        out.defaultWriteObject();
+        
+    }
 
     /**
      * Serialization of Object
@@ -74,12 +104,10 @@ public class MetaImageData implements Serializable {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    /*public void readMetaObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+    public void readMetaObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         //read normal fields
-        //in.defaultReadObject();
-        compression_type = (String) in.readObject();
-        state = (ImageDataState) in.readObject();
+        in.defaultReadObject();
         
-    }*/
+    }
 
 }
