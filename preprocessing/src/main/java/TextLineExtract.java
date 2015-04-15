@@ -474,7 +474,7 @@ public class TextLineExtract {
 		return arr;
 	}
 	
-	public static Mat computeSeparatingSeams(Mat img, Mat L, Double sigma, Integer off)
+	public static Mat computeSeparatingSeams(Mat img, ArrayList<ArrayList<Integer>> L, Double sigma, Integer off)
 	{
 			
 		Mat img_blur = null;
