@@ -81,24 +81,22 @@ public class SpectralClustering {
 	}
 
 	/**
-	 * Compute the Spectral Clustering Algorithm
+	 * Train the Spectral Clustering Algorithm
 	 * 
-	 * @return Clusters A<sub>1</sub>,...,A<sub>k</sub> .
+	 * @return KneansModel.
 	 */
-	public KMeansModel compute() {
+	public KMeansModel train() {
 		// Constructing similarity graphs
 		Matrix w = null;
 		switch (similarityGraph) {
 		case 0:
 			w = computeEpsilon();
-			// TODO: Find an implementation or some papers
 			break;
 		case 1:
 			w = computeKNearest();
 			break;
 		case 2:
 			w = computeFullyConnected();
-			// TODO: Find an implementation or some papers
 			break;
 		default:
 			w = computeKNearest();
@@ -127,10 +125,10 @@ public class SpectralClustering {
 			u = generalizedEigenvectorComputing(l);
 		}
 
-		return kmeans(u);
+		return kmeansTraining(u);
 	}
 
-	private KMeansModel kmeans(Matrix y) {
+	private KMeansModel kmeansTraining(Matrix y) {
 		int nbRow = y.numRows();
 		int nbCol = y.numCols();
 		double[][] yArray = getValues2D(y);
@@ -151,23 +149,7 @@ public class SpectralClustering {
 		
 		int numIterations = 20;
 		KMeansModel clusters = KMeans.train(JavaRDD.toRDD(distData), k, numIterations);
-
-		// Evaluate clustering by computing Within Set Sum of Squared Errors
-		// double WSSSE = clusters.computeCost(parsedData.rdd());
-		// System.out.println("Within Set Sum of Squared Errors = " + WSSSE);
 		return clusters;
-	}
-
-	/**
-	 * Get the values <i>y<sub>i</sub></i> &isin; &real;<sup><i>k</i></sup> from
-	 * the <i>i</i>-th row of u.
-	 * 
-	 * @param u
-	 *            : The matrix containing the eigenvectors.
-	 * @return Matrix of the <i>y<sub>i</sub></i> values.
-	 */
-	private Matrix rows(Matrix u) {
-		return null;
 	}
 
 	/**
@@ -178,6 +160,7 @@ public class SpectralClustering {
 	 * @return A normalized matrix of eigenvectors.
 	 */
 	private Matrix normalize(Matrix u) {
+		// TODO
 		return null;
 	}
 
@@ -190,6 +173,7 @@ public class SpectralClustering {
 	 * @return The k generalized eigenvectors.
 	 */
 	private Matrix generalizedEigenvectorComputing(Matrix l) {
+		// TODO
 		return null;
 	}
 
@@ -221,6 +205,7 @@ public class SpectralClustering {
 	 * @return Normalized graph Laplacian symetric matrix L<sub>sym</sub>
 	 */
 	private Matrix computeLsym(Matrix w, Matrix d) {
+		// TODO
 		return null;
 	}
 
@@ -252,6 +237,7 @@ public class SpectralClustering {
 	 * @return Similarity matrix
 	 */
 	private Matrix computeFullyConnected() {
+		// TODO
 		return null;
 	}
 
@@ -262,7 +248,7 @@ public class SpectralClustering {
 	 * @return Similarity matrix
 	 */
 	private Matrix computeKNearest() {
-		// https://issues.apache.org/jira/browse/SPARK-2335
+		// TODO
 		return null;
 	}
 
@@ -273,6 +259,7 @@ public class SpectralClustering {
 	 * @return Similarity matrix
 	 */
 	private Matrix computeEpsilon() {
+		// TODO
 		return null;
 	}
 
