@@ -11,7 +11,7 @@ public class BaseLayerFactory {
 	//	super(configLayer, new PreProcessZCA(), new DummyLearner(), new DummyExtractor(), new MaxPooler(configLayer));
 		PreProcessZCA preprocessor = null;
 		if (configLayer.hasConfigPreprocess()) {
-					preprocessor = new PreProcessZCA();
+					preprocessor = new PreProcessZCA(configLayer);
 		}
 		// Assert one of this two needs to be true.
 		assert(configLayer.hasConfigAutoencoders()|| configLayer.hasConfigKmeans());
