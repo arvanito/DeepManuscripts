@@ -82,12 +82,17 @@ public class DeepLearningMain {
     	JavaSparkContext sc = new JavaSparkContext(conf);
     	String inputFile = args[0];
     	String outputFile = args[1];
-		JavaRDD<Vector> data = sc.textFile(inputFile).map(new Parse());
-		
+    	
+		JavaRDD<Vector> input_small_patches = sc.textFile(inputFile).map(new Parse());
+		JavaRDD<Vector> input_word_patches = sc.textFile(inputFile).map(new Parse());
 		// The main loop calls execute() on each of the layers
-		DeepLearningLayer layer1 = new DummyLayer(globalConfig.get(0));
-		JavaRDD<Vector> result = layer1.execute(data);
-		result.saveAsTextFile(outputFile);
+		for (ConfigBaseLayer configLayer: globalConfig) {
+			//DeepLearningLayer layer1 = BaseLayerFactory.createBaseLayer(configLayer);
+			//JavaRDD<Vector> result = layer1.execute(input_small_patches, input_word_patches);
+			// How does copying of data happen here?
+			//input_small_patches = result;
+		}
+		//data.saveAsTextFile(outputFile);
 		
 		sc.close();
 	}
