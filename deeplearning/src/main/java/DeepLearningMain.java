@@ -80,7 +80,7 @@ public class DeepLearningMain {
 		// open files and convert them to JavaRDD<Vector> datasets
 		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
     	JavaSparkContext sc = new JavaSparkContext(conf);
-    	String inputFile = args[0];
+    /*	String inputFile = args[0];
     	String outputFile = args[1];
     	
 		JavaRDD<Vector> input_small_patches = sc.textFile(inputFile).map(new Parse());
@@ -92,7 +92,7 @@ public class DeepLearningMain {
 			// How does copying of data happen here?
 			//input_small_patches = result;
 		}
-		//data.saveAsTextFile(outputFile);
+		//data.saveAsTextFile(outputFile);*/
 		
 		sc.close();
 	}
