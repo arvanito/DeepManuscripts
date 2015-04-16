@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -18,18 +17,15 @@ import main.java.DeepModelSettings.ConfigPreprocess;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
-import org.apache.avro.generic.GenericData.Array;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class OneLayerTest implements Serializable {
 
-	private static final long serialVersionUID = 856790367630259972L;
+	private static final long serialVersionUID = -8953031572106667936L;
 	private transient JavaSparkContext sc;
 
 	@Before
@@ -77,6 +73,7 @@ public class OneLayerTest implements Serializable {
 		
 	   	JavaRDD<Vector> preprocessed = layer.preProcess(patches);
 	   	List<Vector> v = preprocessed.collect();
+	   	Assert.assertEquals(100, v.size());
 		Vector[] features = layer.learnFeatures(preprocessed);
 	
 		JavaRDD<Vector> represent = layer.extractFeatures(imgwords, c, features);
