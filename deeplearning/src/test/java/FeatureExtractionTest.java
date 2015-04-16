@@ -56,7 +56,6 @@ public class FeatureExtractionTest implements Serializable {
 		// create Vectors from double arrays
 		Vector vx = Vectors.dense(x);
 		DenseVector dvx = (DenseVector) vx;
-		System.out.println(dvx);
 		
  		Vector[] vf = new Vector[3];
 		vf[0] = Vectors.dense(f1);
@@ -65,10 +64,8 @@ public class FeatureExtractionTest implements Serializable {
 	
 		// run the feature extraction code
 		DenseMatrix D = MatrixOps.convertVectors2Mat(vf);
-		System.out.println(D);
 		DenseVector dvxOut = new DenseVector(new double[D.numRows()]);
 		BLAS.gemv(1.0, D, dvx, 0.0, dvxOut);
-		System.out.println(dvxOut);
 		
 		Assert.assertArrayEquals(expected_output, dvxOut.toArray(), 1e-6);
 		
