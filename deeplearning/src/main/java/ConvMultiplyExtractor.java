@@ -128,7 +128,7 @@ public class ConvMultiplyExtractor implements Extractor {
 		DenseMatrix patches = MatrixOps.im2colT(M, rfSize);
 		
 		// allocate memory for the output vector
-		DenseMatrix out = new DenseMatrix(patches.numRows(),D.numCols(),new double[patches.numRows()*D.numCols()]);	
+		DenseMatrix out = new DenseMatrix(patches.numRows(),D.numRows(),new double[patches.numRows()*D.numRows()]);	
 		
 		// get necessary data from the PreProcessor
 		if (configLayer.hasConfigPreprocess()) {
