@@ -28,7 +28,11 @@ public class BaseLayerFactory {
 		}
 		Extractor extractor = null;
 		if (configLayer.hasConfigFeatureExtractor()) {
-			extractor = new FFTConvolutionExtractor(configLayer, preprocessor);
+			if (configLayer.getConfigFeatureExtractor().getInputDim1() > 3) {
+				extractor = new FFTConvolutionExtractor(configLayer, preprocessor);
+			} else {
+				extractor = new MultiplyExtractor(configLayer, preprocessor);
+			}
 		}
 		ConfigPooler cpooler = configLayer.getConfigPooler();
 		Pooler pooler = null;

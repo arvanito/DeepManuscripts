@@ -34,7 +34,16 @@ public class MultiplyExtractor implements Extractor {
 		this.preProcess = preProcess;
 		this.features = features;
 	}
-	
+	/**
+	 * Constructor 
+	 * @param configLayer The input configuration for the current layer
+	 * @param preProcess The input PreProcess configuration
+	 * @param features The input feature learned from the previous step
+	 */
+	public MultiplyExtractor(ConfigBaseLayer configLayer, PreProcessZCA preProcess) {
+		this.configLayer = configLayer;
+		this.preProcess = preProcess;
+	}
 	
 	/**
 	 * Getter method for the ConfigBaseLayer object.
