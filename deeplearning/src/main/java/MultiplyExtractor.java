@@ -142,6 +142,9 @@ public class MultiplyExtractor implements Extractor {
 	
 		// multiply the matrix of the learned features with the preprocessed data point
 		BLAS.gemv(1.0, D, dataDense, 0.0, out);
+		
+		// HERE!! Apply non-linearity!!!
+		
 		return out;
 	}
 
