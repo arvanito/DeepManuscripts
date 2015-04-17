@@ -10,9 +10,16 @@ import main.java.DeepModelSettings.ConfigBaseLayer;
  * 
  */
 public class DummyLayer extends BaseLayer {
-
+	/**
+	 * @param configLayer holds the configuration for every type of layer
+	 *  For accessing DummyLearner config:
+	 * 		     configLayer.getConfigKmeans();
+	 *			 configLayer.getConfigAutoencoders()
+	 *  For accessing DummyPooler config
+     *			 configLayer.getConfigPooler();
+	 */
 	public DummyLayer(ConfigBaseLayer configLayer) {
-		super(configLayer, new PreProcessZCA(), new DummyLearner(), new DummyExtractor(), new DummyPooler());
+		super(configLayer, new PreProcessZCA(), new DummyLearner(), new DummyExtractor(), new MaxPooler(configLayer));
 	}
 
 }

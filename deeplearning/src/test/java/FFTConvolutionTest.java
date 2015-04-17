@@ -29,7 +29,7 @@ public class FFTConvolutionTest implements Serializable {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		sc = new JavaSparkContext("local", "MaxPoolerTest");
+		sc = new JavaSparkContext("local", "FFTConvolutionTest");
 	}
 
 	/**
