@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 
 public class Metadata implements Serializable {
-	
+    
+    private static final long serialVersionUID = -7311690903847009641L;	
     public int x_coord,y_coord;
     public int width, height;
     
