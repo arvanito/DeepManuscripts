@@ -37,7 +37,7 @@ public class BaseLayerFactory {
 		ConfigPooler cpooler = configLayer.getConfigPooler();
 		Pooler pooler = null;
 		if (cpooler.getPoolType() == ConfigPooler.PoolType.MAX) {
-			pooler = new MaxPooler(configLayer);
+			pooler = new MaxPoolerExtended(configLayer);
 		}
 		System.out.printf("Pool size %d\n", cpooler.getPoolSize());
 

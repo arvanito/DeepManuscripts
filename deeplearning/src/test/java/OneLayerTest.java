@@ -75,14 +75,19 @@ public class OneLayerTest implements Serializable {
 	   	List<Vector> v = preprocessed.collect();
 	   	Assert.assertEquals(100, v.size());
 		Vector[] features = layer.learnFeatures(preprocessed);
-	
+		Assert.assertEquals(3, features.length);
+		Assert.assertEquals(4, features[0].size());
+		
 		JavaRDD<Vector> represent = layer.extractFeatures(imgwords, c, features);
+		
 		List<Vector> t = represent.collect();
 		Assert.assertEquals(50, t.size());
+		// 147 is 3 x 7 x 7
+		Assert.assertEquals(147, t.get(0).size());
 		JavaRDD<Vector> pooled = layer.pool(represent);
 		List<Vector> result = pooled.collect();
 		Assert.assertEquals(50, result.size());
-		Assert.assertEquals(9, result.get(0).size());
+		Assert.assertEquals(27, result.get(0).size());
 
 	}
 	
@@ -122,7 +127,7 @@ public class OneLayerTest implements Serializable {
 
 		List<Vector> res = result.collect();
 		Assert.assertEquals(50, res.size());
-		Assert.assertEquals(9, res.get(0).size());
+		Assert.assertEquals(27, res.get(0).size());
 
 	}
 }
