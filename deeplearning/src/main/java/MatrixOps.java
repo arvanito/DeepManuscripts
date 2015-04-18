@@ -19,6 +19,105 @@ import org.apache.spark.mllib.linalg.Vectors;
  */
 public class MatrixOps {
 	
+	
+	/**
+	 * @param in Input array of double 
+	 * @return Transformed array by applying the abs function
+	 */
+	public static double[] applyAbsNonLinearity(double[] in) {
+		
+		int n = in.length;
+		double[] out = new double[n];
+		
+		// apply the abs element-wise
+		for (int i = 0; i < n; i++) {
+			out[i] = Math.abs(in[i]);
+		}
+		
+		return out;
+	}
+	
+	
+	/**
+	 * @param in Input array
+	 * @param alpha soft threshold parameter
+	 * @return Transformed array by applying soft thresholding
+	 */
+	public static double[] applySoftNonLinearity(double[] in, double alpha) {
+		
+		int n = in.length;
+		double[] out = new double[n];
+		
+		// apply the soft threshold element-wise
+		// here we need an additional parameter
+		for (int i = 0; i < n; i++) {
+			out[i] = Math.max(in[i]-alpha,0);
+		}
+		
+		return out;
+		
+	}
+	
+	
+	/**
+	 * Method that applies a nonlinear function element-wise to a DenseMatrix.
+	 * 
+	 * @param M Input DenseMatrix
+	 * @param function String that denotes the applied function on the matrix
+	 * @param alpha Optional parameter for soft thresholding
+	 * @return Transformed DenseMatrix
+	 */
+	public static DenseMatrix applyNonLinearityMat(DenseMatrix M, String function, double... alpha) {
+		
+		int n = M.numRows();
+		int m = M.numCols();
+		
+		double[] out = new double[n*m];
+		
+		// apply non-linearity depending on the input String
+		switch (function) {
+		case "abs":
+			out = applyAbsNonLinearity(M.toArray());
+			break;
+		case "soft":
+			out = applySoftNonLinearity(M.toArray(), alpha[0]);
+			break;
+		}
+		
+		DenseMatrix outMat = new DenseMatrix(n,m,out); 
+		return outMat;
+	}
+	
+	
+	/**
+	 * Method that applies a nonlinear function element-wise to a DenseVector.
+	 * 
+	 * @param v Input DenseVector
+	 * @param function String that denotes the applied function on the vector
+	 * @param alpha Optional parameter for soft thresholding
+	 * @return Transformed DenseVector
+	 */
+	public static DenseVector applyNonLinearityVec(DenseVector v, String function, double... alpha) {
+		
+		int s = v.size();
+		
+		double[] out = new double[s];
+		
+		// apply non-linearity depending on the input String 
+		switch (function) {
+		case "abs":
+			out = applyAbsNonLinearity(v.toArray());
+			break;
+		case "soft":
+			out = applySoftNonLinearity(v.toArray(), alpha[0]);
+			break;
+		}
+		
+		DenseVector outVec = new DenseVector(out);
+		return outVec;
+	}
+	
+	
 	/** 
 	 * Method that converts an array of Vectors to a DenseMatrix.
 	 * 

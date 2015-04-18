@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 import main.java.MatrixOps;
 import main.java.DeepModelSettings.ConfigBaseLayer;
+import main.java.DeepModelSettings.ConfigFeatureExtractor;
+import main.java.DeepModelSettings.ConfigPooler;
 
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.BLAS;
@@ -74,6 +76,10 @@ public class FeatureExtractionTest implements Serializable {
 	@Test
 	public void convMultiplyTest() {
 		//ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().setConfigFeatureExtractor()
+		//ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
+		//		setConfigFeatureExtractor(ConfigFeatureExtractor.newBuilder().
+		//				                  setFeatureDim1(2).setFeatureDim2(2).setInputDim1(4).setInputDim2(4)).
+		//				                  setConfigPooler(ConfigPooler.newBuilder().setPoolSize(2)).build();
 		
 		// simple example
 		double[] f1 = {0.1, 0.2, 0.4, 1.4};
