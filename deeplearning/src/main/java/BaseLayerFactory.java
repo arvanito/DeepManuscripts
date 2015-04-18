@@ -5,10 +5,18 @@ import main.java.DeepModelSettings.ConfigBaseLayer;
 import main.java.DeepModelSettings.ConfigPooler;
 import main.java.BaseLayer;
 
+/**
+ * 
+ * A Factory class for BaseLayers. Given the configuration for a base layer,
+ * the class is responsible for properly instantiating  a derived object of type BaseLayer.  
+ * 
+ * @author Viviana Petrescu
+ *
+ */
+
 public class BaseLayerFactory {
 
 	static public BaseLayer createBaseLayer(ConfigBaseLayer configLayer) {
-	//	super(configLayer, new PreProcessZCA(), new DummyLearner(), new DummyExtractor(), new MaxPooler(configLayer));
 		PreProcessZCA preprocessor = null;
 		if (configLayer.hasConfigPreprocess()) {
 					preprocessor = new PreProcessZCA(configLayer);
@@ -28,11 +36,9 @@ public class BaseLayerFactory {
 		}
 		Extractor extractor = null;
 		if (configLayer.hasConfigFeatureExtractor()) {
-			if (configLayer.getConfigFeatureExtractor().getInputDim1() > 3) {
 				extractor = new FFTConvolutionExtractor(configLayer, preprocessor);
-			} else {
+		} else {
 				extractor = new MultiplyExtractor(configLayer, preprocessor);
-			}
 		}
 		ConfigPooler cpooler = configLayer.getConfigPooler();
 		Pooler pooler = null;
