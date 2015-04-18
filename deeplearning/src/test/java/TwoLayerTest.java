@@ -25,6 +25,9 @@ import org.junit.Test;
 
 public class TwoLayerTest implements Serializable {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 6070301047615364301L;
 	private transient JavaSparkContext sc;
 
@@ -82,15 +85,27 @@ public class TwoLayerTest implements Serializable {
 		ConfigBaseLayer.Builder conf2 = ConfigBaseLayer.newBuilder();
 		conf2.setConfigPreprocess(ConfigPreprocess.newBuilder().setEps1(0.1).setEps2(0.2).build());
 		conf2.setConfigPooler(ConfigPooler.newBuilder().setPoolSize(2));
-	 	conf2.setConfigKmeans(ConfigKMeans.newBuilder().setNumberOfClusters(3).setNumberOfIterations(10).build());	
+	 	conf2.setConfigKmeans(ConfigKMeans.newBuilder().setNumberOfClusters(4).setNumberOfIterations(10).build());	
 	 	ConfigBaseLayer c2 = conf2.build();
 		
 	 	DeepLearningLayer layer2 = BaseLayerFactory.createBaseLayer(c2);
-	 /*	
-	 	JavaRDD<Vector> result2 = layer2.execute(result, imgwords);
-	 	List<Vector> res2 = result2.collect();
-		Assert.assertEquals(50, res2.size());
-		Assert.assertEquals(1, res2.get(0).size());*/
+	 	
+    	JavaRDD<Vector> preprocessed = layer2.preProcess(result);
+		Vector[] features = layer2.learnFeatures(preprocessed);
+       
+		Assert.assertEquals(50, imgwords.collect().size());
+		Assert.assertEquals(4, features.length);
+		Assert.assertEquals(27, features[0].size());
+		Assert.assertEquals(64,imgwords.collect().get(0).size());
+		JavaRDD<Vector> represent = layer2.extractFeatures(result, c2, features);
+		Assert.assertEquals(50, represent.collect().size());
+		Assert.assertEquals(4, represent.collect().get(0).size());
+		
+		JavaRDD<Vector> pooled = layer2.pool(represent);
+		List<Vector> out = pooled.collect();
+		Assert.assertEquals(50, out.size());
+		Assert.assertEquals(2, out.get(0).size());
+	 	
 	}
 
 }
