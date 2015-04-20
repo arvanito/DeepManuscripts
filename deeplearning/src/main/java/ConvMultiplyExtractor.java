@@ -20,9 +20,21 @@ public class ConvMultiplyExtractor implements Extractor {
 
 	private static final long serialVersionUID = 7991635895652585866L;
 
-	private ConfigBaseLayer configLayer;	// layer configuration from the protocol buffer
-	private PreProcessZCA preProcess; 		// pre-processing information 
+	private ConfigBaseLayer configLayer = null;		// layer configuration from the protocol buffer
+	private PreProcessZCA preProcess = null; 		// pre-processing information 
 	private Vector[] features;				// array of learned feature Vectors
+
+	
+	/**
+	 * Constructor 
+	 * @param configLayer The input configuration for the current layer
+	 * @param preProcess The input PreProcess configuration
+	 */
+	public ConvMultiplyExtractor(ConfigBaseLayer configLayer, PreProcessZCA preProcess) {
+		this.configLayer = configLayer;
+		this.preProcess = preProcess;
+	}
+	
 	
 	/**
 	 * Constructor 
@@ -132,7 +144,7 @@ public class ConvMultiplyExtractor implements Extractor {
 		DenseMatrix patchesOut = new DenseMatrix(patches.numRows(),patches.numCols(),new double[patches.numRows()*patches.numCols()]);
 		
 		// get necessary data from the PreProcessor
-		if (configLayer.hasConfigPreprocess()) {
+		if (preProcess != null) {
 			// ZCA Matrix
 			DenseMatrix zca = preProcess.getZCA();
 
