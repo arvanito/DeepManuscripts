@@ -18,9 +18,9 @@ public class MultiplyExtractor implements Extractor {
 	
 	private static final long serialVersionUID = -6353736803330058842L;
 
-	private ConfigBaseLayer configLayer;	// layer configuration from the protocol buffer
-	private PreProcessZCA preProcess; 		// pre-processing information 
-	private Vector[] features;				// array of learned feature Vectors
+	private ConfigBaseLayer configLayer = null;				// layer configuration from the protocol buffer
+	private PreProcessZCA preProcess = null; 				// pre-processing information 
+	private Vector[] features;								// array of learned feature Vectors
 	
 	
 	/**
@@ -134,7 +134,9 @@ public class MultiplyExtractor implements Extractor {
 		DenseVector dataOut = new DenseVector(new double[D.numRows()]);
 		DenseVector dataDenseOut = new DenseVector(new double[dataDense.size()]);
 		
-		if (configLayer.hasConfigPreprocess()) {
+		// probably change that, because in any way, we do not need to whiten 
+		// the data is already whitened
+		if (preProcess != null) {
 			// ZCA Matrix
 			DenseMatrix zca = preProcess.getZCA();
 
