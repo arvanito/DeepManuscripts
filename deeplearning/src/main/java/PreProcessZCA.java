@@ -37,6 +37,10 @@ public class PreProcessZCA implements PreProcessor {
 	public PreProcessZCA(ConfigBaseLayer c) {
 		configLayer = c;
 	}
+	public PreProcessZCA(DenseVector mean, DenseMatrix ZCA) {
+		this.mean = mean;
+		this.ZCA = ZCA;
+	}
 	
 	/**
 	 * Getter method for the ConfigBaseLayer object.

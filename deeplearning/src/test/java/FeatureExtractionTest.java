@@ -7,6 +7,7 @@ import main.java.MatrixOps;
 import main.java.DeepModelSettings.ConfigBaseLayer;
 import main.java.DeepModelSettings.ConfigFeatureExtractor;
 import main.java.DeepModelSettings.ConfigPooler;
+import main.java.PreProcessZCA;
 
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.BLAS;
@@ -72,6 +73,33 @@ public class FeatureExtractionTest implements Serializable {
 		Assert.assertArrayEquals(expected_output, dvxOut.toArray(), 1e-6);
 		
 	}
+	
+	
+	@Test
+	public void multiplyPreTest() {
+		
+		// simple example
+		double[] x1 = {0.56, 0.34, 0.32, 0.14};
+		double[] x2 = {0.54, 0.63, 1.2, 0.78};
+		double[] x3 = {1.23, 0.34, 0.67, 0.85};
+		double[] x4 = {0.57, 0.85, 0.29, 0.94};
+		double[] x = {0.56, 0.54, 1.23, 0.57, 0.34, 0.63, 0.34, 0.85, 0.32, 1.2, 0.67, 0.29, 0.14, 0.78, 0.85, 0.94};
+		
+		double[] zca = {1.654633794518243,   0.541992148747697,   0.519961336130961,   0.445690380771477,
+				0.541992148747697,   1.919200272146810,   0.522623043139470,   0.178462196134402,
+				0.519961336130961,   0.522623043139470,   1.601056255503961,   0.518637025393985,
+				0.445690380771477,   0.178462196134402,   0.518637025393985,   2.019488057868512};
+		double[] m = {0.190168010867027,  -0.204704063143829,  -0.042614218658781,   0.057150270935583};
+		
+		DenseVector mean = new DenseVector(m);
+		DenseMatrix ZCA = new DenseMatrix(4,4,zca);
+		
+		// create a PreProcessZCA object with the input mean and ZCA variables
+		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
+		
+		
+	}
+	
 	
 	@Test
 	public void convMultiplyTest() {
