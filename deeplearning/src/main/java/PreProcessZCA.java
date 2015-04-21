@@ -33,8 +33,8 @@ public class PreProcessZCA implements PreProcessor {
 	// TODO: Initialize it somewhere!
 	boolean conv;
 	
-	PreProcessZCA() {}
-	PreProcessZCA(ConfigBaseLayer c) {
+	public PreProcessZCA() {}
+	public PreProcessZCA(ConfigBaseLayer c) {
 		configLayer = c;
 	}
 	

@@ -21,7 +21,7 @@ public class SubtractMean implements Function<Vector, Vector> {
 	 * 
 	 * @param mean Input mean Vector
 	 */
-	SubtractMean(Vector mean) {
+	public SubtractMean(Vector mean) {
 		this.mean = mean;
 	}
 	
