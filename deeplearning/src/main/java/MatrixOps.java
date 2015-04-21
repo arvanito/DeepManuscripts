@@ -232,10 +232,10 @@ public class MatrixOps {
 		for (int i = 0; i < n; i++) {
 			cur = getRow(M, i);
 			cur = localVecContrastNorm(cur, e);
-
+			
 			// copy the normalized row back to the result
 			for (int j = 0; j < m; j++) {
-				C.toArray()[i+n*j] = cur.toArray()[j];
+				C.update(i, j, cur.toArray()[j]);
 			}
 		}
 
@@ -269,7 +269,7 @@ public class MatrixOps {
 
 			// copy the subtracted row back to the result
 			for (int j = 0; j < m; j++) {
-				C.toArray()[i+n*j] = cur.toArray()[j];
+				C.update(i, j, cur.toArray()[j]);
 			}
 		}
 

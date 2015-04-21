@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import main.java.ConvMultiplyExtractor;
 import main.java.DeepModelSettings.ConfigPreprocess;
 import main.java.MatrixOps;
 import main.java.DeepModelSettings.ConfigBaseLayer;
@@ -141,40 +142,71 @@ public class FeatureExtractionTest implements Serializable {
 	
 	@Test
 	public void convMultiplyTest() {
-		//ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().setConfigFeatureExtractor()
-		//ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
-		//		setConfigFeatureExtractor(ConfigFeatureExtractor.newBuilder().
-		//				                  setFeatureDim1(2).setFeatureDim2(2).setInputDim1(4).setInputDim2(4)).
-		//				                  setConfigPooler(ConfigPooler.newBuilder().setPoolSize(2)).build();
+		
+		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
+		setConfigFeatureExtractor(ConfigFeatureExtractor.newBuilder().setFeatureDim1(2).setFeatureDim2(2).setInputDim1(4).setInputDim2(4)).
+		setConfigPooler(ConfigPooler.newBuilder().setPoolSize(1)).
+		setConfigPreprocess(ConfigPreprocess.newBuilder().setEps1(0.1).setEps2(0.1)).build();
 		
 		// simple example
 		double[] f1 = {0.1, 0.2, 0.4, 1.4};
-		//double[] f2 = {0.5, 0.2, 0.1, 0.5};
-		double[] x = {0.56, 0.54, 1.23, 0.57, 0.34, 0.63, 0.34, 0.85, 0.32, 1.2, 0.67, 0.29, 0.14, 0.78, 0.85, 0.94};
+		double[] f2 = {0.5, 0.2, 0.1, 0.5};
+		double[] x = {0.560000000000000,   0.340000000000000,   0.320000000000000,   0.140000000000000,
+				   0.540000000000000,   0.630000000000000,   1.200000000000000,   0.780000000000000,
+				   1.230000000000000,   0.340000000000000,   0.670000000000000,   0.850000000000000,
+				   0.570000000000000,   0.850000000000000,   0.290000000000000,   0.940000000000000};
+		
+		double[] zca = {1.654633794518243,   0.541992148747697,   0.519961336130961,   0.445690380771477,
+				0.541992148747697,   1.919200272146810,   0.522623043139470,   0.178462196134402,
+				0.519961336130961,   0.522623043139470,   1.601056255503961,   0.518637025393985,
+				0.445690380771477,   0.178462196134402,   0.518637025393985,   2.019488057868512};
+		double[] m = {0.190168010867027,  -0.204704063143829,  -0.042614218658781,   0.057150270935583};
+
 		//double[] expected_output = {1.1310, 1.4080, 2.1030, 0.9120, 1.3250, 0.9790, 1.0340, 2.1890, 1.3180};
-	    double[] expected_output = {1.1820, 1.0280, 1.5630, 1.9680, 1.5490, 0.8780, 1.4200, 1.7560, 1.7810};
+	    double[] expected_output = {0.662032762310817,   2.228330709948044, 1.059039882521740, -1.054450834512288, -0.845244929924908, -0.436701601060417, 0.296864933161854, -1.091676319630362, 0.579432074562157, 
+	    		0.115146987448164, 0.248682789409449, -0.176343125716004, -0.607612501991995, -0.212833806576546, 0.208543928476519, 0.405416463911857, -0.628706789196375, 0.194667022197182,};
+	    
+		DenseVector mean = new DenseVector(m);
+		DenseMatrix ZCA = new DenseMatrix(4,4,zca);
 		
-	    // create Vectors from double arrays
-		Vector vx = Vectors.dense(x);
+		// create a PreProcessZCA object with the input mean and ZCA variables
+		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
+		preProcess.setConfigLayer(conf);
 		
- 		Vector[] vf = new Vector[1];
+		// create a parallel dataset from the local matrix
+		List<Vector> matX = new ArrayList<Vector>(1);
+		matX.add(Vectors.dense(x));
+		JavaRDD<Vector> matRDD = sc.parallelize(matX);
+		
+		// create the array of feature vectors
+ 		Vector[] vf = new Vector[2];
 		vf[0] = Vectors.dense(f1);
-		//vf[1] = Vectors.dense(f2);
+		vf[1] = Vectors.dense(f2);
+		
+		// create a MultiplyExtractor object
+		ConvMultiplyExtractor multi = new ConvMultiplyExtractor(conf, preProcess);
+		multi.setFeatures(vf);
 	
-		// run the feature extraction code
-		DenseMatrix D = MatrixOps.convertVectors2Mat(vf);
-		int[] dims = {4,4};
-		int[] rfSize = {2,2};
-		DenseMatrix M = MatrixOps.reshapeVec2Mat((DenseVector) vx, dims);	
-		DenseMatrix patches = MatrixOps.im2colT(M, rfSize);
+		// call the feature extraction process
+		matRDD = matRDD.map(multi);
 		
-		// allocate memory for the output vector
-		DenseMatrix out = new DenseMatrix(patches.numRows(),D.numRows(),new double[patches.numRows()*D.numRows()]);	
-		// multiply the matrix of the learned features with the preprocessed data point
-		BLAS.gemm(1.0, patches, D.transpose(), 0.0, out);
-		//DenseVector outVec = MatrixOps.reshapeMat2Vec(out);
+		Vector[] outputD = matRDD.collect().toArray(new Vector[1]);
+		DenseMatrix outputM = MatrixOps.convertVectors2Mat(outputD);
 		
-		Assert.assertArrayEquals(expected_output, out.toArray(), 1e-6);
+//		// run the feature extraction code
+//		DenseMatrix D = MatrixOps.convertVectors2Mat(vf);
+//		int[] dims = {4,4};
+//		int[] rfSize = {2,2};
+//		DenseMatrix M = MatrixOps.reshapeVec2Mat((DenseVector) vx, dims);	
+//		DenseMatrix patches = MatrixOps.im2colT(M, rfSize);
+//		
+//		// allocate memory for the output vector
+//		DenseMatrix out = new DenseMatrix(patches.numRows(),D.numRows(),new double[patches.numRows()*D.numRows()]);	
+//		// multiply the matrix of the learned features with the preprocessed data point
+//		BLAS.gemm(1.0, patches, D.transpose(), 0.0, out);
+//		//DenseVector outVec = MatrixOps.reshapeMat2Vec(out);
+		
+		Assert.assertArrayEquals(expected_output, outputM.toArray(), 1e-6);
 		
 	}
 	

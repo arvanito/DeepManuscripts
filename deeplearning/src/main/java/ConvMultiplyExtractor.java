@@ -157,6 +157,7 @@ public class ConvMultiplyExtractor implements Extractor {
 			// preprocess the data point with contrast normalization and ZCA whitening
 			patches = MatrixOps.localMatContrastNorm(patches, eps1);
 			patches = MatrixOps.localMatSubtractMean(patches, zcaMean);
+			
 			//patches = patches.multiply(zca);
 			BLAS.gemm(1.0, patches, zca, 0.0, patchesOut);
 		} else {
