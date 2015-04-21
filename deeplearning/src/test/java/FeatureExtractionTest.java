@@ -1,14 +1,19 @@
 package test.java;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import main.java.DeepModelSettings.ConfigPreprocess;
 import main.java.MatrixOps;
 import main.java.DeepModelSettings.ConfigBaseLayer;
 import main.java.DeepModelSettings.ConfigFeatureExtractor;
 import main.java.DeepModelSettings.ConfigPooler;
+import main.java.MultiplyExtractor;
 import main.java.PreProcessZCA;
 
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.BLAS;
 import org.apache.spark.mllib.linalg.DenseMatrix;
@@ -78,25 +83,58 @@ public class FeatureExtractionTest implements Serializable {
 	@Test
 	public void multiplyPreTest() {
 		
+		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
+		setConfigFeatureExtractor(ConfigFeatureExtractor.newBuilder().setFeatureDim1(2).setFeatureDim2(2).setInputDim1(4).setInputDim2(4)).
+		setConfigPooler(ConfigPooler.newBuilder().setPoolSize(1)).
+		setConfigPreprocess(ConfigPreprocess.newBuilder().setEps1(0.1).setEps2(0.1)).build();
+		
 		// simple example
-		double[] x1 = {0.56, 0.34, 0.32, 0.14};
-		double[] x2 = {0.54, 0.63, 1.2, 0.78};
-		double[] x3 = {1.23, 0.34, 0.67, 0.85};
-		double[] x4 = {0.57, 0.85, 0.29, 0.94};
-		double[] x = {0.56, 0.54, 1.23, 0.57, 0.34, 0.63, 0.34, 0.85, 0.32, 1.2, 0.67, 0.29, 0.14, 0.78, 0.85, 0.94};
+		double[] f1 = {0.1, 0.2, 0.4, 1.4};
+		double[] f2 = {0.5, 0.2, 0.1, 0.5};
+		double[] x1 = {0.35, 0.65, 0.28, 0.12}; 
+		double[] x2 = {0.86, 0.96, 0.34, 0.57};
+		//double[] x = {0.56, 0.54, 1.23, 0.57, 0.34, 0.63, 0.34, 0.85, 0.32, 1.2, 0.67, 0.29, 0.14, 0.78, 0.85, 0.94};
 		
 		double[] zca = {1.654633794518243,   0.541992148747697,   0.519961336130961,   0.445690380771477,
-				0.541992148747697,   1.919200272146810,   0.522623043139470,   0.178462196134402,
-				0.519961336130961,   0.522623043139470,   1.601056255503961,   0.518637025393985,
-				0.445690380771477,   0.178462196134402,   0.518637025393985,   2.019488057868512};
+						0.541992148747697,   1.919200272146810,   0.522623043139470,   0.178462196134402,
+						0.519961336130961,   0.522623043139470,   1.601056255503961,   0.518637025393985,
+						0.445690380771477,   0.178462196134402,   0.518637025393985,   2.019488057868512};
 		double[] m = {0.190168010867027,  -0.204704063143829,  -0.042614218658781,   0.057150270935583};
+		
+		//double[] expected_output = {-0.145702567855953,  1.591192624037388,  -0.146329897991626,  -1.299160158189805,
+		//							 0.302514463615425,	 1.316131165465278,  -0.825195898488151,  -0.793449730592545};
+		double[] expected_output = {-1.573687912640495,  -1.147430302770226,
+									-0.418825828014564,  -0.064760990244320};
 		
 		DenseVector mean = new DenseVector(m);
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca);
 		
 		// create a PreProcessZCA object with the input mean and ZCA variables
 		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
+		preProcess.setConfigLayer(conf);
 		
+		// create a parallel dataset from the local matrix
+		List<Vector> matX = new ArrayList<Vector>(4);
+		matX.add(Vectors.dense(x1));
+		matX.add(Vectors.dense(x2));
+		JavaRDD<Vector> matRDD = sc.parallelize(matX);
+		
+		// create the array of feature vectors
+ 		Vector[] vf = new Vector[2];
+		vf[0] = Vectors.dense(f1);
+		vf[1] = Vectors.dense(f2);
+		
+		// create a MultiplyExtractor object
+		MultiplyExtractor multi = new MultiplyExtractor(conf, preProcess);
+		multi.setFeatures(vf);
+		
+		// call the feature extraction process
+		matRDD = matRDD.map(multi);
+		
+		Vector[] outputD = matRDD.collect().toArray(new Vector[2]);
+		DenseMatrix outputM = MatrixOps.convertVectors2Mat(outputD);
+		
+		Assert.assertArrayEquals(expected_output, outputM.toArray(), 1e-6);
 		
 	}
 	
@@ -111,7 +149,7 @@ public class FeatureExtractionTest implements Serializable {
 		
 		// simple example
 		double[] f1 = {0.1, 0.2, 0.4, 1.4};
-		double[] f2 = {0.5, 0.2, 0.1, 0.5};
+		//double[] f2 = {0.5, 0.2, 0.1, 0.5};
 		double[] x = {0.56, 0.54, 1.23, 0.57, 0.34, 0.63, 0.34, 0.85, 0.32, 1.2, 0.67, 0.29, 0.14, 0.78, 0.85, 0.94};
 		//double[] expected_output = {1.1310, 1.4080, 2.1030, 0.9120, 1.3250, 0.9790, 1.0340, 2.1890, 1.3180};
 	    double[] expected_output = {1.1820, 1.0280, 1.5630, 1.9680, 1.5490, 0.8780, 1.4200, 1.7560, 1.7810};

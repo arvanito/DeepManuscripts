@@ -6,10 +6,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import main.java.ContrastNormalization;
+import main.java.DeepModelSettings.ConfigFeatureExtractor;
+import main.java.DeepModelSettings.ConfigPooler;
 import main.java.MatrixOps;
 import main.java.PreProcessZCA;
 import main.java.PreProcessor;
 import main.java.SubtractMean;
+import main.java.DeepModelSettings.ConfigBaseLayer;
+import main.java.DeepModelSettings.ConfigPreprocess;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -53,6 +57,11 @@ public class PreProcessTest implements Serializable {
 	@Test
 	public void preprocessTest() {
 		
+		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
+		setConfigFeatureExtractor(ConfigFeatureExtractor.newBuilder().setFeatureDim1(2).setFeatureDim2(2).setInputDim1(4).setInputDim2(4)).
+		setConfigPooler(ConfigPooler.newBuilder().setPoolSize(1)).
+		setConfigPreprocess(ConfigPreprocess.newBuilder().setEps1(0.1).setEps2(0.1)).build();
+		
 		// simple test example for pre-processing
 		double[] x1 = {0.56, 0.34, 0.32, 0.14};
 		double[] x2 = {0.54, 0.63, 1.2, 0.78};
@@ -81,14 +90,13 @@ public class PreProcessTest implements Serializable {
 		JavaRDD<Vector> matRDD = sc.parallelize(matX);
 		
 		// run pre-processing
-		matRDD = new PreProcessZCA().preprocessData(matRDD);
+		PreProcessZCA preProcess = new PreProcessZCA(conf);
+		matRDD = preProcess.preprocessData(matRDD);
 		
-		Double[] outputD = matRDD.collect().toArray(new Double[16]);
-		double[] output = new double[16];
-		for (int i = 0; i < 16; i++) {
-			output[i] = outputD[i];
-		}
-		Assert.assertArrayEquals(expected_output, output, 1e-6);
+		Vector[] outputD = matRDD.collect().toArray(new Vector[4]);
+		DenseMatrix outputM = MatrixOps.convertVectors2Mat(outputD);
+		
+		Assert.assertArrayEquals(expected_output, outputM.toArray(), 1e-6);
 		
 	}
 	

@@ -23,6 +23,8 @@ public class MultiplyExtractor implements Extractor {
 	private Vector[] features;				// array of learned feature Vectors
 	
 	
+	public MultiplyExtractor() {}
+	
 	/**
 	 * Constructor 
 	 * @param configLayer The input configuration for the current layer
