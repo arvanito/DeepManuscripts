@@ -47,23 +47,25 @@ public class FFTConvolutionExtractor implements Extractor {
 		 * Should pre-process features, flip 'em, pad them to match input data size and calculate their FFT's
 		 */
 		//this.features = features;
-		DenseMatrix zca = preProcess != null ? preProcess.getZCA() : null;
-		DenseVector mean = preProcess != null ? preProcess.getMean() : null;
+		final DenseMatrix zca = preProcess != null ? preProcess.getZCA() : null;
+		final DenseVector mean = preProcess != null ? preProcess.getMean() : null;
 		featureFFTs = new double[features.length][][][];
 		
-		if(mean != null) {
-			BLAS.gemv(1.0, zca, mean, 0.0, mean); // whiten mean vector
+		if(zca != null) {
 			featureAdds = new double[features.length];
 		}
 		
 		for(int i = 0; i < features.length; ++i) {
 			DenseVector feature = (DenseVector)features[i];
 			if(zca != null) {
-				BLAS.gemv(1.0, zca.transpose(), feature, 0.0, feature); // "de-whiten" features, instead of whitening data
-				featureAdds[i] = BLAS.dot(mean,feature); // the effect of the mean vector - to be added to each cell
+				DenseVector temp = new DenseVector(new double[features[0].size()]);
+				//System.out.println("before: "+feature);
+				BLAS.gemv(1.0, zca.transpose(), feature, 0.0, temp); // "de-whiten" features, instead of whitening data
+				feature = temp;
+				featureAdds[i] = -BLAS.dot(mean,feature); // the effect of the mean vector - to be added to each cell
+				//System.out.println("after: "+feature + "\nmean: " + mean  + "\nadd: " + featureAdds[i]);
 			}
 			featureFFTs[i] = FFT(pad(inputRows, inputCols, flip(vectorToMatrix(featureRows, featureCols, feature.toArray()))));
-			//BLAS.gemm(false, false, 1.0, V, ZCA, 0.0, ZCA);
 		}
 	}
 	
