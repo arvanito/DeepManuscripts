@@ -152,10 +152,10 @@ public class ConvMultiplyExtractor implements Extractor {
 			DenseVector zcaMean = preProcess.getMean();
 
 			// epsilon for pre-processing
-			double eps1 = configLayer.getConfigPreprocess().getEps1();
+			//double eps1 = configLayer.getConfigPreprocess().getEps1();
 			
 			// preprocess the data point with contrast normalization and ZCA whitening
-			patches = MatrixOps.localMatContrastNorm(patches, eps1);
+			//patches = MatrixOps.localMatContrastNorm(patches, eps1);
 			patches = MatrixOps.localMatSubtractMean(patches, zcaMean);
 			
 			//patches = patches.multiply(zca);

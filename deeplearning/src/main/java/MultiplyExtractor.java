@@ -134,10 +134,10 @@ public class MultiplyExtractor implements Extractor {
 			DenseVector zcaMean = preProcess.getMean();
 
 			// epsilon for pre-processing
-			double eps1 = configLayer.getConfigPreprocess().getEps1();
+			//double eps1 = configLayer.getConfigPreprocess().getEps1();
 			
 			// preprocess the data point with contrast normalization and ZCA whitening
-			dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
+			//dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
 			dataDense = MatrixOps.localVecSubtractMean(dataDense, zcaMean);
 			//dataDense = zca.transpose().multiply(dataDense);
 			BLAS.gemv(1.0, zca.transpose(), dataDense, 0.0, dataDenseOut);
