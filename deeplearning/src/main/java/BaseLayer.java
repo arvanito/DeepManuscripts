@@ -1,8 +1,5 @@
 package main.java;
 
-import java.util.List;
-
-import junit.framework.Assert;
 import main.java.DeepModelSettings.ConfigBaseLayer;
 
 import org.apache.spark.api.java.JavaRDD;
@@ -63,7 +60,7 @@ public class BaseLayer implements DeepLearningLayer {
 
 	//TODO:: Input two datasets, one is patche-based and the other is larger parts of the image.
     @Override
-	public JavaRDD<Vector> execute(JavaRDD<Vector> input_small_patches, 
+	public JavaRDD<Vector> train(JavaRDD<Vector> input_small_patches, 
 			                       JavaRDD<Vector> input_word_patches) throws Exception {
     	
     	JavaRDD<Vector> preprocessed = preProcess(input_small_patches);
