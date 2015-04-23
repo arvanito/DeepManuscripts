@@ -227,4 +227,20 @@ public class PreProcessZCA implements PreProcessor {
 		return outVec;
 	}
 	
+	/**
+	 *  Sets up the preprocessor. It loads the saved weights from the disk.
+	 * @param filename
+	 **/
+	public void loadFromFile(String filename) {
+		//TODO
+	}
+	
+	/**
+	 *  Saves the fields necessary to reconstruct a preprocessor object. 
+	 *  Depending on the preprocessor type, more than one file will be saved.
+	 * @param filename
+	 **/
+	public void saveToFile(String filename) {
+		//TODO
+	}
 }

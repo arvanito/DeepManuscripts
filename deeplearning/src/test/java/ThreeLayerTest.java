@@ -93,8 +93,9 @@ public class ThreeLayerTest implements Serializable {
 		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
 		JavaRDD<Vector> imgwords = sc.parallelize(input_word_patches);
 		JavaRDD<Vector> result = null;
+		int layer_index = 0;
 	 	for (ConfigBaseLayer config_layer: config_list) {
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config_layer);
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config_layer, layer_index++);
 			// The config layer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
 			if (config_layer.hasConfigFeatureExtractor()) {

@@ -23,6 +23,14 @@ public class BaseLayer implements DeepLearningLayer {
 	Extractor extract;
 	Pooler pool;
 	
+	// The path to the folder of the .prototxt file, where the 
+	// weight will be saved. (This path should already exist.)
+	String pathPrefix;
+	String featuresOutputFile;
+	String preprocessOutputFile;
+	
+	// The layer number, starting from 0
+	int layer_index;
 	
 	public BaseLayer(ConfigBaseLayer configLayer, PreProcessor preprocess, Learner learn, Extractor extract, Pooler pool) {
 		this.configLayer = configLayer;
@@ -34,7 +42,6 @@ public class BaseLayer implements DeepLearningLayer {
 	}
 	
 	
-
 	 @Override
 	 public JavaRDD<Vector> preProcess(JavaRDD<Vector> data) {
 	 	return preprocess.preprocessData(data);
@@ -64,7 +71,14 @@ public class BaseLayer implements DeepLearningLayer {
 			                       JavaRDD<Vector> input_word_patches) throws Exception {
     	
     	JavaRDD<Vector> preprocessed = preProcess(input_small_patches);
+    	// preprocess.saveToFile("temp");
+    	
+    	//TODO save the preprocess input
 		Vector[] features = learnFeatures(preprocessed);
+		//TODO save here the features
+		
+		
+		//features.saveAsTextFile(featuresOutputFile);
 		
 		// TODO:: do preprocessing on the second dataset
 		//JavaRDD<Vector> preprocessedBig = dataBig.map(preprocess);
@@ -74,4 +88,22 @@ public class BaseLayer implements DeepLearningLayer {
 		return pooled;
 	}
 
+    public JavaRDD<Vector> test(JavaRDD<Vector> data) throws Exception {
+    	return null;
+    	/*
+    	JavaRDD<Vector> preprocessed = preProcess(data);
+    	//TODO load the features from file.
+    	Vector[] features = null;
+
+    	JavaRDD<Vector> represent = extractFeatures(preprocessed, configLayer, features);
+    	JavaRDD<Vector> pooled = pool(represent);
+    	return pooled;*/
+    }
+    
+    public int getLayerIndex() {
+    	return layer_index;
+    }
+    public void setLayerIndex(int l) {
+    	layer_index = l;
+    }
 }

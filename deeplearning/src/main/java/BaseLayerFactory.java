@@ -16,7 +16,7 @@ import main.java.BaseLayer;
 
 public class BaseLayerFactory {
 
-	static public BaseLayer createBaseLayer(ConfigBaseLayer configLayer) {
+	static public BaseLayer createBaseLayer(ConfigBaseLayer configLayer, int layer_index) {
 		PreProcessZCA preprocessor = null;
 		if (configLayer.hasConfigPreprocess()) {
 					preprocessor = new PreProcessZCA(configLayer);
@@ -46,7 +46,9 @@ public class BaseLayerFactory {
 			pooler = new MaxPoolerExtended(configLayer);
 		}
 		System.out.printf("Pool size %d\n", cpooler.getPoolSize());
-
-		return new BaseLayer(configLayer, preprocessor, learner, extractor, pooler);
+ 
+		BaseLayer b = new BaseLayer(configLayer, preprocessor, learner, extractor, pooler);
+		b.setLayerIndex(layer_index);
+		return b;
 	}
 }

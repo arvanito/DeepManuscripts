@@ -65,5 +65,13 @@ public interface DeepLearningLayer {
 	 */
 	public JavaRDD<Vector> train(JavaRDD<Vector> data1, JavaRDD<Vector> data2) throws Exception;
 
-
+    /**
+	 * Computes the descriptors of the input image patches.
+	 *
+	 * @param data An RDD of size N x M containing candidate image patches where
+	 * 				N is the number of patches and M is the product of the patch sizes (width x height).
+	 * @return An RDD containing a new representation of the data, of size N x (descriptor size)
+	 * @throws Exception
+	 */
+	 public JavaRDD<Vector> test(JavaRDD<Vector> data) throws Exception;
 }
