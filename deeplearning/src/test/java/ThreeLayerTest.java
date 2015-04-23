@@ -98,9 +98,9 @@ public class ThreeLayerTest implements Serializable {
 			// The config layer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
 			if (config_layer.hasConfigFeatureExtractor()) {
-				result = layer.execute(patches, imgwords);
+				result = layer.train(patches, imgwords);
 			} else {
-				result = layer.execute(result, result);
+				result = layer.train(result, result);
 			}	
 	 	}
 		List<Vector> out = result.collect();

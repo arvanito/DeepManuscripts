@@ -84,7 +84,7 @@ public class TwoLayersTest implements Serializable {
 		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
 		JavaRDD<Vector> imgwords = sc.parallelize(input_word_patches);
 		
-		JavaRDD<Vector> result = layer.execute(patches, imgwords);
+		JavaRDD<Vector> result = layer.train(patches, imgwords);
 
 		List<Vector> res = result.collect();
 		Assert.assertEquals(50, res.size());
@@ -144,7 +144,7 @@ public class TwoLayersTest implements Serializable {
 		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
 		JavaRDD<Vector> imgwords = sc.parallelize(input_word_patches);
 		
-		JavaRDD<Vector> result = layer.execute(patches, imgwords);
+		JavaRDD<Vector> result = layer.train(patches, imgwords);
 
 		List<Vector> res = result.collect();
 		Assert.assertEquals(50, res.size());
@@ -158,7 +158,7 @@ public class TwoLayersTest implements Serializable {
 	 	ConfigBaseLayer c2 = conf2.build();
 		
 	 	DeepLearningLayer layer2 = BaseLayerFactory.createBaseLayer(c2);
-		JavaRDD<Vector> result2 = layer2.execute(result, result);
+		JavaRDD<Vector> result2 = layer2.train(result, result);
 
 		List<Vector> out = result2.collect();
 		Assert.assertEquals(50, out.size());
@@ -196,9 +196,9 @@ public class TwoLayersTest implements Serializable {
 			// The config layer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
 			if (config_layer.hasConfigFeatureExtractor()) {
-				result = layer.execute(patches, imgwords);
+				result = layer.train(patches, imgwords);
 			} else {
-				result = layer.execute(result, result);
+				result = layer.train(result, result);
 			}	
 	 	}
 		List<Vector> out = result.collect();
