@@ -31,6 +31,8 @@ message ConfigFeatureExtractor {
   	ABS = 0;
   	SOFT = 1;
   }
+  optional NonLinearity non_linearity = 5 [default = ABS];
+  optional double soft_threshold = 6;
 }
 
 message ConfigPooler {

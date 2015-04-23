@@ -85,7 +85,7 @@ public class FeatureExtractionTest implements Serializable {
 	public void multiplyPreTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
-		setConfigFeatureExtractor(ConfigFeatureExtractor.newBuilder().setFeatureDim1(2).setFeatureDim2(2).setInputDim1(4).setInputDim2(4)).
+		setConfigFeatureExtractor(ConfigFeatureExtractor.newBuilder().setFeatureDim1(2).setFeatureDim2(2).setInputDim1(4).setInputDim2(4).setNonLinearity(ConfigFeatureExtractor.NonLinearity.SOFT).setSoftThreshold(0.1)).
 		setConfigPooler(ConfigPooler.newBuilder().setPoolSize(1)).
 		setConfigPreprocess(ConfigPreprocess.newBuilder().setEps1(0.1).setEps2(0.1)).build();
 		
@@ -112,9 +112,10 @@ public class FeatureExtractionTest implements Serializable {
 		//							 0.302514463615425,	 1.316131165465278,  -0.825195898488151,  -0.793449730592545};
 		//double[] expected_output = {-1.573687912640495,  -1.147430302770226,
 		//							-0.418825828014564,  -0.064760990244320};
-		double[] expected_output = {-1.764262994854122,  -0.456956908917123,
-				  					-0.866564862855998,   0.237752718826297};
-		   
+		//double[] expected_output = {-1.764262994854122,  -0.456956908917123,
+		//		  					-0.866564862855998,   0.237752718826297};
+		double[] expected_output = {0, 0, 0, 0.137752718826297};
+		
 		DenseVector mean = new DenseVector(m);
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca);
 		

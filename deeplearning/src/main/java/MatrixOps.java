@@ -1,5 +1,7 @@
 package main.java;
 
+import main.java.DeepModelSettings.ConfigFeatureExtractor;
+
 import org.apache.spark.mllib.linalg.DenseMatrix;
 import org.apache.spark.mllib.linalg.DenseVector;
 import org.apache.spark.mllib.linalg.Matrices;
@@ -51,7 +53,7 @@ public class MatrixOps {
 		// apply the soft threshold element-wise
 		// here we need an additional parameter
 		for (int i = 0; i < n; i++) {
-			out[i] = Math.max(in[i]-alpha,0);
+			out[i] = Math.max(in[i]-alpha,0.0);
 		}
 		
 		return out;
@@ -63,11 +65,11 @@ public class MatrixOps {
 	 * Method that applies a nonlinear function element-wise to a DenseMatrix.
 	 * 
 	 * @param M Input DenseMatrix
-	 * @param function String that denotes the applied function on the matrix
+	 * @param nonLinearity Enumeration that denotes the applied non-linearity on the matrix
 	 * @param alpha Optional parameter for soft thresholding
 	 * @return Transformed DenseMatrix
 	 */
-	public static DenseMatrix applyNonLinearityMat(DenseMatrix M, String function, double... alpha) {
+	public static DenseMatrix applyNonLinearityMat(DenseMatrix M, ConfigFeatureExtractor.NonLinearity nonLinearity, double... alpha) {
 		
 		int n = M.numRows();
 		int m = M.numCols();
@@ -75,11 +77,11 @@ public class MatrixOps {
 		double[] out = new double[n*m];
 		
 		// apply non-linearity depending on the input String
-		switch (function) {
-		case "abs":
+		switch (nonLinearity) {
+		case ABS:
 			out = applyAbsNonLinearity(M.toArray());
 			break;
-		case "soft":
+		case SOFT:
 			out = applySoftNonLinearity(M.toArray(), alpha[0]);
 			break;
 		}
@@ -93,22 +95,22 @@ public class MatrixOps {
 	 * Method that applies a nonlinear function element-wise to a DenseVector.
 	 * 
 	 * @param v Input DenseVector
-	 * @param function String that denotes the applied function on the vector
+	 * @param nonLinearity Enumeration that denotes the applied non-linearity on the vector
 	 * @param alpha Optional parameter for soft thresholding
 	 * @return Transformed DenseVector
 	 */
-	public static DenseVector applyNonLinearityVec(DenseVector v, String function, double... alpha) {
+	public static DenseVector applyNonLinearityVec(DenseVector v, ConfigFeatureExtractor.NonLinearity nonLinearity, double... alpha) {
 		
 		int s = v.size();
 		
 		double[] out = new double[s];
 		
 		// apply non-linearity depending on the input String 
-		switch (function) {
-		case "abs":
+		switch (nonLinearity) {
+		case ABS:
 			out = applyAbsNonLinearity(v.toArray());
 			break;
-		case "soft":
+		case SOFT:
 			out = applySoftNonLinearity(v.toArray(), alpha[0]);
 			break;
 		}
