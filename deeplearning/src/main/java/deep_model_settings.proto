@@ -27,6 +27,10 @@ message ConfigFeatureExtractor {
   required int32 input_dim2 = 2;
   required int32 feature_dim1 = 3;
   required int32 feature_dim2 = 4;
+  enum NonLinearity {
+  	ABS = 0;
+  	SOFT = 1;
+  }
 }
 
 message ConfigPooler {
