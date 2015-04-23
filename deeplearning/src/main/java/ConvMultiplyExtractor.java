@@ -1,6 +1,7 @@
 package main.java;
 
 import main.java.DeepModelSettings.ConfigBaseLayer;
+import main.java.DeepModelSettings.ConfigFeatureExtractor;
 
 import org.apache.spark.mllib.linalg.BLAS;
 import org.apache.spark.mllib.linalg.DenseMatrix;
@@ -168,7 +169,14 @@ public class ConvMultiplyExtractor implements Extractor {
 		BLAS.gemm(1.0, patchesOut, D.transpose(), 0.0, out);
 		DenseVector outVec = MatrixOps.reshapeMat2Vec(out);
 		
-		// HERE: Apply non-linearity!
+		// apply non-linearity
+		ConfigFeatureExtractor.NonLinearity nonLinearity = configLayer.getConfigFeatureExtractor().getNonLinearity();
+		double alpha = 0.0;
+		if (configLayer.getConfigFeatureExtractor().hasSoftThreshold()) {
+			System.out.println("We do not have a threshold");
+			alpha = configLayer.getConfigFeatureExtractor().getSoftThreshold();
+		}
+		outVec = MatrixOps.applyNonLinearityVec(outVec, nonLinearity, alpha);
 		
 		return outVec;
 	}
