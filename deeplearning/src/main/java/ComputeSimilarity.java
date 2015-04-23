@@ -4,6 +4,12 @@ import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.linalg.BLAS;
 import org.apache.spark.mllib.linalg.Vector;
 
+/**
+ * Class that performs the computation of similarities between vector representations.
+ * 
+ * @author Nikolaos Arvanitopoulos
+ *
+ */
 public class ComputeSimilarity implements Function<Vector, Double> {
 	
 	
