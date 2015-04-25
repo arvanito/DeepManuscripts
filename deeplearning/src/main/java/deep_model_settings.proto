@@ -28,10 +28,11 @@ message ConfigFeatureExtractor {
   required int32 feature_dim1 = 3;
   required int32 feature_dim2 = 4;
   enum NonLinearity {
-  	ABS = 0;
-  	SOFT = 1;
+    NONE = 0;
+  	ABS = 1;
+  	SOFT = 2;
   }
-  optional NonLinearity non_linearity = 5 [default = ABS];
+  optional NonLinearity non_linearity = 5 [default = NONE];
   optional double soft_threshold = 6;
 }
 

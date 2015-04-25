@@ -11,6 +11,7 @@ import main.java.MatrixOps;
 import main.java.DeepModelSettings.ConfigBaseLayer;
 import main.java.DeepModelSettings.ConfigFeatureExtractor;
 import main.java.DeepModelSettings.ConfigPooler;
+import main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity;
 import main.java.MultiplyExtractor;
 import main.java.PreProcessZCA;
 
@@ -153,7 +154,7 @@ public class FeatureExtractionTest implements Serializable {
 	public void convMultiplyTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
-		setConfigFeatureExtractor(ConfigFeatureExtractor.newBuilder().setFeatureDim1(2).setFeatureDim2(2).setInputDim1(4).setInputDim2(4)).
+		setConfigFeatureExtractor(ConfigFeatureExtractor.newBuilder().setFeatureDim1(2).setFeatureDim2(2).setInputDim1(4).setInputDim2(4).setNonLinearity(NonLinearity.ABS)).
 		setConfigPooler(ConfigPooler.newBuilder().setPoolSize(1)).
 		setConfigPreprocess(ConfigPreprocess.newBuilder().setEps1(0.1).setEps2(0.1)).build();
 		

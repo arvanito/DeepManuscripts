@@ -84,6 +84,10 @@ public class MatrixOps {
 		case SOFT:
 			out = applySoftNonLinearity(M.toArray(), alpha[0]);
 			break;
+		case NONE:
+		default:
+			out = M.toArray();
+			break;
 		}
 		
 		DenseMatrix outMat = new DenseMatrix(n,m,out); 
@@ -112,6 +116,10 @@ public class MatrixOps {
 			break;
 		case SOFT:
 			out = applySoftNonLinearity(v.toArray(), alpha[0]);
+			break;
+		case NONE:
+		default:
+			out = v.toArray();
 			break;
 		}
 		
