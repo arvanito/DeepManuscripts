@@ -36,6 +36,7 @@ public class FFT {
 	
 	/**
 	 * A proxy to call fftCooleyTukeyRec. Maybe extend to choose between different FFT-implementations?
+	 * For example http://www.nayuki.io/res/free-small-fft-in-multiple-languages/Fft.java
 	 * 
 	 * @param x An array of (real,img)-pairs to be transformed 
 	 * @return A transformed array of (real,img)-pairs

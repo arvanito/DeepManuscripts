@@ -32,6 +32,9 @@ public class FFTConvolutionExtractor implements Extractor {
 	private int validRows;
 	private int validCols;
 	
+	private ConfigFeatureExtractor.NonLinearity nonLinearity = null;  
+	private double alpha; // non-linearity (threshold)
+	
 	public FFTConvolutionExtractor(ConfigBaseLayer configLayer, PreProcessZCA preProcess) {
 		setConfigLayer(configLayer);
 		this.preProcess = preProcess;
@@ -84,6 +87,12 @@ public class FFTConvolutionExtractor implements Extractor {
 		
 		validRows = inputRows - featureRows + 1;
 		validCols = inputCols - featureCols + 1;
+		nonLinearity = conf.getNonLinearity();
+		System.out.println(nonLinearity);
+		if (conf.hasSoftThreshold()) {
+			alpha = conf.getSoftThreshold();
+		}
+		
 	}
 
 	/* (non-Javadoc)
@@ -104,7 +113,9 @@ public class FFTConvolutionExtractor implements Extractor {
 			System.arraycopy(tmp, 0, result, resultPos, tmp.length);
 			resultPos += tmp.length;
 		}
-		return new DenseVector(result);
+		DenseVector res = new DenseVector(result);
+		if(nonLinearity != null) res = MatrixOps.applyNonLinearityVec(res, nonLinearity, alpha);
+		return res;
 	}
 	
 	/**
