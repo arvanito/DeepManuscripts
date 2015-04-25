@@ -1,7 +1,11 @@
 package main.java;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import main.java.DeepModelSettings.ConfigBaseLayer;
 
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.linalg.BLAS;
@@ -231,8 +235,23 @@ public class PreProcessZCA implements PreProcessor {
 	 *  Sets up the preprocessor. It loads the saved weights from the disk.
 	 * @param filename
 	 **/
-	public void loadFromFile(String filename) {
-		//TODO
+	public void loadFromFile(String filename, JavaSparkContext sc) {
+		//NOTE Since ZCA and mean are both expected to be small (max 64x64)
+		// their loading/saving should not be a bottleneck
+		List<Vector> temp_mean = new ArrayList<Vector>();
+		temp_mean.add(mean);
+		sc.parallelize(temp_mean).saveAsTextFile(filename + "_mean");
+		
+		List<Vector> temp_zca = new ArrayList<Vector>();
+		for (int i = 0; i < ZCA.numRows();++i) {
+			double[] darray = new double[ZCA.numCols()];
+			for (int j = 0; j < ZCA.numCols(); ++j) {
+				darray[j] = ZCA.apply(i, j);
+			}
+			Vector row = Vectors.dense(darray);
+			temp_zca.add(row);
+		}
+		sc.parallelize(temp_zca).saveAsTextFile(filename + "_zca");
 	}
 	
 	/**
@@ -240,7 +259,13 @@ public class PreProcessZCA implements PreProcessor {
 	 *  Depending on the preprocessor type, more than one file will be saved.
 	 * @param filename
 	 **/
-	public void saveToFile(String filename) {
+	public void saveToFile(String filename, JavaSparkContext sc) {
 		//TODO
+		//NOTE Since ZCA and mean are both expected to be small (max 64x64)
+		// their loading/saving should not be a bottleneck
+		JavaRDD<String> mean = sc.textFile(filename + "_mean");
+		List<String> t = mean.collect();
+		assert(t.size() == 1);
+		//t.get(0).
 	}
 }

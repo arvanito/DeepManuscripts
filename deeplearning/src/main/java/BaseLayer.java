@@ -2,6 +2,7 @@ package main.java;
 
 import main.java.DeepModelSettings.ConfigBaseLayer;
 
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.linalg.Vector;
 
@@ -31,6 +32,9 @@ public class BaseLayer implements DeepLearningLayer {
 	
 	// The layer number, starting from 0
 	int layer_index;
+	// Ugly hack. Spark context is needed by the preprocessor.
+	// It needs to parallelize a DenseMatrix object.
+	JavaSparkContext spark_context; 
 	
 	public BaseLayer(ConfigBaseLayer configLayer, PreProcessor preprocess, Learner learn, Extractor extract, Pooler pool) {
 		this.configLayer = configLayer;
@@ -105,5 +109,8 @@ public class BaseLayer implements DeepLearningLayer {
     }
     public void setLayerIndex(int l) {
     	layer_index = l;
+    }
+    public void setSparkContext(JavaSparkContext sc) {
+    	spark_context = sc;
     }
 }
