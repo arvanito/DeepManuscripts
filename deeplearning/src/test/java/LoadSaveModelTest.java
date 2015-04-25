@@ -37,29 +37,27 @@ public class LoadSaveModelTest {
 		sc = null;
 	}
 
-	@Ignore @Test
+	@Test
 	public void testDenseVectorTextIO() {
+		String filename = "temp3";
 		// Create a sample mean vector 
 		Vector mean = Vectors.dense(1,2,3,4);
-		String filename = "tmp6";
-		LinAlgebraIOUtils.saveToText(mean, filename + "_mean", sc);
+		LinAlgebraIOUtils.saveToText(mean, filename, sc);
 		
 		// Read back the file as an array of strings
-		Vector reconstructed = LinAlgebraIOUtils.loadFromText(filename + "_mean", sc);
+		Vector reconstructed = LinAlgebraIOUtils.loadFromText(filename, sc);
 		Assert.assertEquals(mean.toString(), reconstructed.toString());
 	}
-	@Ignore @Test
+	@Test
 	public void testDenseVectorObjectIO() {
+		String filename = "temp2";
 		// Create a sample mean vector 
-		Vector mean = Vectors.dense(1,2,3,4);
-		List<Vector> temp_mean = new ArrayList<Vector>();
-		temp_mean.add(mean);
-		sc.parallelize(temp_mean).saveAsObjectFile("t2");
+		Vector input = Vectors.dense(1,2,3,4);
+		LinAlgebraIOUtils.saveToObject(input, filename, sc);
 		
 	    // Read back the array
-		JavaRDD<Vector> out = sc.objectFile("t2");
-		List<Vector> a = out.toArray();
-		Assert.assertEquals(mean.toString(),a.get(0).toString());
+		Vector reconstructed = LinAlgebraIOUtils.loadFromObject(filename, sc);
+		Assert.assertEquals(input.toString(), reconstructed.toString());
 	}
 
 }

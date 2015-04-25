@@ -48,7 +48,7 @@ public class LinAlgebraIOUtils {
 		return Vectors.dense(out_vector);
 	}
 	public static Vector loadFromObject(String inFile, JavaSparkContext sc) {
-		JavaRDD<Vector> out = sc.objectFile("inFile");
+		JavaRDD<Vector> out = sc.objectFile(inFile);
 		List<Vector> a = out.collect();
 		return Vectors.dense(a.get(0).toArray());
 	}
