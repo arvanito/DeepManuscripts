@@ -78,7 +78,7 @@ public class TwoLayersTest implements Serializable {
 	 		input_small_patches.add(Vectors.dense(1,2,3,4));
 	 	}
 	 	
-		DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config1, 0);
+		DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config1, 0, "two_layer1");
 		// We have 100 patches of size 2x2 as input
 		// We have 50 word images of size 8x8
 		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
@@ -91,7 +91,7 @@ public class TwoLayersTest implements Serializable {
 		Assert.assertEquals(27, res.get(0).size());
 
 		
-	 	DeepLearningLayer layer2 = BaseLayerFactory.createBaseLayer(config2, 1);
+	 	DeepLearningLayer layer2 = BaseLayerFactory.createBaseLayer(config2, 1,"two_layer1");
 	 	
     	JavaRDD<Vector> preprocessed = layer2.preProcess(result);
 		Vector[] features = layer2.learnFeatures(preprocessed);
@@ -138,7 +138,7 @@ public class TwoLayersTest implements Serializable {
 	 		input_small_patches.add(Vectors.dense(1,2,3,4));
 	 	}
 	 	int layer_index = 0;
-		DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(c, layer_index);
+		DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(c, layer_index, "two_layer2");
 		// We have 100 patches of size 2x2 as input
 		// We have 50 word images of size 8x8
 		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
@@ -158,7 +158,7 @@ public class TwoLayersTest implements Serializable {
 	 	ConfigBaseLayer c2 = conf2.build();
 		
 	 	layer_index = 1;
-	 	DeepLearningLayer layer2 = BaseLayerFactory.createBaseLayer(c2, layer_index);
+	 	DeepLearningLayer layer2 = BaseLayerFactory.createBaseLayer(c2, layer_index, "two_layer_2");
 		JavaRDD<Vector> result2 = layer2.train(result, result);
 
 		List<Vector> out = result2.collect();
@@ -194,7 +194,7 @@ public class TwoLayersTest implements Serializable {
 		JavaRDD<Vector> result = null;
 		int layer_index = 0;
 	 	for (ConfigBaseLayer config_layer: config_list) {
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config_layer, layer_index++);
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config_layer, layer_index++, "two_layer3");
 			// The config layer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
 			if (config_layer.hasConfigFeatureExtractor()) {

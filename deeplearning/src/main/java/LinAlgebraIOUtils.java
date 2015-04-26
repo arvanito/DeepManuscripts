@@ -139,4 +139,20 @@ public class LinAlgebraIOUtils {
 		// Transform it to JavaRDD and save it to file
 		sc.parallelize(temp_input).saveAsObjectFile(outFile);
 	}
+	
+	public static void saveVectorArrayToObject(Vector[] input, String outFile, JavaSparkContext sc) {
+		List<Vector> temp_input = new ArrayList<Vector>();
+		for (int i = 0; i < input.length; ++i)
+			temp_input.add(input[i]);
+		// Transform it to JavaRDD and save it to file
+		sc.parallelize(temp_input).saveAsObjectFile(outFile);
+	}
+	public static Vector[] loadVectorArrayFromObject(String inFile, JavaSparkContext sc) {
+		JavaRDD<Vector> out = sc.objectFile(inFile);
+		List<Vector> a = out.collect();
+		Vector []output = new Vector[a.size()];
+		for (int i = 0; i < a.size(); ++i)
+			output[i] = Vectors.dense(a.get(i).toArray());
+		return output;
+	}
 }

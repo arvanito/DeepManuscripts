@@ -43,18 +43,18 @@ public class LoadSaveModelTest {
 	public void testDenseVectorTextIO() {
 		String filename = "temp3";
 		// Create a sample mean vector 
-		Vector mean = Vectors.dense(1,2,3,4);
+		DenseVector mean = (DenseVector) Vectors.dense(1,2,3,4);
 		LinAlgebraIOUtils.saveVectorToText(mean, filename, sc);
 		
 		// Read back the file as an array of strings
 		Vector reconstructed = LinAlgebraIOUtils.loadVectorFromText(filename, sc);
 		Assert.assertEquals(mean.toString(), reconstructed.toString());
 	}
-	@Test @Ignore
+	@Test
 	public void testDenseVectorObjectIO() {
 		String filename = "temp2";
 		// Create a sample mean vector 
-		Vector input = Vectors.dense(1,2,3,4);
+		DenseVector input = (DenseVector) Vectors.dense(1,2,3,4);
 		LinAlgebraIOUtils.saveVectorToObject(input, filename, sc);
 		
 	    // Read back the array

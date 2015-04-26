@@ -95,7 +95,7 @@ public class ThreeLayerTest implements Serializable {
 		JavaRDD<Vector> result = null;
 		int layer_index = 0;
 	 	for (ConfigBaseLayer config_layer: config_list) {
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config_layer, layer_index++);
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config_layer, layer_index++, "three_layer");
 			// The config layer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
 			if (config_layer.hasConfigFeatureExtractor()) {

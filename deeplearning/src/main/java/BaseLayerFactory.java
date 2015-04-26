@@ -16,7 +16,7 @@ import main.java.BaseLayer;
 
 public class BaseLayerFactory {
 
-	static public BaseLayer createBaseLayer(ConfigBaseLayer configLayer, int layer_index) {
+	static public BaseLayer createBaseLayer(ConfigBaseLayer configLayer, int layer_index, String pathPrefix) {
 		PreProcessZCA preprocessor = null;
 		if (configLayer.hasConfigPreprocess()) {
 					preprocessor = new PreProcessZCA(configLayer);
@@ -49,6 +49,8 @@ public class BaseLayerFactory {
  
 		BaseLayer b = new BaseLayer(configLayer, preprocessor, learner, extractor, pooler);
 		b.setLayerIndex(layer_index);
+		//TODO change this
+		b.setPathPrefix(pathPrefix + Integer.toString(layer_index));
 		return b;
 	}
 }

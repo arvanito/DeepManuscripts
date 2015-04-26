@@ -78,8 +78,7 @@ public class DeepLearningMain {
 		// The main loop calls execute() on each of the layers
 		JavaRDD<Vector> result = null;
 	 	for (int layer_index = 0; layer_index < globalConfig.size(); ++layer_index) {
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layer_index), layer_index);
-		
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layer_index), layer_index, "x");
 			// The config layer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
 			if (globalConfig.get(layer_index).hasConfigFeatureExtractor()) {

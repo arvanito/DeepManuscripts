@@ -239,7 +239,7 @@ public class PreProcessZCA implements PreProcessor {
 		//NOTE Since ZCA and mean are both expected to be small (max 64x64)
 		// their loading/saving should not be a bottleneck
 		mean = (DenseVector) LinAlgebraIOUtils.loadVectorFromObject(filename+"_mean", sc);
-		ZCA = (DenseMatrix) LinAlgebraIOUtils.loadMatrixFromObject(filename + "+zca", sc);
+		ZCA = (DenseMatrix) LinAlgebraIOUtils.loadMatrixFromObject(filename + "_zca", sc);
 
 	}
 	
@@ -253,7 +253,7 @@ public class PreProcessZCA implements PreProcessor {
 		//TODO
 		//NOTE Since ZCA and mean are both expected to be small (max 64x64)
 		// their loading/saving should not be a bottleneck
-		LinAlgebraIOUtils.saveVectorToObject(mean, filename + "+mean", sc);
-		LinAlgebraIOUtils.saveMatrixToObject(ZCA, filename + "+zca", sc);
+		LinAlgebraIOUtils.saveVectorToObject(this.mean, filename + "_mean", sc);
+		LinAlgebraIOUtils.saveMatrixToObject(this.ZCA, filename + "_zca", sc);
 	}
 }

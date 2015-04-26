@@ -65,7 +65,7 @@ public class OneLayerTest implements Serializable {
 	 		input_small_patches.add(Vectors.dense(1,2,3,4));
 	 	}
 	 	
-		DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(c, 0);
+		DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(c, 0, "one_layer");
 		// We have 100 patches of size 2x2 as input
 		// We have 50 word images of size 8x8
 		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
@@ -99,7 +99,7 @@ public class OneLayerTest implements Serializable {
 						                  setFeatureDim1(2).setFeatureDim2(2).setInputDim1(8).setInputDim2(8).build());
 		conf.setConfigPooler(ConfigPooler.newBuilder().setPoolSize(2));
 	 	conf.setConfigKmeans(ConfigKMeans.newBuilder().setNumberOfClusters(3).setNumberOfIterations(10).build());	
-	 	ConfigBaseLayer c = conf.build();
+	 	ConfigBaseLayer layer_config = conf.build();
 	 	
 	 	int Nimgs = 50;
 	 	int Npatches = 100;
@@ -117,7 +117,9 @@ public class OneLayerTest implements Serializable {
 	 		input_small_patches.add(Vectors.dense(1,2,3,4));
 	 	}
 	 	
-		DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(c, 0);
+	 	int layer_index = 1;
+		DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(layer_config, layer_index, "one_layer_2");
+		layer.setSparkContext(sc);
 		// We have 100 patches of size 2x2 as input
 		// We have 50 word images of size 8x8
 		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);

@@ -27,14 +27,15 @@ public class BaseLayer implements DeepLearningLayer {
 	// The path to the folder of the .prototxt file, where the 
 	// weight will be saved. (This path should already exist.)
 	String pathPrefix;
-	String featuresOutputFile;
-	String preprocessOutputFile;
 	
 	// The layer number, starting from 0
 	int layer_index;
 	// Ugly hack. Spark context is needed by the preprocessor.
 	// It needs to parallelize a DenseMatrix object.
 	JavaSparkContext spark_context; 
+	
+	// By default, saving of the model si false
+	boolean save_model;
 	
 	public BaseLayer(ConfigBaseLayer configLayer, PreProcessor preprocess, Learner learn, Extractor extract, Pooler pool) {
 		this.configLayer = configLayer;
@@ -43,6 +44,8 @@ public class BaseLayer implements DeepLearningLayer {
 		this.learn = learn;
 		this.extract = extract;
 		this.pool = pool;
+		
+		save_model = false;
 	}
 	
 	
@@ -75,17 +78,17 @@ public class BaseLayer implements DeepLearningLayer {
 			                       JavaRDD<Vector> input_word_patches) throws Exception {
     	
     	JavaRDD<Vector> preprocessed = preProcess(input_small_patches);
-    	// preprocess.saveToFile("temp");
+    	if (save_model == true)
+    		this.preprocess.saveToFile(pathPrefix + "_preprocess", spark_context);
     	
-    	//TODO save the preprocess input
 		Vector[] features = learnFeatures(preprocessed);
-		//TODO save here the features
-		
-		
-		//features.saveAsTextFile(featuresOutputFile);
 		
 		// TODO:: do preprocessing on the second dataset
 		//JavaRDD<Vector> preprocessedBig = dataBig.map(preprocess);
+		
+		// Ugly hack, move this to the Learner class
+		if (save_model == true)
+			LinAlgebraIOUtils.saveVectorArrayToObject(features, pathPrefix + "_features", spark_context);
 		
 		JavaRDD<Vector> represent = extractFeatures(input_word_patches, configLayer, features);
 		JavaRDD<Vector> pooled = pool(represent);
@@ -93,17 +96,23 @@ public class BaseLayer implements DeepLearningLayer {
 	}
 
     public JavaRDD<Vector> test(JavaRDD<Vector> data) throws Exception {
-    	return null;
-    	/*
+    	// Setup the preprocessor
+    	this.preprocess.loadFromFile(pathPrefix + "_preprocess", spark_context);
     	JavaRDD<Vector> preprocessed = preProcess(data);
     	//TODO load the features from file.
-    	Vector[] features = null;
+    	Vector[] features = LinAlgebraIOUtils.loadVectorArrayFromObject(pathPrefix + "_features", spark_context);
 
     	JavaRDD<Vector> represent = extractFeatures(preprocessed, configLayer, features);
     	JavaRDD<Vector> pooled = pool(represent);
-    	return pooled;*/
+    	return pooled;
     }
-    
+   
+    public String getPathPrefix() {
+    	return pathPrefix;
+    }
+    public void setPathPrefix(String s) {
+    	pathPrefix = s;
+    }
     public int getLayerIndex() {
     	return layer_index;
     }
@@ -113,4 +122,10 @@ public class BaseLayer implements DeepLearningLayer {
     public void setSparkContext(JavaSparkContext sc) {
     	spark_context = sc;
     }
+	public void setSaveModel(boolean value) {
+		save_model = value;
+	}
+	public boolean getSaveModel() {
+		return this.save_model;
+	}
 }

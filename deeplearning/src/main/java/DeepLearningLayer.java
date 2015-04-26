@@ -3,6 +3,7 @@ package main.java;
 import main.java.DeepModelSettings.ConfigBaseLayer;
 
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.Vector;
 
 /**
@@ -74,4 +75,9 @@ public interface DeepLearningLayer {
 	 * @throws Exception
 	 */
 	 public JavaRDD<Vector> test(JavaRDD<Vector> data) throws Exception;
+	 
+	 public void setSparkContext(JavaSparkContext sc);
+	 
+	 public void setSaveModel(boolean value);
+	 public boolean getSaveModel();
 }
