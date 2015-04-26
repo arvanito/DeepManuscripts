@@ -98,11 +98,15 @@ public class BaseLayer implements DeepLearningLayer {
     public JavaRDD<Vector> test(JavaRDD<Vector> data) throws Exception {
     	// Setup the preprocessor
     	this.preprocess.loadFromFile(pathPrefix + "_preprocess", spark_context);
-    	JavaRDD<Vector> preprocessed = preProcess(data);
+//    	JavaRDD<Vector> preprocessed = preProcess(data);
     	//TODO load the features from file.
     	Vector[] features = LinAlgebraIOUtils.loadVectorArrayFromObject(pathPrefix + "_features", spark_context);
 
-    	JavaRDD<Vector> represent = extractFeatures(preprocessed, configLayer, features);
+    	System.out.println("Features info");
+    	System.out.println(features.length);
+    	System.out.println(features[0].size());
+    	
+    	JavaRDD<Vector> represent = extractFeatures(data, configLayer, features);
     	JavaRDD<Vector> pooled = pool(represent);
     	return pooled;
     }
