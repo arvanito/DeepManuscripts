@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.mllib.linalg.Matrices;
+import org.apache.spark.mllib.linalg.Matrix;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 
@@ -17,19 +19,19 @@ import org.apache.spark.mllib.linalg.Vectors;
  */
 
 public class LinAlgebraIOUtils {
-	public static void saveToText(Vector input, String outFile, JavaSparkContext sc) {
+	public static void saveVectorToText(Vector input, String outFile, JavaSparkContext sc) {
 		List<Vector> temp_input = new ArrayList<Vector>();
 		temp_input.add(input);
 		// Transform it to JavaRDD and save it to file
 		sc.parallelize(temp_input).saveAsTextFile(outFile);
 	}
-	public static void saveToObject(Vector input, String outFile, JavaSparkContext sc) {
+	public static void saveVectorToObject(Vector input, String outFile, JavaSparkContext sc) {
 		List<Vector> temp_input = new ArrayList<Vector>();
 		temp_input.add(input);
 		// Transform it to JavaRDD and save it to file
 		sc.parallelize(temp_input).saveAsObjectFile(outFile);
 	}
-	public static Vector loadFromText(String inFile, JavaSparkContext sc) {
+	public static Vector loadVectorFromText(String inFile, JavaSparkContext sc) {
 		// Read back the file as an array of strings
 		JavaRDD<String> in_read = sc.textFile(inFile);
 
@@ -47,10 +49,94 @@ public class LinAlgebraIOUtils {
 		}
 		return Vectors.dense(out_vector);
 	}
-	public static Vector loadFromObject(String inFile, JavaSparkContext sc) {
+	public static Vector loadVectorFromObject(String inFile, JavaSparkContext sc) {
 		JavaRDD<Vector> out = sc.objectFile(inFile);
 		List<Vector> a = out.collect();
 		return Vectors.dense(a.get(0).toArray());
 	}
 	
+	// Do the same for DenseMatrix
+	public static void saveVectorToText(Matrix input, String outFile, JavaSparkContext sc) {
+		List<Vector> temp_zca = new ArrayList<Vector>();
+		for (int i = 0; i < input.numRows();++i) {
+			double[] darray = new double[input.numCols()];
+			for (int j = 0; j < input.numCols(); ++j) {
+				darray[j] = input.apply(i, j);
+			}
+			Vector row = Vectors.dense(darray);
+			temp_zca.add(row);
+		}
+		sc.parallelize(temp_zca).saveAsTextFile(outFile);
+	}
+	
+	//TODO check row or column major
+	public static Matrix loadMatrixFromText(String inFile, JavaSparkContext sc) {
+		// Read back the file as an array of strings
+		JavaRDD<String> in_read = sc.textFile(inFile);
+
+		List<String> in_string = in_read.collect();
+		// Since it is a vector, it has 1 dimension equal to 1
+		int nCols = in_string.size();
+		String m = in_string.get(0);
+		m = m.substring(1, m.length()-2);
+		int nRows = m.split(",").length;
+		double[] out_vector = new double[nRows * nCols];
+		int idx = 0;
+		for (int i = 0; i < in_string.size(); ++i) {
+			String m2 = in_string.get(i);
+			m2 = m2.substring(1, m.length()-2);
+			String[] parts = m.split(",");
+			int vector_size = parts.length;
+			for (int j = 0; j < vector_size; ++j) {
+				out_vector[idx++] = Double.parseDouble(parts[j]);
+			}
+		}
+		return Matrices.dense(nRows, nCols, out_vector);
+	}
+	
+	//TODO check row or column major
+	public static void saveMatrixToText(Matrix input, String outFile, JavaSparkContext sc) {
+		List<Vector> temp_input = new ArrayList<Vector>();
+		for (int i = 0; i < input.numCols(); ++i) {
+			double[] temp = new double[input.numRows()];
+			for (int j = 0; j < input.numRows(); ++j) {
+				temp[j] = input.apply(j, i);
+			} 
+			Vector col_vector = Vectors.dense(temp);
+			temp_input.add(col_vector);
+		}
+		// Transform it to JavaRDD and save it to file
+		sc.parallelize(temp_input).saveAsTextFile(outFile);
+	}
+	
+	// Load Column major matrix
+	public static Matrix loadMatrixFromObject(String inFile, JavaSparkContext sc) {
+		JavaRDD<Vector> input = sc.objectFile(inFile);
+		List<Vector> col_matrix = input.collect();
+		int nCols = col_matrix.size();
+		int nRows = col_matrix.get(0).size();
+		double[] temp = new double[nRows*nCols];
+		int idx = 0;
+		for (int i = 0; i < nCols; ++i) {
+			for (int j = 0; j < nRows; ++j) {
+				temp[idx++] = col_matrix.get(i).apply(j);
+			}
+		}
+		return Matrices.dense(nRows, nCols, temp);
+	}
+	
+	// Save the matrix column major
+	public static void saveMatrixToObject(Matrix input, String outFile, JavaSparkContext sc) {
+		List<Vector> temp_input = new ArrayList<Vector>();
+		for (int i = 0; i < input.numCols(); ++i) {
+			double[] temp = new double[input.numRows()];
+			for (int j = 0; j < input.numRows(); ++j) {
+				temp[j] = input.apply(j, i);
+			} 
+			Vector col_vector = Vectors.dense(temp);
+			temp_input.add(col_vector);
+		}
+		// Transform it to JavaRDD and save it to file
+		sc.parallelize(temp_input).saveAsObjectFile(outFile);
+	}
 }
