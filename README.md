@@ -48,11 +48,18 @@ The .java file contains all the classes generated from your .proto file definiti
   'Compiling .proto files' section from the provided link
   * Note that you do not need to compile the .proto file if you do not want to add changes to it
   * If you modified the .proto file, for the changes to take effect run the command below in the deeplearning folder:
-         protoc -I=src/main/java --java_out=src/ $src/main/java/deep_model_settings.proto
+        `protoc -I=src/main/java --java_out=src/ src/main/java/deep_model_settings.proto`
     This will create a class in the src/main/java folder named DeepModelSettings.java
-
-* Modyfing the .proto file //TODO 
+    You need to run `mvn package` again after you update DeepModelSettings.java
+* Modyfing the .proto file 
+  * The .proto file must be compiled after every change.
+  * Every `message` is compiled into a Java class
+  * A field of the message can be `optional`, `required` or `repeated`
+  * Every field `field` of a message generates methods of the form 
+     ** hasField() is true if the field is present (it is always true for required fields but can be false for optional and repeated)
+     ** getField() / getFieldList() returns the actual field message / a list of messages for repeated fields
 * Creating a .prototxt file //TODO
-* Available methods //TODO
+
+      
 
  

@@ -9,6 +9,7 @@ message ConfigPreprocess {
 
 message ConfigKMeans {
         required int32 number_of_clusters = 1;
+        required int32 number_of_iterations = 2;
 } 
 
 message ConfigAutoencoders {
@@ -26,6 +27,12 @@ message ConfigFeatureExtractor {
   required int32 input_dim2 = 2;
   required int32 feature_dim1 = 3;
   required int32 feature_dim2 = 4;
+  enum NonLinearity {
+  	ABS = 0;
+  	SOFT = 1;
+  }
+  optional NonLinearity non_linearity = 5 [default = ABS];
+  optional double soft_threshold = 6;
 }
 
 message ConfigPooler {
@@ -41,7 +48,7 @@ message ConfigBaseLayer {
   optional ConfigPreprocess config_preprocess = 1;
   optional ConfigKMeans config_kmeans = 2;
   optional ConfigAutoencoders config_autoencoders = 3;
-  required ConfigFeatureExtractor config_feature_extractor = 4;
+  optional ConfigFeatureExtractor config_feature_extractor = 4;
   required ConfigPooler config_pooler = 5;
 }   
 

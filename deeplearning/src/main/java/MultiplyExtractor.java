@@ -1,6 +1,7 @@
 package main.java;
 
 import main.java.DeepModelSettings.ConfigBaseLayer;
+import main.java.DeepModelSettings.ConfigFeatureExtractor;
 
 import org.apache.spark.mllib.linalg.BLAS;
 import org.apache.spark.mllib.linalg.DenseMatrix;
@@ -18,23 +19,22 @@ public class MultiplyExtractor implements Extractor {
 	
 	private static final long serialVersionUID = -6353736803330058842L;
 
-	private ConfigBaseLayer configLayer;	// layer configuration from the protocol buffer
-	private PreProcessZCA preProcess; 		// pre-processing information 
+	private ConfigBaseLayer configLayer = null;		// layer configuration from the protocol buffer
+	private PreProcessZCA preProcess = null; 		// pre-processing information 
 	private Vector[] features;				// array of learned feature Vectors
 	
+	
+	public MultiplyExtractor() {}
 	
 	/**
 	 * Constructor 
 	 * @param configLayer The input configuration for the current layer
 	 * @param preProcess The input PreProcess configuration
-	 * @param features The input feature learned from the previous step
 	 */
-	public MultiplyExtractor(ConfigBaseLayer configLayer, PreProcessZCA preProcess, Vector[] features) {
+	public MultiplyExtractor(ConfigBaseLayer configLayer, PreProcessZCA preProcess) {
 		this.configLayer = configLayer;
 		this.preProcess = preProcess;
-		this.features = features;
 	}
-	
 	
 	/**
 	 * Getter method for the ConfigBaseLayer object.
@@ -120,7 +120,14 @@ public class MultiplyExtractor implements Extractor {
 
 		// get necessary data from the PreProcessor
 		DenseVector dataDense = (DenseVector) data;
-		if (configLayer.hasConfigPreprocess()) {
+		
+		// allocate memory for the output vector
+		DenseVector dataOut = new DenseVector(new double[D.numRows()]);
+		DenseVector dataDenseOut = new DenseVector(new double[dataDense.size()]);
+		
+		// most probably we do not need any pre-processing here, 
+		// data is already whitened
+		if (preProcess != null) {
 			// ZCA Matrix
 			DenseMatrix zca = preProcess.getZCA();
 
@@ -128,18 +135,30 @@ public class MultiplyExtractor implements Extractor {
 			DenseVector zcaMean = preProcess.getMean();
 
 			// epsilon for pre-processing
-			double eps1 = configLayer.getConfigPreprocess().getEps1();
+			//double eps1 = configLayer.getConfigPreprocess().getEps1();
 			
 			// preprocess the data point with contrast normalization and ZCA whitening
-			dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
+			//dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
 			dataDense = MatrixOps.localVecSubtractMean(dataDense, zcaMean);
-			BLAS.gemv(true, 1.0, zca, dataDense, 0.0, dataDense);
+			//dataDense = zca.transpose().multiply(dataDense);
+			BLAS.gemv(1.0, zca.transpose(), dataDense, 0.0, dataDenseOut);
+		} else {
+			dataDenseOut = dataDense;
 		}
 	
 		// multiply the matrix of the learned features with the preprocessed data point
-		BLAS.gemv(false, 1.0, D, dataDense, 0.0, dataDense);
-				
-		return dataDense;
+		BLAS.gemv(1.0, D, dataDenseOut, 0.0, dataOut);
+		
+		// apply non-linearity
+		ConfigFeatureExtractor.NonLinearity nonLinearity = configLayer.getConfigFeatureExtractor().getNonLinearity();
+		double alpha = 0.0;
+		if (configLayer.getConfigFeatureExtractor().hasSoftThreshold()) {
+			System.out.println("We do not have a threshold");
+			alpha = configLayer.getConfigFeatureExtractor().getSoftThreshold();
+		}
+		dataOut = MatrixOps.applyNonLinearityVec(dataOut, nonLinearity, alpha);
+		
+		return dataOut;
 	}
 
 }

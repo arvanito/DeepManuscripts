@@ -1,5 +1,6 @@
 package main.java;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.highgui.Highgui;
@@ -18,6 +19,10 @@ import java.io.Serializable;
  */
 public class ImageData implements Serializable {
     private static final long serialVersionUID = -151442211116649858L;
+
+    static {
+        NativeLibraryLoader.load(Core.NATIVE_LIBRARY_NAME);
+    }
 
     //Uncompressed representation
     transient private Mat image;

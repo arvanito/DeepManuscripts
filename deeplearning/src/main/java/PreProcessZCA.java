@@ -33,7 +33,14 @@ public class PreProcessZCA implements PreProcessor {
 	// TODO: Initialize it somewhere!
 	boolean conv;
 	
-	
+	public PreProcessZCA() {}
+	public PreProcessZCA(ConfigBaseLayer c) {
+		configLayer = c;
+	}
+	public PreProcessZCA(DenseVector mean, DenseMatrix ZCA) {
+		this.mean = mean;
+		this.ZCA = ZCA;
+	}
 	
 	/**
 	 * Getter method for the ConfigBaseLayer object.
@@ -73,6 +80,11 @@ public class PreProcessZCA implements PreProcessor {
 	@Override
 	public void setConfigLayer(ConfigBaseLayer configLayer) {
 		this.configLayer = configLayer;
+		if (this.configLayer.hasConfigPreprocess()) {
+			conv = true;
+		} else {
+			conv = false;
+		}
 	}
 	
 	
@@ -123,10 +135,12 @@ public class PreProcessZCA implements PreProcessor {
 
 		// compute the ZCA matrix by V * Lambda * V'
 		DenseMatrix ZCA = new DenseMatrix(ss, ss, new double[ss*ss]);
-		BLAS.gemm(false, true, 1.0, Matrices.diag(Vectors.dense(l)), V, 0.0, ZCA);
-		BLAS.gemm(false, false, 1.0, V, ZCA, 0.0, ZCA);
+		DenseMatrix ZCAout = new DenseMatrix(ss, ss, new double[ss*ss]);
+		BLAS.gemm(1.0, Matrices.diag(Vectors.dense(l)), V.transpose(), 0.0, ZCA);
+		//ZCA = V.multiply(ZCA);
+		BLAS.gemm(1.0, V, ZCA, 0.0, ZCAout);
 		
-		return ZCA;
+		return ZCAout;
 	}
 	
 	
@@ -141,10 +155,10 @@ public class PreProcessZCA implements PreProcessor {
 	public JavaRDD<Vector> preprocessData(JavaRDD<Vector> data) {
 
 		// assign eps1 for pre-processing
-		double eps1 = configLayer.getConfigPreprocess().getEps1();
+		//double eps1 = configLayer.getConfigPreprocess().getEps1();
 
 		// apply contrast normalization
-		data = data.map(new ContrastNormalization(eps1));
+		//data = data.map(new ContrastNormalization(eps1));
 
 		// convert the JavaRRD<Vector> to a distributed RowMatrix (through Scala RDD<Vector>)
 		RowMatrix rowData = new RowMatrix(data.rdd());
@@ -186,12 +200,14 @@ public class PreProcessZCA implements PreProcessor {
 		// epsilon for pre-processing
 		double eps1 = configLayer.getConfigPreprocess().getEps1();
 		
+		DenseVector outVec = new DenseVector(new double[data.size()]);
+		
 		// preprocess data depending on the conv flag
 		if (conv == false) {
 			// preprocess the data point with contrast normalization and ZCA whitening
 			dataDense = MatrixOps.localVecContrastNorm(dataDense, eps1);
 			dataDense = MatrixOps.localVecSubtractMean(dataDense, mean);
-			BLAS.gemv(true, 1.0, ZCA, dataDense, 0.0, dataDense);
+			BLAS.gemv(1.0, ZCA.transpose(), dataDense, 0.0, outVec);
 		} else {
 			// reshape data vector to a matrix and extract all overlapping patches
 			int[] dims = {configLayer.getConfigFeatureExtractor().getInputDim1(), configLayer.getConfigFeatureExtractor().getInputDim2()};
@@ -202,10 +218,29 @@ public class PreProcessZCA implements PreProcessor {
 			// preprocess the data point with contrast normalization and ZCA whitening
 			patches = MatrixOps.localMatContrastNorm(patches, eps1);
 			patches = MatrixOps.localMatSubtractMean(patches, mean);
-			BLAS.gemm(false, false, 1.0, patches, ZCA, 0.0, patches);
+			
+			DenseMatrix dataOut = new DenseMatrix(patches.numRows(),ZCA.numCols(),new double[patches.numRows()*ZCA.numCols()]);
+			BLAS.gemm(1.0, patches, ZCA, 0.0, dataOut);
+			outVec = MatrixOps.reshapeMat2Vec(dataOut);
 		}
 		
-		return dataDense;
+		return outVec;
 	}
 	
+	/**
+	 *  Sets up the preprocessor. It loads the saved weights from the disk.
+	 * @param filename
+	 **/
+	public void loadFromFile(String filename) {
+		//TODO
+	}
+	
+	/**
+	 *  Saves the fields necessary to reconstruct a preprocessor object. 
+	 *  Depending on the preprocessor type, more than one file will be saved.
+	 * @param filename
+	 **/
+	public void saveToFile(String filename) {
+		//TODO
+	}
 }

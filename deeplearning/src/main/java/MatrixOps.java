@@ -1,5 +1,7 @@
 package main.java;
 
+import main.java.DeepModelSettings.ConfigFeatureExtractor;
+
 import org.apache.spark.mllib.linalg.DenseMatrix;
 import org.apache.spark.mllib.linalg.DenseVector;
 import org.apache.spark.mllib.linalg.Matrices;
@@ -18,6 +20,105 @@ import org.apache.spark.mllib.linalg.Vectors;
  *
  */
 public class MatrixOps {
+	
+	
+	/**
+	 * @param in Input array of double 
+	 * @return Transformed array by applying the abs function
+	 */
+	public static double[] applyAbsNonLinearity(double[] in) {
+		
+		int n = in.length;
+		double[] out = new double[n];
+		
+		// apply the abs element-wise
+		for (int i = 0; i < n; i++) {
+			out[i] = Math.abs(in[i]);
+		}
+		
+		return out;
+	}
+	
+	
+	/**
+	 * @param in Input array
+	 * @param alpha soft threshold parameter
+	 * @return Transformed array by applying soft thresholding
+	 */
+	public static double[] applySoftNonLinearity(double[] in, double alpha) {
+		
+		int n = in.length;
+		double[] out = new double[n];
+		
+		// apply the soft threshold element-wise
+		// here we need an additional parameter
+		for (int i = 0; i < n; i++) {
+			out[i] = Math.max(in[i]-alpha,0.0);
+		}
+		
+		return out;
+		
+	}
+	
+	
+	/**
+	 * Method that applies a nonlinear function element-wise to a DenseMatrix.
+	 * 
+	 * @param M Input DenseMatrix
+	 * @param nonLinearity Enumeration that denotes the applied non-linearity on the matrix
+	 * @param alpha Optional parameter for soft thresholding
+	 * @return Transformed DenseMatrix
+	 */
+	public static DenseMatrix applyNonLinearityMat(DenseMatrix M, ConfigFeatureExtractor.NonLinearity nonLinearity, double... alpha) {
+		
+		int n = M.numRows();
+		int m = M.numCols();
+		
+		double[] out = new double[n*m];
+		
+		// apply non-linearity depending on the input String
+		switch (nonLinearity) {
+		case ABS:
+			out = applyAbsNonLinearity(M.toArray());
+			break;
+		case SOFT:
+			out = applySoftNonLinearity(M.toArray(), alpha[0]);
+			break;
+		}
+		
+		DenseMatrix outMat = new DenseMatrix(n,m,out); 
+		return outMat;
+	}
+	
+	
+	/**
+	 * Method that applies a nonlinear function element-wise to a DenseVector.
+	 * 
+	 * @param v Input DenseVector
+	 * @param nonLinearity Enumeration that denotes the applied non-linearity on the vector
+	 * @param alpha Optional parameter for soft thresholding
+	 * @return Transformed DenseVector
+	 */
+	public static DenseVector applyNonLinearityVec(DenseVector v, ConfigFeatureExtractor.NonLinearity nonLinearity, double... alpha) {
+		
+		int s = v.size();
+		
+		double[] out = new double[s];
+		
+		// apply non-linearity depending on the input String 
+		switch (nonLinearity) {
+		case ABS:
+			out = applyAbsNonLinearity(v.toArray());
+			break;
+		case SOFT:
+			out = applySoftNonLinearity(v.toArray(), alpha[0]);
+			break;
+		}
+		
+		DenseVector outVec = new DenseVector(out);
+		return outVec;
+	}
+	
 	
 	/** 
 	 * Method that converts an array of Vectors to a DenseMatrix.
@@ -133,10 +234,10 @@ public class MatrixOps {
 		for (int i = 0; i < n; i++) {
 			cur = getRow(M, i);
 			cur = localVecContrastNorm(cur, e);
-
+			
 			// copy the normalized row back to the result
 			for (int j = 0; j < m; j++) {
-				C.toArray()[i+n*j] = cur.toArray()[j];
+				C.update(i, j, cur.toArray()[j]);
 			}
 		}
 
@@ -170,7 +271,7 @@ public class MatrixOps {
 
 			// copy the subtracted row back to the result
 			for (int j = 0; j < m; j++) {
-				C.toArray()[i+n*j] = cur.toArray()[j];
+				C.update(i, j, cur.toArray()[j]);
 			}
 		}
 
@@ -238,6 +339,16 @@ public class MatrixOps {
 		return new DenseVector(sub);
 	}
 	
+	
+	/**
+	 * Method that reshapes a matrix to a vector.
+	 * 
+	 * @param v Matrix of type DenseMatrix to be reshaped
+	 * @return Output vector
+	 */
+	public static DenseVector reshapeMat2Vec(DenseMatrix M) {
+		return new DenseVector(M.toArray()); 
+	}
 	
 	/**
 	 * Method that reshapes a vector to a matrix.
