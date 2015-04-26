@@ -1,3 +1,4 @@
+package main.java;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,20 +11,69 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.mllib.linalg.Vector;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.highgui.Highgui;
+import org.apache.spark.api.java.function.*;
 
 
 public class ParseJSON {
 
+	public int sizex = 64, sizey = 64;
 	
-	
-	public static void main (String[] args) throws IOException, ParseException {
+	public void main (String[] args) throws IOException, ParseException {
 		
-		 String filePath = "/home/ashish/Desktop/BD Project/Datasets/adieu_a_beaucoup_de_personnages/json/IS5337_2_010_00093.json";
-		 ArrayList<Integer[][]> lines = parseJSON(filePath);
-		 System.out.println("Line number: "+ lines.size());
+		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
+		Mat img = Highgui.imread("/home/isinsu/Desktop/DeepManuscripts/preprocessing/IS5337_2_010_00093.tif");
+		String filePath = "/home/isinsu/Desktop/DeepManuscripts/preprocessing/IS5337_2_010_00093.json";
+		processLines(img, filePath, "--local");
 	}
 	
-	private static ArrayList<Integer[][]> parseJSON(String filePath){
+	public void processLines(Mat imgMat, String filePath, String arg)
+	{
+		SparkConf conf;
+		JavaSparkContext sc;
+		if(arg.equals("--local")) {
+		    conf = new SparkConf().setAppName("DeepManuscript candidate patches").setMaster("local");
+		    sc = new JavaSparkContext(conf);
+		}else {
+		    conf = new SparkConf().setAppName("DeepManuscript candidate patches");
+		    sc = new JavaSparkContext(conf);
+		   
+		}
+		
+		 ArrayList<Integer[][]> lines = parseJSON(filePath);
+		 System.out.println("Line number: "+ lines.size());
+		 JavaRDD<Integer[][]> textLines = sc.parallelize(lines);
+		 JavaRDD<List<Vector>> patches = textLines.map(new Function<Integer[][], List<Vector>> (){
+			@Override
+			public List<Vector> call(Integer[][] arg0) throws Exception {
+				List<Vector> result = extractPatches(arg0);
+				return result;
+			}
+			
+		 });
+		 
+		 sc.close();
+	}
+	
+	public List<Vector> extractPatches(Integer[][] boundary) {
+
+	List<Vector> results = new ArrayList<>();
+	int stepSize;
+	if(sizex > sizey)
+		stepSize = sizey/2;
+	else
+		stepSize = sizex/2;
+
+	return results;
+	}
+
+	private ArrayList<Integer[][]> parseJSON(String filePath){
 		
 		ArrayList<Integer[][]> textLines = new ArrayList<Integer[][]>();
 		
@@ -119,7 +169,7 @@ public class ParseJSON {
 		
 	}
 
-	private static Integer[][] get_boundaries(String boundaries) {
+	private  Integer[][] get_boundaries(String boundaries) {
 		// gets the two dimensional array of the form [size][2] where size is the number 
 		// of boundary points and 2 corresponds to the two indices x,y ..
 		// "boundaries" string is in the form ((a,b),(c,d),(e,f),.......,(y,z))
