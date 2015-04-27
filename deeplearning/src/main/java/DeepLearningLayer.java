@@ -66,6 +66,7 @@ public interface DeepLearningLayer {
 	 */
 	public JavaRDD<Vector> train(JavaRDD<Vector> data1, JavaRDD<Vector> data2) throws Exception;
 
+	
     /**
 	 * Computes the descriptors of the input image patches.
 	 *
@@ -76,8 +77,27 @@ public interface DeepLearningLayer {
 	 */
 	 public JavaRDD<Vector> test(JavaRDD<Vector> data) throws Exception;
 	 
+	 
+	 /**
+	  * Sets the SparkContext, it is needed for saving data into files
+	  * 
+	  * @param sc The SparkContext variable
+	  */
 	 public void setSparkContext(JavaSparkContext sc);
 	 
+	 
+	 /**
+	  * Sets a boolean variable that checks if we save our trained model, or not
+	  * 
+	  * @param value True of false
+	  */
 	 public void setSaveModel(boolean value);
+	 
+	 
+	 /**
+	  * Gets the boolean variable that denotes if we save the trained model, or not
+	  * 
+	  * @return True or false
+	  */
 	 public boolean getSaveModel();
 }

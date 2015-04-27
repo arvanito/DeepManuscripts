@@ -12,25 +12,53 @@ import org.apache.spark.mllib.linalg.Vectors;
 
 /**
  *  The class offers different ways of storing DenseMatrix and Vector from linalg package to hdfs.
- *  The objects can be saved either as text file or as objects.
+ *  The objects can be saved either as text files or as objects.
  * 
  * @author Viviana Petrescu
  *
  */
 
 public class LinAlgebraIOUtils {
+	
+	/**
+	 * Saves a Vector as a text file.
+	 * 
+	 * @param input
+	 * @param outFile
+	 * @param sc
+	 */
 	public static void saveVectorToText(Vector input, String outFile, JavaSparkContext sc) {
 		List<Vector> temp_input = new ArrayList<Vector>();
 		temp_input.add(input);
+		
 		// Transform it to JavaRDD and save it to file
 		sc.parallelize(temp_input).saveAsTextFile(outFile);
 	}
+	
+	
+	/**
+	 * Saves a Vector as an object.
+	 * 
+	 * @param input
+	 * @param outFile
+	 * @param sc
+	 */
 	public static void saveVectorToObject(Vector input, String outFile, JavaSparkContext sc) {
 		List<Vector> temp_input = new ArrayList<Vector>();
 		temp_input.add(input);
+		
 		// Transform it to JavaRDD and save it to file
 		sc.parallelize(temp_input).saveAsObjectFile(outFile);
 	}
+	
+	
+	/**
+	 * Loads a Vector from a text file.
+	 * 
+	 * @param inFile
+	 * @param sc
+	 * @return
+	 */
 	public static Vector loadVectorFromText(String inFile, JavaSparkContext sc) {
 		// Read back the file as an array of strings
 		JavaRDD<String> in_read = sc.textFile(inFile);
@@ -49,13 +77,30 @@ public class LinAlgebraIOUtils {
 		}
 		return Vectors.dense(out_vector);
 	}
+	
+	
+	/**
+	 * Loads a Vector from an object file.
+	 * 
+	 * @param inFile
+	 * @param sc
+	 * @return
+	 */
 	public static Vector loadVectorFromObject(String inFile, JavaSparkContext sc) {
 		JavaRDD<Vector> out = sc.objectFile(inFile);
 		List<Vector> a = out.collect();
 		return Vectors.dense(a.get(0).toArray());
 	}
 	
-	//TODO check row or column major
+
+	
+	/**
+	 * Loads a Matrix from a text file.
+	 * 
+	 * @param inFile
+	 * @param sc
+	 * @return
+	 **/
 	public static Matrix loadMatrixFromText(String inFile, JavaSparkContext sc) {
 		// Read back the file as an array of strings
 		JavaRDD<String> in_read = sc.textFile(inFile);
@@ -80,6 +125,14 @@ public class LinAlgebraIOUtils {
 		return Matrices.dense(nRows, nCols, out_vector);
 	}
 	
+	
+	/**
+	 * Saves a Matrix to a text file.
+	 * 
+	 * @param input
+	 * @param outFile
+	 * @param sc
+	 */
 	//TODO check row or column major
 	public static void saveMatrixToText(Matrix input, String outFile, JavaSparkContext sc) {
 		List<Vector> temp_input = new ArrayList<Vector>();
@@ -95,6 +148,14 @@ public class LinAlgebraIOUtils {
 		sc.parallelize(temp_input).saveAsTextFile(outFile);
 	}
 	
+	
+	/**
+	 * Loads a Matrix from an object file.
+	 * 
+	 * @param inFile
+	 * @param sc
+	 * @return
+	 */
 	// Load Column major matrix
 	public static Matrix loadMatrixFromObject(String inFile, JavaSparkContext sc) {
 		JavaRDD<Vector> input = sc.objectFile(inFile);
@@ -111,6 +172,14 @@ public class LinAlgebraIOUtils {
 		return Matrices.dense(nRows, nCols, temp);
 	}
 	
+	
+	/**
+	 * Saves a Matrix from an object file.
+	 * 
+	 * @param input
+	 * @param outFile
+	 * @param sc
+	 */
 	// Save the matrix column major
 	public static void saveMatrixToObject(Matrix input, String outFile, JavaSparkContext sc) {
 		List<Vector> temp_input = new ArrayList<Vector>();
@@ -126,6 +195,14 @@ public class LinAlgebraIOUtils {
 		sc.parallelize(temp_input).saveAsObjectFile(outFile);
 	}
 	
+	
+	/**
+	 * Saves an array of Vectors to an object file.
+	 * 
+	 * @param input
+	 * @param outFile
+	 * @param sc
+	 */
 	public static void saveVectorArrayToObject(Vector[] input, String outFile, JavaSparkContext sc) {
 		List<Vector> temp_input = new ArrayList<Vector>();
 		for (int i = 0; i < input.length; ++i)
@@ -133,10 +210,19 @@ public class LinAlgebraIOUtils {
 		// Transform it to JavaRDD and save it to file
 		sc.parallelize(temp_input).saveAsObjectFile(outFile);
 	}
+	
+	
+	/**
+	 * Loads an array of Vectors from an object file.
+	 * 
+	 * @param inFile
+	 * @param sc
+	 * @return
+	 */
 	public static Vector[] loadVectorArrayFromObject(String inFile, JavaSparkContext sc) {
 		JavaRDD<Vector> out = sc.objectFile(inFile);
 		List<Vector> a = out.collect();
-		Vector []output = new Vector[a.size()];
+		Vector[] output = new Vector[a.size()];
 		for (int i = 0; i < a.size(); ++i)
 			output[i] = Vectors.dense(a.get(i).toArray());
 		return output;
