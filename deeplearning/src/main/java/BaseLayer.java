@@ -34,8 +34,9 @@ public class BaseLayer implements DeepLearningLayer {
 	// It needs to parallelize a DenseMatrix object.
 	JavaSparkContext spark_context; 
 	
-	// By default, saving of the model si false
+	// By default, saving of the model is false
 	boolean save_model;
+	
 	
 	public BaseLayer(ConfigBaseLayer configLayer, PreProcessor preprocess, Learner learn, Extractor extract, Pooler pool) {
 		this.configLayer = configLayer;
@@ -49,10 +50,10 @@ public class BaseLayer implements DeepLearningLayer {
 	}
 	
 	
-	 @Override
-	 public JavaRDD<Vector> preProcess(JavaRDD<Vector> data) {
-	 	return preprocess.preprocessData(data);
-	 }
+	@Override
+	public JavaRDD<Vector> preProcess(JavaRDD<Vector> data) {
+		return preprocess.preprocessData(data);
+	}
 	
 	
 	@Override
@@ -60,6 +61,7 @@ public class BaseLayer implements DeepLearningLayer {
 		return learn.call(data);
 	}
 
+	
 	@Override
 	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, ConfigBaseLayer configLayer, Vector[] features) {
 		extract.setConfigLayer(configLayer);
@@ -67,12 +69,14 @@ public class BaseLayer implements DeepLearningLayer {
 		return data.map(extract);
 	}
 
+	
 	@Override
 	public JavaRDD<Vector> pool(JavaRDD<Vector> data) {
 		return data.map(pool);
 	}
 
-	//TODO:: Input two datasets, one is patche-based and the other is larger parts of the image.
+	
+	//TODO:: Input two datasets, one is patch-based and the other is larger parts of the image.
     @Override
 	public JavaRDD<Vector> train(JavaRDD<Vector> input_small_patches, 
 			                       JavaRDD<Vector> input_word_patches) throws Exception {
@@ -95,10 +99,12 @@ public class BaseLayer implements DeepLearningLayer {
 		return pooled;
 	}
 
+    
     public JavaRDD<Vector> test(JavaRDD<Vector> data) throws Exception {
     	// Setup the preprocessor
     	this.preprocess.loadFromFile(pathPrefix + "_preprocess", spark_context);
 //    	JavaRDD<Vector> preprocessed = preProcess(data);
+    	
     	//TODO load the features from file.
     	Vector[] features = LinAlgebraIOUtils.loadVectorArrayFromObject(pathPrefix + "_features", spark_context);
 
@@ -111,6 +117,7 @@ public class BaseLayer implements DeepLearningLayer {
     	return pooled;
     }
    
+    
     public String getPathPrefix() {
     	return pathPrefix;
     }
