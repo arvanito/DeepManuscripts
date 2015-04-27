@@ -116,7 +116,7 @@ public class DeepLearningMain {
 	 */
 	
 	/**
-	 * Main method. Starting place for the execution
+	 * Main method. Starting place for the execution.
 	 * 
 	 * @param args
 	 * @throws Exception

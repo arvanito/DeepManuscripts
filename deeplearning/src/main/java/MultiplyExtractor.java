@@ -26,6 +26,7 @@ public class MultiplyExtractor implements Extractor {
 	
 	public MultiplyExtractor() {}
 	
+	
 	/**
 	 * Constructor 
 	 * @param configLayer The input configuration for the current layer
@@ -35,6 +36,7 @@ public class MultiplyExtractor implements Extractor {
 		this.configLayer = configLayer;
 		this.preProcess = preProcess;
 	}
+	
 	
 	/**
 	 * Getter method for the ConfigBaseLayer object.
@@ -153,7 +155,6 @@ public class MultiplyExtractor implements Extractor {
 		ConfigFeatureExtractor.NonLinearity nonLinearity = configLayer.getConfigFeatureExtractor().getNonLinearity();
 		double alpha = 0.0;
 		if (configLayer.getConfigFeatureExtractor().hasSoftThreshold()) {
-			System.out.println("We do not have a threshold");
 			alpha = configLayer.getConfigFeatureExtractor().getSoftThreshold();
 		}
 		dataOut = MatrixOps.applyNonLinearityVec(dataOut, nonLinearity, alpha);

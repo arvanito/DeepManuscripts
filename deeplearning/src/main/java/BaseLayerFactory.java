@@ -17,7 +17,7 @@ import main.java.BaseLayer;
 public class BaseLayerFactory {
 
 	/**
-	 * Main method that creates a BaseLayer from the loaded protocol buffer configuration
+	 * Main method that creates a BaseLayer from the loaded protocol buffer configuration.
 	 * 
 	 * @param configLayer ConfigBaseLayer object read from the protocol buffer file
 	 * @param layer_index Index that represents the number of layer created
