@@ -126,11 +126,14 @@ public class LoadSaveModelTest implements Serializable {
 			if (config_layer.hasConfigFeatureExtractor()) {
 				result2 = layer.test(imgwords_test);
 			} else {
-				result2 = layer.test(result);
+				result2 = layer.test(result2);
 			}	
 	 	}
 		List<Vector> out2 = result2.collect();
 		Assert.assertEquals(50, out2.size());
 		Assert.assertEquals(5, out2.get(0).size());	
+		for (int i = 0; i < 50; ++i) {
+			Assert.assertEquals(out.get(i).toString(), out2.get(i).toString());
+		}
 	}
 }
