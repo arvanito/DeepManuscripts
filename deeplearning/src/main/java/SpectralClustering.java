@@ -20,17 +20,17 @@ import org.apache.spark.rdd.RDD;
 
 public class SpectralClustering {
 
-	Matrix s;
+	Matrix w;
 	int spectralType;
 	int k;
-	int similarityGraph;
-	int similarityGraphArgument;
+	KMeansModel training;
 
 	/**
 	 * General constructor for Spectral Clustering.
 	 * 
 	 * @param input
-	 *            : Input similarity matrix that will be used for the training. Must be square.
+	 *            : Input similarity matrix that will be used for the training.
+	 *            Must be square.
 	 * @param spectralType
 	 *            : Type of Spectral Clustering Algorithm that will be used:
 	 *            <ul>
@@ -42,67 +42,71 @@ public class SpectralClustering {
 	 *            </ul>
 	 * @param k
 	 *            : Number of clusters to construct.
-	 * @param similarityGraph
-	 *            : Type of Similarity graphs that will be used:
-	 *            <ul>
-	 *            <li><i>0:</i> Uses <i>&epsilon;</i>-neighborhood graph .
-	 *            <li><i>1:</i> Uses <i>k</i>-nearest neighbor graphs
-	 *            <li><i>2:</i> Uses the fully connected graph
-	 *            </ul>
-	 * @param sGargument
-	 *            : Argument for the similarity graphs.
 	 */
-	public SpectralClustering(Matrix input, int spectralType, int k,
-			int similarityGraph, int sGargument) {
-		this.s = input;
-		this.spectralType = spectralType;
+	public SpectralClustering(Matrix input, int spectralType, int k) {
+		this.w = input;
 		this.k = k;
-		this.similarityGraph = similarityGraph;
-		this.similarityGraphArgument = sGargument;
+		this.train();
 	}
 
 	/**
-	 * Default constructor for Spectral Clustering using <i>k</i>-nearest
-	 * neighbor graphs and unnormalized spectral clustering.
+	 * Default constructor for Spectral Clustering using unnormalized spectral
+	 * clustering.
 	 * 
 	 * @param input
 	 *            : Input similarity matrix. Must be square.
 	 * @param k
 	 *            : Number of clusters to construct.
-	 * @param sGargument
-	 *            : Argument for the similarity graphs.
 	 */
-	public SpectralClustering(Matrix input, int k, int sGargument) {
-		this.s = input;
+	public SpectralClustering(Matrix input, int k) {
+		this.w = input;
 		this.spectralType = 0;
 		this.k = k;
-		this.similarityGraph = 1;
-		this.similarityGraphArgument = sGargument;
+		this.train();
 	}
 
 	/**
-	 * Train the Spectral Clustering Algorithm using the data provided by the Input Matrix.
-	 * To predict the cluster in which points are use the <a href ="https://spark.apache.org/docs/1.0.0/api/scala/index.html#org.apache.spark.mllib.clustering.KMeansModel">predict</a> methods from KMeansModel().
+	 * Maps the vectors to the ID of the corresponding cluster.
 	 * 
-	 * @return A KneansModel train with the Input Matrix .
+	 * @param input
+	 *            A JavaRDD of Vectors to map
+	 * @return A JavaRDD of Integer corresponding to the clusters.
 	 */
-	public KMeansModel train() {
-		// Constructing similarity graphs
-		Matrix w = null;
-		switch (similarityGraph) {
-		case 0:
-			w = computeEpsilon();
-			break;
-		case 1:
-			w = computeKNearest();
-			break;
-		case 2:
-			w = computeFullyConnected();
-			break;
-		default:
-			w = computeKNearest();
-			break;
-		}
+	public JavaRDD<Integer> predict(JavaRDD<Vector> input) {
+		return training.predict(input);
+	}
+
+	/**
+	 * Maps the vectors to the ID of the corresponding cluster.
+	 * 
+	 * @param input
+	 *            A RDD of Vectors to map
+	 * @return A RDD of Object corresponding to the clusters.
+	 */
+	public RDD<Object> predict(RDD<Vector> input) {
+		return training.predict(input);
+	}
+
+	/**
+	 * Find the corresponding cluster for a certain vector.
+	 * 
+	 * @param input
+	 *            The Vector to classify
+	 * @return The ID of the corresponding cluster.
+	 */
+	public int predict(Vector input) {
+		return training.predict(input);
+	}
+
+	/**
+	 * Train the Spectral Clustering Algorithm using the data provided by the
+	 * Input Matrix. To predict the cluster in which points are use the <a href
+	 * =
+	 * "https://spark.apache.org/docs/1.0.0/api/scala/index.html#org.apache.spark.mllib.clustering.KMeansModel"
+	 * >predict</a> methods from KMeansModel().
+	 * 
+	 */
+	private void train() {
 		Matrix d = getDegreeMatrix(w);
 		Matrix l = null;
 		// Computing different Laplacian
@@ -126,7 +130,7 @@ public class SpectralClustering {
 			u = generalizedEigenvectorComputing(l);
 		}
 
-		return kmeansTraining(u);
+		this.training = kmeansTraining(u);
 	}
 
 	private KMeansModel kmeansTraining(Matrix y) {
@@ -134,22 +138,23 @@ public class SpectralClustering {
 		int nbCol = y.numCols();
 		double[][] yArray = getValues2D(y);
 		Vector[] vectors = new Vector[nbRow];
-		
-		for(int i= 0; i<nbRow; i++){
+
+		for (int i = 0; i < nbRow; i++) {
 			double[] temp = new double[nbCol];
-			for(int j=0; j<nbCol; j++){
+			for (int j = 0; j < nbCol; j++) {
 				temp[j] = yArray[i][j];
 			}
 			vectors[i] = Vectors.dense(temp);
 		}
 		List<Vector> data = Arrays.asList(vectors);
-		
+
 		SparkConf conf = new SparkConf().setAppName("K-means");
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		JavaRDD<Vector> distData = sc.parallelize(data);
-		
+
 		int numIterations = 20;
-		KMeansModel clusters = KMeans.train(JavaRDD.toRDD(distData), k, numIterations);
+		KMeansModel clusters = KMeans.train(JavaRDD.toRDD(distData), k,
+				numIterations);
 		return clusters;
 	}
 
@@ -230,38 +235,6 @@ public class SpectralClustering {
 
 	private Array2DRowRealMatrix toArray2DRowRealMatrix(Matrix w) {
 		return new Array2DRowRealMatrix(getValues2D(w));
-	}
-
-	/**
-	 * Compute the Similarity matrix using the fully connected graph algorithm.
-	 * 
-	 * @return Similarity matrix
-	 */
-	private Matrix computeFullyConnected() {
-		// TODO
-		return null;
-	}
-
-	/**
-	 * Compute the Similarity matrix using the <i>k</i>-nearest neighbor graphs
-	 * algorithm.
-	 * 
-	 * @return Similarity matrix
-	 */
-	private Matrix computeKNearest() {
-		// TODO
-		return null;
-	}
-
-	/**
-	 * Compute the Similarity matrix using the <i>&epsilon;</i>-neighborhood
-	 * graph algorithm.
-	 * 
-	 * @return Similarity matrix
-	 */
-	private Matrix computeEpsilon() {
-		// TODO
-		return null;
 	}
 
 	/**
