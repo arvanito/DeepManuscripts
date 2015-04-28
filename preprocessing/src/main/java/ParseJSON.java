@@ -60,7 +60,7 @@ public class ParseJSON {
 		 ArrayList<Integer[][]> lines = parseJSON(filePath);
 		// System.out.println("Line number: "+ lines.size());
 		 JavaRDD<Integer[][]> textLines = sc.parallelize(lines);
-		 JavaRDD<List<Vector>> patches = textLines.map(new Function<Integer[][], List<Vector>> (){
+		 JavaRDD<Vector> patches = textLines.flatMap(new FlatMapFunction<Integer[][], Vector> (){
 			@Override
 			public List<Vector> call(Integer[][] arg0) throws Exception {
 				List<Vector> result = extractPatches(arg0);
