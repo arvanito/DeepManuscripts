@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -28,11 +29,11 @@ import org.opencv.core.CvType;
 
 public class ParseJSON {
 
-	public static int sizex = 64, sizey = 64;
+	public static int sizex = 32, sizey = 32;
 	public static Mat img; 
 	public static int numRows ;
     public static int numCols ;
-    
+    public static int saveindex = 0;
 	public static void main (String[] args) throws IOException, ParseException {
 		
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
@@ -63,7 +64,7 @@ public class ParseJSON {
 		 JavaRDD<Vector> patches = textLines.flatMap(new FlatMapFunction<Integer[][], Vector> (){
 			@Override
 			public List<Vector> call(Integer[][] arg0) throws Exception {
-				List<Vector> result = extractPatches(arg0);
+				List<Vector> result = extractPatches2(arg0);
 				return result;
 			}
 			
@@ -75,7 +76,7 @@ public class ParseJSON {
 //		System.out.println("Line number: "+ lines.size());
 //		for(int i = 0; i < lines.size(); i++)
 //		{
-//			List<Vector> res =  extractPatches(lines.get(i));
+//			List<Vector> res =  extractPatches2(lines.get(i));
 //			System.out.println(res.size());
 //		}
 		
@@ -93,6 +94,83 @@ public class ParseJSON {
 	    }); 
 	 }
 	
+	public static List<Vector> extractPatches2(Integer[][] boundary) {
+		List<Vector> results = new ArrayList<>();
+		int stepSize;
+		if(sizex > sizey)
+			stepSize = sizey/2;
+		else
+			stepSize = sizex/2;
+		
+		sortArray(boundary,0);
+		int xmin = boundary[0][0];
+		//System.out.println("xmin: "+ xmin);
+		int xmax = boundary[boundary.length-1][0];
+		Integer[]tempboundary = new Integer[boundary.length];
+		Integer[]tempboundary2= new Integer[boundary.length];
+		for(int s = 0; s < boundary.length; s++)
+		{
+			tempboundary[s] = boundary[s][0];
+		}
+		
+		for(int i = xmin + stepSize; i <= xmax-stepSize ; i = i+stepSize)
+		{
+			//System.out.println("x: "+i);
+			ArrayList<Integer> yval = new ArrayList<Integer>();
+			int ind = 0;
+			int val = Arrays.binarySearch(tempboundary, i);
+		    tempboundary2 = Arrays.copyOfRange(tempboundary, 0, tempboundary.length);
+			while(val >= 0)
+			{
+				yval.add(boundary[val+ind][1]);
+				tempboundary2 = Arrays.copyOfRange(tempboundary2, val+1, tempboundary2.length);
+				//System.out.println("uzunluk" + tempboundary2.length);
+				ind += val+1;
+				val = Arrays.binarySearch(tempboundary2, i);
+			}
+			if(yval.size() != 0)
+			{
+				int ymin = Collections.min(yval);
+				int ymax = Collections.max(yval);
+				//System.out.println("ymin: "+ ymin + " ymax: " + ymax);
+				for(int j = ymin +stepSize; j <= ymax-stepSize ; j= j+stepSize)
+				{
+					double[] patchData = new double[sizex*sizey];
+					byte[] lineData = new byte[numCols];
+					Mat pat = new Mat();
+					if((i-stepSize+1 >= 0) && (i+stepSize+1 <= numRows) && (j-stepSize+1 >= 0) && (j+stepSize+1 <= numCols))
+					{
+						if(stepSize % 2 == 0)
+						{
+							pat = img.submat(i-stepSize+1, i+stepSize+1, j-stepSize+1, j+stepSize+1);
+							//System.out.println(pat.size().height);
+						}
+						else
+						{
+							pat = img.submat(i-stepSize, i+stepSize+1, j-stepSize, j+stepSize+1);
+						}
+						Highgui.imwrite("/home/isinsu/Desktop/DeepManuscripts/preprocessing/pat" +saveindex+".tif", pat);
+						saveindex = saveindex + 1;
+						Mat temppatch = pat.clone();
+						Mat patch = temppatch.t();
+						patch = patch.reshape(0, 1);
+						//System.out.println(patch.rows() + " " + patch.cols());
+						for(int k = 0; k < patch.cols(); k++)
+						{
+							byte [] data = new byte[1];
+							patch.get(0, k, data);
+							patchData[k] = (data[0]>= 0 ? data[0] : 256+data[0]);
+						}
+		
+						results.add(new DenseVector(patchData)); 
+						
+					}
+				}
+			}
+		}
+		
+		return results;
+	}
 	public static List<Vector> extractPatches(Integer[][] boundary) {
 
 		List<Vector> results = new ArrayList<>();
