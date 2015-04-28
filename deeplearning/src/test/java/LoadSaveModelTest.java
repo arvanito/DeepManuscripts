@@ -132,5 +132,8 @@ public class LoadSaveModelTest implements Serializable {
 		List<Vector> out2 = result2.collect();
 		Assert.assertEquals(50, out2.size());
 		Assert.assertEquals(5, out2.get(0).size());	
+		for (int i = 0; i < 50; ++i) {
+			Assert.assertEquals(out.get(i).toString(), out2.get(i).toString());
+		}
 	}
 }

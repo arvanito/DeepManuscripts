@@ -92,26 +92,7 @@ public class LinAlgebraIOUtils {
 		return Vectors.dense(a.get(0).toArray());
 	}
 	
-	
-	/**
-	 * !!!
-	 * @param input
-	 * @param outFile
-	 * @param sc
-	 */
-	public static void saveVectorToText(Matrix input, String outFile, JavaSparkContext sc) {
-		List<Vector> temp_zca = new ArrayList<Vector>();
-		for (int i = 0; i < input.numRows();++i) {
-			double[] darray = new double[input.numCols()];
-			for (int j = 0; j < input.numCols(); ++j) {
-				darray[j] = input.apply(i, j);
-			}
-			Vector row = Vectors.dense(darray);
-			temp_zca.add(row);
-		}
-		sc.parallelize(temp_zca).saveAsTextFile(outFile);
-	}
-	
+
 	
 	/**
 	 * Loads a Matrix from a text file.
@@ -119,8 +100,7 @@ public class LinAlgebraIOUtils {
 	 * @param inFile
 	 * @param sc
 	 * @return
-	 */
-	//TODO check row or column major
+	 **/
 	public static Matrix loadMatrixFromText(String inFile, JavaSparkContext sc) {
 		// Read back the file as an array of strings
 		JavaRDD<String> in_read = sc.textFile(inFile);
