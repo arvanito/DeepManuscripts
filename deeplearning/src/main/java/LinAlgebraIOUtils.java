@@ -66,9 +66,8 @@ public class LinAlgebraIOUtils {
 		List<String> in_string = in_read.collect();
 		// Since it is a vector, it has 1 dimension equal to 1
 		assert(in_string.size() == 1);
-		System.out.println(in_string);
 		String m = in_string.get(0);
-		m = m.substring(1, m.length()-2);
+		m = m.substring(1, m.length()-1);
 		String[] parts = m.split(",");
 		int vector_size = parts.length;
 		double out_vector[] = new double[vector_size];
@@ -109,13 +108,13 @@ public class LinAlgebraIOUtils {
 		// Since it is a vector, it has 1 dimension equal to 1
 		int nCols = in_string.size();
 		String m = in_string.get(0);
-		m = m.substring(1, m.length()-2);
+		m = m.substring(1, m.length()-1);
 		int nRows = m.split(",").length;
 		double[] out_vector = new double[nRows * nCols];
 		int idx = 0;
 		for (int i = 0; i < in_string.size(); ++i) {
 			String m2 = in_string.get(i);
-			m2 = m2.substring(1, m.length()-2);
+			m2 = m2.substring(1, m.length()-1);
 			String[] parts = m.split(",");
 			int vector_size = parts.length;
 			for (int j = 0; j < vector_size; ++j) {
