@@ -22,6 +22,7 @@ public class ImageData implements Serializable {
 
     static {
         NativeLibraryLoader.load(Core.NATIVE_LIBRARY_NAME);
+        NativeLibraryLoader.load("AndreaPipeline");
     }
 
     //Uncompressed representation
