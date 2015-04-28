@@ -12,7 +12,6 @@ import org.apache.spark.mllib.linalg.Vector;
 
 import com.google.protobuf.TextFormat;
 
-import main.java.DeepModelSettings.ConfigBaseLayer;
 import main.java.DeepModelSettings.*;
 
 /**
@@ -25,8 +24,7 @@ public class DeepLearningMain {
 	 * Method that loads the layer configurations from .prototxt file. 
 	 * Makes use of the protocol buffers for describing the configuration. 
 	 * 
-	 * @param prototxt_file
-	 * @return 
+	 * @param prototxt_file Input protocol buffer configuration
 	 * @return List of objects that describe the configuration in each layer
 	 */
 	public static List<ConfigBaseLayer> loadSettings(String prototxt_file) {
@@ -66,29 +64,76 @@ public class DeepLearningMain {
 
 		return globalConfig;
 	}
-	public static void main(String[] args) throws Exception {
-		
-		// check if settings file .prototxt is provided, maybe do this better!
-		List<ConfigBaseLayer> globalConfig = null;
-		if (args.length > 2) {
-		    globalConfig = loadSettings(args[2]);
-		} else {
-			System.out.print("Usage: spark-submit --class main.java.DeepLearningMain --master local[1] target/DeepManuscriptLearning-0.0.1.jar <test_in.txt> <test_out> <config.prototxt>");
-			throw new Exception("No .prototxt file found!");
-		}
+	
+	/**
+	 * Main method that trains the model layer by layer. 
+	 * 
+	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration
+	 * @param inputFileSmallPatches Small dataset input, represents small patch learning for the first layer
+	 * @param inputFileLargePatches Large dataset input, represents high-level learning for the remaining layers
+	 * @param outputFile File to save the final pooled representations after full training
+	 * @throws Exception
+	 */
+	public static void train(List<ConfigBaseLayer> globalConfig, String inputFileSmallPatches, 
+							String inputFileLargePatches, String outputFile) throws Exception {
 		
 		// open files and convert them to JavaRDD<Vector> datasets
 		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
     	JavaSparkContext sc = new JavaSparkContext(conf);
-    	String inputFile = args[0];
-    	String outputFile = args[1];
-		JavaRDD<Vector> data = sc.textFile(inputFile).map(new Parse());
-		
+ 
+    	
+		JavaRDD<Vector> input_small_patches = sc.textFile(inputFileSmallPatches).map(new Parse());
+		JavaRDD<Vector> input_word_patches = sc.textFile(inputFileLargePatches).map(new Parse());
+
 		// The main loop calls execute() on each of the layers
-		DeepLearningLayer layer1 = new DummyLayer(globalConfig.get(0));
-		JavaRDD<Vector> result = layer1.execute(data);
+		JavaRDD<Vector> result = null;
+	 	for (int layer_index = 0; layer_index < globalConfig.size(); ++layer_index) {
+	 		
+	 		// set up the current layer 
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layer_index), layer_index, "x");
+			
+			// The configLayer has configExtractor only if it convolutional,
+			// The multiply Extractor does not need any parameters.
+			if (globalConfig.get(layer_index).hasConfigFeatureExtractor()) {
+				result = layer.train(input_small_patches, input_word_patches);
+			} else {
+				result = layer.train(result, result);
+			}	
+	 	}
+		//TODO save also last file
 		result.saveAsTextFile(outputFile);
 		
 		sc.close();
+	}
+	
+	
+	public static void test(List<ConfigBaseLayer> globalConfig, String inputFile) {
+		
+	}
+	/*
+	 public static void rank() {
+	 }
+	 */
+	
+	/**
+	 * Main method. Starting place for the execution.
+	 * 
+	 * @param args
+	 * @throws Exception
+	 */
+	public static void main(String[] args) throws Exception {
+		
+		// check if settings file .prototxt is provided, maybe do this better!
+		List<ConfigBaseLayer> globalConfig = null;
+		if (args.length == 4) {
+		    globalConfig = loadSettings(args[0]);
+		} else {
+			System.out.print("Usage: spark-submit --class main.java.DeepLearningMain --master local[1] target/DeepManuscriptLearning-0.0.1.jar  <config.prototxt> <test_in1.txt> <test_in2.txt>  <test_out>");
+			throw new Exception("Missing command line arguments!");
+		}
+		
+		//TODO add option for train/test/rank in main
+		train(globalConfig, args[1], args[2], args[3]);
+
 	}
 }

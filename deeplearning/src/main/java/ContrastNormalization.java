@@ -20,7 +20,7 @@ public class ContrastNormalization implements Function<Vector, Vector> {
 	 * 
 	 * @param e Parameter for contrast normalization
 	 */
-	ContrastNormalization(double e) {
+	public ContrastNormalization(double e) {
 		this.e = e;
 	}
 

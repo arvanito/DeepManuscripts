@@ -1,6 +1,7 @@
 package main.java;
 
 import main.java.DeepModelSettings.ConfigBaseLayer;
+import main.java.DeepModelSettings.ConfigFeatureExtractor;
 
 import org.apache.spark.mllib.linalg.BLAS;
 import org.apache.spark.mllib.linalg.DenseMatrix;
@@ -20,9 +21,21 @@ public class ConvMultiplyExtractor implements Extractor {
 
 	private static final long serialVersionUID = 7991635895652585866L;
 
-	private ConfigBaseLayer configLayer;	// layer configuration from the protocol buffer
-	private PreProcessZCA preProcess; 		// pre-processing information 
+	private ConfigBaseLayer configLayer = null;		// layer configuration from the protocol buffer
+	private PreProcessZCA preProcess = null; 		// pre-processing information 
 	private Vector[] features;				// array of learned feature Vectors
+
+	
+	/**
+	 * Constructor 
+	 * @param configLayer The input configuration for the current layer
+	 * @param preProcess The input PreProcess configuration
+	 */
+	public ConvMultiplyExtractor(ConfigBaseLayer configLayer, PreProcessZCA preProcess) {
+		this.configLayer = configLayer;
+		this.preProcess = preProcess;
+	}
+	
 	
 	/**
 	 * Constructor 
@@ -127,8 +140,12 @@ public class ConvMultiplyExtractor implements Extractor {
 		DenseMatrix M = MatrixOps.reshapeVec2Mat((DenseVector) data, dims);	
 		DenseMatrix patches = MatrixOps.im2colT(M, rfSize);
 		
+		// allocate memory for the output vector
+		DenseMatrix out = new DenseMatrix(patches.numRows(),D.numRows(),new double[patches.numRows()*D.numRows()]);	
+		DenseMatrix patchesOut = new DenseMatrix(patches.numRows(),patches.numCols(),new double[patches.numRows()*patches.numCols()]);
+		
 		// get necessary data from the PreProcessor
-		if (configLayer.hasConfigPreprocess()) {
+		if (preProcess != null) {
 			// ZCA Matrix
 			DenseMatrix zca = preProcess.getZCA();
 
@@ -136,18 +153,32 @@ public class ConvMultiplyExtractor implements Extractor {
 			DenseVector zcaMean = preProcess.getMean();
 
 			// epsilon for pre-processing
-			double eps1 = configLayer.getConfigPreprocess().getEps1();
+			//double eps1 = configLayer.getConfigPreprocess().getEps1();
 			
 			// preprocess the data point with contrast normalization and ZCA whitening
-			patches = MatrixOps.localMatContrastNorm(patches, eps1);
+			//patches = MatrixOps.localMatContrastNorm(patches, eps1);
 			patches = MatrixOps.localMatSubtractMean(patches, zcaMean);
-			BLAS.gemm(false, false, 1.0, patches, zca, 0.0, patches);
+			
+			//patches = patches.multiply(zca);
+			BLAS.gemm(1.0, patches, zca, 0.0, patchesOut);
+		} else {
+			patchesOut = patches;
 		}
 	
 		// multiply the matrix of the learned features with the preprocessed data point
-		BLAS.gemm(false, true, 1.0, patches, D, 0.0, patches);
-				
-		return data;
+		BLAS.gemm(1.0, patchesOut, D.transpose(), 0.0, out);
+		DenseVector outVec = MatrixOps.reshapeMat2Vec(out);
+		
+		// apply non-linearity
+		ConfigFeatureExtractor.NonLinearity nonLinearity = configLayer.getConfigFeatureExtractor().getNonLinearity();
+		double alpha = 0.0;
+		if (configLayer.getConfigFeatureExtractor().hasSoftThreshold()) {
+			System.out.println("We do not have a threshold");
+			alpha = configLayer.getConfigFeatureExtractor().getSoftThreshold();
+		}
+		outVec = MatrixOps.applyNonLinearityVec(outVec, nonLinearity, alpha);
+		
+		return outVec;
 	}
 	
 }

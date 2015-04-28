@@ -20,13 +20,12 @@ config_layer {
 
 config_layer {
   config_autoencoders {
-    number_of_units: 10
+    number_of_clusters: 10
+    number_of_iterations: 20
   }
-  config_feature_extractor {
-    input_dim1: 128
-    input_dim2: 32
-    feature_dim1: 32
-    feature_dim2: 32
+  config_kmeans {
+    number_of_clusters: 10
+    number_of_iterations: 20
   }
   config_pooler {
     pool_size: 2

@@ -3,6 +3,7 @@ package main.java;
 import main.java.DeepModelSettings.ConfigBaseLayer;
 
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.Vector;
 
 /**
@@ -63,7 +64,40 @@ public interface DeepLearningLayer {
 	 * @return An RDD containing a new representation of the data
 	 * @throws Exception
 	 */
-	public JavaRDD<Vector> execute(JavaRDD<Vector> data) throws Exception;
+	public JavaRDD<Vector> train(JavaRDD<Vector> data1, JavaRDD<Vector> data2) throws Exception;
 
-
+	
+    /**
+	 * Computes the descriptors of the input image patches.
+	 *
+	 * @param data An RDD of size N x M containing candidate image patches where
+	 * 				N is the number of patches and M is the product of the patch sizes (width x height).
+	 * @return An RDD containing a new representation of the data, of size N x (descriptor size)
+	 * @throws Exception
+	 */
+	 public JavaRDD<Vector> test(JavaRDD<Vector> data) throws Exception;
+	 
+	 
+	 /**
+	  * Sets the SparkContext, it is needed for saving data into files
+	  * 
+	  * @param sc The SparkContext variable
+	  */
+	 public void setSparkContext(JavaSparkContext sc);
+	 
+	 
+	 /**
+	  * Sets a boolean variable that checks if we save our trained model, or not
+	  * 
+	  * @param value True of false
+	  */
+	 public void setSaveModel(boolean value);
+	 
+	 
+	 /**
+	  * Gets the boolean variable that denotes if we save the trained model, or not
+	  * 
+	  * @return True or false
+	  */
+	 public boolean getSaveModel();
 }
