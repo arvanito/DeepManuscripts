@@ -18,6 +18,7 @@ import org.apache.spark.mllib.linalg.Vectors;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class RankTest implements Serializable {
@@ -48,7 +49,7 @@ public class RankTest implements Serializable {
 	}
 	
 	
-	@Test
+	@Test @Ignore
 	public void rankTest() {
 		
 		// simple example

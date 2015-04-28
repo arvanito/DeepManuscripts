@@ -133,7 +133,7 @@ public class MultiplyExtractor implements Extractor {
 
 			// mean from ZCA
 			DenseVector zcaMean = preProcess.getMean();
-
+			
 			// epsilon for pre-processing
 			//double eps1 = configLayer.getConfigPreprocess().getEps1();
 			

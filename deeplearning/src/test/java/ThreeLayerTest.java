@@ -21,6 +21,7 @@ import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ThreeLayerTest implements Serializable {
@@ -64,7 +65,7 @@ public class ThreeLayerTest implements Serializable {
 		sc = null;
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testSmallLoop() throws Exception {
 
 	 	List<ConfigBaseLayer> config_list = new ArrayList<ConfigBaseLayer>();

@@ -21,6 +21,7 @@ import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TwoLayersTest implements Serializable {
@@ -59,7 +60,7 @@ public class TwoLayersTest implements Serializable {
 		sc = null;
 	}
 
-	@Test
+	@Test @Ignore
 	public void test() throws Exception {
 	 	
 	 	int Nimgs = 50;
@@ -111,7 +112,7 @@ public class TwoLayersTest implements Serializable {
 	 	
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testForLoop() throws Exception {
 		// Configuration for layer1 
 		ConfigBaseLayer.Builder conf = ConfigBaseLayer.newBuilder();
@@ -165,7 +166,7 @@ public class TwoLayersTest implements Serializable {
 		Assert.assertEquals(50, out.size());
 		Assert.assertEquals(2, out.get(0).size());	
 	}
-	@Test
+	@Test @Ignore
 	public void testSmallLoop() throws Exception {
 
 	 	List<ConfigBaseLayer> config_list = new ArrayList<ConfigBaseLayer>();

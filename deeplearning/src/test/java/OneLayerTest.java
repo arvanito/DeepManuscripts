@@ -21,6 +21,7 @@ import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class OneLayerTest implements Serializable {
@@ -39,7 +40,7 @@ public class OneLayerTest implements Serializable {
 		sc = null;
 	}
 
-	@Test
+	@Test @Ignore
 	public void test() throws Exception {
 		ConfigBaseLayer.Builder conf = ConfigBaseLayer.newBuilder();
 		conf.setConfigPreprocess(ConfigPreprocess.newBuilder().setEps1(0.1).setEps2(0.2).build());
@@ -91,7 +92,7 @@ public class OneLayerTest implements Serializable {
 
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testBaseLayer() throws Exception {
 		ConfigBaseLayer.Builder conf = ConfigBaseLayer.newBuilder();
 		conf.setConfigPreprocess(ConfigPreprocess.newBuilder().setEps1(0.1).setEps2(0.2).build());

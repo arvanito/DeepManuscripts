@@ -14,7 +14,8 @@ public class Parse implements Function<String, Vector> {
 
 	@Override
 	public Vector call(String line) throws Exception {
-		String[] sarray = line.split("\t");	
+		line = line.substring(1, line.length()-1);
+		String[] sarray = line.split(",");	
 		double[] values = new double[sarray.length];
 		for (int i = 0; i < sarray.length; i++) {
 			values[i] = Double.parseDouble(sarray[i]);	// creates a double from a string
