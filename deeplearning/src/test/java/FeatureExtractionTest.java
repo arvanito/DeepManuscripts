@@ -25,6 +25,7 @@ import org.apache.spark.mllib.linalg.Vectors;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class FeatureExtractionTest implements Serializable {
@@ -52,7 +53,7 @@ public class FeatureExtractionTest implements Serializable {
 		sc = null;
 	}
 	
-	@Test
+	@Test @Ignore
 	public void multiplyTest() {
 		//ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().setConfigFeatureExtractor()
 		
@@ -82,7 +83,7 @@ public class FeatureExtractionTest implements Serializable {
 	}
 	
 	
-	@Test
+	@Test @Ignore
 	public void multiplyPreTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
@@ -150,7 +151,7 @@ public class FeatureExtractionTest implements Serializable {
 	}
 	
 	
-	@Test
+	@Test @Ignore
 	public void convMultiplyTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().

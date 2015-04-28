@@ -44,7 +44,8 @@ public class LinAlgebraIOUtilsTest implements Serializable {
 		sc = null;
 	}
 
-	@Test @Ignore
+	//@Test @Ignore
+	@Test
 	public void testDenseVectorTextIO() {
 		String filename = "temp3";
 		// Create a sample mean vector 
@@ -66,7 +67,8 @@ public class LinAlgebraIOUtilsTest implements Serializable {
 		Vector reconstructed = LinAlgebraIOUtils.loadVectorFromObject(filename, sc);
 		Assert.assertEquals(input.toString(), reconstructed.toString());
 	}
-	@Test @Ignore
+	//@Test @Ignore
+	@Test
 	public void testDenseMatrixObjectIO() {
 		String filename = "tmp6";
 		// Create a sample mean vector 
@@ -81,7 +83,8 @@ public class LinAlgebraIOUtilsTest implements Serializable {
 		Assert.assertEquals(6.0, reconstructed.apply(1, 2));
 	}
 	
-	@Ignore @Test
+	//@Ignore @Test
+	@Test
 	public void testDenseMatrixTextIO() {
 		// Test is not currently working
 		String filename = "tmp7";
@@ -97,7 +100,8 @@ public class LinAlgebraIOUtilsTest implements Serializable {
 		Assert.assertEquals(6.0, reconstructed.apply(1, 2));
 	}
 	
-	@Test @Ignore
+	//@Test @Ignore
+	@Test
 	public void testVectorArrayObjectIO() {
 		Vector[] features = new Vector[2];
 		features[0] = Vectors.dense(1,2,3);

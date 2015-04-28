@@ -66,7 +66,7 @@ public class LoadSaveModelTest implements Serializable {
 		sc = null;
 	}
 	
-	@Test @Ignore
+	@Test
 	public void testSmallLoop() throws Exception {
 
 	 	List<ConfigBaseLayer> config_list = new ArrayList<ConfigBaseLayer>();
@@ -126,7 +126,7 @@ public class LoadSaveModelTest implements Serializable {
 			if (config_layer.hasConfigFeatureExtractor()) {
 				result2 = layer.test(imgwords_test);
 			} else {
-				result2 = layer.test(result);
+				result2 = layer.test(result2);
 			}	
 	 	}
 		List<Vector> out2 = result2.collect();

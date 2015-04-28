@@ -27,6 +27,7 @@ import org.apache.spark.mllib.stat.MultivariateStatisticalSummary;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class PreProcessTest implements Serializable {
@@ -54,7 +55,7 @@ public class PreProcessTest implements Serializable {
 		sc = null;
 	}
 	
-	@Test
+	@Test @Ignore
 	public void preprocessTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().

@@ -29,6 +29,7 @@ import org.apache.spark.mllib.linalg.Vectors;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class FFTConvolutionTest implements Serializable {
@@ -69,7 +70,7 @@ public class FFTConvolutionTest implements Serializable {
 		return true;
 	}
 	
-	@Test
+	@Test @Ignore
 	public void simpleTest1DFFT() {
 		double[][] input =   {{1,2,3,0}};
 		double[][][] output = FFT.fftReal1Dor2D(input);
@@ -78,7 +79,7 @@ public class FFTConvolutionTest implements Serializable {
 		assertTrue(deepApproximateEquals(output, expected, 1e-2));
 	}
 	
-	@Test
+	@Test @Ignore
 	public void simpleTest2DFFT() {
 		double[][] input =   {{1,2,3,0}, {4,5,6,0}, {7,8,9,0},{0,0,0,0}};
 		double[][][] output = FFT.fftReal1Dor2D(input);
@@ -91,7 +92,7 @@ public class FFTConvolutionTest implements Serializable {
 		assertTrue(deepApproximateEquals(output, expected, 1e-2));
 	}
 	
-	@Test
+	@Test @Ignore
 	public void simpleTest1DConvolution() {
 		int inputRows = 1;
 		int inputCols = 4;
@@ -125,7 +126,7 @@ public class FFTConvolutionTest implements Serializable {
 		Assert.assertArrayEquals(expected_outputs, output.toArray(), 1e-6);
 	}
 	
-	@Test
+	@Test @Ignore
 	public void simpleTest2DConvolution() {
 		int inputRows = 4;
 		int inputCols = 4;
@@ -202,7 +203,7 @@ public class FFTConvolutionTest implements Serializable {
 	 * 
 	 */
 	
-	@Test
+	@Test @Ignore
 	public void identityPreprocessingFFTConvTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
@@ -250,7 +251,7 @@ public class FFTConvolutionTest implements Serializable {
 		Assert.assertArrayEquals(expected_output, out.toArray(), 1e-6);	
 	}
 	
-	@Test
+	@Test @Ignore
 	public void identityZcaPreprocessingFFTConvTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
@@ -298,7 +299,7 @@ public class FFTConvolutionTest implements Serializable {
 		Assert.assertArrayEquals(expected_output, out.toArray(), 1e-2);
 	}
 	
-	@Test
+	@Test @Ignore
 	public void zeroMeanPreprocessingFFTConvTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
@@ -347,7 +348,7 @@ public class FFTConvolutionTest implements Serializable {
 		Assert.assertArrayEquals(expected_output, out.toArray(), 1e-2);	
 	}
 	
-	@Test
+	@Test @Ignore
 	public void preprocessingFFTConvTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
@@ -407,7 +408,7 @@ public class FFTConvolutionTest implements Serializable {
 		Assert.assertArrayEquals(expected_output, outputM.toArray(), 1e-2);		
 	}
 	
-	@Test
+	@Test @Ignore
 	public void convMultiplyTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
