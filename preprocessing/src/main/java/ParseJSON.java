@@ -29,11 +29,12 @@ import org.opencv.core.CvType;
 
 public class ParseJSON {
 
-	public static int sizex = 32, sizey = 32;
+	public static int sizex = 64, sizey = 64;
 	public static Mat img; 
 	public static int numRows ;
     public static int numCols ;
     public static int saveindex = 0;
+    public static int nPatch = 10;
 	public static void main (String[] args) throws IOException, ParseException {
 		
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
@@ -64,20 +65,22 @@ public class ParseJSON {
 		 JavaRDD<Vector> patches = textLines.flatMap(new FlatMapFunction<Integer[][], Vector> (){
 			@Override
 			public List<Vector> call(Integer[][] arg0) throws Exception {
-				List<Vector> result = extractPatches2(arg0);
+				List<Vector> result = extractPatches(arg0);
 				return result;
 			}
 			
 		 });
-		
+		//patches.saveAsObjectFile("/home/isinsu/Desktop/DeepManuscripts/preprocessing/output");
 		patches.saveAsTextFile("/home/isinsu/Desktop/DeepManuscripts/preprocessing/output");
 		sc.close();
+		
+		
 //		ArrayList<Integer[][]> lines = parseJSON(filePath);
-//		System.out.println("Line number: "+ lines.size());
+//		//System.out.println("Line number: "+ lines.size());
 //		for(int i = 0; i < lines.size(); i++)
 //		{
-//			List<Vector> res =  extractPatches2(lines.get(i));
-//			System.out.println(res.size());
+//			List<Vector> res =  extractPatches(lines.get(i));
+//			//System.out.println(res.size());
 //		}
 		
 	}
@@ -94,6 +97,83 @@ public class ParseJSON {
 	    }); 
 	 }
 	
+	public static List<Vector> extractPatches3(Integer[][] boundary) {
+		List<Vector> results = new ArrayList<>();
+		int stepSize;
+		if(sizex > sizey)
+			stepSize = sizey/2;
+		else
+			stepSize = sizex/2;
+		
+		sortArray(boundary,1);
+		int xmin = boundary[0][1];
+		//System.out.println("xmin: "+ xmin);
+		int xmax = boundary[boundary.length-1][1];
+		int rangex = xmax - xmin;
+		Integer[]tempboundary = new Integer[boundary.length];
+		Integer[]tempboundary2= new Integer[boundary.length];
+		for(int s = 0; s < boundary.length; s++)
+		{
+			tempboundary[s] = boundary[s][0];
+		}
+		for(int i = 0; i < nPatch ; )
+		{
+			int randx = (int)(Math.random()*rangex + xmin);
+			ArrayList<Integer> yval = new ArrayList<Integer>();
+			int ind = 0;
+			int val = Arrays.binarySearch(tempboundary, i);
+		    tempboundary2 = Arrays.copyOfRange(tempboundary, 0, tempboundary.length);
+			while(val >= 0)
+			{
+				yval.add(boundary[val+ind][0]);
+				tempboundary2 = Arrays.copyOfRange(tempboundary2, val+1, tempboundary2.length);
+				//System.out.println("uzunluk" + tempboundary2.length);
+				ind += val+1;
+				val = Arrays.binarySearch(tempboundary2, i);
+			}
+			if(yval.size() != 0)
+			{
+				int ymin = Collections.min(yval);
+				int ymax = Collections.max(yval);
+				int rangey = ymax - ymin;
+				int randy = (int)(Math.random()*rangey + ymin);
+				double[] patchData = new double[sizex*sizey];
+				byte[] lineData = new byte[numCols];
+				Mat pat = new Mat();
+				if((randx-stepSize+1 >= 0) && (randx+stepSize+1 <= numRows) && (randy-stepSize+1 >= 0) && (randy+stepSize+1 <= numCols))
+				{
+					if(stepSize % 2 == 0)
+					{
+						pat = img.submat(randx-stepSize+1, randx+stepSize+1, randy-stepSize+1, randy+stepSize+1);
+						//System.out.println(pat.size().height);
+					}
+					else
+					{
+						pat = img.submat(randx-stepSize, randx+stepSize+1, randy-stepSize, randy+stepSize+1);
+					}
+					i = i+1; //We extracted a random patch
+					Highgui.imwrite("/home/isinsu/Desktop/DeepManuscripts/preprocessing/pat" +saveindex+".tif", pat);
+					saveindex = saveindex + 1;
+					Mat temppatch = pat.clone();
+					Mat patch = temppatch.t();
+					patch = patch.reshape(0, 1);
+					//System.out.println(patch.rows() + " " + patch.cols());
+					for(int k = 0; k < patch.cols(); k++)
+					{
+						byte [] data = new byte[1];
+						patch.get(0, k, data);
+						patchData[k] = (data[0]>= 0 ? data[0] : 256+data[0]);
+					}
+	
+					results.add(new DenseVector(patchData)); 
+					
+				}
+				
+			}
+			
+		}
+		return results;
+	}
 	public static List<Vector> extractPatches2(Integer[][] boundary) {
 		List<Vector> results = new ArrayList<>();
 		int stepSize;
@@ -102,15 +182,15 @@ public class ParseJSON {
 		else
 			stepSize = sizex/2;
 		
-		sortArray(boundary,0);
-		int xmin = boundary[0][0];
+		sortArray(boundary,1);
+		int xmin = boundary[0][1];
 		//System.out.println("xmin: "+ xmin);
-		int xmax = boundary[boundary.length-1][0];
+		int xmax = boundary[boundary.length-1][1];
 		Integer[]tempboundary = new Integer[boundary.length];
 		Integer[]tempboundary2= new Integer[boundary.length];
 		for(int s = 0; s < boundary.length; s++)
 		{
-			tempboundary[s] = boundary[s][0];
+			tempboundary[s] = boundary[s][1];
 		}
 		
 		for(int i = xmin + stepSize; i <= xmax-stepSize ; i = i+stepSize)
@@ -122,7 +202,7 @@ public class ParseJSON {
 		    tempboundary2 = Arrays.copyOfRange(tempboundary, 0, tempboundary.length);
 			while(val >= 0)
 			{
-				yval.add(boundary[val+ind][1]);
+				yval.add(boundary[val+ind][0]);
 				tempboundary2 = Arrays.copyOfRange(tempboundary2, val+1, tempboundary2.length);
 				//System.out.println("uzunluk" + tempboundary2.length);
 				ind += val+1;
@@ -175,51 +255,90 @@ public class ParseJSON {
 
 		List<Vector> results = new ArrayList<>();
 		int stepSize;
-		if(sizex > sizey)
-			stepSize = sizey/2;
-		else
-			stepSize = sizex/2;
+		int stepSizex;
+		int stepSizey;
+		//if(sizex > sizey)
+			stepSizex = sizex/2;
+		//elsey
+			stepSizey = sizey;
 		
-		sortArray(boundary,0);
-		int xmin = boundary[0][0];
-		int xmax = boundary[boundary.length-1][0];
 		sortArray(boundary,1);
-		int ymin = boundary[0][1];
-		int ymax = boundary[boundary.length-1][1];
+		int xmin = boundary[0][1];
+		int xmax = boundary[boundary.length-1][1];
+		sortArray(boundary,0);
+		int ymin = boundary[0][0];
+		int ymax = boundary[boundary.length-1][0];
 		//System.out.println(xmin + " " + xmax + " " + ymin + " " + ymax);
 		
-		for(int i = xmin; i <= xmax ; i = i+stepSize)
+		for(int i = xmin; i <= xmax ; i = i+stepSizex)
 		{
-			for(int j = ymin; j <= ymax ; j= j+stepSize)
+			for(int j = ymin; j <= ymax ; j= j+stepSizey)
 			{
+				//System.out.println("ymin: "+ ymin + "ymax: "+ ymax + "current y: " + j);
 				double[] patchData = new double[sizex*sizey];
 				byte[] lineData = new byte[numCols];
 				Mat pat = new Mat();
-				if((i-stepSize+1 >= 0) && (i+stepSize+1 <= numRows) && (j-stepSize+1 >= 0) && (j+stepSize+1 <= numCols))
+				if((i-stepSizex+1 >= 0) && (i+stepSizex+1 <= numRows) && (j-stepSizey+1 >= 0) && (j+stepSizey+1 <= numCols))
 				{
-					if(stepSize % 2 == 0)
+					if(stepSizey % 2 == 0)
 					{
-						pat = img.submat(i-stepSize+1, i+stepSize+1, j-stepSize+1, j+stepSize+1);
+						pat = img.submat(i-stepSizex+1, i+stepSizex+1, j-stepSizey/2+1, j+stepSizey/2+1);
 						//System.out.println(pat.size().height);
 					}
 					else
 					{
-						pat = img.submat(i-stepSize, i+stepSize+1, j-stepSize, j+stepSize+1);
+						//pat = img.submat(i-stepSize, i+stepSize+1, j-stepSize, j+stepSize+1);
 					}
-					//Highgui.imwrite("/home/isinsu/Desktop/DeepManuscripts/preprocessing/pat.tif", pat);
 					
-					Mat temppatch = pat.clone();
-					Mat patch = temppatch.t();
-					patch = patch.reshape(0, 1);
-					//System.out.println(patch.rows() + " " + patch.cols());
-					for(int k = 0; k < patch.cols(); k++)
+					
+					/*Standard Deviation:
+					 * */
+					double total = 0;
+					for(int a = 0; a < pat.rows(); a++)
 					{
-						byte [] data = new byte[1];
-						patch.get(0, k, data);
-						patchData[k] = (data[0]>= 0 ? data[0] : 256+data[0]);
+						for (int b = 0; b < pat.cols(); b++)
+						{
+							byte [] pat_data = new byte[1];
+							pat.get(a, b, pat_data);
+							double pat_data_val = (pat_data[0]>= 0 ? pat_data[0] : 256+pat_data[0]);
+							total += pat_data_val;
+							
+						}
 					}
-	
-					results.add(new DenseVector(patchData)); 
+					double mean = total/(pat.cols()*pat.rows());
+					
+					double var = 0;
+					
+					for(int a = 0; a < pat.rows(); a++)
+					{
+						for (int b = 0; b < pat.cols(); b++)
+						{
+							byte [] pat_data = new byte[1];
+							pat.get(a, b, pat_data);
+							double pat_data_val = (pat_data[0]>= 0 ? pat_data[0] : 256+pat_data[0]);
+							var += ((pat_data_val - mean) * (pat_data_val - mean));
+							
+						}
+					}
+					var /= (pat.rows()*pat.cols());
+					double std_dev = Math.sqrt(var);
+					//System.out.println("Standard Deviation: " + std_dev );
+					if(std_dev > 15)
+					{
+						Highgui.imwrite("/home/isinsu/Desktop/DeepManuscripts/preprocessing/pat.tif", pat);
+						Mat temppatch = pat.clone();
+						Mat patch = temppatch.t();
+						patch = patch.reshape(0, 1);
+						//System.out.println(patch.rows() + " " + patch.cols());
+						for(int k = 0; k < patch.cols(); k++)
+						{
+							byte [] data = new byte[1];
+							patch.get(0, k, data);
+							patchData[k] = (data[0]>= 0 ? data[0] : 256+data[0]);
+						}
+		
+						results.add(new DenseVector(patchData)); 
+					}
 					
 				}
 				
