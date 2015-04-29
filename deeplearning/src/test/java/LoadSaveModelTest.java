@@ -2,6 +2,7 @@ package test.java;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,6 @@ import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class LoadSaveModelTest implements Serializable {
@@ -134,6 +134,14 @@ public class LoadSaveModelTest implements Serializable {
 		Assert.assertEquals(5, out2.get(0).size());	
 		for (int i = 0; i < 50; ++i) {
 			Assert.assertEquals(out.get(i).toString(), out2.get(i).toString());
+		}
+		
+		//TODO consider cleaning up from the layers themselves
+		String base_file = "three_layer";
+		for (int i = 0; i < 3; ++i) {
+			org.apache.hadoop.fs.FileUtil.fullyDelete(new File(base_file + Integer.toString(i) +"_features"));
+			org.apache.hadoop.fs.FileUtil.fullyDelete(new File(base_file + Integer.toString(i) +"_preprocess_zca"));
+			org.apache.hadoop.fs.FileUtil.fullyDelete(new File(base_file + Integer.toString(i) + "_preprocess_mean"));
 		}
 	}
 }
