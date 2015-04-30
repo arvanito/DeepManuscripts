@@ -125,7 +125,7 @@ public class FFTConvolutionExtractor implements Extractor {
 	 * @return A transformed array of (real,img)-pairs
 	 */
 	private double[][][] FFT(double[][] x) {
-		return FFT.fftReal1Dor2D(x);
+		return FFTConvolution.fftReal1Dor2D(x);
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class FFTConvolutionExtractor implements Extractor {
 		//System.out.println(Arrays.deepToString(fftx));
 		//System.out.println(Arrays.deepToString(ffty));
 		
-		double[][] convolved = FFT.convolveWithPreFFT(fftx,ffty);
+		double[][] convolved = FFTConvolution.convolveWithPreFFT(fftx,ffty);
 		//System.out.println(Arrays.deepToString(convolved));
 		int rows = convolved.length;
 		int cols = convolved[0].length;
