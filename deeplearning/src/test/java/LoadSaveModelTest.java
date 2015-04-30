@@ -66,7 +66,7 @@ public class LoadSaveModelTest implements Serializable {
 		sc = null;
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testSmallLoop() throws Exception {
 
 	 	List<ConfigBaseLayer> config_list = new ArrayList<ConfigBaseLayer>();

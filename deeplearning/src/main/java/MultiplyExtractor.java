@@ -19,6 +19,8 @@ public class MultiplyExtractor implements Extractor {
 	
 	private static final long serialVersionUID = -6353736803330058842L;
 
+	private ConfigFeatureExtractor.NonLinearity nonLinearity = null; 	// nonLinearity, by default NONE
+	private double alpha;												// non-linearity optional threshold
 	private ConfigBaseLayer configLayer = null;		// layer configuration from the protocol buffer
 	private PreProcessZCA preProcess = null; 		// pre-processing information 
 	private Vector[] features;				// array of learned feature Vectors
@@ -73,7 +75,15 @@ public class MultiplyExtractor implements Extractor {
 	 */
 	@Override
 	public void setConfigLayer(ConfigBaseLayer configLayer) {
+		
+		// set the configuration layer
 		this.configLayer = configLayer;
+		
+		// set the non-linearity and the optional soft threshold
+		nonLinearity = configLayer.getConfigFeatureExtractor().getNonLinearity();
+		if (configLayer.getConfigFeatureExtractor().hasSoftThreshold()) {
+			alpha = configLayer.getConfigFeatureExtractor().getSoftThreshold();
+		}
 	}
 	
 	
@@ -150,12 +160,6 @@ public class MultiplyExtractor implements Extractor {
 		BLAS.gemv(1.0, D, dataDenseOut, 0.0, dataOut);
 		
 		// apply non-linearity
-		ConfigFeatureExtractor.NonLinearity nonLinearity = configLayer.getConfigFeatureExtractor().getNonLinearity();
-		double alpha = 0.0;
-		if (configLayer.getConfigFeatureExtractor().hasSoftThreshold()) {
-			System.out.println("We do not have a threshold");
-			alpha = configLayer.getConfigFeatureExtractor().getSoftThreshold();
-		}
 		dataOut = MatrixOps.applyNonLinearityVec(dataOut, nonLinearity, alpha);
 		
 		return dataOut;
