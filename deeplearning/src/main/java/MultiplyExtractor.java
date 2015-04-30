@@ -34,7 +34,7 @@ public class MultiplyExtractor implements Extractor {
 	 * @param preProcess The input PreProcess configuration
 	 */
 	public MultiplyExtractor(ConfigBaseLayer configLayer, PreProcessZCA preProcess) {
-		this.configLayer = configLayer;
+		setConfigLayer(configLayer);
 		this.preProcess = preProcess;
 	}
 	
@@ -160,7 +160,9 @@ public class MultiplyExtractor implements Extractor {
 		BLAS.gemv(1.0, D, dataDenseOut, 0.0, dataOut);
 		
 		// apply non-linearity
-		dataOut = MatrixOps.applyNonLinearityVec(dataOut, nonLinearity, alpha);
+		if (nonLinearity != null) {
+			dataOut = MatrixOps.applyNonLinearityVec(dataOut, nonLinearity, alpha);
+		}
 		
 		return dataOut;
 	}

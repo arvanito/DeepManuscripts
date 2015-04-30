@@ -154,7 +154,7 @@ public class DeepLearningMain {
 	 * @param testPatches JavaRDD<Vector> which contains all the candidate patches
 	 * @return The resulting representations of the test patches
 	 */
-	public static JavaRDD<Vector> test(List<ConfigBaseLayer> globalConfig, JavaRDD<Vector> testPatches) throws Exception {
+	public static JavaRDD<Vector> testRDD(List<ConfigBaseLayer> globalConfig, JavaRDD<Vector> testPatches) throws Exception {
 		
 		// The main loop calls test() on each of the layers
 		JavaRDD<Vector> result = null;
@@ -184,7 +184,7 @@ public class DeepLearningMain {
 	 * @param testPatches JavaRDD<Tuple2<Vector, Vector>> which contains all the candidate patches
 	 * @return The resulting representations of the test patches
 	 */
-	public static JavaRDD<Vector> test(List<ConfigBaseLayer> globalConfig, JavaRDD<Tuple2<Vector, Vector>> testPatches) throws Exception {
+	public static JavaRDD<Vector> testRDDTuple(List<ConfigBaseLayer> globalConfig, JavaRDD<Tuple2<Vector, Vector>> testPatches) throws Exception {
 		
 		// The main loop calls test() on each of the layers
 		JavaRDD<Vector> result = null;
@@ -196,9 +196,9 @@ public class DeepLearningMain {
 			// The configLayer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
 			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
-				result = layer.test(testPatches);
+			//	result = layer.test(testPatches);
 			} else {
-				result = layer.test(result);
+			//	result = layer.test(result);
 			}	
 	 	}
 	 	

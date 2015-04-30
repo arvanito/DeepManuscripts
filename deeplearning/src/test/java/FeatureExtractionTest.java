@@ -83,7 +83,7 @@ public class FeatureExtractionTest implements Serializable {
 	}
 	
 	
-	@Test @Ignore
+	@Test
 	public void multiplyPreTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
