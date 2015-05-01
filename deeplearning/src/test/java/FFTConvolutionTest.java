@@ -11,7 +11,7 @@ import java.util.List;
 import main.java.ConvMultiplyExtractor;
 import main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity;
 import main.java.Extractor;
-import main.java.FFT;
+import main.java.FFTConvolution;
 import main.java.FFTConvolutionExtractor;
 import main.java.MatrixOps;
 import main.java.PreProcessZCA;
@@ -73,7 +73,7 @@ public class FFTConvolutionTest implements Serializable {
 	@Test @Ignore
 	public void simpleTest1DFFT() {
 		double[][] input =   {{1,2,3,0}};
-		double[][][] output = FFT.fftReal1Dor2D(input);
+		double[][][] output = FFTConvolution.fftReal1Dor2D(input);
 		double[][][] expected = {{{6,0},{-2,-2},{2,0},{-2,2}}};
 		//System.out.println(Arrays.deepToString(output));
 		assertTrue(deepApproximateEquals(output, expected, 1e-2));
@@ -82,7 +82,7 @@ public class FFTConvolutionTest implements Serializable {
 	@Test @Ignore
 	public void simpleTest2DFFT() {
 		double[][] input =   {{1,2,3,0}, {4,5,6,0}, {7,8,9,0},{0,0,0,0}};
-		double[][][] output = FFT.fftReal1Dor2D(input);
+		double[][][] output = FFTConvolution.fftReal1Dor2D(input);
 		//System.out.println(Arrays.deepToString(output));
 		double[][][] expected = {{{ 45,  0}, { -6,-15}, { 15,  0}, { -6, 15}},
 				 {{-18,-15}, { -5,  8}, { -6, -5}, {  5, -4}},

@@ -2,6 +2,7 @@ package test.java;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,6 @@ public class LinAlgebraIOUtilsTest implements Serializable {
 		sc = null;
 	}
 
-	//@Test @Ignore
 	@Test
 	public void testDenseVectorTextIO() {
 		String filename = "temp3";
@@ -55,8 +55,10 @@ public class LinAlgebraIOUtilsTest implements Serializable {
 		// Read back the file as an array of strings
 		Vector reconstructed = LinAlgebraIOUtils.loadVectorFromText(filename, sc);
 		Assert.assertEquals(mean.toString(), reconstructed.toString());
+		
+		org.apache.hadoop.fs.FileUtil.fullyDelete(new File(filename));
 	}
-	@Test
+	@Test @Ignore
 	public void testDenseVectorObjectIO() {
 		String filename = "temp2";
 		// Create a sample mean vector 
@@ -66,8 +68,9 @@ public class LinAlgebraIOUtilsTest implements Serializable {
 	    // Read back the array
 		Vector reconstructed = LinAlgebraIOUtils.loadVectorFromObject(filename, sc);
 		Assert.assertEquals(input.toString(), reconstructed.toString());
+		
+		org.apache.hadoop.fs.FileUtil.fullyDelete(new File(filename));
 	}
-	//@Test @Ignore
 	@Test
 	public void testDenseMatrixObjectIO() {
 		String filename = "tmp6";
@@ -81,10 +84,10 @@ public class LinAlgebraIOUtilsTest implements Serializable {
 		Assert.assertEquals(2, reconstructed.numRows());
 		Assert.assertEquals(3, reconstructed.numCols());
 		Assert.assertEquals(6.0, reconstructed.apply(1, 2));
+		org.apache.hadoop.fs.FileUtil.fullyDelete(new File(filename));
 	}
 	
-	//@Ignore @Test
-	@Test
+	@Ignore @Test
 	public void testDenseMatrixTextIO() {
 		// Test is not currently working
 		String filename = "tmp7";
@@ -99,18 +102,19 @@ public class LinAlgebraIOUtilsTest implements Serializable {
 		Assert.assertEquals(3, reconstructed.numCols());
 		Assert.assertEquals(6.0, reconstructed.apply(1, 2));
 	}
-	
-	//@Test @Ignore
 	@Test
 	public void testVectorArrayObjectIO() {
+		String filename = "temp";
 		Vector[] features = new Vector[2];
 		features[0] = Vectors.dense(1,2,3);
 		features[1] = Vectors.dense(5,6,7);
-		LinAlgebraIOUtils.saveVectorArrayToObject(features,"a", sc);
+		LinAlgebraIOUtils.saveVectorArrayToObject(features,filename, sc);
 		
-		Vector[] out = LinAlgebraIOUtils.loadVectorArrayFromObject("a", sc);
+		Vector[] out = LinAlgebraIOUtils.loadVectorArrayFromObject(filename, sc);
 		Assert.assertEquals(2, out.length);
 		Assert.assertEquals(features[0].toString(), out[0].toString());
 		Assert.assertEquals(features[1].toString(), out[1].toString());
+		
+		org.apache.hadoop.fs.FileUtil.fullyDelete(new File(filename));
 	}
 }

@@ -14,8 +14,14 @@ public class Parse implements Function<String, Vector> {
 
 	@Override
 	public Vector call(String line) throws Exception {
+		
+		// remove square brackets from the start and the end of the string
 		line = line.substring(1, line.length()-1);
+		
+		// split the string to an array of string by using "," as a delimiter
 		String[] sarray = line.split(",");	
+		
+		// convert this array of strings to an array of doubles
 		double[] values = new double[sarray.length];
 		for (int i = 0; i < sarray.length; i++) {
 			values[i] = Double.parseDouble(sarray[i]);	// creates a double from a string

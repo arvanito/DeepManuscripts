@@ -3,12 +3,16 @@ package main.java;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.Vector;
+import org.apache.spark.mllib.linalg.Vectors;
+
+import scala.Tuple2;
 
 import com.google.protobuf.TextFormat;
 
@@ -81,21 +85,20 @@ public class DeepLearningMain {
 		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
     	JavaSparkContext sc = new JavaSparkContext(conf);
  
-    	
-		JavaRDD<Vector> input_small_patches = sc.textFile(inputFileSmallPatches).map(new Parse());
-		JavaRDD<Vector> input_word_patches = sc.textFile(inputFileLargePatches).map(new Parse());
+		JavaRDD<Vector> inputSmallPatches = sc.textFile(inputFileSmallPatches).map(new Parse());
+		JavaRDD<Vector> inputWordPatches = sc.textFile(inputFileLargePatches).map(new Parse());
 
-		// The main loop calls execute() on each of the layers
+		// The main loop calls train() on each of the layers
 		JavaRDD<Vector> result = null;
-	 	for (int layer_index = 0; layer_index < globalConfig.size(); ++layer_index) {
+	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
 	 		
 	 		// set up the current layer 
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layer_index), layer_index, "x");
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, "x");
 			
 			// The configLayer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
-			if (globalConfig.get(layer_index).hasConfigFeatureExtractor()) {
-				result = layer.train(input_small_patches, input_word_patches);
+			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
+				result = layer.train(inputSmallPatches, inputWordPatches);
 			} else {
 				result = layer.train(result, result);
 			}	
@@ -107,13 +110,155 @@ public class DeepLearningMain {
 	}
 	
 	
-	public static void test(List<ConfigBaseLayer> globalConfig, String inputFile) {
+	/**
+	 * Main method for testing the trained model. 
+	 * 
+	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration
+	 * @param inputFile Input file that contains the test patches for comparison
+	 * @param outputFile Output file that contains the final representations of the test patches
+	 */
+	public static void test(List<ConfigBaseLayer> globalConfig, String inputFile, String outputFile) throws Exception {
+		
+		// open the test file and convert it to a JavaRDD<Vector> dataset
+		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
+    	JavaSparkContext sc = new JavaSparkContext(conf);
+    	
+		JavaRDD<Vector> testPatches = sc.textFile(inputFile).map(new Parse());
+    	
+		// The main loop calls test() on each of the layers
+		JavaRDD<Vector> result = null;
+	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
+	 		
+	 		// set up the current layer 
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, "x");
+			
+			// The configLayer has configExtractor only if it convolutional,
+			// The multiply Extractor does not need any parameters.
+			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
+				result = layer.test(testPatches);
+			} else {
+				result = layer.test(result);
+			}	
+	 	}
+	 	
+	 	//TODO save the result to a file 
+	 	
+		sc.close();
+	}
+	
+	
+	/**
+	 * Main method for testing the trained model. 
+	 * 
+	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration
+	 * @param testPatches JavaRDD<Vector> which contains all the candidate patches
+	 * @return The resulting representations of the test patches
+	 */
+	public static JavaRDD<Vector> testRDD(List<ConfigBaseLayer> globalConfig, JavaRDD<Vector> testPatches) throws Exception {
+		
+		// The main loop calls test() on each of the layers
+		JavaRDD<Vector> result = null;
+	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
+	 		
+	 		// set up the current layer 
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, "x");
+			
+			// The configLayer has configExtractor only if it convolutional,
+			// The multiply Extractor does not need any parameters.
+			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
+				result = layer.test(testPatches);
+			} else {
+				result = layer.test(result);
+			}	
+	 	}
+	 	
+	 	// return the final representations of the test patches
+	 	return result;
+	}
+	
+	
+	/**
+	 * Main method for testing the trained model. 
+	 * 
+	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration
+	 * @param testPatches JavaRDD<Tuple2<Vector, Vector>> which contains all the candidate patches
+	 * @return The resulting representations of the test patches
+	 */
+	public static JavaRDD<Vector> testRDDTuple(List<ConfigBaseLayer> globalConfig, JavaRDD<Tuple2<Vector, Vector>> testPatches) throws Exception {
+		
+		// The main loop calls test() on each of the layers
+		JavaRDD<Vector> result = null;
+	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
+	 		
+	 		// set up the current layer 
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, "x");
+			
+			// The configLayer has configExtractor only if it convolutional,
+			// The multiply Extractor does not need any parameters.
+			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
+			//	result = layer.test(testPatches);
+			} else {
+			//	result = layer.test(result);
+			}	
+	 	}
+	 	
+	 	// return the final representations of the test patches
+	 	return result;
+	}
+	
+	
+	/**
+	 * Main method for ranking the candidate patches with the query 
+	 * 
+	 * @param globalConfig
+	 * @param inputFileQuery
+	 * @param inputFilePatches
+	 */
+	public static void rank(List<ConfigBaseLayer> globalConfig, String inputFileQuery, String inputFilePatches) throws Exception {
+		
+		// open the test file and convert it to a JavaRDD<Vector> dataset
+		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
+    	JavaSparkContext sc = new JavaSparkContext(conf);
+    	
+		// load query 
+		JavaRDD<Tuple2<Vector, Vector>> query = sc.textFile(inputFileQuery).map(new ParseTuples());
+		Tuple2<Vector, Vector> queryTuple = query.collect().get(0);
+		//JavaRDD<Tuple2<Vector, Vector>> query = sc.objectFile(inputFileQuery);
+    	
+		// load candidate patches
+		JavaRDD<Tuple2<Vector, Vector>> testPatches = sc.textFile(inputFilePatches).map(new ParseTuples());
+		//JavaRDD<Tuple2<Vector, Vector>> testPatches = sc.objectFile(inputFilePatches);
+		
+		// union of the two JavaRDD<Vector> datasets
+		//JavaRDD<Vector> completePatches = queryRDD.union(testPatches);
+		
+		// get the dimensions of the large learned patches
+		int[] inputDims = {globalConfig.get(0).getConfigFeatureExtractor().getInputDim1(), globalConfig.get(0).getConfigFeatureExtractor().getInputDim2()};
+		
+		// extract (overlapping?) patches from the input query and candidate patches
+		Vector vecSize = queryTuple._1;
+		int[] vecSizeInt = new int[vecSize.size()];
+		for (int i = 0; i < vecSize.size(); i++) {
+			vecSizeInt[i] = (int) vecSize.apply(i);
+		}
+		//JavaRDD<Tuple2<Vector, Vector>> queryPatches = query.flatMap(new ExtractPatchesTuples(vecSizeInt, inputDims));
+		//testPatches = testPatches.flatMap(new ExtractPatchesTuples(vecSize, patchSize));
+		
+		//TODO:: Change the test method to take arguments of JavaRDD<Tuple2<Vector,Vector>>
+		
+		// compute representations for the query and candidate patches
+		//JavaRDD<Vector> queryRepresentation = test(globalConfig, queryPatches);
+		//JavaRDD<Vector> testRepresentation = test(globalConfig, testPatches);
+		
+		// concatenate patch representations to represent the original big candidate patch
+		//List<Vector> queryRepList = queryRepresentation.collect();
+		//String queryString = queryRepList.toString();
+
+		// compute cosine similarities between the query representation and the condidate patches' representations
+		//JavaRDD<Double> cosineSim = testRepresentation.map(new ComputeSimilarity(queryV));
 		
 	}
-	/*
-	 public static void rank() {
-	 }
-	 */
+	
 	
 	/**
 	 * Main method. Starting place for the execution.
