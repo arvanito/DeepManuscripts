@@ -241,7 +241,7 @@ public class DeepLearningMain {
 		for (int i = 0; i < vecSize.size(); i++) {
 			vecSizeInt[i] = (int) vecSize.apply(i);
 		}
-		JavaRDD<Tuple2<Vector, Vector>> queryPatches = query.flatMap(new ExtractPatchesTuples(vecSizeInt, inputDims));
+		//JavaRDD<Tuple2<Vector, Vector>> queryPatches = query.flatMap(new ExtractPatchesTuples(vecSizeInt, inputDims));
 		//testPatches = testPatches.flatMap(new ExtractPatchesTuples(vecSize, patchSize));
 		
 		//TODO:: Change the test method to take arguments of JavaRDD<Tuple2<Vector,Vector>>
