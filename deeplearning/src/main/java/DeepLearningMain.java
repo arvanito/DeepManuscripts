@@ -221,11 +221,12 @@ public class DeepLearningMain {
     	JavaSparkContext sc = new JavaSparkContext(conf);
     	
 		// load query 
-		//JavaRDD<Tuple2<Vector, Vector>> query = sc.textFile(inputFileQuery).map(new Parse());
-    	//JavaRDD<Tuple2<Vector, Vector>> query = sc.objectFile(inputFileQuery);
+		JavaRDD<Tuple2<Vector, Vector>> query = sc.textFile(inputFileQuery).map(new ParseTuples());
+		Tuple2<Vector, Vector> queryTuple = query.collect().get(0);
+		//JavaRDD<Tuple2<Vector, Vector>> query = sc.objectFile(inputFileQuery);
     	
 		// load candidate patches
-		//JavaRDD<Tuple2<Vector, Vector>> testPatches = sc.textFile(inputFilePatches).map(new Parse());
+		JavaRDD<Tuple2<Vector, Vector>> testPatches = sc.textFile(inputFilePatches).map(new ParseTuples());
 		//JavaRDD<Tuple2<Vector, Vector>> testPatches = sc.objectFile(inputFilePatches);
 		
 		// union of the two JavaRDD<Vector> datasets
@@ -235,9 +236,12 @@ public class DeepLearningMain {
 		int[] inputDims = {globalConfig.get(0).getConfigFeatureExtractor().getInputDim1(), globalConfig.get(0).getConfigFeatureExtractor().getInputDim2()};
 		
 		// extract (overlapping?) patches from the input query and candidate patches
-		int[] vecSize = {2,2};
-		int[] patchSize = {2,2};
-		//JavaRDD<Tuple2<Vector, Vector>> queryPatches = query.flatMap(new ExtractPatchesTuples(vecSize, patchSize));
+		Vector vecSize = queryTuple._1;
+		int[] vecSizeInt = new int[vecSize.size()];
+		for (int i = 0; i < vecSize.size(); i++) {
+			vecSizeInt[i] = (int) vecSize.apply(i);
+		}
+		JavaRDD<Tuple2<Vector, Vector>> queryPatches = query.flatMap(new ExtractPatchesTuples(vecSizeInt, inputDims));
 		//testPatches = testPatches.flatMap(new ExtractPatchesTuples(vecSize, patchSize));
 		
 		//TODO:: Change the test method to take arguments of JavaRDD<Tuple2<Vector,Vector>>
