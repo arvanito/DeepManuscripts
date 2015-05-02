@@ -19,6 +19,8 @@ import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.linalg.distributed.RowMatrix;
 import org.apache.spark.mllib.stat.MultivariateStatisticalSummary;
 
+import scala.Tuple2;
+
 /**
  * Class that performs ZCA whitening on the dataset.
  * 
@@ -197,8 +199,8 @@ public class PreProcessZCA implements PreProcessor {
 	 * @return Preprocessed output
 	 */
 	@Override
-	public Vector call(Vector data) {		
-		
+	public  Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pair_data) {		
+		Vector data = pair_data._2;
 		DenseVector dataDense = (DenseVector) data;
 		
 		// epsilon for pre-processing
@@ -228,7 +230,7 @@ public class PreProcessZCA implements PreProcessor {
 			outVec = MatrixOps.reshapeMat2Vec(dataOut);
 		}
 		
-		return outVec;
+		return new Tuple2<Vector, Vector>(pair_data._1, outVec);
 	}
 	
 	/**

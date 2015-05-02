@@ -7,6 +7,8 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.linalg.Vector;
 
+import scala.Tuple2;
+
 
 /**
  * All PreProcessors (PCA, ZCA, etc) should implement this interface.
@@ -14,7 +16,7 @@ import org.apache.spark.mllib.linalg.Vector;
  * @author Nikolaos Arvanitopoulos
  *
  */
-public interface PreProcessor extends Function<Vector, Vector>{
+public interface PreProcessor extends Function<Tuple2<Vector, Vector>, Tuple2<Vector, Vector>>{
 
 	/**
 	 * Method that sets the layer configuration.
@@ -39,7 +41,7 @@ public interface PreProcessor extends Function<Vector, Vector>{
 	 * @param data Input data in Vector format
 	 * @return Preprocessed output
 	 */
-	public Vector call(Vector data) throws Exception;
+	public  Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> data) throws Exception;
 	
 	/**
 	 *  Sets up the preprocessor. It loads the saved weights from the disk.

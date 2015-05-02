@@ -13,6 +13,8 @@ import org.apache.spark.mllib.linalg.DenseMatrix;
 import org.apache.spark.mllib.linalg.DenseVector;
 import org.apache.spark.mllib.linalg.Vector;
 
+import scala.Tuple2;
+
 /**
  * @author blizzara
  *
@@ -99,7 +101,8 @@ public class FFTConvolutionExtractor implements Extractor {
 	 * @see main.java.Extractor#call(org.apache.spark.mllib.linalg.Vector)
 	 */
 	@Override
-	public Vector call(Vector data) throws Exception {
+	public Tuple2<Vector, Vector> call(Tuple2<Vector,Vector> pair_data) throws Exception {
+		Vector data = pair_data._2;
 		if(data.size() != inputRows*inputCols) throw new RuntimeException("Vector length does not match config");
 		assert featureFFTs != null: "Features must be set before call()!";
 		
@@ -115,7 +118,7 @@ public class FFTConvolutionExtractor implements Extractor {
 		}
 		DenseVector res = new DenseVector(result);
 		if(nonLinearity != null) res = MatrixOps.applyNonLinearityVec(res, nonLinearity, alpha);
-		return res;
+		return new Tuple2<Vector, Vector>(pair_data._1, res);
 	}
 	
 	/**
