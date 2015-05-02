@@ -32,6 +32,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import scala.Tuple2;
+
 public class FFTConvolutionTest implements Serializable {
 	
 	private static final long serialVersionUID = 2780960378816038954L;
@@ -113,9 +115,9 @@ public class FFTConvolutionTest implements Serializable {
 		
 		Vector[] features = {new DenseVector(A)};
 		extractor.setFeatures(features);
-		Vector output;
+		Tuple2<Vector, Vector> output;
 		try {
-			output = extractor.call(data);
+			output = extractor.call(new Tuple2<Vector, Vector>(data, data));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Call threw exception");
@@ -123,7 +125,7 @@ public class FFTConvolutionTest implements Serializable {
 		}
 		//System.out.println(Arrays.toString(output.toArray()));
 		double[] expected_outputs = {5,8,3};
-		Assert.assertArrayEquals(expected_outputs, output.toArray(), 1e-6);
+		Assert.assertArrayEquals(expected_outputs, output._2.toArray(), 1e-6);
 	}
 	
 	@Test @Ignore
@@ -151,9 +153,9 @@ public class FFTConvolutionTest implements Serializable {
 		
 		Vector[] features = {new DenseVector(A)};
 		extractor.setFeatures(features);
-		Vector output;
+		Tuple2<Vector,Vector> output;
 		try {
-			output = extractor.call(data);
+			output = extractor.call(new Tuple2<Vector, Vector>(data,data));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Call threw exception");
@@ -163,7 +165,7 @@ public class FFTConvolutionTest implements Serializable {
 		double[] expected_outputs = {5,8,3,
 									 14,17,6,
 									 23,26,9};
-		Assert.assertArrayEquals(expected_outputs, output.toArray(), 1e-6);
+		Assert.assertArrayEquals(expected_outputs, output._2.toArray(), 1e-6);
 	}
 	
 	
@@ -237,9 +239,9 @@ public class FFTConvolutionTest implements Serializable {
 		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf, preProcess);
  		Vector[] vf = {Vectors.dense(f1)};
 		extractor.setFeatures(vf);
-		Vector out;
+		Tuple2<Vector, Vector> out;
 		try {
-			out = extractor.call(Vectors.dense(x));
+			out = extractor.call(new Tuple2<Vector, Vector>(Vectors.dense(x), Vectors.dense(x)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Call threw exception");
@@ -248,7 +250,7 @@ public class FFTConvolutionTest implements Serializable {
 		
 		//System.out.println(Arrays.toString(out.toArray()));
 		
-		Assert.assertArrayEquals(expected_output, out.toArray(), 1e-6);	
+		Assert.assertArrayEquals(expected_output, out._2.toArray(), 1e-6);	
 	}
 	
 	@Test @Ignore
@@ -285,9 +287,9 @@ public class FFTConvolutionTest implements Serializable {
 		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf, preProcess);
  		Vector[] vf = {Vectors.dense(f1)};
 		extractor.setFeatures(vf);
-		Vector out;
+		Tuple2<Vector, Vector> out;
 		try {
-			out = extractor.call(Vectors.dense(x));
+			out = extractor.call(new Tuple2<Vector, Vector>(Vectors.dense(x),Vectors.dense(x)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Call threw exception");
@@ -296,7 +298,7 @@ public class FFTConvolutionTest implements Serializable {
 		
 		//System.out.println(Arrays.toString(out.toArray()));
 		
-		Assert.assertArrayEquals(expected_output, out.toArray(), 1e-2);
+		Assert.assertArrayEquals(expected_output, out._2.toArray(), 1e-2);
 	}
 	
 	@Test @Ignore
@@ -334,9 +336,9 @@ public class FFTConvolutionTest implements Serializable {
 		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf, preProcess);
  		Vector[] vf = {Vectors.dense(f1)};
 		extractor.setFeatures(vf);
-		Vector out;
+		Tuple2<Vector, Vector> out;
 		try {
-			out = extractor.call(Vectors.dense(x));
+			out = extractor.call(new Tuple2<Vector, Vector>(Vectors.dense(x), Vectors.dense(x)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Call threw exception");
@@ -345,7 +347,7 @@ public class FFTConvolutionTest implements Serializable {
 		
 		//System.out.println(Arrays.toString(out.toArray()));
 		
-		Assert.assertArrayEquals(expected_output, out.toArray(), 1e-2);	
+		Assert.assertArrayEquals(expected_output, out._2.toArray(), 1e-2);	
 	}
 	
 	@Test @Ignore
@@ -387,9 +389,9 @@ public class FFTConvolutionTest implements Serializable {
 		preProcess.setConfigLayer(conf);
 		
 		// create a parallel dataset from the local matrix
-		List<Vector> matX = new ArrayList<Vector>(1);
-		matX.add(Vectors.dense(x));
-		JavaRDD<Vector> matRDD = sc.parallelize(matX);
+		List<Tuple2<Vector, Vector>> matX = new ArrayList<Tuple2<Vector,Vector>>(1);
+		matX.add(new Tuple2<Vector, Vector>(Vectors.dense(x), Vectors.dense(x)));
+		JavaRDD<Tuple2<Vector, Vector>> matRDD = sc.parallelize(matX);
 		
 		// create the array of feature vectors
  		Vector[] vf = {Vectors.dense(f1), Vectors.dense(f2)};
@@ -441,9 +443,9 @@ public class FFTConvolutionTest implements Serializable {
 		preProcess.setConfigLayer(conf);
 		
 		// create a parallel dataset from the local matrix
-		List<Vector> matX = new ArrayList<Vector>(1);
-		matX.add(Vectors.dense(x));
-		JavaRDD<Vector> matRDD = sc.parallelize(matX);
+		List<Tuple2<Vector, Vector>> matX = new ArrayList<Tuple2<Vector,Vector>>(1);
+		matX.add(new Tuple2<Vector, Vector>(Vectors.dense(x), Vectors.dense(x)));
+		JavaRDD<Tuple2<Vector, Vector>> matRDD = sc.parallelize(matX);
 		
 		// create the array of feature vectors
  		Vector[] vf = new Vector[2];
