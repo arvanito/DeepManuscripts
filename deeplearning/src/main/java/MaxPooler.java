@@ -3,8 +3,12 @@ package main.java;
 import main.java.DeepModelSettings.ConfigFeatureExtractor;
 import main.java.DeepModelSettings.ConfigPooler;
 import main.java.DeepModelSettings.ConfigBaseLayer;
+
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
+
+import scala.Tuple2;
 
 /**
  * A max Pooler 
@@ -41,13 +45,16 @@ public class MaxPooler implements Pooler {
 		}
 	}
 	@Override
-	public Vector call(Vector data) throws Exception {
+	public Tuple2<Vector,Vector> call(Tuple2<Vector,Vector> data) throws Exception {
 		//TODO(viviana) The pooler needs to know if the input vector comes from
 		//  a 2D or 1D data  
-		if (this.poolOver2DInput == false)
-			return poolOver1D(data);
-		else
-			return poolOver2D(data);
+		Vector pooledVec = null;
+		if (this.poolOver2DInput == false) {
+			pooledVec = poolOver1D(data._2);
+		} else {
+			pooledVec = poolOver2D(data._2);
+		}
+		return new Tuple2<Vector, Vector>(data._1, pooledVec);
 	}
 	/**
 	 * The method shrinks the input array.
