@@ -6,6 +6,8 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.Vector;
 
+import scala.Tuple2;
+
 /**
  * 
  * Interface for a deep learning layer. This allows a main loop which just calls each of the functions for each layer.
@@ -21,7 +23,7 @@ public interface DeepLearningLayer {
 	 * @param data An RDD containing the input data for preprocessing
 	 * @return Preprocessed data
 	 */
-	public JavaRDD<Vector> preProcess(JavaRDD<Vector> data);
+	public JavaRDD<Tuple2<Vector, Vector>> preProcess(JavaRDD<Tuple2<Vector, Vector>> data);
 	
 	
 	/**
@@ -31,7 +33,7 @@ public interface DeepLearningLayer {
 	 * @return An Vector array of the learned features
 	 * @throws Exception 
 	 */
-	public Vector[] learnFeatures(JavaRDD<Vector> data) throws Exception;
+	public Vector[] learnFeatures(JavaRDD<Tuple2<Vector, Vector>> data) throws Exception;
 	
 	
 	/**
@@ -44,7 +46,7 @@ public interface DeepLearningLayer {
 	 * @param features An RDD of Vectors, where each Vector is a feature
 	 * @return An RDD of extracted features, where each Vector corresponds to one Vector in data
 	 */
-	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, ConfigBaseLayer configLayer, Vector[] features);
+	public JavaRDD<Tuple2<Vector, Vector>> extractFeatures(JavaRDD<Tuple2<Vector, Vector>> data, ConfigBaseLayer configLayer, Vector[] features);
 	
 	
 	/**
@@ -54,7 +56,7 @@ public interface DeepLearningLayer {
 	 * @param data An RDD of Vectors, where each Vector represents one element in input dataset (pooling happens only inside a Vector).
 	 * @return An RDD of the pooled Vectors
 	 */
-	public JavaRDD<Vector> pool(JavaRDD<Vector> data);
+	public JavaRDD<Tuple2<Vector, Vector>> pool(JavaRDD<Tuple2<Vector, Vector>> data);
 
 	
      /**
@@ -64,7 +66,7 @@ public interface DeepLearningLayer {
 	 * @return An RDD containing a new representation of the data
 	 * @throws Exception
 	 */
-	public JavaRDD<Vector> train(JavaRDD<Vector> data1, JavaRDD<Vector> data2) throws Exception;
+	public JavaRDD<Tuple2<Vector, Vector>> train(JavaRDD<Tuple2<Vector, Vector>> data1, JavaRDD<Tuple2<Vector, Vector>> data2) throws Exception;
 
 	
     /**
@@ -75,7 +77,7 @@ public interface DeepLearningLayer {
 	 * @return An RDD containing a new representation of the data, of size N x (descriptor size)
 	 * @throws Exception
 	 */
-	 public JavaRDD<Vector> test(JavaRDD<Vector> data) throws Exception;
+	 public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data) throws Exception;
 	 
 	 
 	 /**

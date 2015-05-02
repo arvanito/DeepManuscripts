@@ -32,7 +32,7 @@ public interface PreProcessor extends Function<Tuple2<Vector, Vector>, Tuple2<Ve
 	 * @param data Input data points in a distributed dataset
 	 * @return preprocessed distributed dataset
 	 */
-	public JavaRDD<Vector> preprocessData(JavaRDD<Vector> data);
+	public JavaRDD<Tuple2<Vector, Vector>> preprocessData(JavaRDD<Tuple2<Vector, Vector>> data);
 	
 	
 	/**

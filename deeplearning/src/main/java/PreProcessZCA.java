@@ -158,8 +158,16 @@ public class PreProcessZCA implements PreProcessor {
 	 * @return Preprocessed distributed dataset
 	 */
 	@Override
-	public JavaRDD<Vector> preprocessData(JavaRDD<Vector> data) {
+	public JavaRDD<Tuple2<Vector, Vector>> preprocessData(JavaRDD<Tuple2<Vector, Vector>> pair_data) {
+		JavaRDD<Vector> data = pair_data.map(
+				new Function<Tuple2<Vector, Vector>, Vector>() {
+					private static final long serialVersionUID = 6369401581724529416L;
 
+					public Vector call(Tuple2<Vector, Vector> pair) {
+						return pair._2;
+					}
+				} 
+		);
 		// assign eps1 for pre-processing
 		//double eps1 = configLayer.getConfigPreprocess().getEps1();
 
@@ -188,7 +196,8 @@ public class PreProcessZCA implements PreProcessor {
 		// convert the distributed RowMatrix into a JavaRDD<Vector> 
 		data = new JavaRDD<Vector>(rowData.rows(), data.classTag());
 
-		return data;
+		//return data;
+		return null;
 	}
 	
 	
