@@ -43,7 +43,7 @@ import scala.Tuple2;
 
 public class ParseJSON {
 
-	public static int sizex = 64, sizey = 64;
+	public static int sizex = 32, sizey = 32;
 	public static Mat img; 
 	public static int numRows ;
     	public static int numCols ;
@@ -52,17 +52,17 @@ public class ParseJSON {
 	public static void main (String[] args) throws IOException, ParseException {
 		
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
-		img = Highgui.imread("/home/isinsu/Desktop/DeepManuscripts/preprocessing/IS5337_2_010_00093.tif");
-		String filePath = "/home/isinsu/Desktop/DeepManuscripts/preprocessing/IS5337_2_010_00093.json";
+		img = Highgui.imread("/home/ashish/Desktop/BDProject/Datasets/adieu_a_beaucoup_de_personnages/IS5337_2_010_00093.tif");
+		String filePath = "/home/ashish/Desktop/BDProject/Datasets/adieu_a_beaucoup_de_personnages/json/IS5337_2_010_00093.json";
 		Imgproc.cvtColor(img,img, Imgproc.COLOR_BGR2GRAY);
 		numRows = img.rows();
 	    numCols = img.cols();
 		processLines(img, filePath, "--local");
 	}
 	
-/*
+/**
 processLines takes as input the image of the page which is of type Mat and the location of the JSON file. It parallelizes the patch extraction operation for each text line in the corresponding page. It saves the result patches as JavaRDD of Tuple2 of Vectors in a text file.
-*/
+**/
 	public static void processLines(Mat imgMat, String filePath, String arg)
 	{
 		SparkConf conf;
@@ -76,24 +76,24 @@ processLines takes as input the image of the page which is of type Mat and the l
 		   
 		}
 		
-		 ArrayList<Integer[][]> lines = parseJSON(filePath);
+		 ArrayList<Tuple2<Integer[],Integer[][]>> lines = parseJSON(filePath);
 		// System.out.println("Line number: "+ lines.size());
-		 JavaRDD<Integer[][]> textLines = sc.parallelize(lines);
-		 JavaRDD<Tuple2<Vector,Vector>> patches = textLines.flatMap(new FlatMapFunction<Integer[][], Tuple2<Vector,Vector>> (){
+		 JavaRDD<Tuple2<Integer[],Integer[][]>> textLines = sc.parallelize(lines);
+		 JavaRDD<Tuple2<Vector,Vector>> patches = textLines.flatMap(new FlatMapFunction<Tuple2<Integer[],Integer[][]>, Tuple2<Vector,Vector>> (){
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 749022448957212279L;
 
 			@Override
-			public List<Tuple2<Vector,Vector>> call(Integer[][] arg0) throws Exception {
+			public List<Tuple2<Vector,Vector>> call(Tuple2<Integer[],Integer[][]> arg0) throws Exception {
 				List<Tuple2<Vector,Vector>> result = extractPatches(arg0);
 				return result;
 			}
 			
 		 });
 		//patches.saveAsObjectFile("/home/isinsu/Desktop/DeepManuscripts/preprocessing/output");
-		patches.saveAsTextFile("/home/isinsu/Desktop/DeepManuscripts/preprocessing/output");
+		patches.saveAsTextFile("/home/ashish/Desktop/BDProject/output");
 		sc.close();
 		
 		
@@ -174,7 +174,7 @@ processLines takes as input the image of the page which is of type Mat and the l
 						pat = img.submat(randx-stepSize, randx+stepSize+1, randy-stepSize, randy+stepSize+1);
 					}
 					i = i+1; //We extracted a random patch
-					Highgui.imwrite("/home/isinsu/Desktop/DeepManuscripts/preprocessing/pat" +saveindex+".tif", pat);
+					Highgui.imwrite("/home/ashish/Desktop/BDProject/output/p" +saveindex+".tif", pat);
 					saveindex = saveindex + 1;
 					Mat temppatch = pat.clone();
 					Mat patch = temppatch.t();
@@ -273,7 +273,7 @@ processLines takes as input the image of the page which is of type Mat and the l
 		
 		return results;
 	}
-/*
+/**
 extractPathces takes as input the two dimensional array of boundary coordinates and it uses sliding window approach within the boundaries and eliminates blank patches. The output includes a tuple of two vectors where the first vector contains
 - line id
 - (x,y) coordinates of upper left corner of the patch
@@ -281,8 +281,8 @@ extractPathces takes as input the two dimensional array of boundary coordinates 
 - height of the patch
 and the second vector containes the column major vectorized patches.
 Similar approaches are used in extractPatches2 and extractPatches3
-*/
-	public static List<Tuple2<Vector,Vector>> extractPatches(Integer[][] boundary) {
+**/
+	public static List<Tuple2<Vector,Vector>> extractPatches(Tuple2<Integer[],Integer[][]> boundary) {
 
 		List<Tuple2<Vector,Vector>> results = new ArrayList<>();
 		int stepSize;
@@ -293,12 +293,12 @@ Similar approaches are used in extractPatches2 and extractPatches3
 		//elsey
 			stepSizey = sizey;
 		
-		sortArray(boundary,1);
-		int xmin = boundary[0][1];
-		int xmax = boundary[boundary.length-1][1];
-		sortArray(boundary,0);
-		int ymin = boundary[0][0];
-		int ymax = boundary[boundary.length-1][0];
+		sortArray(boundary._2,1);
+		int xmin = boundary._2[0][1];
+		int xmax = boundary._2[boundary._2.length-1][1];
+		sortArray(boundary._2,0);
+		int ymin = boundary._2[0][0];
+		int ymax = boundary._2[boundary._2.length-1][0];
 		//System.out.println(xmin + " " + xmax + " " + ymin + " " + ymax);
 		
 		for(int i = xmin; i <= xmax ; i = i+stepSizex)
@@ -356,7 +356,7 @@ Similar approaches are used in extractPatches2 and extractPatches3
 					//System.out.println("Standard Deviation: " + std_dev );
 					if(std_dev > 15)
 					{
-						Highgui.imwrite("/home/isinsu/Desktop/DeepManuscripts/preprocessing/pat.tif", pat);
+						Highgui.imwrite("/home/ashish/Desktop/BDProject/output/pat.tif", pat);
 						Mat temppatch = pat.clone();
 						Mat patch = temppatch.t();
 						patch = patch.reshape(0, 1);
@@ -367,9 +367,13 @@ Similar approaches are used in extractPatches2 and extractPatches3
 							patch.get(0, k, data);
 							patchData[k] = (data[0]>= 0 ? data[0] : 256+data[0]);
 						}
-						double [] coord = new double[2];
-						coord[0] = i-(sizex/2);
-						coord[1] = j-(sizey/2);
+						double [] coord = new double[6];
+						coord[0] = boundary._1[0];
+						coord[1] = boundary._1[1];
+						coord[2] = i-(sizex/2);
+						coord[3] = j-(sizey/2);
+						coord[4] = sizex;
+						coord[5] = sizey;
 						results.add(new Tuple2<Vector, Vector>(new DenseVector(coord),new DenseVector(patchData)));
 						 
 					}
@@ -382,12 +386,12 @@ Similar approaches are used in extractPatches2 and extractPatches3
 		return results;
 	}
 
-/*
+/**
 parseJSON is a parser function for the corresponding JSON files of pages.
-*/
-	private static ArrayList<Integer[][]> parseJSON(String filePath){
+**/
+	private static ArrayList<Tuple2<Integer[],Integer[][]>> parseJSON(String filePath){
 		
-		ArrayList<Integer[][]> textLines = new ArrayList<Integer[][]>();
+		ArrayList<Tuple2<Integer[],Integer[][]>> textLines = new ArrayList<Tuple2<Integer[],Integer[][]>>();
 		
 		try {
 			// read the json file (full page)
@@ -406,7 +410,8 @@ parseJSON is a parser function for the corresponding JSON files of pages.
 			}
 			
 			//get the page_id			
-			String page_id = (String) page.get("id");
+			String page_ids = (String)page.get("id");
+			Integer page_id = Integer.parseInt(page_ids.substring(16, 18)); 
 			//System.out.println("page_id  = " + page_id);
 			
 			//get the page height and width
@@ -426,7 +431,8 @@ parseJSON is a parser function for the corresponding JSON files of pages.
 				JSONObject line = (JSONObject) l.next();
 				
 				//get the line_id
-				long line_id = (long) line.get("id");
+				long line_ids = (long)line.get("id");
+				Integer line_id =  (int)line_ids; 
 				//System.out.println("line_id =  " + line_id);
 				
 				//get the x,y,w,h for the line
@@ -438,9 +444,11 @@ parseJSON is a parser function for the corresponding JSON files of pages.
 				//get the boundaries for line
 				String boundaries = (String) line.get("boundaries");
 				//System.out.println("boundaries =  " + boundaries);
-				
+				Integer[] ids = new Integer[2];
+				ids[0] = page_id;
+				ids[1] = line_id;
 				Integer[][] g_b = get_boundaries(boundaries);
-				textLines.add(g_b);
+				textLines.add(new Tuple2<Integer[],Integer[][]>(ids,g_b));
 				//System.out.println("First two boundary points are (" + textLines.get(textLines.size()-1)[0][0] + "," + textLines.get(textLines.size()-1)[0][1] + ") and (" + textLines.get(textLines.size()-1)[1][0] + "," + textLines.get(textLines.size()-1)[1][1] + ")");
 				
 				//get the number of words in that line
@@ -506,3 +514,4 @@ parseJSON is a parser function for the corresponding JSON files of pages.
 	}
 			
 }
+
