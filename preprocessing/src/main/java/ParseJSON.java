@@ -1,3 +1,15 @@
+/**
+ParseJSON class includes the methods for parsing the JSON file of a specific image, extracting the boundaries of each text line and applying the patch extraction with a sliding window approach for every line.
+
+processLines: The purpose of this method is to parallelize the patch extraction approach for every text line using flatMap.
+
+extractPatches: There are various versions of this method. The current method of patch extraction uses a sliding window approach considering that redundant patches crossing the text line boundaries are eliminated. Blank patches are also eliminated by examining the variance of patches and discardignt he ones with low variance.
+
+parseJSON: For a given image, we extract its JSON data and parse it in order to obtain the information about page id, page height and width, text line id, text line height and width, text line location and boundary coordinates.
+
+**/
+
+
 package main.java;
 
 import java.io.FileNotFoundException;
@@ -34,9 +46,9 @@ public class ParseJSON {
 	public static int sizex = 64, sizey = 64;
 	public static Mat img; 
 	public static int numRows ;
-    public static int numCols ;
-    public static int saveindex = 0;
-    public static int nPatch = 10;
+    	public static int numCols ;
+    	public static int saveindex = 0;
+    	public static int nPatch = 10;
 	public static void main (String[] args) throws IOException, ParseException {
 		
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
@@ -48,6 +60,9 @@ public class ParseJSON {
 		processLines(img, filePath, "--local");
 	}
 	
+/*
+processLines takes as input the image of the page which is of type Mat and the location of the JSON file. It parallelizes the patch extraction operation for each text line in the corresponding page. It saves the result patches as JavaRDD of Tuple2 of Vectors in a text file.
+*/
 	public static void processLines(Mat imgMat, String filePath, String arg)
 	{
 		SparkConf conf;
@@ -77,8 +92,8 @@ public class ParseJSON {
 			}
 			
 		 });
-		patches.saveAsObjectFile("/home/isinsu/Desktop/DeepManuscripts/preprocessing/output");
-		//patches.saveAsTextFile("/home/isinsu/Desktop/DeepManuscripts/preprocessing/output");
+		//patches.saveAsObjectFile("/home/isinsu/Desktop/DeepManuscripts/preprocessing/output");
+		patches.saveAsTextFile("/home/isinsu/Desktop/DeepManuscripts/preprocessing/output");
 		sc.close();
 		
 		
@@ -258,6 +273,15 @@ public class ParseJSON {
 		
 		return results;
 	}
+/*
+extractPathces takes as input the two dimensional array of boundary coordinates and it uses sliding window approach within the boundaries and eliminates blank patches. The output includes a tuple of two vectors where the first vector contains
+- line id
+- (x,y) coordinates of upper left corner of the patch
+- width of the patch
+- height of the patch
+and the second vector containes the column major vectorized patches.
+Similar approaches are used in extractPatches2 and extractPatches3
+*/
 	public static List<Tuple2<Vector,Vector>> extractPatches(Integer[][] boundary) {
 
 		List<Tuple2<Vector,Vector>> results = new ArrayList<>();
@@ -358,6 +382,9 @@ public class ParseJSON {
 		return results;
 	}
 
+/*
+parseJSON is a parser function for the corresponding JSON files of pages.
+*/
 	private static ArrayList<Integer[][]> parseJSON(String filePath){
 		
 		ArrayList<Integer[][]> textLines = new ArrayList<Integer[][]>();
