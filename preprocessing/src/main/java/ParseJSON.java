@@ -26,6 +26,8 @@ import org.apache.spark.api.java.function.*;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.core.CvType;
 
+import scala.Tuple2;
+
 
 public class ParseJSON {
 
@@ -62,16 +64,21 @@ public class ParseJSON {
 		 ArrayList<Integer[][]> lines = parseJSON(filePath);
 		// System.out.println("Line number: "+ lines.size());
 		 JavaRDD<Integer[][]> textLines = sc.parallelize(lines);
-		 JavaRDD<Vector> patches = textLines.flatMap(new FlatMapFunction<Integer[][], Vector> (){
+		 JavaRDD<Tuple2<Vector,Vector>> patches = textLines.flatMap(new FlatMapFunction<Integer[][], Tuple2<Vector,Vector>> (){
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 749022448957212279L;
+
 			@Override
-			public List<Vector> call(Integer[][] arg0) throws Exception {
-				List<Vector> result = extractPatches(arg0);
+			public List<Tuple2<Vector,Vector>> call(Integer[][] arg0) throws Exception {
+				List<Tuple2<Vector,Vector>> result = extractPatches(arg0);
 				return result;
 			}
 			
 		 });
-		//patches.saveAsObjectFile("/home/isinsu/Desktop/DeepManuscripts/preprocessing/output");
-		patches.saveAsTextFile("/home/isinsu/Desktop/DeepManuscripts/preprocessing/output");
+		patches.saveAsObjectFile("/home/isinsu/Desktop/DeepManuscripts/preprocessing/output");
+		//patches.saveAsTextFile("/home/isinsu/Desktop/DeepManuscripts/preprocessing/output");
 		sc.close();
 		
 		
@@ -251,9 +258,9 @@ public class ParseJSON {
 		
 		return results;
 	}
-	public static List<Vector> extractPatches(Integer[][] boundary) {
+	public static List<Tuple2<Vector,Vector>> extractPatches(Integer[][] boundary) {
 
-		List<Vector> results = new ArrayList<>();
+		List<Tuple2<Vector,Vector>> results = new ArrayList<>();
 		int stepSize;
 		int stepSizex;
 		int stepSizey;
@@ -336,8 +343,11 @@ public class ParseJSON {
 							patch.get(0, k, data);
 							patchData[k] = (data[0]>= 0 ? data[0] : 256+data[0]);
 						}
-		
-						results.add(new DenseVector(patchData)); 
+						double [] coord = new double[2];
+						coord[0] = i-(sizex/2);
+						coord[1] = j-(sizey/2);
+						results.add(new Tuple2<Vector, Vector>(new DenseVector(coord),new DenseVector(patchData)));
+						 
 					}
 					
 				}
