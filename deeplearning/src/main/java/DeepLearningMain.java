@@ -69,6 +69,7 @@ public class DeepLearningMain {
 		return globalConfig;
 	}
 	
+	
 	/**
 	 * Main method that trains the model layer by layer. 
 	 * 
@@ -85,11 +86,11 @@ public class DeepLearningMain {
 		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
     	JavaSparkContext sc = new JavaSparkContext(conf);
  
-		JavaRDD<Vector> inputSmallPatches = sc.textFile(inputFileSmallPatches).map(new Parse());
-		JavaRDD<Vector> inputWordPatches = sc.textFile(inputFileLargePatches).map(new Parse());
+		JavaRDD<Tuple2<Vector, Vector>> inputSmallPatches = sc.textFile(inputFileSmallPatches).map(new ParseTuples());
+		JavaRDD<Tuple2<Vector, Vector>> inputWordPatches = sc.textFile(inputFileLargePatches).map(new ParseTuples());
 
 		// The main loop calls train() on each of the layers
-		JavaRDD<Vector> result = null;
+		JavaRDD<Tuple2<Vector, Vector>> result = null;
 	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
 	 		
 	 		// set up the current layer 
@@ -123,10 +124,10 @@ public class DeepLearningMain {
 		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
     	JavaSparkContext sc = new JavaSparkContext(conf);
     	
-		JavaRDD<Vector> testPatches = sc.textFile(inputFile).map(new Parse());
+		JavaRDD<Tuple2<Vector, Vector>> testPatches = sc.textFile(inputFile).map(new ParseTuples());
     	
 		// The main loop calls test() on each of the layers
-		JavaRDD<Vector> result = null;
+		JavaRDD<Tuple2<Vector, Vector>> result = null;
 	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
 	 		
 	 		// set up the current layer 
@@ -151,13 +152,13 @@ public class DeepLearningMain {
 	 * Main method for testing the trained model. 
 	 * 
 	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration
-	 * @param testPatches JavaRDD<Vector> which contains all the candidate patches
+	 * @param testPatches JavaRDD<Tuple2<Vector, Vector>> which contains all the candidate patches
 	 * @return The resulting representations of the test patches
 	 */
-	public static JavaRDD<Vector> testRDD(List<ConfigBaseLayer> globalConfig, JavaRDD<Vector> testPatches) throws Exception {
+	public static JavaRDD<Tuple2<Vector, Vector>> testRDD(List<ConfigBaseLayer> globalConfig, JavaRDD<Tuple2<Vector, Vector>> testPatches) throws Exception {
 		
 		// The main loop calls test() on each of the layers
-		JavaRDD<Vector> result = null;
+		JavaRDD<Tuple2<Vector, Vector>> result = null;
 	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
 	 		
 	 		// set up the current layer 
@@ -169,36 +170,6 @@ public class DeepLearningMain {
 				result = layer.test(testPatches);
 			} else {
 				result = layer.test(result);
-			}	
-	 	}
-	 	
-	 	// return the final representations of the test patches
-	 	return result;
-	}
-	
-	
-	/**
-	 * Main method for testing the trained model. 
-	 * 
-	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration
-	 * @param testPatches JavaRDD<Tuple2<Vector, Vector>> which contains all the candidate patches
-	 * @return The resulting representations of the test patches
-	 */
-	public static JavaRDD<Vector> testRDDTuple(List<ConfigBaseLayer> globalConfig, JavaRDD<Tuple2<Vector, Vector>> testPatches) throws Exception {
-		
-		// The main loop calls test() on each of the layers
-		JavaRDD<Vector> result = null;
-	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
-	 		
-	 		// set up the current layer 
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, "x");
-			
-			// The configLayer has configExtractor only if it convolutional,
-			// The multiply Extractor does not need any parameters.
-			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
-			//	result = layer.test(testPatches);
-			} else {
-			//	result = layer.test(result);
 			}	
 	 	}
 	 	
