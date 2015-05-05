@@ -5,11 +5,9 @@ import java.util.List;
 
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.EigenDecomposition;
-import org.apache.commons.math3.linear.RealVector;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.clustering.KMeans;
 import org.apache.spark.mllib.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Matrices;
@@ -24,6 +22,7 @@ public class SpectralClustering {
 	int spectralType;
 	int k;
 	KMeansModel training;
+	JavaRDD<Integer> vectorClassification;
 
 	/**
 	 * General constructor for Spectral Clustering.
@@ -46,7 +45,7 @@ public class SpectralClustering {
 	public SpectralClustering(Matrix input, int spectralType, int k) {
 		this.w = input;
 		this.k = k;
-		this.train();
+		this.vectorClassification = this.compute();
 	}
 
 	/**
@@ -62,7 +61,7 @@ public class SpectralClustering {
 		this.w = input;
 		this.spectralType = 0;
 		this.k = k;
-		this.train();
+		this.compute();
 	}
 
 	/**
@@ -100,13 +99,11 @@ public class SpectralClustering {
 
 	/**
 	 * Train the Spectral Clustering Algorithm using the data provided by the
-	 * Input Matrix. To predict the cluster in which points are use the <a href
-	 * =
-	 * "https://spark.apache.org/docs/1.0.0/api/scala/index.html#org.apache.spark.mllib.clustering.KMeansModel"
-	 * >predict</a> methods from KMeansModel().
+	 * Input Matrix.
+	 * @return 
 	 * 
 	 */
-	private void train() {
+	private JavaRDD<Integer> compute() {
 		Matrix d = getDegreeMatrix(w);
 		Matrix l = null;
 		// Computing different Laplacian
@@ -130,10 +127,10 @@ public class SpectralClustering {
 			u = generalizedEigenvectorComputing(l);
 		}
 
-		this.training = kmeansTraining(u);
+		return kmeansTraining(u);
 	}
 
-	private KMeansModel kmeansTraining(Matrix y) {
+	private JavaRDD<Integer> kmeansTraining(Matrix y) {
 		int nbRow = y.numRows();
 		int nbCol = y.numCols();
 		double[][] yArray = getValues2D(y);
@@ -155,7 +152,8 @@ public class SpectralClustering {
 		int numIterations = 20;
 		KMeansModel clusters = KMeans.train(JavaRDD.toRDD(distData), k,
 				numIterations);
-		return clusters;
+		this.training =  clusters;
+		return clusters.predict(distData);
 	}
 
 	/**
