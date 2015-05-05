@@ -36,16 +36,18 @@ public class WeightedMatrix {
 	 * @param matrixType
 	 *            The type of the result matrix:
 	 *            <ul>
-	 *            <li>0: for a matrix with only 1s and 0s.
-	 *            <li>1: for a weighted matrix
+	 *            <li>0: for an unweighted matrix.
+	 *            <li>1: for a Gaussian similarity function
 	 *            </ul>
 	 * @param neighborType
 	 *            The type of the kNN matrix:
 	 *            <ul>
 	 *            <li>0: Not symmetric
-	 *            <li>1: Normal
-	 *            <li>2: Mutual
+	 *            <li>1: Mutual
+	 *            <li>2: Normal
 	 *            </ul>
+	 * @param sigma
+	 *            The value of sigma for the Gaussian similarity function
 	 */
 	public WeightedMatrix(Vector[] input, int k, int matrixType,
 			int neighborType, double sigma) {
@@ -58,7 +60,26 @@ public class WeightedMatrix {
 	}
 
 	/**
-	 * Default constructor for WeightedMatrix
+	 * Smaller constructor for WeightedMatrix
+	 * 
+	 * @param input
+	 *            Array of Vectors
+	 * @param k
+	 *            Number of nearest neighbors
+	 * @param sigma
+	 *            The value of sigma for the Gaussian similarity function
+	 */
+	public WeightedMatrix(Vector[] input, int k,double sigma) {
+		this.input = input;
+		this.maxDistance = 0;
+		this.matrixType = 1;
+		this.k = k;
+		this.neighborType = 1;
+		this.sigma = sigma;
+	}
+	
+	/**
+	 * Smallest constructor for WeightedMatrix
 	 * 
 	 * @param input
 	 *            Array of Vectors
@@ -71,7 +92,7 @@ public class WeightedMatrix {
 		this.matrixType = 1;
 		this.k = k;
 		this.neighborType = 1;
-		this.sigma =1;
+		this.sigma = 1;
 	}
 
 	/**
@@ -108,13 +129,28 @@ public class WeightedMatrix {
 		output = Matrices.dense(n, n, result);
 	}
 
+	/**
+	 * Compute the Gaussian similarity function for non-zero values.
+	 * @param d Input value
+	 * @return Calculated value
+	 */
 	private double gaussian(double d) {
-		if(d == 0) return 0;
-		return Math.exp(-Math.pow(d, 2)/(2*Math.pow(sigma, 2)));
+		if (d == 0)
+			return 0;
+		return Math.exp(-Math.pow(d, 2) / (2 * Math.pow(sigma, 2)));
 	}
 
-	private double[][] atLeastK(double[][] kNeighbour) {
-		double[][] result = kNeighbour;
+	/**
+	 * Compute a symmetric two-dimensional array from a non-symmetric
+	 * two-dimensional array M by taking the maximum between M and
+	 * M<sup>T</sup>.
+	 * 
+	 * @param M
+	 *            The input non-symmetric two-dimensional array.
+	 * @return A symmetric two-dimensional array
+	 */
+	private double[][] atLeastK(double[][] M) {
+		double[][] result = M;
 		int size = result.length;
 		for (int i = 0; i < size; i++) {
 			for (int j = i; j < size; j++) {
@@ -126,8 +162,17 @@ public class WeightedMatrix {
 		return result;
 	}
 
-	private double[][] atMostK(double[][] kNeighbour) {
-		double[][] result = kNeighbour;
+	/**
+	 * Compute a symmetric two-dimensional array from a non-symmetric
+	 * two-dimensional array M by taking the minimum between M and
+	 * M<sup>T</sup>.
+	 * 
+	 * @param M
+	 *            The input non-symmetric two-dimensional array.
+	 * @return A symmetric two-dimensional array
+	 */
+	private double[][] atMostK(double[][] M) {
+		double[][] result = M;
 		int size = result.length;
 		for (int i = 0; i < size; i++) {
 			for (int j = i; j < size; j++) {
@@ -167,6 +212,13 @@ public class WeightedMatrix {
 		}
 	}
 
+	/**
+	 * Function to sort a two-dimensionnal array
+	 * 
+	 * @param toSort
+	 *            the array to sort
+	 * @return The sorted array
+	 */
 	private double[][] sortWeights(double[][] toSort) {
 		Arrays.sort(toSort, new Comparator<double[]>() {
 			public int compare(double[] o1, double[] o2) {
@@ -176,18 +228,13 @@ public class WeightedMatrix {
 		return toSort;
 	}
 
-	private double[][] invertMatrix(double[][] distances) {
-		int size = distances.length;
-		double[][] results = new double[size][size];
-		for (int i = 0; i < size; i++) {
-			for (int j = i; j < size; j++) {
-				double w = (maxDistance - distances[i][j]) / maxDistance;
-				results[i][j] = w;
-				results[j][i] = w;
-			}
-		}
-		return results;
-	}
+	/*
+	 * private double[][] invertMatrix(double[][] distances) { int size =
+	 * distances.length; double[][] results = new double[size][size]; for (int i
+	 * = 0; i < size; i++) { for (int j = i; j < size; j++) { double w =
+	 * (maxDistance - distances[i][j]) / maxDistance; results[i][j] = w;
+	 * results[j][i] = w; } } return results; }
+	 */
 
 	/**
 	 * Compute the matrix of the distances between all the vectors of the
