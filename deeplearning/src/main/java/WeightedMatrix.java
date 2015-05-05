@@ -109,6 +109,7 @@ public class WeightedMatrix {
 	}
 
 	private double gaussian(double d) {
+		if(d == 0) return 0;
 		return Math.exp(-Math.pow(d, 2)/(2*Math.pow(sigma, 2)));
 	}
 
