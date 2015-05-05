@@ -5,6 +5,7 @@ import java.util.List;
 
 import main.java.DeepModelSettings.ConfigBaseLayer;
 
+import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
@@ -47,6 +48,7 @@ public class PreProcessZCA implements PreProcessor {
 		this.mean = mean;
 		this.ZCA = ZCA;
 	}
+	
 	
 	/**
 	 * Getter method for the ConfigBaseLayer object.
@@ -159,6 +161,12 @@ public class PreProcessZCA implements PreProcessor {
 	 */
 	@Override
 	public JavaRDD<Tuple2<Vector, Vector>> preprocessData(JavaRDD<Tuple2<Vector, Vector>> pair_data) {
+		
+		// take the size of the first Vector in the Tuple
+		Tuple2<Vector, Vector> firstTuple = pair_data.first();
+		final int s = firstTuple._1.size();
+		
+		// convert to JavaRDD<Vector>
 		JavaRDD<Vector> data = pair_data.map(
 				new Function<Tuple2<Vector, Vector>, Vector>() {
 					private static final long serialVersionUID = 6369401581724529416L;
@@ -167,13 +175,17 @@ public class PreProcessZCA implements PreProcessor {
 						return pair._2;
 					}
 				} 
-		);
+			);
+		
+		//JavaPairRDD<Vector, Vector> pairRDD = JavaPairRDD.fromJavaRDD(pair_data);
+		
 		// assign eps1 for pre-processing
 		//double eps1 = configLayer.getConfigPreprocess().getEps1();
 
 		// apply contrast normalization
 		//data = data.map(new ContrastNormalization(eps1));
-
+		
+		
 		// convert the JavaRRD<Vector> to a distributed RowMatrix (through Scala RDD<Vector>)
 		RowMatrix rowData = new RowMatrix(data.rdd());
 
@@ -195,9 +207,20 @@ public class PreProcessZCA implements PreProcessor {
 			
 		// convert the distributed RowMatrix into a JavaRDD<Vector> 
 		data = new JavaRDD<Vector>(rowData.rows(), data.classTag());
+		
+		// convert to JavaRDD<Tuple2<Vector, Vector>>
+		JavaRDD<Tuple2<Vector, Vector>> dataTuples = data.map(
+				new Function<Vector, Tuple2<Vector, Vector>>() {
+					
+					private static final long serialVersionUID = -3940360804300835012L;
 
-		//return data;
-		return null;
+					public Tuple2<Vector, Vector> call(Vector v) {
+						return new Tuple2<Vector, Vector>(Vectors.dense(new double[s]), v);
+					}
+				}
+		);
+		
+		return dataTuples;
 	}
 	
 	
@@ -242,6 +265,7 @@ public class PreProcessZCA implements PreProcessor {
 		return new Tuple2<Vector, Vector>(pair_data._1, outVec);
 	}
 	
+	
 	/**
 	 *  Sets up the preprocessor. It loads the saved weights from the disk.
 	 * @param filename
@@ -253,6 +277,7 @@ public class PreProcessZCA implements PreProcessor {
 		ZCA = (DenseMatrix) LinAlgebraIOUtils.loadMatrixFromObject(filename + "_zca", sc);
 
 	}
+	
 	
 	/**
 	 *  Saves the fields necessary to reconstruct a preprocessor object. 

@@ -43,11 +43,13 @@ public interface PreProcessor extends Function<Tuple2<Vector, Vector>, Tuple2<Ve
 	 */
 	public  Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> data) throws Exception;
 	
+	
 	/**
 	 *  Sets up the preprocessor. It loads the saved weights from the disk.
 	 * @param filename
 	 **/
 	public void loadFromFile(String filename, JavaSparkContext sc);
+	
 	
 	/**
 	 *  Saves the fields necessary to reconstruct a preprocessor object. 
