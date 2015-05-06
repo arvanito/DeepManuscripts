@@ -73,12 +73,6 @@ public class MultiplyExtractor implements Extractor {
 		
 		// set the configuration layer
 		this.configLayer = configLayer;
-		
-		// set the non-linearity and the optional soft threshold
-		nonLinearity = configLayer.getConfigFeatureExtractor().getNonLinearity();
-		if (configLayer.getConfigFeatureExtractor().hasSoftThreshold()) {
-			alpha = configLayer.getConfigFeatureExtractor().getSoftThreshold();
-		}
 	}
 	
 	/**
