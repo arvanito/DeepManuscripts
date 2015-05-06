@@ -3,16 +3,20 @@ package main.java;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function;
+import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 
 import scala.Tuple2;
+import scala.reflect.ClassTag;
 
 import com.google.protobuf.TextFormat;
 
@@ -24,6 +28,9 @@ import main.java.DeepModelSettings.*;
  */
 public class DeepLearningMain {
 	
+	private static JavaSparkContext sc;
+
+
 	/**
 	 * Method that loads the layer configurations from .prototxt file. 
 	 * Makes use of the protocol buffers for describing the configuration. 
@@ -82,12 +89,14 @@ public class DeepLearningMain {
 							String inputFileLargePatches, String outputFile) throws Exception {
 		
 		// open files and convert them to JavaRDD<Vector> datasets
-		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
-    	JavaSparkContext sc = new JavaSparkContext(conf);
+//		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
+//    	JavaSparkContext sc = new JavaSparkContext(conf);
  
 		JavaRDD<Vector> inputSmallPatches = sc.textFile(inputFileSmallPatches).map(new Parse());
 		JavaRDD<Vector> inputWordPatches = sc.textFile(inputFileLargePatches).map(new Parse());
 
+		//testMe(inputSmallPatches);
+		
 		// The main loop calls train() on each of the layers
 		JavaRDD<Vector> result = null;
 	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
@@ -106,10 +115,94 @@ public class DeepLearningMain {
 		//TODO save also last file
 		result.saveAsTextFile(outputFile);
 		
+		
+		
 		sc.close();
 	}
 	
 	
+	private static class shareMe implements Serializable{
+
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -4709600624146273244L;
+		public int[] val;
+		public shareMe(int[] i){
+			this.val = i;
+		}
+	}
+	
+	private static class runMeBr implements Function<Vector, Integer>{
+		
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -8025122885549295898L;
+		private Broadcast<shareMe> bObj;
+		
+		public runMeBr(Broadcast<shareMe> bObj) {
+			this.bObj = bObj;
+		}
+
+		@Override
+		public Integer call(Vector arg0) throws Exception {
+			return  bObj.value().val[0];
+		}
+		
+	}
+	
+	private static class runMe implements Function<Vector, Integer>{
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -354064928874130047L;
+		private shareMe s;
+		
+		public runMe(shareMe s) {
+			this.s = s;
+		}
+
+		@Override
+		public Integer call(Vector arg0) throws Exception {
+			return s.val[0];
+		}
+		
+	}
+	
+	private static void testMe(JavaRDD<Vector> data) throws InterruptedException {
+		int[] longArray = new int[300000];
+		longArray[0] = 3;
+		
+		long i = data.count();
+		
+//		long t1 = System.currentTimeMillis();
+		shareMe shareMe = new shareMe(longArray);
+		runMe runMeFct = new runMe(shareMe);
+		JavaRDD<Integer> data1 = data.map(runMeFct);
+		System.out.println("\n-------------------\n"+data1.collect().iterator().next()+"\n-------------------\n");
+//		long t2 = System.currentTimeMillis();
+		
+//		for (int i=0;i<10000;i++){
+//			System.out.print(""+longArray[0]);
+//		}
+		
+//		long t3 = System.currentTimeMillis();
+		shareMe shareMe2 = new shareMe(longArray);
+		Broadcast<shareMe> shareMeBr =  sc.broadcast(shareMe2);//, scala.reflect.ClassTag$.MODULE$.apply(shareMe.class));
+		runMeBr runMeFctBr = new runMeBr(shareMeBr);
+		JavaRDD<Integer> data2 = data.map(runMeFctBr);
+		System.out.println("\n-------------------\n"+data2.collect().iterator().next()+"\n-------------------\n");
+//		long t4 = System.currentTimeMillis();
+//		
+//		System.out.println("\n-------------------\n"+(t2-t1)+" "+(t4-t3)+"\n-------------------\n");
+		
+		Thread.sleep(180000);
+	}
+
 	/**
 	 * Main method for testing the trained model. 
 	 * 
@@ -120,8 +213,8 @@ public class DeepLearningMain {
 	public static void test(List<ConfigBaseLayer> globalConfig, String inputFile, String outputFile) throws Exception {
 		
 		// open the test file and convert it to a JavaRDD<Vector> dataset
-		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
-    	JavaSparkContext sc = new JavaSparkContext(conf);
+//		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
+//    	JavaSparkContext sc = new JavaSparkContext(conf);
     	
 		JavaRDD<Vector> testPatches = sc.textFile(inputFile).map(new Parse());
     	
@@ -217,8 +310,8 @@ public class DeepLearningMain {
 	public static void rank(List<ConfigBaseLayer> globalConfig, String inputFileQuery, String inputFilePatches) throws Exception {
 		
 		// open the test file and convert it to a JavaRDD<Vector> dataset
-		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
-    	JavaSparkContext sc = new JavaSparkContext(conf);
+//		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
+//    	sc = new JavaSparkContext(conf);
     	
 		// load query 
 		JavaRDD<Tuple2<Vector, Vector>> query = sc.textFile(inputFileQuery).map(new ParseTuples());
@@ -267,6 +360,9 @@ public class DeepLearningMain {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
+		
+		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
+    	sc = new JavaSparkContext(conf);
 		
 		// check if settings file .prototxt is provided, maybe do this better!
 		List<ConfigBaseLayer> globalConfig = null;
