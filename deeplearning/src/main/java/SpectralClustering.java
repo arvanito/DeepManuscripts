@@ -18,7 +18,7 @@ import org.apache.spark.mllib.linalg.Vectors;
 public class SpectralClustering {
 
 	Vector[] input;
-	int k;
+	Matrix kNN;
 	KMeansModel training;
 	JavaRDD<Integer> vectorClassification;
 
@@ -26,32 +26,55 @@ public class SpectralClustering {
 	 * General constructor for Spectral Clustering.
 	 * 
 	 * @param input
-	 *            : Input array of Vectors to sort by clusters.
-	 *            </ul>
-	 * @param k
-	 *            : Number of clusters to construct.
+	 *            : Input array of Vectors to sort by clusters. </ul>
 	 */
-	public SpectralClustering(Vector[] input, int spectralType, int k) {
+	public SpectralClustering(Vector[] input) {
 		this.input = input;
-		this.k = k;
-		this.vectorClassification = this.compute();
 	}
 
 	/**
 	 * Train the Spectral Clustering Algorithm using the data provided by the
 	 * Input Matrix.
-	 * @return 
+	 * 
+	 * @return
 	 * 
 	 */
-	private JavaRDD<Integer> compute() {
+	public JavaRDD<Integer> compute() {
 		// TODO Modify to make more customizable.
-		Matrix w = new KNearestNeighbor(input, 3,0,1,1).getWeightedMatrix();
+		Matrix w = new KNearestNeighbor(input, 3, 0, 1, 1).getWeightedMatrix();
 		Matrix d = getDegreeMatrix(w);
 		Matrix l = computeUnnormalizedLaplacian(w, d);
 		// Computing the eigenvectors
 		Matrix u = eigenvectorComputing(l);
 
 		return kmeansTraining(u);
+	}
+
+	/**
+	 * Compute the weighted Matrix using <i>k</i>-Nearest Neighbor algorithm.
+	 * 
+	 * @param k
+	 *            Number of nearest neighbors to consider.
+	 * @param matrixType
+	 *            The type of the result matrix:
+	 *            <ul>
+	 *            <li>0: for an unweighted matrix.
+	 *            <li>1: for a Gaussian similarity function
+	 *            </ul>
+	 * @param neighborType
+	 *            The type of the kNN matrix:
+	 *            <ul>
+	 *            <li>0: Not symmetric
+	 *            <li>1: Mutual
+	 *            <li>2: Normal
+	 *            </ul>
+	 * @param sigma
+	 *            The value of sigma for the Gaussian similarity function
+	 */
+	public void computeKNN(int k, int matrixType, int neighborType, double sigma) {
+		KNearestNeighbor kNN = new KNearestNeighbor(input, k, matrixType,
+				neighborType, sigma);
+		this.kNN = kNN.getWeightedMatrix();
 	}
 
 	private JavaRDD<Integer> kmeansTraining(Matrix y) {
@@ -77,33 +100,8 @@ public class SpectralClustering {
 		KMeansModel clusters = KMeans.train(JavaRDD.toRDD(distData), k,
 				numIterations);
 		sc.close();
-		this.training =  clusters;
+		this.training = clusters;
 		return clusters.predict(distData);
-	}
-
-	/**
-	 * Normalize the rows of u to norm 1.
-	 * 
-	 * @param u
-	 *            : The matrix containing the eigenvectors.
-	 * @return A normalized matrix of eigenvectors.
-	 */
-	private Matrix normalize(Matrix u) {
-		// TODO
-		return null;
-	}
-
-	/**
-	 * Compute the k generalized eigenvectors of the matrix generalized
-	 * eigenproblem lu=&lambda;du.
-	 * 
-	 * @param l
-	 *            : Laplacian matrix.
-	 * @return The k generalized eigenvectors.
-	 */
-	private Matrix generalizedEigenvectorComputing(Matrix l) {
-		// TODO
-		return null;
 	}
 
 	/**
@@ -122,20 +120,6 @@ public class SpectralClustering {
 			eigenvectorsValues[i] = eigen.getEigenvector(i).toArray();
 		}
 		return toMatrix(k, nbRow, eigenvectorsValues);
-	}
-
-	/**
-	 * Compute the normalized symetric Laplacian
-	 * 
-	 * @param w
-	 *            : Weighted adjacency matrix W.
-	 * @param d
-	 *            : Degree matrix D.
-	 * @return Normalized graph Laplacian symetric matrix L<sub>sym</sub>
-	 */
-	private Matrix computeLsym(Matrix w, Matrix d) {
-		// TODO
-		return null;
 	}
 
 	/**
