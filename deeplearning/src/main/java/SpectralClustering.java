@@ -14,12 +14,10 @@ import org.apache.spark.mllib.linalg.Matrices;
 import org.apache.spark.mllib.linalg.Matrix;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
-import org.apache.spark.rdd.RDD;
 
 public class SpectralClustering {
 
-	Matrix w;
-	int spectralType;
+	Vector[] input;
 	int k;
 	KMeansModel training;
 	JavaRDD<Integer> vectorClassification;
@@ -28,73 +26,15 @@ public class SpectralClustering {
 	 * General constructor for Spectral Clustering.
 	 * 
 	 * @param input
-	 *            : Input similarity matrix that will be used for the training.
-	 *            Must be square.
-	 * @param spectralType
-	 *            : Type of Spectral Clustering Algorithm that will be used:
-	 *            <ul>
-	 *            <li><i>0:</i> Uses Unnormalized spectral clustering.
-	 *            <li><i>1:</i> Uses Normalized spectral clustering according to
-	 *            Shi and Malik (2000)
-	 *            <li><i>2:</i> Uses Normalized spectral clustering according to
-	 *            Ng, Jordan, and Weiss (2002)
+	 *            : Input array of Vectors to sort by clusters.
 	 *            </ul>
 	 * @param k
 	 *            : Number of clusters to construct.
 	 */
-	public SpectralClustering(Matrix input, int spectralType, int k) {
-		this.w = input;
+	public SpectralClustering(Vector[] input, int spectralType, int k) {
+		this.input = input;
 		this.k = k;
 		this.vectorClassification = this.compute();
-	}
-
-	/**
-	 * Default constructor for Spectral Clustering using unnormalized spectral
-	 * clustering.
-	 * 
-	 * @param input
-	 *            : Input similarity matrix. Must be square.
-	 * @param k
-	 *            : Number of clusters to construct.
-	 */
-	public SpectralClustering(Matrix input, int k) {
-		this.w = input;
-		this.spectralType = 0;
-		this.k = k;
-		this.compute();
-	}
-
-	/**
-	 * Maps the vectors to the ID of the corresponding cluster.
-	 * 
-	 * @param input
-	 *            A JavaRDD of Vectors to map
-	 * @return A JavaRDD of Integer corresponding to the clusters.
-	 */
-	public JavaRDD<Integer> predict(JavaRDD<Vector> input) {
-		return training.predict(input);
-	}
-
-	/**
-	 * Maps the vectors to the ID of the corresponding cluster.
-	 * 
-	 * @param input
-	 *            A RDD of Vectors to map
-	 * @return A RDD of Object corresponding to the clusters.
-	 */
-	public RDD<Object> predict(RDD<Vector> input) {
-		return training.predict(input);
-	}
-
-	/**
-	 * Find the corresponding cluster for a certain vector.
-	 * 
-	 * @param input
-	 *            The Vector to classify
-	 * @return The ID of the corresponding cluster.
-	 */
-	public int predict(Vector input) {
-		return training.predict(input);
 	}
 
 	/**
@@ -104,28 +44,12 @@ public class SpectralClustering {
 	 * 
 	 */
 	private JavaRDD<Integer> compute() {
+		// TODO Modify to make more customizable.
+		Matrix w = new KNearestNeighbor(input, 3,0,1,1).getWeightedMatrix();
 		Matrix d = getDegreeMatrix(w);
-		Matrix l = null;
-		// Computing different Laplacian
-		if (spectralType == 0 | spectralType == 1) {
-			l = computeUnnormalizedLaplacian(w, d);
-		}
-		if (spectralType == 2) {
-			l = computeLsym(w, d);
-		}
+		Matrix l = computeUnnormalizedLaplacian(w, d);
 		// Computing the eigenvectors
-		Matrix u = null;
-		if (spectralType == 0 | spectralType == 2) {
-			u = eigenvectorComputing(l);
-			if (spectralType == 2) {
-				Matrix t = null;
-				t = normalize(u);
-				u = t;
-			}
-		}
-		if (spectralType == 1) {
-			u = generalizedEigenvectorComputing(l);
-		}
+		Matrix u = eigenvectorComputing(l);
 
 		return kmeansTraining(u);
 	}
@@ -152,6 +76,7 @@ public class SpectralClustering {
 		int numIterations = 20;
 		KMeansModel clusters = KMeans.train(JavaRDD.toRDD(distData), k,
 				numIterations);
+		sc.close();
 		this.training =  clusters;
 		return clusters.predict(distData);
 	}
