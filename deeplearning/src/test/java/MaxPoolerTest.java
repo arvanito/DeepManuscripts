@@ -47,7 +47,7 @@ public class MaxPoolerTest implements Serializable{
 		sc = null;
 	}
 
-	@Test @Ignore
+	@Test
 	public void sampleTest() {
 		//fail("Not yet implemented");
 		List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
@@ -61,7 +61,7 @@ public class MaxPoolerTest implements Serializable{
 		int totalLength = distData.reduce(new Sum());
 		Assert.assertEquals(15, totalLength);
 	}
-	@Test @Ignore
+	@Test
 	public void test1DMaxPooling() {
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().setConfigPooler(ConfigPooler.newBuilder().setPoolSize(2)).build();
 		MaxPooler pooler = new MaxPooler(conf);
@@ -72,7 +72,7 @@ public class MaxPoolerTest implements Serializable{
 		double[] expected_outputs = {2,4,6,8,10};
 		Assert.assertArrayEquals(expected_outputs, output.toArray(), 1e-6);
 	}
-	@Test @Ignore
+	@Test
 	public void test2DMaxPooling() {
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
 				setConfigFeatureExtractor(ConfigFeatureExtractor.newBuilder().
