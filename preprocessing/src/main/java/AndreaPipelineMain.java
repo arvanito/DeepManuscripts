@@ -4,6 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.yarn.webapp.hamlet.HamletSpec;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -87,6 +88,10 @@ public class AndreaPipelineMain {
                 Mat binarized = AndreaPipeline.binarizePage(m); // Binarize the image
                 Mat segmentationResult = new Mat();
                 String jSonString = AndreaPipeline.lineDetection(data._1(), m, binarized, segmentationResult); //detect the lines
+                Mat segmentationResultResized = new Mat();
+                int newHeight = 1200;
+                int newWidth = newHeight *segmentationResult.cols()/segmentationResult.rows();
+                Imgproc.resize(segmentationResult,segmentationResultResized,new Size(newWidth,newHeight));
                 return new Tuple2<String, Tuple2<String, ImageData>>(data._1(), new Tuple2<String, ImageData>(jSonString, new ImageData(segmentationResult)));
             }
         });
