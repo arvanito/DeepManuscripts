@@ -51,9 +51,9 @@ public class BaseLayerFactory {
 		// or matrix-vector multiplication extraction
 		Extractor extractor = null;
 		if (configLayer.hasConfigFeatureExtractor()) {
-				extractor = new FFTConvolutionExtractor(configLayer, preprocessor);
+				extractor = new FFTConvolutionExtractor(configLayer);
 		} else {
-				extractor = new MultiplyExtractor(configLayer, preprocessor);
+				extractor = new MultiplyExtractor(configLayer);
 		}
 		
 		// set up the pooler, by default max-pooler

@@ -22,7 +22,8 @@ public class ConvMultiplyExtractor implements Extractor {
 	private static final long serialVersionUID = 7991635895652585866L;
 
 	private ConfigBaseLayer configLayer = null;		// layer configuration from the protocol buffer
-	private PreProcessZCA preProcess = null; 		// pre-processing information 
+	private DenseMatrix zca;
+	private DenseVector mean;
 	private Vector[] features;				// array of learned feature Vectors
 
 	
@@ -31,9 +32,8 @@ public class ConvMultiplyExtractor implements Extractor {
 	 * @param configLayer The input configuration for the current layer
 	 * @param preProcess The input PreProcess configuration
 	 */
-	public ConvMultiplyExtractor(ConfigBaseLayer configLayer, PreProcessZCA preProcess) {
+	public ConvMultiplyExtractor(ConfigBaseLayer configLayer) {
 		this.configLayer = configLayer;
-		this.preProcess = preProcess;
 	}
 	
 	
@@ -45,7 +45,6 @@ public class ConvMultiplyExtractor implements Extractor {
 	 */
 	public ConvMultiplyExtractor(ConfigBaseLayer configLayer, PreProcessZCA preProcess, Vector[] features) {
 		this.configLayer = configLayer;
-		this.preProcess = preProcess;
 		this.features = features;
 	}
 	
@@ -58,17 +57,6 @@ public class ConvMultiplyExtractor implements Extractor {
 	public ConfigBaseLayer getConfigLayer() {
 		return configLayer;
 	}
-	
-	
-	/**
-	 * Getter method for the PreProcessor object.
-	 * 
-	 * @return The PreProcessor object
-	 */
-	public PreProcessZCA getPreProcess() {
-		return preProcess;
-	}
-	
 	
 	/**
 	 * Getter method for the learned features.
@@ -90,14 +78,10 @@ public class ConvMultiplyExtractor implements Extractor {
 		this.configLayer = configLayer;
 	}
 	
-	
-	/**
-	 * Setter method for the PreProcessor object.
-	 * 
-	 * @param preProcess The PreProcessor object
-	 */
-	public void setPreProcess(PreProcessZCA preProcess) {
-		this.preProcess = preProcess;
+	@Override
+	public void setPreProcessZCA(DenseMatrix zca, DenseVector mean) {
+		this.zca = zca;
+		this.mean = mean;
 	}
 	
 	
@@ -145,19 +129,14 @@ public class ConvMultiplyExtractor implements Extractor {
 		DenseMatrix patchesOut = new DenseMatrix(patches.numRows(),patches.numCols(),new double[patches.numRows()*patches.numCols()]);
 		
 		// get necessary data from the PreProcessor
-		if (preProcess != null) {
-			// ZCA Matrix
-			DenseMatrix zca = preProcess.getZCA();
-
-			// mean from ZCA
-			DenseVector zcaMean = preProcess.getMean();
+		if (zca != null && mean != null) {
 
 			// epsilon for pre-processing
 			//double eps1 = configLayer.getConfigPreprocess().getEps1();
 			
 			// preprocess the data point with contrast normalization and ZCA whitening
 			//patches = MatrixOps.localMatContrastNorm(patches, eps1);
-			patches = MatrixOps.localMatSubtractMean(patches, zcaMean);
+			patches = MatrixOps.localMatSubtractMean(patches, mean);
 			
 			//patches = patches.multiply(zca);
 			BLAS.gemm(1.0, patches, zca, 0.0, patchesOut);

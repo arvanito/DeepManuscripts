@@ -65,6 +65,9 @@ public class BaseLayer implements DeepLearningLayer {
 	@Override
 	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, ConfigBaseLayer configLayer, Vector[] features) {
 		extract.setConfigLayer(configLayer);
+		if(preprocess != null) {
+			extract.setPreProcessZCA(((PreProcessZCA)preprocess).getZCA(), ((PreProcessZCA)preprocess).getMean());
+		}
 		extract.setFeatures(features);
 		return data.map(extract);
 	}

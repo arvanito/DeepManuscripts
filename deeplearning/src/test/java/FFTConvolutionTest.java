@@ -92,7 +92,7 @@ public class FFTConvolutionTest implements Serializable {
 		assertTrue(deepApproximateEquals(output, expected, 1e-2));
 	}
 	
-	@Test @Ignore
+	@Test
 	public void simpleTest1DConvolution() {
 		int inputRows = 1;
 		int inputCols = 4;
@@ -105,7 +105,7 @@ public class FFTConvolutionTest implements Serializable {
 						                  setFeatureDim1(featureCols).setFeatureDim2(featureRows).
 						                  setInputDim1(inputCols).setInputDim2(inputRows)).
 			    setConfigPooler(ConfigPooler.newBuilder().setPoolSize(1)).build();
-		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf, null); // no pre-processing yet
+		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf); // no pre-processing yet
 
 		Vector data = new DenseVector(input);
 		
@@ -126,7 +126,7 @@ public class FFTConvolutionTest implements Serializable {
 		Assert.assertArrayEquals(expected_outputs, output.toArray(), 1e-6);
 	}
 	
-	@Test @Ignore
+	@Test
 	public void simpleTest2DConvolution() {
 		int inputRows = 4;
 		int inputCols = 4;
@@ -142,7 +142,7 @@ public class FFTConvolutionTest implements Serializable {
 						                  setFeatureDim1(featureCols).setFeatureDim2(featureRows).
 						                  setInputDim1(inputCols).setInputDim2(inputRows)).
 			    setConfigPooler(ConfigPooler.newBuilder().setPoolSize(1)).build();
-		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf, null); // no pre-processing yet
+		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf); // no pre-processing yet
 
 		Vector data = new DenseVector(input);
 		
@@ -203,7 +203,7 @@ public class FFTConvolutionTest implements Serializable {
 	 * 
 	 */
 	
-	@Test @Ignore
+	@Test
 	public void identityPreprocessingFFTConvTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
@@ -234,7 +234,8 @@ public class FFTConvolutionTest implements Serializable {
 		preProcess.setConfigLayer(conf);
 				
 		
-		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf, preProcess);
+		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf);
+		extractor.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
  		Vector[] vf = {Vectors.dense(f1)};
 		extractor.setFeatures(vf);
 		Vector out;
@@ -251,7 +252,7 @@ public class FFTConvolutionTest implements Serializable {
 		Assert.assertArrayEquals(expected_output, out.toArray(), 1e-6);	
 	}
 	
-	@Test @Ignore
+	@Test
 	public void identityZcaPreprocessingFFTConvTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
@@ -282,7 +283,8 @@ public class FFTConvolutionTest implements Serializable {
 		preProcess.setConfigLayer(conf);
 				
 		
-		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf, preProcess);
+		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf);
+		extractor.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
  		Vector[] vf = {Vectors.dense(f1)};
 		extractor.setFeatures(vf);
 		Vector out;
@@ -299,7 +301,7 @@ public class FFTConvolutionTest implements Serializable {
 		Assert.assertArrayEquals(expected_output, out.toArray(), 1e-2);
 	}
 	
-	@Test @Ignore
+	@Test
 	public void zeroMeanPreprocessingFFTConvTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
@@ -331,7 +333,8 @@ public class FFTConvolutionTest implements Serializable {
 		preProcess.setConfigLayer(conf);
 				
 		
-		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf, preProcess);
+		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf);
+		extractor.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
  		Vector[] vf = {Vectors.dense(f1)};
 		extractor.setFeatures(vf);
 		Vector out;
@@ -348,7 +351,7 @@ public class FFTConvolutionTest implements Serializable {
 		Assert.assertArrayEquals(expected_output, out.toArray(), 1e-2);	
 	}
 	
-	@Test @Ignore
+	@Test
 	public void preprocessingFFTConvTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
@@ -395,11 +398,12 @@ public class FFTConvolutionTest implements Serializable {
  		Vector[] vf = {Vectors.dense(f1), Vectors.dense(f2)};
 		
 		// create a MultiplyExtractor object
-		FFTConvolutionExtractor multi = new FFTConvolutionExtractor(conf, preProcess);
-		multi.setFeatures(vf);
+ 		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf);
+		extractor.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
+		extractor.setFeatures(vf);
 	
 		// call the feature extraction process
-		matRDD = matRDD.map(multi);
+		matRDD = matRDD.map(extractor);
 		
 		Vector[] outputD = matRDD.collect().toArray(new Vector[1]);
 		DenseMatrix outputM = MatrixOps.convertVectors2Mat(outputD);
@@ -408,7 +412,7 @@ public class FFTConvolutionTest implements Serializable {
 		Assert.assertArrayEquals(expected_output, outputM.toArray(), 1e-2);		
 	}
 	
-	@Test @Ignore
+	@Test
 	public void convMultiplyTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
@@ -451,11 +455,12 @@ public class FFTConvolutionTest implements Serializable {
 		vf[1] = Vectors.dense(f2);
 		
 		// create a MultiplyExtractor object
-		Extractor multi = new FFTConvolutionExtractor(conf, preProcess);
-		multi.setFeatures(vf);
+		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf);
+		extractor.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
+		extractor.setFeatures(vf);
 	
 		// call the feature extraction process
-		matRDD = matRDD.map(multi);
+		matRDD = matRDD.map(extractor);
 		
 		Vector[] outputD = matRDD.collect().toArray(new Vector[1]);
 		DenseMatrix outputM = MatrixOps.convertVectors2Mat(outputD);

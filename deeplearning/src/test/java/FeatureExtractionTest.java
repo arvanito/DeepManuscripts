@@ -53,7 +53,7 @@ public class FeatureExtractionTest implements Serializable {
 		sc = null;
 	}
 	
-	@Test @Ignore
+	@Test
 	public void multiplyTest() {
 		//ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().setConfigFeatureExtractor()
 		
@@ -137,7 +137,8 @@ public class FeatureExtractionTest implements Serializable {
 		vf[1] = Vectors.dense(f2);
 		
 		// create a MultiplyExtractor object
-		MultiplyExtractor multi = new MultiplyExtractor(conf, preProcess);
+		MultiplyExtractor multi = new MultiplyExtractor(conf);
+		multi.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
 		multi.setFeatures(vf);
 		
 		// call the feature extraction process
@@ -151,7 +152,7 @@ public class FeatureExtractionTest implements Serializable {
 	}
 	
 	
-	@Test @Ignore
+	@Test
 	public void convMultiplyTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
@@ -203,7 +204,8 @@ public class FeatureExtractionTest implements Serializable {
 		vf[1] = Vectors.dense(f2);
 		
 		// create a MultiplyExtractor object
-		ConvMultiplyExtractor multi = new ConvMultiplyExtractor(conf, preProcess);
+		ConvMultiplyExtractor multi = new ConvMultiplyExtractor(conf);
+		multi.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
 		multi.setFeatures(vf);
 	
 		// call the feature extraction process
