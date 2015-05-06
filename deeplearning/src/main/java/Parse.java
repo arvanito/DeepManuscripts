@@ -16,10 +16,10 @@ public class Parse implements Function<String, Vector> {
 	public Vector call(String line) throws Exception {
 		
 		// remove square brackets from the start and the end of the string
-		line = line.substring(1, line.length()-1);
+		//line = line.substring(1, line.length()-1);
 		
 		// split the string to an array of string by using "," as a delimiter
-		String[] sarray = line.split(",");	
+		String[] sarray = line.trim().split("\\s+");	
 		
 		// convert this array of strings to an array of doubles
 		double[] values = new double[sarray.length];
