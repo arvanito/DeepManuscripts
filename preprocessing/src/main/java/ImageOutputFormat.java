@@ -14,7 +14,9 @@ import org.apache.hadoop.util.Progressable;
 import org.opencv.core.MatOfByte;
 import org.opencv.highgui.Highgui;
 
-
+/**
+ * FileOutputFormat class allowing to save a PairRDD 'imageFileName,imageRepresentation' to a folder, even with subdirectory structure
+ */
 public class ImageOutputFormat extends
         MultipleOutputFormat<String, ImageData> {
 
@@ -28,9 +30,6 @@ public class ImageOutputFormat extends
         return key;
     }
 
-    /**
-     * RecordWriter that writes raw bytes as key and no value.
-     */
     public static class ImageRecordWriter implements
             RecordWriter<String, ImageData> {
         private final FSDataOutputStream outputStream;
@@ -64,6 +63,9 @@ public class ImageOutputFormat extends
         return new ImageRecordWriter(stream);
     }
 
+    /**
+     * Allows to overwrite/modify an existing folder
+     */
     public void checkOutputSpecs(FileSystem ignored, JobConf job) throws FileAlreadyExistsException, InvalidJobConfException, IOException {
         Path outDir = getOutputPath(job);
         if(outDir == null && job.getNumReduceTasks() != 0) {

@@ -11,7 +11,6 @@ import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.input.PortableDataStream;
 import org.opencv.core.Mat;
-import org.opencv.highgui.Highgui;
 import scala.Tuple2;
 
 import java.io.IOException;
@@ -76,7 +75,7 @@ public class TestMain {
 
 
         //Save result
-        pixelsNumber.saveAsHadoopFile(outputFile, String.class, String.class, MultiFileOutput.class);
+        pixelsNumber.saveAsHadoopFile(outputFile, String.class, String.class, MultipleStringFileOutputFormat.class);
 
         //Save result
        // dataImages.saveAsHadoopFile(outputFile+"-img", String.class, ImageData.class, ImageOutputFormat.class);

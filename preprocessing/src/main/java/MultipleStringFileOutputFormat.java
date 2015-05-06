@@ -12,9 +12,9 @@ import org.apache.hadoop.mapreduce.security.TokenCache;
 import java.io.IOException;
 
 /**
- * OutputFormat class that outputs to a different files named with the key, and whose content is the value.
+ * FileOutputFormat class allowing to save a PairRDD 'filename,fileContent' to a folder, with each record being saved to a different file
  */
-public class MultiFileOutput extends MultipleTextOutputFormat<String, String> {
+public class MultipleStringFileOutputFormat extends MultipleTextOutputFormat<String, String> {
     @Override
     protected String generateFileNameForKeyValue(String key, String value, String name) {
         return key.toString();
@@ -25,6 +25,9 @@ public class MultiFileOutput extends MultipleTextOutputFormat<String, String> {
         return null;
     }
 
+    /**
+     * Allows to overwrite/modify an existing folder
+     */
     public void checkOutputSpecs(FileSystem ignored, JobConf job) throws FileAlreadyExistsException, InvalidJobConfException, IOException {
         Path outDir = getOutputPath(job);
         if(outDir == null && job.getNumReduceTasks() != 0) {

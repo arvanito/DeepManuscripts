@@ -10,6 +10,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.input.PortableDataStream;
+import org.apache.spark.storage.StorageLevel;
 import org.opencv.core.Mat;
 import ch.epfl.dhlab.AndreaPipeline;
 import org.opencv.core.Size;
@@ -25,14 +26,14 @@ public class AndreaPipelineMain {
         JavaPairRDD<String,PortableDataStream> dataStream  = sc.binaryFiles(FilenameUtils.concat(inputFolder, regex))
         //Filter non-image file
             .filter(new Function<Tuple2<String, PortableDataStream>, Boolean>() {
-            @Override
-            public Boolean call(Tuple2<String, PortableDataStream> d) throws Exception {
-                String ext = FilenameUtils.getExtension(d._1());
-                return ext.equals("jpg") || ext.equals("JPG") || ext.equals("jpeg") || ext.equals("JPEG")
-                        || ext.equals("png") || ext.equals("PNG") || ext.equals("tif") || ext.equals("TIF")
-                        || ext.equals("tiff") || ext.equals("TIFF");
-            }
-        });
+                @Override
+                public Boolean call(Tuple2<String, PortableDataStream> d) throws Exception {
+                    String ext = FilenameUtils.getExtension(d._1());
+                    return ext.equals("jpg") || ext.equals("JPG") || ext.equals("jpeg") || ext.equals("JPEG")
+                            || ext.equals("png") || ext.equals("PNG") || ext.equals("tif") || ext.equals("TIF")
+                            || ext.equals("tiff") || ext.equals("TIFF");
+                }
+            });
         //Find absolute path of input folder
         String inputFileAbs="";
         FileSystem fs=null;
@@ -81,16 +82,18 @@ public class AndreaPipelineMain {
         JavaRDD<Tuple2<String, Tuple2<String, ImageData>>> segmentationResult = dataImages.map(new Function<Tuple2<String, ImageData>, Tuple2<String, Tuple2<String, ImageData>>>() {
             public Tuple2<String, Tuple2<String, ImageData>> call(Tuple2<String, ImageData> data) {
                 Mat m = data._2().getImage(); //Decompress and return a pointer to the uncompressed image representation
-                //Imgproc.resize(m,m,new Size(300,900));
+                //Imgproc.resize(m, m, new Size(300, 900));
                 Mat binarized = AndreaPipeline.binarizePage(m); // Binarize the image
                 Mat segmentationResult = new Mat();
                 String jSonString = AndreaPipeline.lineDetection(data._1(), m, binarized, segmentationResult); //detect the lines
                 int newHeight = 1200;
-                int newWidth = newHeight *segmentationResult.cols()/segmentationResult.rows();
-                Imgproc.resize(segmentationResult,segmentationResult,new Size(newWidth,newHeight));
+                int newWidth = newHeight * segmentationResult.cols() / segmentationResult.rows();
+                Imgproc.resize(segmentationResult, segmentationResult, new Size(newWidth, newHeight));
                 return new Tuple2<String, Tuple2<String, ImageData>>(data._1(), new Tuple2<String, ImageData>(jSonString, new ImageData(segmentationResult)));
             }
         });
+        //Persist result so it is not recomputed twice
+        segmentationResult.cache();
 
         //Filtering only the jSon output
         JavaPairRDD<String, String> jSonData = segmentationResult.mapToPair(new PairFunction<Tuple2<String, Tuple2<String, ImageData>>, String, String>() {
@@ -100,9 +103,9 @@ public class AndreaPipelineMain {
             }
         });
         //Save jSon files separately based on the key value
-        jSonData.saveAsHadoopFile(outputFile, String.class, String.class, MultiFileOutput.class);
+        jSonData.saveAsHadoopFile(outputFile, String.class, String.class, MultipleStringFileOutputFormat.class);
 
-        //Filtering only the jSon output
+        //Filtering only the marked segmentation
         JavaPairRDD<String, ImageData> imgOutput = segmentationResult.mapToPair(new PairFunction<Tuple2<String, Tuple2<String, ImageData>>, String, ImageData>() {
             public Tuple2<String, ImageData> call(Tuple2<String, Tuple2<String, ImageData>> data) {
                 String basename = data._1();
