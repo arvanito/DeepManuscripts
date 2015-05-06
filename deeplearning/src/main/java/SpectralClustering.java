@@ -20,10 +20,13 @@ public class SpectralClustering {
 	Vector[] input;
 	Matrix kNN;
 	KMeansModel training;
-	JavaRDD<Integer> vectorClassification;
+	JavaRDD<Integer> vectorsClusters;
 
 	/**
-	 * General constructor for Spectral Clustering.
+	 * General constructor for Spectral Clustering. <br>
+	 * To cluster the input, first use the <i>.computeKNN</i> method and the
+	 * <i>.computeClustering</i> method and finnally get the result by using
+	 * <i>getVectorsClusters</i> method.
 	 * 
 	 * @param input
 	 *            : Input array of Vectors to sort by clusters. </ul>
@@ -33,18 +36,25 @@ public class SpectralClustering {
 	}
 
 	/**
-	 * Train the Spectral Clustering Algorithm using the data provided by the
-	 * Input Matrix.
+	 * Getter for vectorsClusters.
 	 * 
-	 * @return
-	 * 
+	 * @return A JavaRDD of Integer containing the IDs of the clusters
+	 *         corresponding to each input Vector.
 	 */
-	public JavaRDD<Integer> computeClustering(int k) {
+	public JavaRDD<Integer> getVectorsClusters() {
+		return vectorsClusters;
+	}
+
+	/**
+	 * Train the Spectral Clustering Algorithm using the data provided by the
+	 * Input Matrix and return.
+	 * @param k Number of clusters.
+	 */
+	public void computeClustering(int k) {
 		Matrix d = getDegreeMatrix(kNN);
 		Matrix l = computeUnnormalizedLaplacian(kNN, d);
-		Matrix u = eigenvectorComputing(l,k);
-
-		return kmeansTraining(u,k);
+		Matrix u = eigenvectorComputing(l, k);
+		kmeansTraining(u, k);
 	}
 
 	/**
@@ -78,10 +88,11 @@ public class SpectralClustering {
 	 * Train KMeansModel and cluster the values.
 	 * 
 	 * @param y
-	 * @return A JavaRDD of Integer containing the IDs of the clusters
-	 *         corresponding to each input Vector.
+	 *            Matrix of eingenvectors.
+	 * @param k
+	 *            Number of clusters.
 	 */
-	private JavaRDD<Integer> kmeansTraining(Matrix y, int k) {
+	private void kmeansTraining(Matrix y, int k) {
 		int nbRow = y.numRows();
 		int nbCol = y.numCols();
 		double[][] yArray = getValues2D(y);
@@ -96,7 +107,7 @@ public class SpectralClustering {
 		}
 		List<Vector> data = Arrays.asList(vectors);
 
-		SparkConf conf = new SparkConf().setAppName("K-means");
+		SparkConf conf = new SparkConf().setAppName("K-means in Spectral Clustering");
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		JavaRDD<Vector> distData = sc.parallelize(data);
 
@@ -105,14 +116,17 @@ public class SpectralClustering {
 				numIterations);
 		sc.close();
 		this.training = clusters;
-		return clusters.predict(distData);
+		this.vectorsClusters = clusters.predict(distData);
 	}
 
 	/**
 	 * Compute the k eigenvectors of the matrix l.
 	 * 
 	 * @param l
-	 *            : Laplacian matrix.
+	 *            Laplacian matrix.
+	 * 
+	 * @param k
+	 *            Number of clusters
 	 * @return The k eigenvectors of the matrix l.
 	 */
 	private Matrix eigenvectorComputing(Matrix l, int k) {
@@ -130,9 +144,9 @@ public class SpectralClustering {
 	 * Compute the unnormalized Laplacian
 	 * 
 	 * @param w
-	 *            : Weighted adjacency matrix W.
+	 *            Weighted adjacency matrix W.
 	 * @param d
-	 *            : Degree matrix D.
+	 *            Degree matrix D.
 	 * @return Unnormalized graph Laplacian matrix L
 	 */
 	private Matrix computeUnnormalizedLaplacian(Matrix w, Matrix d) {
@@ -152,6 +166,7 @@ public class SpectralClustering {
 	 * Calculate the degree matrix D from the input matrix W.
 	 * 
 	 * @param w
+	 *            The input Matrix
 	 * @return Degree matrix D.
 	 */
 	private Matrix getDegreeMatrix(Matrix w) {
@@ -171,11 +186,11 @@ public class SpectralClustering {
 	 * Transform an array of arrays into a Matrix
 	 * 
 	 * @param nbRow
-	 *            : Number of rows
+	 *            Number of rows
 	 * @param nbCol
-	 *            : Number of columns
+	 *            Number of columns
 	 * @param d
-	 *            : Array of arrays of doubles
+	 *            Array of arrays of doubles
 	 * @return The Matrix
 	 */
 	private Matrix toMatrix(int nbRow, int nbCol, double[][] d) {
@@ -192,7 +207,7 @@ public class SpectralClustering {
 	 * Transform a matrix to an array of arrays of doubles
 	 * 
 	 * @param w
-	 *            : The Matrix to transform
+	 *            The Matrix to transform
 	 * @return An array of arrays of doubles
 	 */
 	private double[][] getValues2D(Matrix w) {

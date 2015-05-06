@@ -1,9 +1,6 @@
 package test.java;
 
-import java.util.Arrays;
-import java.util.Comparator;
-
-import main.java.WeightedMatrix;
+import main.java.KNearestNeighbor;
 
 import org.apache.spark.mllib.linalg.Matrix;
 import org.apache.spark.mllib.linalg.Vector;
@@ -20,7 +17,7 @@ public class WeightedMatrixTest {
 			vectors[i] = Vectors.dense(testArray[i]);
 			System.out.println("Vector " + i +": " + vectors[i].toArray()[0] + " " + vectors[i].toArray()[1] + " " + vectors[i].toArray()[2] + " " + vectors[i].toArray()[3] + " " + vectors[i].toArray()[4] + " " + vectors[i].toArray()[5] + " ");
 		}
-		WeightedMatrix w = new WeightedMatrix(vectors, 3,0,1,1);
+		KNearestNeighbor w = new KNearestNeighbor(vectors, 3,0,1,1);
 		Matrix m = w.getWeightedMatrix();
 		System.out.println("Matrix:");
 		int size = m.numCols();
