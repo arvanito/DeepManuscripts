@@ -21,22 +21,30 @@ public class ConvMultiplyExtractor implements Extractor {
 
 	private static final long serialVersionUID = 7991635895652585866L;
 
-	private ConfigBaseLayer configLayer = null;		// layer configuration from the protocol buffer
 	private DenseMatrix zca;
 	private DenseVector mean;
-	private Vector[] features;				// array of learned feature Vectors
+	private Vector[] features;	// array of learned feature Vectors
 
-	
+	private int inputRows;
+	private int inputCols;
+	private int featureRows;
+	private int featureCols;
+	//private int validRows;
+	//private int validCols;
+
+	private ConfigFeatureExtractor.NonLinearity nonLinearity = null;
+	private double alpha; // non-linearity (threshold)
+
 	/**
 	 * Constructor 
 	 * @param configLayer The input configuration for the current layer
 	 * @param preProcess The input PreProcess configuration
 	 */
 	public ConvMultiplyExtractor(ConfigBaseLayer configLayer) {
-		this.configLayer = configLayer;
+		setConfigLayer(configLayer);
 	}
-	
-	
+
+
 	/**
 	 * Constructor 
 	 * @param configLayer The input configuration for the current layer
@@ -44,20 +52,10 @@ public class ConvMultiplyExtractor implements Extractor {
 	 * @param features The input feature learned from the previous step
 	 */
 	public ConvMultiplyExtractor(ConfigBaseLayer configLayer, PreProcessZCA preProcess, Vector[] features) {
-		this.configLayer = configLayer;
+		setConfigLayer(configLayer);
 		this.features = features;
 	}
-	
-	
-	/**
-	 * Getter method for the ConfigBaseLayer object.
-	 * 
-	 * @return The ConfigBaseLayer object
-	 */
-	public ConfigBaseLayer getConfigLayer() {
-		return configLayer;
-	}
-	
+
 	/**
 	 * Getter method for the learned features.
 	 * 
@@ -75,7 +73,24 @@ public class ConvMultiplyExtractor implements Extractor {
 	 */
 	//@Override
 	public void setConfigLayer(ConfigBaseLayer configLayer) {
-		this.configLayer = configLayer;
+		ConfigFeatureExtractor conf = configLayer.getConfigFeatureExtractor();
+		inputCols = conf.getInputDim1();
+		inputRows = conf.getInputDim2();
+		if(inputCols == 0) throw new RuntimeException("Configured input dimension 1 is 0");
+		if(inputCols == 0) throw new RuntimeException("Configured input dimension 2 is 0");
+
+		featureCols = conf.getFeatureDim1();
+		featureRows = conf.getFeatureDim2();
+		if(featureCols == 0 || featureCols > inputCols) throw new RuntimeException("Configured feature dimension 1 is 0 or > input dimension 1");
+		if(featureRows == 0 || featureRows > inputRows) throw new RuntimeException("Configured feature dimension 2 is 0 or > input dimension 2");
+
+		//validRows = inputRows - featureRows + 1;
+		//validCols = inputCols - featureCols + 1;
+		nonLinearity = conf.getNonLinearity();
+		System.out.println(nonLinearity);
+		if (conf.hasSoftThreshold()) {
+			alpha = conf.getSoftThreshold();
+		}
 	}
 	
 	@Override
@@ -119,8 +134,8 @@ public class ConvMultiplyExtractor implements Extractor {
 		DenseMatrix D = MatrixOps.convertVectors2Mat(features);
 
 		// reshape data vector to a matrix and extract all overlapping patches
-		int[] dims = {configLayer.getConfigFeatureExtractor().getInputDim1(), configLayer.getConfigFeatureExtractor().getInputDim2()};
-		int[] rfSize = {configLayer.getConfigFeatureExtractor().getFeatureDim1(), configLayer.getConfigFeatureExtractor().getFeatureDim2()};
+		int[] dims = {inputRows, inputCols};
+		int[] rfSize = {featureRows, featureCols};
 		DenseMatrix M = MatrixOps.reshapeVec2Mat((DenseVector) data, dims);	
 		DenseMatrix patches = MatrixOps.im2colT(M, rfSize);
 		
@@ -149,12 +164,6 @@ public class ConvMultiplyExtractor implements Extractor {
 		DenseVector outVec = MatrixOps.reshapeMat2Vec(out);
 		
 		// apply non-linearity
-		ConfigFeatureExtractor.NonLinearity nonLinearity = configLayer.getConfigFeatureExtractor().getNonLinearity();
-		double alpha = 0.0;
-		if (configLayer.getConfigFeatureExtractor().hasSoftThreshold()) {
-			System.out.println("We do not have a threshold");
-			alpha = configLayer.getConfigFeatureExtractor().getSoftThreshold();
-		}
 		outVec = MatrixOps.applyNonLinearityVec(outVec, nonLinearity, alpha);
 		
 		return outVec;

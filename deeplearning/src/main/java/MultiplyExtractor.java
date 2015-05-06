@@ -21,7 +21,6 @@ public class MultiplyExtractor implements Extractor {
 
 	private ConfigFeatureExtractor.NonLinearity nonLinearity = null; 	// nonLinearity, by default NONE
 	private double alpha;												// non-linearity optional threshold
-	private ConfigBaseLayer configLayer = null;		// layer configuration from the protocol buffer
 	private DenseMatrix zca;
 	private DenseVector mean;
 	private Vector[] features;				// array of learned feature Vectors
@@ -38,13 +37,14 @@ public class MultiplyExtractor implements Extractor {
 		setConfigLayer(configLayer);
 	}
 	
-	/**
-	 * Getter method for the ConfigBaseLayer object.
-	 * 
-	 * @return The ConfigBaseLayer object
-	 */
-	public ConfigBaseLayer getConfigLayer() {
-		return configLayer;
+	@Override
+	public void setConfigLayer(ConfigBaseLayer configLayer) {
+		ConfigFeatureExtractor conf = configLayer.getConfigFeatureExtractor();
+		nonLinearity = conf.getNonLinearity();
+		System.out.println(nonLinearity);
+		if (conf.hasSoftThreshold()) {
+			alpha = conf.getSoftThreshold();
+		}
 	}
 	
 	@Override
@@ -61,20 +61,7 @@ public class MultiplyExtractor implements Extractor {
 	public Vector[] getFeatures() {
 		return features;
 	}
-	
-	
-	/**
-	 * Setter method for the ConfigBaseLayer object.
-	 * 
-	 * @param configLayer The ConfigBaseLayer object
-	 */
-	@Override
-	public void setConfigLayer(ConfigBaseLayer configLayer) {
-		
-		// set the configuration layer
-		this.configLayer = configLayer;
-	}
-	
+
 	/**
 	 * Setter method for learned features.
 	 * 
@@ -94,15 +81,6 @@ public class MultiplyExtractor implements Extractor {
 	 */
 	@Override
 	public Vector call(Vector data) throws Exception {
-		
-		// number of features learned
-		/*int numFeatures = 0;
-		if (configLayer.hasConfigKmeans()) {
-			numFeatures = configLayer.getConfigKmeans().getNumberOfClusters();
-		} else if (configLayer.hasConfigAutoencoders()) {
-			numFeatures = configLayer.getConfigAutoencoders().getNumberOfUnits();
-		}*/
-		
 		// filters, convert from Vector[] to DenseMatrix
 		DenseMatrix D = MatrixOps.convertVectors2Mat(features);
 
@@ -139,5 +117,4 @@ public class MultiplyExtractor implements Extractor {
 		
 		return dataOut;
 	}
-
 }
