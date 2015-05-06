@@ -39,15 +39,12 @@ public class SpectralClustering {
 	 * @return
 	 * 
 	 */
-	public JavaRDD<Integer> compute() {
-		// TODO Modify to make more customizable.
-		Matrix w = new KNearestNeighbor(input, 3, 0, 1, 1).getWeightedMatrix();
-		Matrix d = getDegreeMatrix(w);
-		Matrix l = computeUnnormalizedLaplacian(w, d);
-		// Computing the eigenvectors
-		Matrix u = eigenvectorComputing(l);
+	public JavaRDD<Integer> computeClustering(int k) {
+		Matrix d = getDegreeMatrix(kNN);
+		Matrix l = computeUnnormalizedLaplacian(kNN, d);
+		Matrix u = eigenvectorComputing(l,k);
 
-		return kmeansTraining(u);
+		return kmeansTraining(u,k);
 	}
 
 	/**
@@ -77,7 +74,14 @@ public class SpectralClustering {
 		this.kNN = kNN.getWeightedMatrix();
 	}
 
-	private JavaRDD<Integer> kmeansTraining(Matrix y) {
+	/**
+	 * Train KMeansModel and cluster the values.
+	 * 
+	 * @param y
+	 * @return A JavaRDD of Integer containing the IDs of the clusters
+	 *         corresponding to each input Vector.
+	 */
+	private JavaRDD<Integer> kmeansTraining(Matrix y, int k) {
 		int nbRow = y.numRows();
 		int nbCol = y.numCols();
 		double[][] yArray = getValues2D(y);
@@ -111,7 +115,7 @@ public class SpectralClustering {
 	 *            : Laplacian matrix.
 	 * @return The k eigenvectors of the matrix l.
 	 */
-	private Matrix eigenvectorComputing(Matrix l) {
+	private Matrix eigenvectorComputing(Matrix l, int k) {
 		int nbRow = l.numRows();
 		Array2DRowRealMatrix L = toArray2DRowRealMatrix(l);
 		EigenDecomposition eigen = new EigenDecomposition(L);
