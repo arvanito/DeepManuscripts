@@ -4,6 +4,8 @@ import main.java.DeepModelSettings.ConfigPooler;
 
 import org.apache.spark.mllib.linalg.Vector;
 
+import scala.Tuple2;
+
 /**
  * A dummy Pooler - just passes the data through.
  * 
@@ -16,7 +18,7 @@ public class DummyPooler implements Pooler {
 	protected ConfigPooler config;
 	
 	@Override
-	public Vector call(Vector data) throws Exception {
+	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> data) throws Exception {
 		return data;
 	}
 	

@@ -7,13 +7,15 @@ import org.apache.spark.mllib.linalg.DenseMatrix;
 import org.apache.spark.mllib.linalg.DenseVector;
 import org.apache.spark.mllib.linalg.Vector;
 
+import scala.Tuple2;
+
 /**
  * All Extractors (Matrix multiply, Convolution,..) should implement this interface. See DummyExtractor for example.
  * 
  * @author Arttu Voutilainen
  *
  */
-public interface Extractor extends Function<Vector, Vector> {
+public interface Extractor extends Function<Tuple2<Vector, Vector>, Tuple2<Vector, Vector>> {
 
 	/**
 	 * Set BaseLayer configuration to be used by this extractor.
@@ -47,6 +49,6 @@ public interface Extractor extends Function<Vector, Vector> {
 	 * @param data Vector representing one data point
 	 * @return A new representation of the input after applying the feature extraction
 	 */
-	public Vector call(Vector data) throws Exception;
+	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> data) throws Exception;
 
 }

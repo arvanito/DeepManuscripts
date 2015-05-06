@@ -7,6 +7,8 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.linalg.Vector;
 
+import scala.Tuple2;
+
 
 /**
  * All PreProcessors (PCA, ZCA, etc) should implement this interface.
@@ -30,7 +32,7 @@ public interface PreProcessor extends Function<Vector, Vector>{
 	 * @param data Input data points in a distributed dataset
 	 * @return preprocessed distributed dataset
 	 */
-	public JavaRDD<Vector> preprocessData(JavaRDD<Vector> data);
+	public JavaRDD<Tuple2<Vector, Vector>> preprocessData(JavaRDD<Tuple2<Vector, Vector>> data);
 	
 	
 	/**

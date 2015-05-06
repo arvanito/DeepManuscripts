@@ -19,6 +19,8 @@ import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.linalg.distributed.RowMatrix;
 import org.apache.spark.mllib.stat.MultivariateStatisticalSummary;
 
+import scala.Tuple2;
+
 /**
  * Class that performs ZCA whitening on the dataset.
  * 
@@ -156,8 +158,16 @@ public class PreProcessZCA implements PreProcessor {
 	 * @return Preprocessed distributed dataset
 	 */
 	@Override
-	public JavaRDD<Vector> preprocessData(JavaRDD<Vector> data) {
+	public JavaRDD<Tuple2<Vector, Vector>> preprocessData(JavaRDD<Tuple2<Vector, Vector>> pairData) {
 
+		// extract data part from the Tuple2 RDD
+		JavaRDD<Vector> data = pairData.map(
+					new Function<Tuple2<Vector, Vector>, Vector>() {
+						public Vector call(Tuple2<Vector, Vector> pair) {
+							return pair._2;
+						}
+					}
+				);
 		// assign eps1 for pre-processing
 		//double eps1 = configLayer.getConfigPreprocess().getEps1();
 
@@ -180,13 +190,12 @@ public class PreProcessZCA implements PreProcessor {
 		
 		// perform ZCA whitening and project the data to decorrelate them
 		DenseMatrix ZCA = performZCA(rowData, configLayer.getConfigPreprocess().getEps2());
-		rowData = rowData.multiply(ZCA);
 		setZCA(ZCA);
 			
-		// convert the distributed RowMatrix into a JavaRDD<Vector> 
-		data = new JavaRDD<Vector>(rowData.rows(), data.classTag());
-
-		return data;
+		// create a JavaRDD<Tuple2<Vector, Vector>> with the whitened data
+		pairData = pairData.map(new convert2Tuple2(ZCA, m));
+		
+		return pairData;
 	}
 	
 	
@@ -255,5 +264,44 @@ public class PreProcessZCA implements PreProcessor {
 		// their loading/saving should not be a bottleneck
 		LinAlgebraIOUtils.saveVectorToObject(this.mean, filename + "_mean", sc);
 		LinAlgebraIOUtils.saveMatrixToObject(this.ZCA, filename + "_zca", sc);
+	}
+}
+
+/**
+ * Helper class that does the projection of the original data onto the whitened space. 
+ * It uses a map that takes as input Tuple2<Vector, Vector> and projects the second part 
+ * of the pair to the whitened space. It outputs a Tuple2<Vector, Vector> where the 
+ * first part of the pair remains the same.
+ */
+class convert2Tuple2 implements Function<Tuple2<Vector, Vector>, Tuple2<Vector, Vector>> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3141810027556534234L;
+	
+	private DenseMatrix M;
+	private DenseVector m;
+
+
+	public convert2Tuple2(DenseMatrix M, DenseVector m) {
+		this.M = M;
+		this.m = m;
+	}
+
+	
+	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pair) {
+
+		// compute multiplication between the second part of the pair and the DenseMatrix
+		DenseVector v = (DenseVector) pair._2;
+
+		// subtract the mean
+		v = MatrixOps.localVecSubtractMean(v, m);
+
+		// project to the whitened space
+		DenseVector out = new DenseVector(new double[v.size()]);
+		BLAS.gemv(1.0, M.transpose(), v, 0, out);
+
+		return new Tuple2<Vector, Vector>(pair._1, out);
 	}
 }

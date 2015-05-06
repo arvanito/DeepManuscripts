@@ -4,9 +4,12 @@ import main.java.DeepModelSettings.ConfigBaseLayer;
 import main.java.DeepModelSettings.ConfigKMeans;
 
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.clustering.KMeans;
 import org.apache.spark.mllib.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
+
+import scala.Tuple2;
 
 /**
  * K-Means learning, using the default K-Means from Spark.
@@ -28,7 +31,19 @@ public class KMeansLearner implements Learner {
 	}
 	
 	@Override
-	public Vector[] call(JavaRDD<Vector> data) throws Exception {
+	public Vector[] call(JavaRDD<Tuple2<Vector, Vector>> pairData) throws Exception {
+		
+		// extract second part of the pair
+		JavaRDD<Vector> data = pairData.map(
+					new Function<Tuple2<Vector, Vector>, Vector>() {
+						private static final long serialVersionUID = 6369401581724529416L;
+
+						public Vector call(Tuple2<Vector, Vector> pair) {
+							return pair._2;
+						}
+					}
+				);
+		
 	    KMeansModel clusters = KMeans.train(data.rdd(), numClusters, numIterations);
 		return clusters.clusterCenters();
 	}

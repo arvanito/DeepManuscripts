@@ -9,6 +9,8 @@ import org.apache.spark.mllib.linalg.DenseVector;
 import org.apache.spark.mllib.linalg.Matrix;
 import org.apache.spark.mllib.linalg.Vector;
 
+import scala.Tuple2;
+
 
 /**
  * Class for feature extraction using matrix multiplications. 
@@ -93,8 +95,9 @@ public class MultiplyExtractor implements Extractor {
 	 * @return Extracted feature
 	 */
 	@Override
-	public Vector call(Vector data) throws Exception {
+	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pairData) throws Exception {
 		
+		Vector data = pairData._2;
 		// number of features learned
 		/*int numFeatures = 0;
 		if (configLayer.hasConfigKmeans()) {
@@ -137,7 +140,7 @@ public class MultiplyExtractor implements Extractor {
 			dataOut = MatrixOps.applyNonLinearityVec(dataOut, nonLinearity, alpha);
 		}
 		
-		return dataOut;
+		return new Tuple2<Vector, Vector>(pairData._1, dataOut);
 	}
 
 }

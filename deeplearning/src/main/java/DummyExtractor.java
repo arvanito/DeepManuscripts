@@ -6,6 +6,8 @@ import org.apache.spark.mllib.linalg.DenseMatrix;
 import org.apache.spark.mllib.linalg.DenseVector;
 import org.apache.spark.mllib.linalg.Vector;
 
+import scala.Tuple2;
+
 /**
  * A dummy Extractor - just passes the data through.
  * 
@@ -18,7 +20,7 @@ public class DummyExtractor implements Extractor {
 	private static final long serialVersionUID = -7897241422516586501L;
 	
 	@Override
-	public Vector call(Vector data) throws Exception {
+	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> data) throws Exception {
 		return data;
 	}
 

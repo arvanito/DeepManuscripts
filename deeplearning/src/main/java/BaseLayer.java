@@ -6,6 +6,8 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.linalg.Vector;
 
+import scala.Tuple2;
+
 /**
  * 
  * A base implementation of a Layer. The constructor is given instances of the three classes,
@@ -51,20 +53,22 @@ public class BaseLayer implements DeepLearningLayer {
 	
 	
 	@Override
-	public JavaRDD<Vector> preProcess(JavaRDD<Vector> data) {
+	public JavaRDD<Tuple2<Vector, Vector>> preProcess(JavaRDD<Tuple2<Vector, Vector>> data) {
 		return preprocess.preprocessData(data);
 	}
 	
 	
 	@Override
-	public Vector[] learnFeatures(JavaRDD<Vector> data) throws Exception {
+	public Vector[] learnFeatures(JavaRDD<Tuple2<Vector, Vector>> data) throws Exception {
 		return learn.call(data);
 	}
 
 	
 	@Override
-	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, ConfigBaseLayer configLayer, Vector[] features) {
+	public JavaRDD<Tuple2<Vector, Vector>> extractFeatures(JavaRDD<Tuple2<Vector, Vector>> data, ConfigBaseLayer configLayer, Vector[] features) {
 		extract.setConfigLayer(configLayer);
+		
+		// check this!!
 		if(preprocess != null) {
 			extract.setPreProcessZCA(((PreProcessZCA)preprocess).getZCA(), ((PreProcessZCA)preprocess).getMean());
 		}
@@ -74,17 +78,17 @@ public class BaseLayer implements DeepLearningLayer {
 
 	
 	@Override
-	public JavaRDD<Vector> pool(JavaRDD<Vector> data) {
+	public JavaRDD<Tuple2<Vector, Vector>> pool(JavaRDD<Tuple2<Vector, Vector>> data) {
 		return data.map(pool);
 	}
 
 	
 	//TODO:: Input two datasets, one is patch-based and the other is larger parts of the image.
     @Override
-	public JavaRDD<Vector> train(JavaRDD<Vector> input_small_patches, 
-			                       JavaRDD<Vector> input_word_patches) throws Exception {
+	public JavaRDD<Tuple2<Vector, Vector>> train(JavaRDD<Tuple2<Vector, Vector>> input_small_patches, 
+			JavaRDD<Tuple2<Vector, Vector>> input_word_patches) throws Exception {
     	
-    	JavaRDD<Vector> preprocessed = preProcess(input_small_patches);
+    	JavaRDD<Tuple2<Vector, Vector>> preprocessed = preProcess(input_small_patches);
     	if (save_model == true)
     		this.preprocess.saveToFile(pathPrefix + "_preprocess", spark_context);
     	
@@ -97,13 +101,13 @@ public class BaseLayer implements DeepLearningLayer {
 		if (save_model == true)
 			LinAlgebraIOUtils.saveVectorArrayToObject(features, pathPrefix + "_features", spark_context);
 		
-		JavaRDD<Vector> represent = extractFeatures(input_word_patches, configLayer, features);
-		JavaRDD<Vector> pooled = pool(represent);
+		JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(input_word_patches, configLayer, features);
+		JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent);
 		return pooled;
 	}
 
     
-    public JavaRDD<Vector> test(JavaRDD<Vector> data) throws Exception {
+    public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data) throws Exception {
     	// Setup the preprocessor
     	this.preprocess.loadFromFile(pathPrefix + "_preprocess", spark_context);
 //    	JavaRDD<Vector> preprocessed = preProcess(data);
@@ -115,8 +119,8 @@ public class BaseLayer implements DeepLearningLayer {
     	System.out.println(features.length);
     	System.out.println(features[0].size());
     	
-    	JavaRDD<Vector> represent = extractFeatures(data, configLayer, features);
-    	JavaRDD<Vector> pooled = pool(represent);
+    	JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(data, configLayer, features);
+    	JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent);
     	return pooled;
     }
    
