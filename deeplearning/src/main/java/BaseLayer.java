@@ -83,12 +83,13 @@ public class BaseLayer implements DeepLearningLayer {
     @Override
 	public JavaRDD<Vector> train(JavaRDD<Vector> input_small_patches, 
 			                       JavaRDD<Vector> input_word_patches) throws Exception {
-    	
-    	JavaRDD<Vector> preprocessed = preProcess(input_small_patches);
-    	if (save_model == true)
-    		this.preprocess.saveToFile(pathPrefix + "_preprocess", spark_context);
-    	
-		Vector[] features = learnFeatures(preprocessed);
+		if(preprocess != null) {
+		input_small_patches = preProcess(input_small_patches);
+			if (save_model == true) { // save the ZCA matrix and mean
+				preprocess.saveToFile(pathPrefix + "_preprocess", spark_context);
+			}
+		}
+		Vector[] features = learnFeatures(input_small_patches);
 		
 		// TODO:: do preprocessing on the second dataset
 		//JavaRDD<Vector> preprocessedBig = dataBig.map(preprocess);
