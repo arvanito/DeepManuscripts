@@ -78,8 +78,18 @@ public class AndreaPipelineMain {
 
         JavaPairRDD<String, ImageData> dataImages = loadImages(sc,inputFile,dirRegex);
 
+        //Crop the images
+        JavaPairRDD<String, ImageData> pagesCropped = dataImages.mapValues(new Function<ImageData, ImageData>() {
+            public ImageData call(ImageData data) {
+                Mat m = data.getImage(); //Decompress and return a pointer to the uncompressed image representation
+                return new ImageData(AndreaPipeline.cropPage(m));
+            }
+        });
+        //Save cropped images
+        pagesCropped.saveAsHadoopFile(outputFile+"-cropped", String.class, ImageData.class, ImageOutputFormat.class);
+
         //Segment the image, results as : <fileBasename,<jSonData,imgSegmentation>>
-        JavaPairRDD<String, Tuple2<String, ImageData>> segmentationResult = dataImages.mapToPair(new PairFunction<Tuple2<String, ImageData>, String, Tuple2<String, ImageData>>() {
+        JavaPairRDD<String, Tuple2<String, ImageData>> segmentationResult = pagesCropped.mapToPair(new PairFunction<Tuple2<String, ImageData>, String, Tuple2<String, ImageData>>() {
             public Tuple2<String, Tuple2<String, ImageData>> call(Tuple2<String, ImageData> data) {
                 Mat m = data._2().getImage(); //Decompress and return a pointer to the uncompressed image representation
                 Mat segmentationResult = new Mat();
@@ -136,7 +146,7 @@ public class AndreaPipelineMain {
             }
         });
         //Save jSon files separately based on the key value
-        jSonData.saveAsHadoopFile(outputFile, String.class, String.class, MultipleStringFileOutputFormat.class);
+        jSonData.saveAsHadoopFile(outputFile+"-json", String.class, String.class, MultipleStringFileOutputFormat.class);
 
         //Filtering only the marked segmentation
         JavaPairRDD<String, ImageData> imgOutput = segmentationResultSuccess.mapToPair(new PairFunction<Tuple2<String, Tuple2<String, ImageData>>, String, ImageData>() {
@@ -146,7 +156,7 @@ public class AndreaPipelineMain {
             }
         });
         //Save segmentation representation
-        imgOutput.saveAsHadoopFile(outputFile+"-img", String.class, ImageData.class, ImageOutputFormat.class);
+        imgOutput.saveAsHadoopFile(outputFile+"-seg", String.class, ImageData.class, ImageOutputFormat.class);
 
         sc.close();
     }
