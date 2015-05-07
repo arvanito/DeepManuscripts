@@ -79,24 +79,55 @@ public class AndreaPipelineMain {
         JavaPairRDD<String, ImageData> dataImages = loadImages(sc,inputFile,dirRegex);
 
         //Segment the image, results as : <fileBasename,<jSonData,imgSegmentation>>
-        JavaRDD<Tuple2<String, Tuple2<String, ImageData>>> segmentationResult = dataImages.map(new Function<Tuple2<String, ImageData>, Tuple2<String, Tuple2<String, ImageData>>>() {
+        JavaPairRDD<String, Tuple2<String, ImageData>> segmentationResult = dataImages.mapToPair(new PairFunction<Tuple2<String, ImageData>, String, Tuple2<String, ImageData>>() {
             public Tuple2<String, Tuple2<String, ImageData>> call(Tuple2<String, ImageData> data) {
                 Mat m = data._2().getImage(); //Decompress and return a pointer to the uncompressed image representation
-                //Imgproc.resize(m, m, new Size(300, 900));
-                Mat binarized = AndreaPipeline.binarizePage(m); // Binarize the image
                 Mat segmentationResult = new Mat();
-                String jSonString = AndreaPipeline.lineDetection(data._1(), m, binarized, segmentationResult); //detect the lines
-                int newHeight = 1200;
-                int newWidth = newHeight * segmentationResult.cols() / segmentationResult.rows();
-                Imgproc.resize(segmentationResult, segmentationResult, new Size(newWidth, newHeight));
-                return new Tuple2<String, Tuple2<String, ImageData>>(data._1(), new Tuple2<String, ImageData>(jSonString, new ImageData(segmentationResult)));
+                String jSonStringResult = "";
+                if(m.cols()>0 && m.rows()>0) {
+                    Imgproc.resize(m, m, new Size(300, 900));
+                    Mat binarized = AndreaPipeline.binarizePage(m); // Binarize the image
+                    if (binarized.size().equals(m.size())) {
+                        String jSonString = AndreaPipeline.lineDetection(data._1(), m, binarized, segmentationResult); //detect the lines
+                        if (segmentationResult.size().equals(m.size())) {
+                            int newHeight = 1200;
+                            int newWidth = newHeight * segmentationResult.cols() / segmentationResult.rows();
+                            Imgproc.resize(segmentationResult, segmentationResult, new Size(newWidth, newHeight));
+                            jSonStringResult = jSonString;
+                        }
+                    }
+                }
+                return new Tuple2<String, Tuple2<String, ImageData>>(data._1(), new Tuple2<String, ImageData>(jSonStringResult, new ImageData(segmentationResult)));
             }
         });
-        //Persist result so it is not recomputed twice
+        //Persist result so it is not recomputed multiple times
         segmentationResult.cache();
 
+        //Save failed elements
+        JavaPairRDD<String, String> segmentationResultFailed = segmentationResult.filter(new Function<Tuple2<String, Tuple2<String, ImageData>>, Boolean>() {
+            @Override
+            public Boolean call(Tuple2<String, Tuple2<String, ImageData>> stringTuple2Tuple2) throws Exception {
+                return stringTuple2Tuple2._2()._1() == "";
+            }
+        }).mapToPair(new PairFunction<Tuple2<String, Tuple2<String, ImageData>>, String, String>() {
+            public Tuple2<String, String> call(Tuple2<String, Tuple2<String, ImageData>> data) {
+                return new Tuple2<String, String>(data._1(), data._2()._1());
+            }
+        });
+        //Save empty files with the names of failed elements
+        segmentationResultFailed.saveAsHadoopFile(outputFile+"-failed", String.class, String.class, MultipleStringFileOutputFormat.class);
+
+
+        //Save successfull elements
+        JavaPairRDD<String, Tuple2<String, ImageData>> segmentationResultSuccess = segmentationResult.filter(new Function<Tuple2<String, Tuple2<String, ImageData>>, Boolean>() {
+            @Override
+            public Boolean call(Tuple2<String, Tuple2<String, ImageData>> stringTuple2Tuple2) throws Exception {
+                return stringTuple2Tuple2._2()._1() != "";
+            }
+        });
+
         //Filtering only the jSon output
-        JavaPairRDD<String, String> jSonData = segmentationResult.mapToPair(new PairFunction<Tuple2<String, Tuple2<String, ImageData>>, String, String>() {
+        JavaPairRDD<String, String> jSonData = segmentationResultSuccess.mapToPair(new PairFunction<Tuple2<String, Tuple2<String, ImageData>>, String, String>() {
             public Tuple2<String, String> call(Tuple2<String, Tuple2<String, ImageData>> data) {
                 String basename = FilenameUtils.removeExtension(data._1());
                 return new Tuple2<String, String>(basename + ".json", data._2()._1());
@@ -106,7 +137,7 @@ public class AndreaPipelineMain {
         jSonData.saveAsHadoopFile(outputFile, String.class, String.class, MultipleStringFileOutputFormat.class);
 
         //Filtering only the marked segmentation
-        JavaPairRDD<String, ImageData> imgOutput = segmentationResult.mapToPair(new PairFunction<Tuple2<String, Tuple2<String, ImageData>>, String, ImageData>() {
+        JavaPairRDD<String, ImageData> imgOutput = segmentationResultSuccess.mapToPair(new PairFunction<Tuple2<String, Tuple2<String, ImageData>>, String, ImageData>() {
             public Tuple2<String, ImageData> call(Tuple2<String, Tuple2<String, ImageData>> data) {
                 String basename = data._1();
                 return new Tuple2<String, ImageData>(basename, data._2()._2());
