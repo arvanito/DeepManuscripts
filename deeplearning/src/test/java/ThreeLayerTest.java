@@ -24,6 +24,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import scala.Tuple2;
+
 public class ThreeLayerTest implements Serializable {
 
 	private static final long serialVersionUID = -597804824623690421L;
@@ -31,7 +33,7 @@ public class ThreeLayerTest implements Serializable {
 	ConfigBaseLayer config1;
 	ConfigBaseLayer config2;
 	ConfigBaseLayer config3;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		sc = new JavaSparkContext("local", "ThreeLayerTest");
@@ -91,9 +93,9 @@ public class ThreeLayerTest implements Serializable {
 	 	}
 		// We have 100 patches of size 2x2 as input
 		// We have 50 word images of size 8x8
-		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
-		JavaRDD<Vector> imgwords = sc.parallelize(input_word_patches);
-		JavaRDD<Vector> result = null;
+		JavaRDD<Tuple2<Vector,Vector>> patches = null;//sc.parallelize(input_small_patches);
+		JavaRDD<Tuple2<Vector,Vector>> imgwords = null;//sc.parallelize(input_word_patches);
+		JavaRDD<Tuple2<Vector,Vector>> result = null;
 		int layer_index = 0;
 	 	for (ConfigBaseLayer config_layer: config_list) {
 			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config_layer, layer_index++, "three_layer");
@@ -105,8 +107,8 @@ public class ThreeLayerTest implements Serializable {
 				result = layer.train(result, result);
 			}	
 	 	}
-		List<Vector> out = result.collect();
+		List<Tuple2<Vector,Vector>> out = result.collect();
 		Assert.assertEquals(50, out.size());
-		Assert.assertEquals(5, out.get(0).size());	
+		Assert.assertEquals(5, out.get(0)._2.size());	
 	}
 }

@@ -24,6 +24,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import scala.Tuple2;
+
 public class OneLayerTest implements Serializable {
 
 	private static final long serialVersionUID = -8953031572106667936L;
@@ -69,26 +71,26 @@ public class OneLayerTest implements Serializable {
 		DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(c, 0, "one_layer");
 		// We have 100 patches of size 2x2 as input
 		// We have 50 word images of size 8x8
-		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
-		JavaRDD<Vector> imgwords = sc.parallelize(input_word_patches);
+		JavaRDD<Tuple2<Vector,Vector>> patches = null;//sc.parallelize(input_small_patches);
+		JavaRDD<Tuple2<Vector,Vector>> imgwords = null;//sc.parallelize(input_word_patches);
 		
-	   	JavaRDD<Vector> preprocessed = layer.preProcess(patches);
-	   	List<Vector> v = preprocessed.collect();
+	   	JavaRDD<Tuple2<Vector, Vector>> preprocessed = layer.preProcess(patches);
+	   	List<Tuple2<Vector,Vector>> v = preprocessed.collect();
 	   	Assert.assertEquals(100, v.size());
 		Vector[] features = layer.learnFeatures(preprocessed);
 		Assert.assertEquals(3, features.length);
 		Assert.assertEquals(4, features[0].size());
 		
-		JavaRDD<Vector> represent = layer.extractFeatures(imgwords, c, features);
+		JavaRDD<Tuple2<Vector,Vector>> represent = layer.extractFeatures(imgwords, c, features);
 		
-		List<Vector> t = represent.collect();
+		List<Tuple2<Vector,Vector>> t = represent.collect();
 		Assert.assertEquals(50, t.size());
 		// 147 is 3 x 7 x 7
-		Assert.assertEquals(147, t.get(0).size());
-		JavaRDD<Vector> pooled = layer.pool(represent);
-		List<Vector> result = pooled.collect();
+		Assert.assertEquals(147, t.get(0)._2.size());
+		JavaRDD<Tuple2<Vector,Vector>> pooled = layer.pool(represent);
+		List<Tuple2<Vector,Vector>> result = pooled.collect();
 		Assert.assertEquals(50, result.size());
-		Assert.assertEquals(27, result.get(0).size());
+		Assert.assertEquals(27, result.get(0)._2.size());
 
 	}
 	
@@ -123,14 +125,14 @@ public class OneLayerTest implements Serializable {
 		layer.setSparkContext(sc);
 		// We have 100 patches of size 2x2 as input
 		// We have 50 word images of size 8x8
-		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
-		JavaRDD<Vector> imgwords = sc.parallelize(input_word_patches);
+		JavaRDD<Tuple2<Vector,Vector>> patches = null;//sc.parallelize(input_small_patches);
+		JavaRDD<Tuple2<Vector,Vector>> imgwords = null;//sc.parallelize(input_word_patches);
 		
-		JavaRDD<Vector> result = layer.train(patches, imgwords);
+		JavaRDD<Tuple2<Vector,Vector>> result = layer.train(patches, imgwords);
 
-		List<Vector> res = result.collect();
+		List<Tuple2<Vector,Vector>> res = result.collect();
 		Assert.assertEquals(50, res.size());
-		Assert.assertEquals(27, res.get(0).size());
+		Assert.assertEquals(27, res.get(0)._2.size());
 
 	}
 }

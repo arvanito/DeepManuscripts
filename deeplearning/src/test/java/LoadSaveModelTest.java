@@ -25,6 +25,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import scala.Tuple2;
+
 public class LoadSaveModelTest implements Serializable {
 
 
@@ -93,9 +95,9 @@ public class LoadSaveModelTest implements Serializable {
 	 	}
 		// We have 100 patches of size 2x2 as input
 		// We have 50 word images of size 8x8
-		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
-		JavaRDD<Vector> imgwords = sc.parallelize(input_word_patches);
-		JavaRDD<Vector> result = null;
+		JavaRDD<Tuple2<Vector,Vector>> patches = null;//sc.parallelize(input_small_patches);
+		JavaRDD<Tuple2<Vector,Vector>> imgwords = null;//sc.parallelize(input_word_patches);
+		JavaRDD<Tuple2<Vector,Vector>> result = null;
 		int layer_index = 0;
 	 	for (ConfigBaseLayer config_layer: config_list) {
 			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config_layer, layer_index++, "three_layer");
@@ -109,15 +111,15 @@ public class LoadSaveModelTest implements Serializable {
 				result = layer.train(result, result);
 			}	
 	 	}
-		List<Vector> out = result.collect();
+		List<Tuple2<Vector,Vector>> out = result.collect();
 		Assert.assertEquals(50, out.size());
-		Assert.assertEquals(5, out.get(0).size());	
+		Assert.assertEquals(5, out.get(0)._2.size());	
 		
-		JavaRDD<Vector> imgwords_test = sc.parallelize(input_word_patches);
+		JavaRDD<Tuple2<Vector,Vector>> imgwords_test = null;//sc.parallelize(input_word_patches);
 		System.out.println("Starting testing");
 		layer_index = 0;
 		// now testing time
-		JavaRDD<Vector> result2 = null;
+		JavaRDD<Tuple2<Vector,Vector>> result2 = null;
 	 	for (ConfigBaseLayer config_layer: config_list) {
 			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config_layer, layer_index++, "three_layer");
 		//	layer.setSaveModel(true);
@@ -130,9 +132,9 @@ public class LoadSaveModelTest implements Serializable {
 				result2 = layer.test(result2);
 			}	
 	 	}
-		List<Vector> out2 = result2.collect();
+		List<Tuple2<Vector,Vector>> out2 = result2.collect();
 		Assert.assertEquals(50, out2.size());
-		Assert.assertEquals(5, out2.get(0).size());	
+		Assert.assertEquals(5, out2.get(0)._2.size());	
 		for (int i = 0; i < 50; ++i) {
 			Assert.assertEquals(out.get(i).toString(), out2.get(i).toString());
 		}
