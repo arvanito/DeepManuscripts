@@ -18,6 +18,8 @@ import org.opencv.imgproc.Imgproc;
 import scala.Tuple2;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class AndreaPipelineMain {
 
@@ -79,10 +81,13 @@ public class AndreaPipelineMain {
         JavaPairRDD<String, ImageData> dataImages = loadImages(sc,inputFile,dirRegex);
 
         //Crop the images
-        JavaPairRDD<String, ImageData> pagesCropped = dataImages.mapValues(new Function<ImageData, ImageData>() {
-            public ImageData call(ImageData data) {
+        JavaPairRDD<String, ImageData> pagesCropped = dataImages.flatMapValues(new Function<ImageData, Iterable<ImageData>>() {
+            public Iterable<ImageData> call(ImageData data) {
                 Mat m = data.getImage(); //Decompress and return a pointer to the uncompressed image representation
-                return new ImageData(AndreaPipeline.cropPage(m));
+                List<ImageData> result = new LinkedList<ImageData>();
+                if (m.cols() > 0 && m.rows() > 0)
+                    result.add( new ImageData(AndreaPipeline.cropPage(m)) );
+                return result;
             }
         });
         //Save cropped images
