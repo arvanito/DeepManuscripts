@@ -67,7 +67,7 @@ public class ThreeLayerTest implements Serializable {
 		sc = null;
 	}
 	
-	@Test @Ignore
+	@Test
 	public void testSmallLoop() throws Exception {
 
 	 	List<ConfigBaseLayer> config_list = new ArrayList<ConfigBaseLayer>();
@@ -77,24 +77,24 @@ public class ThreeLayerTest implements Serializable {
 	 	
 	 	int Nimgs = 50;
 	 	int Npatches = 100;
-	 	List<Vector> input_word_patches = new ArrayList<Vector>(Nimgs);
+	 	List<Tuple2<Vector,Vector>> input_word_patches = new ArrayList<Tuple2<Vector,Vector>>(Nimgs);
 	 	int S = 32;
 	 	double[] temp = new double[S*S];
  		for (int j = 0; j < S*S; ++j) {
  			temp[j] = (double)j;
  		}
 	 	for (int i = 0; i < Nimgs; ++i) {
-	 		input_word_patches.add(Vectors.dense(temp));
+	 		input_word_patches.add(new Tuple2<Vector,Vector>(Vectors.dense(i),Vectors.dense(temp)));
 	 	}
 	 	
-	 	List<Vector> input_small_patches = new ArrayList<Vector>(Npatches);
+	 	List<Tuple2<Vector,Vector>> input_small_patches = new ArrayList<Tuple2<Vector,Vector>>(Npatches);
 	 	for (int i = 0; i < Npatches; ++i) {
-	 		input_small_patches.add(Vectors.dense(1,2,3,4));
+	 		input_small_patches.add(new Tuple2<Vector, Vector>(Vectors.dense(i),Vectors.dense(1,2,3,4)));
 	 	}
 		// We have 100 patches of size 2x2 as input
 		// We have 50 word images of size 8x8
-		JavaRDD<Tuple2<Vector,Vector>> patches = null;//sc.parallelize(input_small_patches);
-		JavaRDD<Tuple2<Vector,Vector>> imgwords = null;//sc.parallelize(input_word_patches);
+		JavaRDD<Tuple2<Vector,Vector>> patches = sc.parallelize(input_small_patches);
+		JavaRDD<Tuple2<Vector,Vector>> imgwords = sc.parallelize(input_word_patches);
 		JavaRDD<Tuple2<Vector,Vector>> result = null;
 		int layer_index = 0;
 	 	for (ConfigBaseLayer config_layer: config_list) {
