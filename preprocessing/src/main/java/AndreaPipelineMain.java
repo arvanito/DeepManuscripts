@@ -85,9 +85,11 @@ public class AndreaPipelineMain {
                 Mat segmentationResult = new Mat();
                 String jSonStringResult = "";
                 if(m.cols()>0 && m.rows()>0) {
-                    //Imgproc.resize(m, m, new Size(300, 900));
-                    Mat binarized = AndreaPipeline.binarizePage(m); // Binarize the image
-                    if (binarized.size().equals(m.size())) {
+                    Mat m2 = new Mat();
+                    Imgproc.resize(m, m2, new Size(m.cols()/2,m.rows()/2));
+                    Mat binarized = AndreaPipeline.binarizePage(m2); // Binarize the image
+                    if (binarized.size().equals(m2.size())) {
+                        Imgproc.resize(binarized, binarized, m.size());
                         String jSonString = AndreaPipeline.lineDetection(data._1(), m, binarized, segmentationResult); //detect the lines
                         if (segmentationResult.size().equals(m.size())) {
                             int newHeight = 1200;
