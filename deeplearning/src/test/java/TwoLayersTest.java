@@ -36,6 +36,9 @@ public class TwoLayersTest implements Serializable {
 	ConfigBaseLayer config1;
 	ConfigBaseLayer config2;
 
+	List<Tuple2<Vector,Vector>> input_small_patches;
+	List<Tuple2<Vector,Vector>> input_word_patches;
+	
 	@Before
 	public void setUp() throws Exception {
 		sc = new JavaSparkContext("local", "TwoLayerTest");
@@ -54,6 +57,23 @@ public class TwoLayersTest implements Serializable {
 		conf2.setConfigPooler(ConfigPooler.newBuilder().setPoolSize(2));
 	 	conf2.setConfigKmeans(ConfigKMeans.newBuilder().setNumberOfClusters(4).setNumberOfIterations(10).build());	
 	 	config2 = conf2.build();
+	 	
+	 	
+	 	int Nimgs = 50;
+	 	int Npatches = 100;
+	 	input_word_patches = new ArrayList<Tuple2<Vector,Vector>>(Nimgs);
+	 	double[] temp = new double[64];
+ 		for (int j = 0; j < 64; ++j) {
+ 			temp[j] = (double)j;
+ 		}
+	 	for (int i = 0; i < Nimgs; ++i) {
+	 		input_word_patches.add(new Tuple2<Vector, Vector>(Vectors.dense(i),Vectors.dense(temp)));
+	 	}
+	 	
+	 	input_small_patches = new ArrayList<Tuple2<Vector,Vector>>(Npatches);
+	 	for (int i = 0; i < Npatches; ++i) {
+	 		input_small_patches.add(new Tuple2<Vector, Vector>(Vectors.dense(i),Vectors.dense(1,2,3,4)));
+	 	}
 	}
 
 	@After
@@ -62,30 +82,14 @@ public class TwoLayersTest implements Serializable {
 		sc = null;
 	}
 
-	@Test @Ignore
+	@Test
 	public void test() throws Exception {
-	 	
-	 	int Nimgs = 50;
-	 	int Npatches = 100;
-	 	List<Vector> input_word_patches = new ArrayList<Vector>(Nimgs);
-	 	double[] temp = new double[64];
- 		for (int j = 0; j < 64; ++j) {
- 			temp[j] = (double)j;
- 		}
-	 	for (int i = 0; i < Nimgs; ++i) {
-	 		input_word_patches.add(Vectors.dense(temp));
-	 	}
-	 	
-	 	List<Vector> input_small_patches = new ArrayList<Vector>(Npatches);
-	 	for (int i = 0; i < Npatches; ++i) {
-	 		input_small_patches.add(Vectors.dense(1,2,3,4));
-	 	}
 	 	
 		DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config1, 0, "two_layer1");
 		// We have 100 patches of size 2x2 as input
 		// We have 50 word images of size 8x8
-		JavaRDD<Tuple2<Vector,Vector>> patches = null;//sc.parallelize(input_small_patches);
-		JavaRDD<Tuple2<Vector,Vector>> imgwords = null;//sc.parallelize(input_word_patches);
+		JavaRDD<Tuple2<Vector,Vector>> patches = sc.parallelize(input_small_patches);
+		JavaRDD<Tuple2<Vector,Vector>> imgwords = sc.parallelize(input_word_patches);
 		
 		JavaRDD<Tuple2<Vector,Vector>> result = layer.train(patches, imgwords);
 
@@ -114,7 +118,7 @@ public class TwoLayersTest implements Serializable {
 	 	
 	}
 	
-	@Test @Ignore
+	@Test
 	public void testForLoop() throws Exception {
 		// Configuration for layer1 
 		ConfigBaseLayer.Builder conf = ConfigBaseLayer.newBuilder();
@@ -125,27 +129,12 @@ public class TwoLayersTest implements Serializable {
 	 	conf.setConfigKmeans(ConfigKMeans.newBuilder().setNumberOfClusters(3).setNumberOfIterations(10).build());	
 	 	ConfigBaseLayer c = conf.build();
 	 	
-	 	int Nimgs = 50;
-	 	int Npatches = 100;
-	 	List<Vector> input_word_patches = new ArrayList<Vector>(Nimgs);
-	 	double[] temp = new double[64];
- 		for (int j = 0; j < 64; ++j) {
- 			temp[j] = (double)j;
- 		}
-	 	for (int i = 0; i < Nimgs; ++i) {
-	 		input_word_patches.add(Vectors.dense(temp));
-	 	}
-	 	
-	 	List<Vector> input_small_patches = new ArrayList<Vector>(Npatches);
-	 	for (int i = 0; i < Npatches; ++i) {
-	 		input_small_patches.add(Vectors.dense(1,2,3,4));
-	 	}
 	 	int layer_index = 0;
 		DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(c, layer_index, "two_layer2");
 		// We have 100 patches of size 2x2 as input
 		// We have 50 word images of size 8x8
-		JavaRDD<Tuple2<Vector,Vector>> patches = null;//sc.parallelize(input_small_patches);
-		JavaRDD<Tuple2<Vector,Vector>> imgwords =null;// sc.parallelize(input_word_patches);
+		JavaRDD<Tuple2<Vector,Vector>> patches = sc.parallelize(input_small_patches);
+		JavaRDD<Tuple2<Vector,Vector>> imgwords = sc.parallelize(input_word_patches);
 		
 		JavaRDD<Tuple2<Vector,Vector>> result = layer.train(patches, imgwords);
 
@@ -168,32 +157,17 @@ public class TwoLayersTest implements Serializable {
 		Assert.assertEquals(50, out.size());
 		Assert.assertEquals(2, out.get(0)._2.size());	
 	}
-	@Test @Ignore
+	@Test
 	public void testSmallLoop() throws Exception {
 
 	 	List<ConfigBaseLayer> config_list = new ArrayList<ConfigBaseLayer>();
 	 	config_list.add(config1);
 	 	config_list.add(config2);
 	 	
-	 	int Nimgs = 50;
-	 	int Npatches = 100;
-	 	List<Vector> input_word_patches = new ArrayList<Vector>(Nimgs);
-	 	double[] temp = new double[64];
- 		for (int j = 0; j < 64; ++j) {
- 			temp[j] = (double)j;
- 		}
-	 	for (int i = 0; i < Nimgs; ++i) {
-	 		input_word_patches.add(Vectors.dense(temp));
-	 	}
-	 	
-	 	List<Vector> input_small_patches = new ArrayList<Vector>(Npatches);
-	 	for (int i = 0; i < Npatches; ++i) {
-	 		input_small_patches.add(Vectors.dense(1,2,3,4));
-	 	}
 		// We have 100 patches of size 2x2 as input
 		// We have 50 word images of size 8x8
-		JavaRDD<Tuple2<Vector,Vector>> patches = null;//sc.parallelize(input_small_patches);
-		JavaRDD<Tuple2<Vector,Vector>> imgwords = null;//sc.parallelize(input_word_patches);
+		JavaRDD<Tuple2<Vector,Vector>> patches = sc.parallelize(input_small_patches);
+		JavaRDD<Tuple2<Vector,Vector>> imgwords = sc.parallelize(input_word_patches);
 		JavaRDD<Tuple2<Vector,Vector>> result = null;
 		int layer_index = 0;
 	 	for (ConfigBaseLayer config_layer: config_list) {
