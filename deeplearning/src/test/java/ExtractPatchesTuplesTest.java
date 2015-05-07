@@ -90,13 +90,6 @@ public class ExtractPatchesTuplesTest implements Serializable {
 		// assign results to arrays
 		for (int i = 0; i < patchList.size(); i++) {
 			output[i] = patchList.get(i)._2.toArray();
-			
-			// print results
-			System.out.println("Vector #1 of the tuple2 #" + i);
-			System.out.println(patchList.get(i)._1);
-			
-			System.out.println("Vector #2 of the tuple2 #" + i);
-			System.out.println(patchList.get(i)._2);
 		}
 		
 		double[] outputD = new double[18*4];

@@ -24,6 +24,7 @@ public interface Extractor extends Function<Tuple2<Vector, Vector>, Tuple2<Vecto
 	 */
 	public void setConfigLayer(ConfigBaseLayer configLayer);
 	
+	
 	/**
 	 * Set the ZCA matrix and mean vector, results of PreProcessingZCA.
 	 * By default those should be null, in which case preprocessing is not used.
@@ -32,6 +33,7 @@ public interface Extractor extends Function<Tuple2<Vector, Vector>, Tuple2<Vecto
 	 * @param mean
 	 */
 	public void setPreProcessZCA(DenseMatrix zca, DenseVector mean);
+	
 	
 	/**
 	 * Set features to be used by this extractor.

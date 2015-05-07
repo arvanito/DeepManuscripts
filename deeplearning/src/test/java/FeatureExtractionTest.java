@@ -28,6 +28,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import scala.Tuple2;
+
 public class FeatureExtractionTest implements Serializable {
 
 	/**
@@ -36,6 +38,7 @@ public class FeatureExtractionTest implements Serializable {
 	private static final long serialVersionUID = 5361837911584977475L;
 	private transient JavaSparkContext sc;
 	
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -43,6 +46,7 @@ public class FeatureExtractionTest implements Serializable {
 	public void setUp() throws Exception {
 		sc = new JavaSparkContext("local", "FeatureExtractionTest");
 	}
+	
 	
 	/**
 	 * @throws java.lang.Exception
@@ -53,6 +57,10 @@ public class FeatureExtractionTest implements Serializable {
 		sc = null;
 	}
 	
+	
+	/**
+	 * Test for MVM feature extraction without pre-processing.
+	 */
 	@Test
 	public void multiplyTest() {
 		//ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().setConfigFeatureExtractor()
@@ -83,15 +91,24 @@ public class FeatureExtractionTest implements Serializable {
 	}
 	
 	
+	/**
+	 * Test for MVM feature extraction with pre-processing
+	 */
 	@Test
 	public void multiplyPreTest() {
 		
+		// build a layer configuration
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
 		setConfigFeatureExtractor(ConfigFeatureExtractor.newBuilder().setFeatureDim1(2).setFeatureDim2(2).setInputDim1(4).setInputDim2(4).setNonLinearity(ConfigFeatureExtractor.NonLinearity.SOFT).setSoftThreshold(0.1)).
 		setConfigPooler(ConfigPooler.newBuilder().setPoolSize(1)).
 		setConfigPreprocess(ConfigPreprocess.newBuilder().setEps1(0.1).setEps2(0.1)).build();
 		
-		// simple example
+		/******************* simple example input and output **************************/
+		double[] m1 = {1,2,1,3,2,5};
+		double[] m2 = {1,4,1,2,7,4};
+		//double[] m3 = {2,1,4,0,5,6};
+		//double[] m4 = {3,2,7,6,5,2};
+		
 		double[] f1 = {0.1, 0.2, 0.4, 1.4};
 		double[] f2 = {0.5, 0.2, 0.1, 0.5};
 		double[] x1 = {0.35, 0.65, 0.28, 0.12}; 
@@ -114,10 +131,14 @@ public class FeatureExtractionTest implements Serializable {
 		//							 0.302514463615425,	 1.316131165465278,  -0.825195898488151,  -0.793449730592545};
 		//double[] expected_output = {-1.573687912640495,  -1.147430302770226,
 		//							-0.418825828014564,  -0.064760990244320};
-		//double[] expected_output = {-1.764262994854122,  -0.456956908917123,
-		//		  					-0.866564862855998,   0.237752718826297};
-		double[] expected_output = {0, 0, 0, 0.137752718826297};
+		double[] expected_output_mat = {-1.764262994854122,  -0.456956908917123,
+				  					-0.866564862855998,   0.237752718826297};
+		//double[] expected_output_mat = {0, 0, 0, 0.137752718826297};
 		
+		double[] expected_output_met = {1,2,1,3,2,5,1,4,1,2,7,4};
+		/******************* simple example input and output **************************/
+		
+		// create the pre-processing data
 		DenseVector mean = new DenseVector(m);
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca);
 		
@@ -125,11 +146,19 @@ public class FeatureExtractionTest implements Serializable {
 		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
 		preProcess.setConfigLayer(conf);
 		
-		// create a parallel dataset from the local matrix
-		List<Vector> matX = new ArrayList<Vector>(4);
+		// create a parallel Tuple2<Vector, Vector> dataset from the local matrix
+		List<Vector> metX = new ArrayList<Vector>(2);
+		metX.add(Vectors.dense(m1));
+		metX.add(Vectors.dense(m2));
+		
+		List<Vector> matX = new ArrayList<Vector>(2);
 		matX.add(Vectors.dense(x1));
 		matX.add(Vectors.dense(x2));
-		JavaRDD<Vector> matRDD = sc.parallelize(matX);
+		
+		List<Tuple2<Vector, Vector>> pairData = new ArrayList<Tuple2<Vector, Vector>>(2);
+		pairData.add(new Tuple2<Vector, Vector>(metX.get(0),matX.get(0)));
+		pairData.add(new Tuple2<Vector, Vector>(metX.get(1),matX.get(1)));
+		JavaRDD<Tuple2<Vector, Vector>> pairDataRDD = sc.parallelize(pairData);
 		
 		// create the array of feature vectors
  		Vector[] vf = new Vector[2];
@@ -142,12 +171,20 @@ public class FeatureExtractionTest implements Serializable {
 		multi.setFeatures(vf);
 		
 		// call the feature extraction process
-		matRDD = matRDD.map(multi);
+		pairDataRDD = pairDataRDD.map(multi);
+		List<Tuple2<Vector, Vector>> pair = pairDataRDD.collect();
+		Vector[] met = new Vector[2];
+		Vector[] mat = new Vector[2];
+		for (int i = 0; i < pair.size(); i++) {
+			met[i] = pair.get(i)._1;
+			mat[i] = pair.get(i)._2;
+		}
 		
-		Vector[] outputD = matRDD.collect().toArray(new Vector[2]);
-		DenseMatrix outputM = MatrixOps.convertVectors2Mat(outputD);
+		DenseMatrix outputMet = MatrixOps.convertVectors2Mat(met).transpose();
+		DenseMatrix outputMat = MatrixOps.convertVectors2Mat(mat);
 		
-		Assert.assertArrayEquals(expected_output, outputM.toArray(), 1e-6);
+		Assert.assertArrayEquals(expected_output_met, outputMet.toArray(), 1e-6);
+		Assert.assertArrayEquals(expected_output_mat, outputMat.toArray(), 1e-6);
 		
 	}
 	
@@ -160,7 +197,12 @@ public class FeatureExtractionTest implements Serializable {
 		setConfigPooler(ConfigPooler.newBuilder().setPoolSize(1)).
 		setConfigPreprocess(ConfigPreprocess.newBuilder().setEps1(0.1).setEps2(0.1)).build();
 		
-		// simple example
+		/******************* simple example input and output **************************/
+		double[] m1 = {1,2,1,3,2,5};
+		//double[] m2 = {1,4,1,2,7,4};
+		//double[] m3 = {2,1,4,0,5,6};
+		//double[] m4 = {3,2,7,6,5,2};
+		
 		double[] f1 = {0.1, 0.2, 0.4, 1.4};
 		double[] f2 = {0.5, 0.2, 0.1, 0.5};
 		double[] x = {0.560000000000000,   0.340000000000000,   0.320000000000000,   0.140000000000000,
@@ -183,9 +225,12 @@ public class FeatureExtractionTest implements Serializable {
 		//double[] expected_output = {1.1310, 1.4080, 2.1030, 0.9120, 1.3250, 0.9790, 1.0340, 2.1890, 1.3180};
 	    //double[] expected_output = {0.662032762310817,   2.228330709948044, 1.059039882521740, -1.054450834512288, -0.845244929924908, -0.436701601060417, 0.296864933161854, -1.091676319630362, 0.579432074562157, 
 	    //		0.115146987448164, 0.248682789409449, -0.176343125716004, -0.607612501991995, -0.212833806576546, 0.208543928476519, 0.405416463911857, -0.628706789196375, 0.194667022197182,};
-	    double[] expected_output = {0.168564094601626,   1.552671452042367,   0.611579585063065,  0.665331628736182,  0.145702887838090,   0.495568102348595,   0.438095915047013, 0.984689478972046,   0.608683133315226,
+	    double[] expected_output_mat = {0.168564094601626,   1.552671452042367,   0.611579585063065,  0.665331628736182,  0.145702887838090,   0.495568102348595,   0.438095915047013, 0.984689478972046,   0.608683133315226,
 	    		0.329710605029764,  0.069543507208860,  0.488992094416595,  0.380760393962722,   0.202356138166303,   0.787967065953481,   0.582523569274661, 0.658255668206114,   0.294530822631855};
 	    
+		double[] expected_output_met = {1,2,1,3,2,5};
+		/******************* simple example input and output **************************/
+		
 		DenseVector mean = new DenseVector(m);
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca);
 		
@@ -193,10 +238,16 @@ public class FeatureExtractionTest implements Serializable {
 		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
 		preProcess.setConfigLayer(conf);
 		
-		// create a parallel dataset from the local matrix
+		// create a parallel Tuple2<Vector, Vector> dataset from the local matrix
+		List<Vector> metX = new ArrayList<Vector>(1);
+		metX.add(Vectors.dense(m1));
+		
 		List<Vector> matX = new ArrayList<Vector>(1);
 		matX.add(Vectors.dense(x));
-		JavaRDD<Vector> matRDD = sc.parallelize(matX);
+		
+		List<Tuple2<Vector, Vector>> pairData = new ArrayList<Tuple2<Vector, Vector>>(1);
+		pairData.add(new Tuple2<Vector, Vector>(metX.get(0),matX.get(0)));
+		JavaRDD<Tuple2<Vector, Vector>> pairDataRDD = sc.parallelize(pairData);
 		
 		// create the array of feature vectors
  		Vector[] vf = new Vector[2];
@@ -207,12 +258,22 @@ public class FeatureExtractionTest implements Serializable {
 		ConvMultiplyExtractor multi = new ConvMultiplyExtractor(conf);
 		multi.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
 		multi.setFeatures(vf);
-	
-		// call the feature extraction process
-		matRDD = matRDD.map(multi);
 		
-		Vector[] outputD = matRDD.collect().toArray(new Vector[1]);
-		DenseMatrix outputM = MatrixOps.convertVectors2Mat(outputD);
+		// call the feature extraction process
+		pairDataRDD = pairDataRDD.map(multi);
+		List<Tuple2<Vector, Vector>> pair = pairDataRDD.collect();
+		Vector[] met = new Vector[1];
+		Vector[] mat = new Vector[1];
+		for (int i = 0; i < pair.size(); i++) {
+			met[i] = pair.get(i)._1;
+			mat[i] = pair.get(i)._2;
+		}
+		
+		DenseMatrix outputMet = MatrixOps.convertVectors2Mat(met);
+		DenseMatrix outputMat = MatrixOps.convertVectors2Mat(mat);
+		
+		Assert.assertArrayEquals(expected_output_met, outputMet.toArray(), 1e-6);
+		Assert.assertArrayEquals(expected_output_mat, outputMat.toArray(), 1e-6);
 		
 //		// run the feature extraction code
 //		DenseMatrix D = MatrixOps.convertVectors2Mat(vf);
@@ -227,7 +288,7 @@ public class FeatureExtractionTest implements Serializable {
 //		BLAS.gemm(1.0, patches, D.transpose(), 0.0, out);
 //		//DenseVector outVec = MatrixOps.reshapeMat2Vec(out);
 		
-		Assert.assertArrayEquals(expected_output, outputM.toArray(), 1e-6);
+		//Assert.assertArrayEquals(expected_output, outputM.toArray(), 1e-6);
 		
 	}
 	

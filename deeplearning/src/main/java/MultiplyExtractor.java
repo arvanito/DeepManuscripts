@@ -40,6 +40,7 @@ public class MultiplyExtractor implements Extractor {
 		setConfigLayer(configLayer);
 	}
 	
+	
 	/**
 	 * Getter method for the ConfigBaseLayer object.
 	 * 
@@ -49,11 +50,13 @@ public class MultiplyExtractor implements Extractor {
 		return configLayer;
 	}
 	
+	
 	@Override
 	public void setPreProcessZCA(DenseMatrix zca, DenseVector mean) {
 		this.zca = zca;
 		this.mean = mean;
 	}
+	
 	
 	/**
 	 * Getter method for the learned features.
@@ -76,6 +79,7 @@ public class MultiplyExtractor implements Extractor {
 		// set the configuration layer
 		this.configLayer = configLayer;
 	}
+	
 	
 	/**
 	 * Setter method for learned features.
