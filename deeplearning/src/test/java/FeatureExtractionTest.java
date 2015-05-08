@@ -37,7 +37,7 @@ public class FeatureExtractionTest implements Serializable {
 	 */
 	private static final long serialVersionUID = 5361837911584977475L;
 	private transient JavaSparkContext sc;
-	
+	List<Tuple2<Vector, Vector>> pairData;
 	
 	/**
 	 * @throws java.lang.Exception
@@ -45,6 +45,29 @@ public class FeatureExtractionTest implements Serializable {
 	@Before
 	public void setUp() throws Exception {
 		sc = new JavaSparkContext("local", "FeatureExtractionTest");
+		
+		double[] m1 = {1,2,1,3,2,5};
+		double[] m2 = {1,4,1,2,7,4};
+		//double[] m3 = {2,1,4,0,5,6};
+		//double[] m4 = {3,2,7,6,5,2};
+		
+		double[] x1 = {0.35, 0.65, 0.28, 0.12}; 
+		double[] x2 = {0.86, 0.96, 0.34, 0.57};
+		//double[] x = {0.56, 0.54, 1.23, 0.57, 0.34, 0.63, 0.34, 0.85, 0.32, 1.2, 0.67, 0.29, 0.14, 0.78, 0.85, 0.94};
+		
+		// create the lists of vector for the tuple creation
+		List<Vector> metX = new ArrayList<Vector>(2);
+		metX.add(Vectors.dense(m1));
+		metX.add(Vectors.dense(m2));
+		
+		List<Vector> matX = new ArrayList<Vector>(2);
+		matX.add(Vectors.dense(x1));
+		matX.add(Vectors.dense(x2));
+		
+		// create the List<Tuple2<Vector, Vector>>
+		pairData = new ArrayList<Tuple2<Vector, Vector>>(2);
+		pairData.add(new Tuple2<Vector, Vector>(metX.get(0),matX.get(0)));
+		pairData.add(new Tuple2<Vector, Vector>(metX.get(1),matX.get(1)));
 	}
 	
 	
@@ -104,16 +127,8 @@ public class FeatureExtractionTest implements Serializable {
 		setConfigPreprocess(ConfigPreprocess.newBuilder().setEps1(0.1).setEps2(0.1)).build();
 		
 		/******************* simple example input and output **************************/
-		double[] m1 = {1,2,1,3,2,5};
-		double[] m2 = {1,4,1,2,7,4};
-		//double[] m3 = {2,1,4,0,5,6};
-		//double[] m4 = {3,2,7,6,5,2};
-		
 		double[] f1 = {0.1, 0.2, 0.4, 1.4};
 		double[] f2 = {0.5, 0.2, 0.1, 0.5};
-		double[] x1 = {0.35, 0.65, 0.28, 0.12}; 
-		double[] x2 = {0.86, 0.96, 0.34, 0.57};
-		//double[] x = {0.56, 0.54, 1.23, 0.57, 0.34, 0.63, 0.34, 0.85, 0.32, 1.2, 0.67, 0.29, 0.14, 0.78, 0.85, 0.94};
 		
 		//double[] zca = {1.654633794518243,   0.541992148747697,   0.519961336130961,   0.445690380771477,
 		//				0.541992148747697,   1.919200272146810,   0.522623043139470,   0.178462196134402,
@@ -146,18 +161,7 @@ public class FeatureExtractionTest implements Serializable {
 		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
 		preProcess.setConfigLayer(conf);
 		
-		// create a parallel Tuple2<Vector, Vector> dataset from the local matrix
-		List<Vector> metX = new ArrayList<Vector>(2);
-		metX.add(Vectors.dense(m1));
-		metX.add(Vectors.dense(m2));
-		
-		List<Vector> matX = new ArrayList<Vector>(2);
-		matX.add(Vectors.dense(x1));
-		matX.add(Vectors.dense(x2));
-		
-		List<Tuple2<Vector, Vector>> pairData = new ArrayList<Tuple2<Vector, Vector>>(2);
-		pairData.add(new Tuple2<Vector, Vector>(metX.get(0),matX.get(0)));
-		pairData.add(new Tuple2<Vector, Vector>(metX.get(1),matX.get(1)));
+		// parallelize the List<Tuple2<Vector, Vector>>
 		JavaRDD<Tuple2<Vector, Vector>> pairDataRDD = sc.parallelize(pairData);
 		
 		// create the array of feature vectors

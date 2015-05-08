@@ -32,6 +32,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import scala.Tuple2;
+
 public class FFTConvolutionTest implements Serializable {
 	
 	private static final long serialVersionUID = 2780960378816038954L;
@@ -99,7 +101,8 @@ public class FFTConvolutionTest implements Serializable {
 		int featureRows = 1;
 		int featureCols = 2;
 		double[] input =   {1,2,3,0};
-	    
+	    double[] meta = {2,1,5,2};
+		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
 				setConfigFeatureExtractor(ConfigFeatureExtractor.newBuilder().
 						                  setFeatureDim1(featureCols).setFeatureDim2(featureRows).
@@ -108,22 +111,28 @@ public class FFTConvolutionTest implements Serializable {
 		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf); // no pre-processing yet
 
 		Vector data = new DenseVector(input);
+		Vector metaData = new DenseVector(meta);
+		Tuple2<Vector, Vector> pair = new Tuple2<Vector, Vector>(metaData, data);
 		
 		double[] A = {1,2};
 		
 		Vector[] features = {new DenseVector(A)};
 		extractor.setFeatures(features);
-		Vector output;
+		Tuple2<Vector, Vector> outputPair;
 		try {
-			output = extractor.call(data);
+			outputPair = extractor.call(pair);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Call threw exception");
 			return;
 		}
+		
 		//System.out.println(Arrays.toString(output.toArray()));
-		double[] expected_outputs = {5,8,3};
-		Assert.assertArrayEquals(expected_outputs, output.toArray(), 1e-6);
+		double[] expected_output_data = {5,8,3};
+		double[] expected_output_meta = {2,1,5,2};
+		Assert.assertArrayEquals(expected_output_data, outputPair._2.toArray(), 1e-6);
+		Assert.assertArrayEquals(expected_output_meta, outputPair._1.toArray(), 1e-6);
+		
 	}
 	
 	@Test
@@ -136,7 +145,8 @@ public class FFTConvolutionTest implements Serializable {
 							4,5,6,0,
 							7,8,9,0,
 							0,0,0,0};
-	    
+	    double[] meta = {4,2,3,1};
+		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
 				setConfigFeatureExtractor(ConfigFeatureExtractor.newBuilder().
 						                  setFeatureDim1(featureCols).setFeatureDim2(featureRows).
@@ -145,25 +155,29 @@ public class FFTConvolutionTest implements Serializable {
 		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf); // no pre-processing yet
 
 		Vector data = new DenseVector(input);
+		Vector metaData = new DenseVector(meta);
+		Tuple2<Vector, Vector> pair = new Tuple2<Vector, Vector>(metaData, data);
 		
 		double[] A = {1,2,
 					  0,0};
 		
 		Vector[] features = {new DenseVector(A)};
 		extractor.setFeatures(features);
-		Vector output;
+		Tuple2<Vector, Vector> outputPair;
 		try {
-			output = extractor.call(data);
+			outputPair = extractor.call(pair);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Call threw exception");
 			return;
 		}
 		//System.out.println(Arrays.toString(output.toArray()));
-		double[] expected_outputs = {5,8,3,
+		double[] expected_output_data = {5,8,3,
 									 14,17,6,
 									 23,26,9};
-		Assert.assertArrayEquals(expected_outputs, output.toArray(), 1e-6);
+		double[] expected_output_meta = {4,2,3,1};
+		Assert.assertArrayEquals(expected_output_data, outputPair._2.toArray(), 1e-6);
+		Assert.assertArrayEquals(expected_output_meta, outputPair._1.toArray(), 1e-6);
 	}
 	
 	
@@ -216,6 +230,7 @@ public class FFTConvolutionTest implements Serializable {
 				   	  0.54,   0.63,   1.20,   0.78,
 				      1.23,   0.34,   0.67,   0.85,
 				      0.57,   0.85,   0.29,   0.94};
+		double[] meta = {8,5,6,2};
 		
 		double[] zca = {1.0,0.0,0.0,0.0,
 						0.0,1.0,0.0,0.0,
@@ -223,24 +238,28 @@ public class FFTConvolutionTest implements Serializable {
 						0.0,0.0,0.0,1.0};
 		double[] m = {0.0, 0.0, 0.0, 0.0};
 
-		double[] expected_output = {1.2220, 2.0300, 1.6320, 
+		double[] expected_output_data = {1.2220, 2.0300, 1.6320, 
 	    							1.1480, 1.3770, 1.7340,
 	    							1.6090, 0.9140, 1.6690};
-	    
+	    double[] expected_output_meta = {8,5,6,2};
+		
 		DenseVector mean = new DenseVector(m);
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca);
 		
 		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
 		preProcess.setConfigLayer(conf);
-				
+						
+		Vector vx = Vectors.dense(x);
+		Vector metaData = Vectors.dense(meta);
+		Tuple2<Vector, Vector> pair = new Tuple2<Vector, Vector>(metaData, vx);
 		
 		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf);
 		extractor.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
  		Vector[] vf = {Vectors.dense(f1)};
 		extractor.setFeatures(vf);
-		Vector out;
+		Tuple2<Vector, Vector> out;
 		try {
-			out = extractor.call(Vectors.dense(x));
+			out = extractor.call(pair);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Call threw exception");
@@ -249,7 +268,8 @@ public class FFTConvolutionTest implements Serializable {
 		
 		//System.out.println(Arrays.toString(out.toArray()));
 		
-		Assert.assertArrayEquals(expected_output, out.toArray(), 1e-6);	
+		Assert.assertArrayEquals(expected_output_data, out._2.toArray(), 1e-6);	
+		Assert.assertArrayEquals(expected_output_meta, out._1.toArray(), 1e-6);	
 	}
 	
 	@Test
@@ -265,6 +285,7 @@ public class FFTConvolutionTest implements Serializable {
 				   	  0.54,   0.63,   1.20,   0.78,
 				      1.23,   0.34,   0.67,   0.85,
 				      0.57,   0.85,   0.29,   0.94};
+		double[] meta = {9,5,2,6};
 		
 		double[] zca = {1.0,0.0,0.0,0.0,
 						0.0,1.0,0.0,0.0,
@@ -272,24 +293,28 @@ public class FFTConvolutionTest implements Serializable {
 						0.0,0.0,0.0,1.0};
 		double[] m = {0.6324, 0.0975, 0.2785, 0.5469};
 
-		double[] expected_output = {0.2622, 1.0702, 0.6722, 
+		double[] expected_output_data = {0.2622, 1.0702, 0.6722, 
 	    							0.1882, 0.4172, 0.7742,
 	    							0.6492,-0.0458, 0.7092};
-	    
+	    double[] expected_output_meta = {9,5,2,6};
+		
 		DenseVector mean = new DenseVector(m);
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca).transpose(); // just for principle - col vs row major
 		
 		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
 		preProcess.setConfigLayer(conf);
 				
+		Vector vx = Vectors.dense(x);
+		Vector metaData = Vectors.dense(meta);
+		Tuple2<Vector, Vector> pair = new Tuple2<Vector, Vector>(metaData, vx);
 		
 		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf);
 		extractor.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
  		Vector[] vf = {Vectors.dense(f1)};
 		extractor.setFeatures(vf);
-		Vector out;
+		Tuple2<Vector, Vector> out;
 		try {
-			out = extractor.call(Vectors.dense(x));
+			out = extractor.call(pair);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Call threw exception");
@@ -298,7 +323,8 @@ public class FFTConvolutionTest implements Serializable {
 		
 		//System.out.println(Arrays.toString(out.toArray()));
 		
-		Assert.assertArrayEquals(expected_output, out.toArray(), 1e-2);
+		Assert.assertArrayEquals(expected_output_data, out._2.toArray(), 1e-2);
+		Assert.assertArrayEquals(expected_output_meta, out._1.toArray(), 1e-2);
 	}
 	
 	@Test
@@ -314,6 +340,7 @@ public class FFTConvolutionTest implements Serializable {
 				   	  0.54,   0.63,   1.20,   0.78,
 				      1.23,   0.34,   0.67,   0.85,
 				      0.57,   0.85,   0.29,   0.94};
+		double[] meta = {0,2,5,1}; 
 		
 		double[] zca = {0.9575,   0.9572,   0.4218,   0.6557,
 			            0.9649,   0.4854,   0.9157,   0.0357,
@@ -322,9 +349,10 @@ public class FFTConvolutionTest implements Serializable {
 		
 		double[] m = {0.0, 0.0, 0.0, 0.0};
 
-		double[] expected_output = {3.3016,   4.0611,   4.2512,
+		double[] expected_output_data = {3.3016,   4.0611,   4.2512,
 			    					4.2759,   3.7250,   5.3330,
 			    					4.8827,   3.1598,   3.9145};
+	    double[] expected_output_meta = {0,2,5,1};
 	    
 		DenseVector mean = new DenseVector(m);
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca).transpose(); // Matrix creation is column-major, ours is row-major
@@ -332,14 +360,17 @@ public class FFTConvolutionTest implements Serializable {
 		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
 		preProcess.setConfigLayer(conf);
 				
+		Vector vx = Vectors.dense(x);
+		Vector metaData = Vectors.dense(meta);
+		Tuple2<Vector, Vector> pair = new Tuple2<Vector, Vector>(metaData, vx);
 		
 		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf);
 		extractor.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
  		Vector[] vf = {Vectors.dense(f1)};
 		extractor.setFeatures(vf);
-		Vector out;
+		Tuple2<Vector, Vector> out;
 		try {
-			out = extractor.call(Vectors.dense(x));
+			out = extractor.call(pair);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Call threw exception");
@@ -348,7 +379,8 @@ public class FFTConvolutionTest implements Serializable {
 		
 		//System.out.println(Arrays.toString(out.toArray()));
 		
-		Assert.assertArrayEquals(expected_output, out.toArray(), 1e-2);	
+		Assert.assertArrayEquals(expected_output_data, out._2.toArray(), 1e-2);	
+		Assert.assertArrayEquals(expected_output_meta, out._1.toArray(), 1e-2);	
 	}
 	
 	@Test
@@ -366,6 +398,7 @@ public class FFTConvolutionTest implements Serializable {
 				   0.540000000000000,   0.630000000000000,   1.200000000000000,   0.780000000000000,
 				   1.230000000000000,   0.340000000000000,   0.670000000000000,   0.850000000000000,
 				   0.570000000000000,   0.850000000000000,   0.290000000000000,   0.940000000000000};
+		double[] meta = {7,6,1,7};
 		
 		double[] zca = {0.9575,   0.9572,   0.4218,   0.6557,
 	            0.9649,   0.4854,   0.9157,   0.0357,
@@ -374,13 +407,14 @@ public class FFTConvolutionTest implements Serializable {
 
 		double[] m = {0.6324, 0.0975, 0.2785, 0.5469};
 
-		double[] expected_output = {0.6848, 1.4443, 1.6343,
+		double[] expected_output_data = {0.6848, 1.4443, 1.6343,
 									1.6591, 1.1081, 2.7161,
 									2.2658, 0.5430, 1.2976,
 									
 									0.4142,    0.7330,    0.7495,
 								    1.0019,    0.9661,    1.8036,
 								    1.4237,    0.3899,    0.9505};
+	    double[] expected_output_meta = {7,6,1,7};
 	    
 		DenseVector mean = new DenseVector(m);
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca).transpose();
@@ -390,9 +424,16 @@ public class FFTConvolutionTest implements Serializable {
 		preProcess.setConfigLayer(conf);
 		
 		// create a parallel dataset from the local matrix
+		List<Vector> metX = new ArrayList<Vector>(1);
+		metX.add(Vectors.dense(meta));
+		
 		List<Vector> matX = new ArrayList<Vector>(1);
 		matX.add(Vectors.dense(x));
-		JavaRDD<Vector> matRDD = sc.parallelize(matX);
+		
+		List<Tuple2<Vector, Vector>> pair = new ArrayList<Tuple2<Vector, Vector>>(1);
+		pair.add(new Tuple2<Vector, Vector>(metX.get(0), matX.get(0)));
+		
+		JavaRDD<Tuple2<Vector, Vector>> pairRDD = sc.parallelize(pair);
 		
 		// create the array of feature vectors
  		Vector[] vf = {Vectors.dense(f1), Vectors.dense(f2)};
@@ -403,13 +444,19 @@ public class FFTConvolutionTest implements Serializable {
 		extractor.setFeatures(vf);
 	
 		// call the feature extraction process
-		matRDD = matRDD.map(extractor);
+		pairRDD = pairRDD.map(extractor);
 		
-		Vector[] outputD = matRDD.collect().toArray(new Vector[1]);
-		DenseMatrix outputM = MatrixOps.convertVectors2Mat(outputD);
-		//System.out.println(Arrays.toString(outputM.toArray()));
+		List<Tuple2<Vector, Vector>> pairTuple = pairRDD.collect();
+		Vector[] met = new Vector[1];
+		Vector[] mat = new Vector[1];
+		met[0] = pairTuple.get(0)._1;
+		mat[0] = pairTuple.get(0)._2;
 		
-		Assert.assertArrayEquals(expected_output, outputM.toArray(), 1e-2);		
+		DenseMatrix outputMeta = MatrixOps.convertVectors2Mat(met);
+		DenseMatrix outputData = MatrixOps.convertVectors2Mat(mat);
+		
+		Assert.assertArrayEquals(expected_output_data, outputData.toArray(), 1e-2);		
+		Assert.assertArrayEquals(expected_output_meta, outputMeta.toArray(), 1e-2);
 	}
 	
 	@Test
@@ -426,6 +473,7 @@ public class FFTConvolutionTest implements Serializable {
 				   0.540000000000000,   0.630000000000000,   1.200000000000000,   0.780000000000000,
 				   1.230000000000000,   0.340000000000000,   0.670000000000000,   0.850000000000000,
 				   0.570000000000000,   0.850000000000000,   0.290000000000000,   0.940000000000000};
+		double[] meta = {4,7,2,5};
 		
 		double[] zca = {2.262239321973017,   0.366216542149525,   0.009718022083399,  -0.269118962890450,
 		   		0.366216542149524,   2.670819891727144,   0.051028161893375,  -0.413249779370649,
@@ -434,9 +482,10 @@ public class FFTConvolutionTest implements Serializable {
 		
 		double[] m = {0.725000000000000,   0.540000000000000,   0.620000000000000,   0.677500000000000};
 		
-		double[] expected_output = {0.168564094601626,   1.552671452042367,   0.611579585063065,  0.665331628736182,  0.145702887838090,   0.495568102348595,   0.438095915047013, 0.984689478972046,   0.608683133315226,
+		double[] expected_output_data = {0.168564094601626,   1.552671452042367,   0.611579585063065,  0.665331628736182,  0.145702887838090,   0.495568102348595,   0.438095915047013, 0.984689478972046,   0.608683133315226,
 	    		0.329710605029764,  0.069543507208860,  0.488992094416595,  0.380760393962722,   0.202356138166303,   0.787967065953481,   0.582523569274661, 0.658255668206114,   0.294530822631855};
-	    
+	    double[] expected_output_meta = {4,7,2,5};
+		
 		DenseVector mean = new DenseVector(m);
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca);
 		
@@ -445,9 +494,16 @@ public class FFTConvolutionTest implements Serializable {
 		preProcess.setConfigLayer(conf);
 		
 		// create a parallel dataset from the local matrix
+		List<Vector> metX = new ArrayList<Vector>(1);
+		metX.add(Vectors.dense(meta));
+		
 		List<Vector> matX = new ArrayList<Vector>(1);
 		matX.add(Vectors.dense(x));
-		JavaRDD<Vector> matRDD = sc.parallelize(matX);
+		
+		List<Tuple2<Vector, Vector>> pair = new ArrayList<Tuple2<Vector, Vector>>(1);
+		pair.add(new Tuple2<Vector, Vector>(metX.get(0), matX.get(0)));
+		
+		JavaRDD<Tuple2<Vector, Vector>> pairRDD = sc.parallelize(pair);
 		
 		// create the array of feature vectors
  		Vector[] vf = new Vector[2];
@@ -460,14 +516,19 @@ public class FFTConvolutionTest implements Serializable {
 		extractor.setFeatures(vf);
 	
 		// call the feature extraction process
-		matRDD = matRDD.map(extractor);
+		pairRDD = pairRDD.map(extractor);
 		
-		Vector[] outputD = matRDD.collect().toArray(new Vector[1]);
-		DenseMatrix outputM = MatrixOps.convertVectors2Mat(outputD);
-
-		System.out.println(Arrays.toString(expected_output));
-		System.out.println(Arrays.toString(outputM.toArray()));
-		Assert.assertArrayEquals(expected_output, outputM.toArray(), 1e-3);
+		List<Tuple2<Vector, Vector>> pairTuple = pairRDD.collect();
+		Vector[] met = new Vector[1];
+		Vector[] mat = new Vector[1];
+		met[0] = pairTuple.get(0)._1;
+		mat[0] = pairTuple.get(0)._2;
+		
+		DenseMatrix outputMeta = MatrixOps.convertVectors2Mat(met);
+		DenseMatrix outputData = MatrixOps.convertVectors2Mat(mat);
+		
+		Assert.assertArrayEquals(expected_output_data, outputData.toArray(), 1e-2);		
+		Assert.assertArrayEquals(expected_output_meta, outputMeta.toArray(), 1e-2);
 		
 	}
 	
