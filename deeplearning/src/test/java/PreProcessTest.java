@@ -61,7 +61,7 @@ public class PreProcessTest implements Serializable {
 	/**
 	 * Pre-processing test.
 	 */
-	@Test @Ignore
+	@Test
 	public void preprocessTest() {
 		
 		ConfigBaseLayer conf = ConfigBaseLayer.newBuilder().
@@ -133,7 +133,7 @@ public class PreProcessTest implements Serializable {
 			mat[i] = pcaPair.get(i)._2;
 		}
 		
-		DenseMatrix outputMet = MatrixOps.convertVectors2Mat(met);
+		DenseMatrix outputMet = MatrixOps.convertVectors2Mat(met).transpose();
 		DenseMatrix outputMat = MatrixOps.convertVectors2Mat(mat);
 		
 		Assert.assertArrayEquals(expected_output_met, outputMet.toArray(), 1e-6);
