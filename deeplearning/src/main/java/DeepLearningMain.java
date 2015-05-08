@@ -4,11 +4,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 
@@ -178,11 +183,11 @@ public class DeepLearningMain {
 	
 	
 	/**
-	 * Main method for ranking the candidate patches with the query 
+	 * Main method for ranking the candidate patches with the query. 
 	 * 
-	 * @param globalConfig
-	 * @param inputFileQuery
-	 * @param inputFilePatches
+	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration
+	 * @param inputFileQuery Input file that contains the query
+	 * @param inputFilePatches Input file that contains the candidate patches
 	 */
 	public static void rank(List<ConfigBaseLayer> globalConfig, String inputFileQuery, String inputFilePatches) throws Exception {
 		
@@ -199,9 +204,6 @@ public class DeepLearningMain {
 		JavaRDD<Tuple2<Vector, Vector>> testPatches = sc.textFile(inputFilePatches).map(new ParseTuples());
 		//JavaRDD<Tuple2<Vector, Vector>> testPatches = sc.objectFile(inputFilePatches);
 		
-		// union of the two JavaRDD<Vector> datasets
-		//JavaRDD<Vector> completePatches = queryRDD.union(testPatches);
-		
 		// get the dimensions of the large learned patches
 		int[] inputDims = {globalConfig.get(0).getConfigFeatureExtractor().getInputDim1(), globalConfig.get(0).getConfigFeatureExtractor().getInputDim2()};
 		
@@ -211,21 +213,83 @@ public class DeepLearningMain {
 		for (int i = 0; i < vecSize.size(); i++) {
 			vecSizeInt[i] = (int) vecSize.apply(i);
 		}
-		//JavaRDD<Tuple2<Vector, Vector>> queryPatches = query.flatMap(new ExtractPatchesTuples(vecSizeInt, inputDims));
-		//testPatches = testPatches.flatMap(new ExtractPatchesTuples(vecSize, patchSize));
-		
-		//TODO:: Change the test method to take arguments of JavaRDD<Tuple2<Vector,Vector>>
+		JavaRDD<Tuple2<Vector, Vector>> queryPatches = query.flatMap(new ExtractPatches(vecSizeInt, inputDims));
+		testPatches = testPatches.flatMap(new ExtractPatches(vecSizeInt, inputDims));
 		
 		// compute representations for the query and candidate patches
-		//JavaRDD<Vector> queryRepresentation = test(globalConfig, queryPatches);
-		//JavaRDD<Vector> testRepresentation = test(globalConfig, testPatches);
+		JavaRDD<Tuple2<Vector, Vector>> queryReps = testRDD(globalConfig, queryPatches);
+		JavaRDD<Tuple2<Vector, Vector>> testReps = testRDD(globalConfig, testPatches);
 		
-		// concatenate patch representations to represent the original big candidate patch
-		//List<Vector> queryRepList = queryRepresentation.collect();
-		//String queryString = queryRepList.toString();
+		// concatenate patch representations to represent the original query
+		List<Tuple2<Vector, Vector>> queryRepList = queryReps.collect();
+		int queryRepLength = queryRepList.size();			// size of the list
+		int vecLength = queryRepList.get(0)._2.size();		// size of the patch representations in the list
+		double[] queryData = new double[queryRepLength*vecLength];
 
-		// compute cosine similarities between the query representation and the condidate patches' representations
-		//JavaRDD<Double> cosineSim = testRepresentation.map(new ComputeSimilarity(queryV));
+		int k = 0;	// offset for each Vector in the List
+		for (int i = 0; i < queryRepLength; i++) {
+			System.arraycopy(queryRepList.get(i)._2, 0, queryData, k, vecLength);
+			k = k + vecLength;
+		}
+		Tuple2<Vector, Vector> queryRep = new Tuple2<Vector, Vector>(queryTuple._1, Vectors.dense(queryData));
+		
+		// concatenate patch representations from the RDD
+		JavaPairRDD<Vector, Vector> testRepsPair = JavaPairRDD.fromJavaRDD(testReps);
+		testRepsPair = testRepsPair.reduceByKey(
+				new Function2<Vector, Vector, Vector>() {
+					private static final long serialVersionUID = 5851620097719920872L;
+
+					// concatenate two Vectors with the same key
+					public Vector call(Vector v1, Vector v2) {
+						double[] out = new double[v1.size() + v2.size()];
+
+						System.arraycopy(v1.toArray(), 0, out, 0, v1.size());
+						System.arraycopy(v2.toArray(), 0, out, v1.size(), v2.size());
+
+						return Vectors.dense(out);
+					}
+				}
+			);
+		testReps = testRepsPair.rdd().toJavaRDD();	// convert back to JavaRDD<Tuple2<Vector, Vector>>
+		
+		// compute cosine similarities between the query representation and the candidate patches' representations
+		JavaRDD<Tuple2<Vector, Double>> cosineSim = testReps.map(new ComputeSimilarityPair(queryRep));
+		
+		// rank the results
+		List<Tuple2<Vector, Double>> simList = cosineSim.collect();
+		int simListSize = simList.size();
+		
+		// extract in separate Lists the Vector metadata and Double similarities
+		final List<Vector> simMeta = new ArrayList<Vector>(simListSize);
+		final List<Double> simData = new ArrayList<Double>(simListSize);
+		for (int i = 0; i < simListSize; i++) {
+			simMeta.add(simList.get(i)._1);
+			simData.add(simList.get(i)._2);
+		}
+		
+		// sort the similarities and the indices
+		final Integer[] idx = new Integer[simListSize];
+		for (int i = 0; i < simListSize; i++) {
+			idx[i] = i;
+		}
+		Arrays.sort(idx, new Comparator<Integer>() {
+		    @Override 
+		    public int compare(final Integer o1, final Integer o2) {
+		        return Double.compare(simData.get(o1), simData.get(o2));
+		    }
+		});
+		
+		// print
+		System.out.println("Sorted indices");
+		for (int i = 0; i < simListSize; i++) {
+			System.out.println(idx[i]);
+		}
+		
+		// sort the List<Vector> of metaData according to the indices
+		//TODO
+		for (int i = 0; i < simListSize; i++) {
+			System.out.println(simMeta.get(idx[i]));
+		}
 		
 	}
 	

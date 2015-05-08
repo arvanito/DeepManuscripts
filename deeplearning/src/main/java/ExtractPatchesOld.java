@@ -11,9 +11,7 @@ import org.apache.spark.mllib.linalg.DenseVector;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 
-import scala.Tuple2;
-
-public class ExtractPatchesTuples implements FlatMapFunction<Tuple2<Vector, Vector>	, Tuple2<Vector, Vector>> {
+public class ExtractPatchesOld implements FlatMapFunction<Vector, Vector> {
 	/**
 	 * 
 	 */
@@ -28,28 +26,24 @@ public class ExtractPatchesTuples implements FlatMapFunction<Tuple2<Vector, Vect
 	 * @param vecSize Original size of the flat vector
 	 * @param patchSize Patch size to extract from the flat vector
 	 */
-	public ExtractPatchesTuples(int[] vecSize, int[] patchSize) {
+	public ExtractPatchesOld(int[] vecSize, int[] patchSize) {
 		this.vecSize = Arrays.copyOf(vecSize, vecSize.length);
 		this.patchSize = Arrays.copyOf(patchSize, patchSize.length);
 	}
 	
 	
 	@Override
-	public List<Tuple2<Vector,Vector>> call(Tuple2<Vector, Vector> v) {
+	public List<Vector> call(Vector v) {
 
-		// extract the meta-data for the vector
-		Vector meta = v._1;
-		
-		// reshape the input vector that corresponds to the data
-		Vector vd = v._2;
-		DenseMatrix M = MatrixOps.reshapeVec2Mat((DenseVector) vd, vecSize);
+		// reshape the input vector
+		DenseMatrix M = MatrixOps.reshapeVec2Mat((DenseVector) v, vecSize);
 		
 		// allocate memory for the final output Matrix 
 		int blockSizeTotal = patchSize[0] * patchSize[1];
 		int[] sizeSmall = {vecSize[0]-patchSize[0]+1, vecSize[1]-patchSize[1]+1};
 		int numPatches = sizeSmall[0] * sizeSmall[1];
 
-		List<Tuple2<Vector, Vector>> patchList = new ArrayList<Tuple2<Vector, Vector>>(numPatches);
+		List<Vector> patchList = new ArrayList<Vector>(numPatches);
 		
 		// main loop for patch extraction
 		int countDim = 0;
@@ -67,9 +61,8 @@ public class ExtractPatchesTuples implements FlatMapFunction<Tuple2<Vector, Vect
 				}
 				countDim = 0;
 				
-				// add the current extracted patch to the list together with its meta-data
-				// the meta-data gets replicated
-				patchList.add(new Tuple2<Vector, Vector>(meta, Vectors.dense(out)));
+				// add the current extracted patch to the list
+				patchList.add(Vectors.dense(out));
 			}
 		}
 		
@@ -77,4 +70,3 @@ public class ExtractPatchesTuples implements FlatMapFunction<Tuple2<Vector, Vect
 	}
 	
 }
-

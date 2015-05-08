@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.ComputeSimilarity;
+import main.java.ExtractPatchesOld;
 import main.java.ExtractPatches;
-import main.java.ExtractPatchesTuples;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -83,7 +83,7 @@ public class ExtractPatchesTuplesTest implements Serializable {
 		int[] patchSize = {2,2};
 		
 		// call the parallel extractPatches procedure
-		JavaRDD<Tuple2<Vector, Vector>> extractedPatches = matRDD.flatMap(new ExtractPatchesTuples(vecSize, patchSize));
+		JavaRDD<Tuple2<Vector, Vector>> extractedPatches = matRDD.flatMap(new ExtractPatches(vecSize, patchSize));
 		List<Tuple2<Vector, Vector>> patchList = extractedPatches.collect();
 		double[][] output = new double[18][4];
 		

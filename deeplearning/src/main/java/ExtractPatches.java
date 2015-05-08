@@ -11,7 +11,9 @@ import org.apache.spark.mllib.linalg.DenseVector;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 
-public class ExtractPatches implements FlatMapFunction<Vector, Vector> {
+import scala.Tuple2;
+
+public class ExtractPatches implements FlatMapFunction<Tuple2<Vector, Vector>	, Tuple2<Vector, Vector>> {
 	/**
 	 * 
 	 */
@@ -33,19 +35,24 @@ public class ExtractPatches implements FlatMapFunction<Vector, Vector> {
 	
 	
 	@Override
-	public List<Vector> call(Vector v) {
+	public List<Tuple2<Vector,Vector>> call(Tuple2<Vector, Vector> v) {
 
-		// reshape the input vector
-		DenseMatrix M = MatrixOps.reshapeVec2Mat((DenseVector) v, vecSize);
+		// extract the meta-data for the vector
+		Vector meta = v._1;
+		
+		// reshape the input vector that corresponds to the data
+		Vector vd = v._2;
+		DenseMatrix M = MatrixOps.reshapeVec2Mat((DenseVector) vd, vecSize);
 		
 		// allocate memory for the final output Matrix 
 		int blockSizeTotal = patchSize[0] * patchSize[1];
 		int[] sizeSmall = {vecSize[0]-patchSize[0]+1, vecSize[1]-patchSize[1]+1};
 		int numPatches = sizeSmall[0] * sizeSmall[1];
 
-		List<Vector> patchList = new ArrayList<Vector>(numPatches);
+		List<Tuple2<Vector, Vector>> patchList = new ArrayList<Tuple2<Vector, Vector>>(numPatches);
 		
 		// main loop for patch extraction
+		// TODO use a step size for the patch extraction process, NOT all overlapping patches!!!
 		int countDim = 0;
 		for (int j = 0; j < sizeSmall[1]; j++) {
 			for (int i = 0; i < sizeSmall[0]; i++) {	
@@ -61,8 +68,9 @@ public class ExtractPatches implements FlatMapFunction<Vector, Vector> {
 				}
 				countDim = 0;
 				
-				// add the current extracted patch to the list
-				patchList.add(Vectors.dense(out));
+				// add the current extracted patch to the list together with its meta-data
+				// the meta-data gets replicated
+				patchList.add(new Tuple2<Vector, Vector>(meta, Vectors.dense(out)));
 			}
 		}
 		
@@ -70,3 +78,4 @@ public class ExtractPatches implements FlatMapFunction<Vector, Vector> {
 	}
 	
 }
+
