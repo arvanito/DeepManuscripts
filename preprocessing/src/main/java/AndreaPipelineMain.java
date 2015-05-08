@@ -11,6 +11,7 @@ import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.input.PortableDataStream;
 import org.apache.spark.storage.StorageLevel;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import ch.epfl.dhlab.AndreaPipeline;
 import org.opencv.core.Size;
@@ -97,20 +98,23 @@ public class AndreaPipelineMain {
         JavaPairRDD<String, Tuple2<String, ImageData>> segmentationResult = pagesCropped.mapToPair(new PairFunction<Tuple2<String, ImageData>, String, Tuple2<String, ImageData>>() {
             public Tuple2<String, Tuple2<String, ImageData>> call(Tuple2<String, ImageData> data) {
                 Mat m = data._2().getImage(); //Decompress and return a pointer to the uncompressed image representation
-                Mat segmentationResult = new Mat();
+                Mat segmentationResult = m;
                 String jSonStringResult = "";
                 if(m.cols()>0 && m.rows()>0) {
                     Mat m2 = new Mat();
-                    Imgproc.resize(m, m2, new Size(m.cols()/2,m.rows()/2));
+                    Imgproc.resize(m, m2, new Size(m.cols() / 2, m.rows() / 2));
                     Mat binarized = AndreaPipeline.binarizePage(m2); // Binarize the image
-                    if (binarized.size().equals(m2.size())) {
+                    if (binarized.size().equals(m2.size()) && Core.countNonZero(binarized)>0.7*binarized.cols()*binarized.rows()) {
                         Imgproc.resize(binarized, binarized, m.size());
-                        String jSonString = AndreaPipeline.lineDetection(data._1(), m, binarized, segmentationResult); //detect the lines
-                        if (segmentationResult.size().equals(m.size())) {
+                        Mat segmentation = new Mat();
+                        String jSonString = AndreaPipeline.lineDetection(data._1(), m, binarized, segmentation); //detect the lines
+                        if (segmentation.size().equals(m.size()) && !jSonString.equals("")) {
                             int newHeight = 1200;
-                            int newWidth = newHeight * segmentationResult.cols() / segmentationResult.rows();
-                            Imgproc.resize(segmentationResult, segmentationResult, new Size(newWidth, newHeight));
+                            int newWidth = newHeight * segmentation.cols() / segmentation.rows();
+                            Imgproc.resize(segmentation, segmentation, new Size(newWidth, newHeight));
+                            //assign results
                             jSonStringResult = jSonString;
+                            segmentationResult = segmentation;
                         }
                     }
                 }
@@ -121,18 +125,18 @@ public class AndreaPipelineMain {
         segmentationResult.cache();
 
         //Save failed elements
-        JavaPairRDD<String, String> segmentationResultFailed = segmentationResult.filter(new Function<Tuple2<String, Tuple2<String, ImageData>>, Boolean>() {
+        JavaPairRDD<String, ImageData> segmentationResultFailed = segmentationResult.filter(new Function<Tuple2<String, Tuple2<String, ImageData>>, Boolean>() {
             @Override
             public Boolean call(Tuple2<String, Tuple2<String, ImageData>> stringTuple2Tuple2) throws Exception {
                 return stringTuple2Tuple2._2()._1() == "";
             }
-        }).mapToPair(new PairFunction<Tuple2<String, Tuple2<String, ImageData>>, String, String>() {
-            public Tuple2<String, String> call(Tuple2<String, Tuple2<String, ImageData>> data) {
-                return new Tuple2<String, String>(data._1(), data._2()._1());
+        }).mapToPair(new PairFunction<Tuple2<String, Tuple2<String, ImageData>>, String, ImageData>() {
+            public Tuple2<String, ImageData> call(Tuple2<String, Tuple2<String, ImageData>> data) {
+                return new Tuple2<String, ImageData>(data._1(), data._2()._2());
             }
         });
         //Save empty files with the names of failed elements
-        segmentationResultFailed.saveAsHadoopFile(outputFile+"-failed", String.class, String.class, MultipleStringFileOutputFormat.class);
+        segmentationResultFailed.saveAsHadoopFile(outputFile+"-failed", String.class, ImageData.class, ImageOutputFormat.class);
 
 
         //Save successfull elements
