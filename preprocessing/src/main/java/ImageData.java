@@ -22,6 +22,7 @@ public class ImageData implements Serializable {
 
     static {
         NativeLibraryLoader.load(Core.NATIVE_LIBRARY_NAME);
+        NativeLibraryLoader.load("AndreaPipeline");
     }
 
     //Uncompressed representation
@@ -30,7 +31,7 @@ public class ImageData implements Serializable {
     transient private MatOfByte compressed_img;
 
     //Status of the representation
-    public enum ImageDataState {UNCOMPRESSED, COMPRESSED, ERROR}
+    public enum ImageDataState {UNCOMPRESSED, COMPRESSED}
     private ImageDataState state;
 
     //Probably other image metadata needed (compression type, compression level, precision of data, number of channels)
@@ -65,6 +66,17 @@ public class ImageData implements Serializable {
     }
 
     /**
+     * Get the compressed binary represenation of the image.
+     * @return an array of the binary representation.
+     */
+    public byte[] getCompressedData() {
+        if (state == ImageDataState.UNCOMPRESSED) {
+            compress();
+        }
+        return compressed_img.toArray();
+    }
+
+    /**
      * Get the current compression status of the class.
      * @return current status.
      */
@@ -87,12 +99,10 @@ public class ImageData implements Serializable {
      */
     public void compress() {
         if (state == ImageDataState.UNCOMPRESSED) {
-            boolean retValue = Highgui.imencode("png",image,compressed_img);
-            if (retValue) {
-                state = ImageDataState.ERROR;
-            }else {
-                state = ImageDataState.COMPRESSED;
-            }
+            if (compressed_img==null)
+                compressed_img=new MatOfByte();
+            boolean retValue = Highgui.imencode(".png",image,compressed_img);
+            state = ImageDataState.COMPRESSED;
         }
     }
 

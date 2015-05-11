@@ -8,6 +8,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <opencv.version>2.4.11</opencv.version>
         <opencv.lib.basename>libopencv_java2411</opencv.lib.basename>
+        <AndreaPipeline.version>1.2</AndreaPipeline.version>
+        <AndreaPipeline.lib.basename>libAndreaPipeline</AndreaPipeline.lib.basename>
     </properties>
 
     <repositories>
@@ -33,6 +35,11 @@
             <groupId>org.opencv</groupId>
             <artifactId>opencv</artifactId>
             <version>${opencv.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.epfl.dhlab</groupId>
+            <artifactId>AndreaPipeline</artifactId>
+            <version>${AndreaPipeline.version}</version>
         </dependency>
         <!--<dependency>
             <groupId>org.opencv</groupId>
@@ -82,6 +89,14 @@
                                     <classifier>${lib.classifier}</classifier>
                                     <destFileName>${opencv.lib.basename}.${lib.type}</destFileName>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>ch.epfl.dhlab</groupId>
+                                    <artifactId>AndreaPipeline</artifactId>
+                                    <version>${AndreaPipeline.version}</version>
+                                    <type>${lib.type}</type>
+                                    <classifier>${lib.classifier}</classifier>
+                                    <destFileName>${AndreaPipeline.lib.basename}.${lib.type}</destFileName>
+                                </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/native</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
@@ -101,6 +116,11 @@
                                     <groupId>org.opencv</groupId>
                                     <artifactId>opencv</artifactId>
                                     <version>${opencv.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>ch.epfl.dhlab</groupId>
+                                    <artifactId>AndreaPipeline</artifactId>
+                                    <version>${AndreaPipeline.version}</version>
                                 </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/lib</outputDirectory>
@@ -125,6 +145,7 @@
                             <artifactSet>
                                 <includes>
                                     <include>org.opencv:opencv</include>
+                                    <include>ch.epfl.dhlab:AndreaPipeline</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
