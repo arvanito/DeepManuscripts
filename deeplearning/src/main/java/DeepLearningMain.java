@@ -255,7 +255,7 @@ public class DeepLearningMain {
 		// compute cosine similarities between the query representation and the candidate patches' representations
 		JavaRDD<Tuple2<Vector, Double>> cosineSim = testReps.map(new ComputeSimilarityPair(queryRep));
 		
-		// rank the results
+		/****************** rank the results ******************/
 		List<Tuple2<Vector, Double>> simList = cosineSim.collect();
 		int simListSize = simList.size();
 		
@@ -290,7 +290,7 @@ public class DeepLearningMain {
 		for (int i = 0; i < simListSize; i++) {
 			System.out.println(simMeta.get(idx[i]));
 		}
-		
+		/**************** finished ranking **********************/
 	}
 	
 	
