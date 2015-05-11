@@ -1,65 +1,23 @@
 package main.java;
 
+import ch.epfl.dhlab.AndreaPipeline;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
-import org.apache.spark.input.PortableDataStream;
-import org.apache.spark.storage.StorageLevel;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import ch.epfl.dhlab.AndreaPipeline;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import scala.Tuple2;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class AndreaPipelineMain {
 
-    public static JavaPairRDD<String,ImageData> loadImages(JavaSparkContext sc, String inputFolder, String regex) {
-        //Get a handle for every file in the directory
-        JavaPairRDD<String,PortableDataStream> dataStream  = sc.binaryFiles(FilenameUtils.concat(inputFolder, regex))
-        //Filter non-image file
-            .filter(new Function<Tuple2<String, PortableDataStream>, Boolean>() {
-                @Override
-                public Boolean call(Tuple2<String, PortableDataStream> d) throws Exception {
-                    String ext = FilenameUtils.getExtension(d._1());
-                    return ext.equals("jpg") || ext.equals("JPG") || ext.equals("jpeg") || ext.equals("JPEG")
-                            || ext.equals("png") || ext.equals("PNG") || ext.equals("tif") || ext.equals("TIF")
-                            || ext.equals("tiff") || ext.equals("TIFF");
-                }
-            });
-        //Find absolute path of input folder
-        String inputFileAbs="";
-        FileSystem fs=null;
-        try {
-            fs=FileSystem.get(sc.hadoopConfiguration());
-            inputFileAbs = fs.resolvePath(new Path(inputFolder)).toString();
-            System.out.println("Input path : " + inputFileAbs);
-        } catch (IOException e) {
-            e.printStackTrace();
-            new Error("Unable to locate input path");
-        }
-        final String fInputFileAbs = inputFileAbs;
-        final FileSystem ffs = fs;
-        //Remove the input path and extract ImageData from the PortableDataStream
-        JavaPairRDD<String, ImageData> dataImages = dataStream.mapToPair(new PairFunction<Tuple2<String, PortableDataStream>, String, ImageData>() {
-            public Tuple2<String, ImageData> call(Tuple2<String, PortableDataStream> data) {
-                String filename = data._1().substring(fInputFileAbs.length() + 1);
-                //String basename = FilenameUtils.removeExtension(filename);
-                return new Tuple2<String, ImageData>(filename, new ImageData(data._2().toArray()));
-            }
-        });
-        return dataImages;
-    }
 
     public static void main(String[] args) {
         String inputFile, outputFile, dirRegex;
@@ -79,7 +37,7 @@ public class AndreaPipelineMain {
             outputFile = args[2];
         }
 
-        JavaPairRDD<String, ImageData> dataImages = loadImages(sc,inputFile,dirRegex);
+        JavaPairRDD<String, ImageData> dataImages = InputFunctions.loadImages(sc, inputFile, dirRegex);
 
         //Crop the images
         JavaPairRDD<String, ImageData> pagesCropped = dataImages.flatMapValues(new Function<ImageData, Iterable<ImageData>>() {
