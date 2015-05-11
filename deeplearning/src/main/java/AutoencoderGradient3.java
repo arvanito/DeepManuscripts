@@ -31,9 +31,12 @@ public class AutoencoderGradient3 {
 			private double lambda = 0.001;
 			private double beta = 6;
 
-			public AutoencoderGradient3(Broadcast<AutoencoderParams> params, JavaRDD<Vector> data){
+			public AutoencoderGradient3(Broadcast<AutoencoderParams> params, JavaRDD<Vector> data, AutoencoderConfig conf){
 				this.params = params;
 				this.data = data;
+				rho = conf.getRho();
+				lambda = conf.getLambda();
+				beta = conf.getBeta();
 			}
 			
 			public AutoencoderFctGrd getGradient(){

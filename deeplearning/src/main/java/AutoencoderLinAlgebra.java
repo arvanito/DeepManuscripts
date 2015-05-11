@@ -2,11 +2,14 @@ package main.java;
 
 import org.apache.spark.mllib.linalg.DenseMatrix;
 import org.apache.spark.mllib.linalg.DenseVector;
+import org.apache.spark.mllib.linalg.Matrices;
 import org.apache.spark.mllib.linalg.Vector;
 
 import scala.util.Random;
 
 public class AutoencoderLinAlgebra {
+	
+	//TO DO replace the calls to matrix multiply by DenseMatrix.multiply
 	
 	public static double sigmoid(double x){
 //		if (x>25){
@@ -272,5 +275,64 @@ public class AutoencoderLinAlgebra {
 		DenseVector b2 = new DenseVector(b2A);
 		
 		return new AutoencoderParams(w1, w2, b1, b2);
+	}
+	
+	public static Vector[] getFilters(AutoencoderParams params){
+		int num_input = params.getW1().numCols();
+		int num_hidden = params.getW1().numRows();
+		Vector[] result = new Vector[num_hidden];
+		
+		for(int i=0;i<num_hidden;i++){
+			double[] row = new double[num_input];
+			for(int j=0;j<num_input;j++){
+				row[j] = params.getW1().apply(i, j);
+			}
+			result[i] = new DenseVector(row);
+		}
+		return result;
+	}
+
+	public static double DP(DenseMatrix w1, DenseMatrix w2) throws Exception {
+		int cols = w1.numCols();
+	    int rows = w1.numRows();
+	    if (w2.numCols()!=cols || w2.numRows()!=rows){
+			throw new Exception("VAA:Inconsistent sizes");
+		};
+		double result = 0;
+		for(int i=0;i<rows;i++){
+			for (int j=0;j<cols;j++){
+				result += w1.apply(i,j)*w2.apply(i, j);
+			}
+		}
+		return result;
+	}
+
+	public static DenseMatrix MMAM(DenseMatrix w1, DenseMatrix w2, double alpha) throws Exception {
+		int cols = w1.numCols();
+	    int rows = w1.numRows();
+	    if (w2.numCols()!=cols || w2.numRows()!=rows){
+			throw new Exception("VAA:Inconsistent sizes");
+		};
+		DenseMatrix result = new DenseMatrix(rows, cols, 
+				new double[rows*cols]);
+		for (int i=0;i<rows;i++){
+			for (int j=0;j<cols;j++){
+				result.update(i, j, w1.apply(i, j) - alpha* w2.apply(i, j));
+			}
+		}
+		return result;
+	}
+
+	public static DenseVector VVAM(DenseVector b1, DenseVector b2, double alpha) throws Exception {
+	    int rows = b1.size();
+	    if ( b2.size() !=rows){
+			throw new Exception("VAA:Inconsistent sizes");
+		};
+		double[] result = new double[rows];
+		for (int i=0;i<rows;i++){			
+				result[i] = b1.apply(i) - alpha* b2.apply(i);
+		
+		}
+		return new DenseVector(result);
 	}
 }
