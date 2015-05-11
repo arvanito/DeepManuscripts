@@ -1,7 +1,6 @@
 package main.java;
 
 import main.java.DeepModelSettings.ConfigFeatureExtractor;
-import main.java.DeepModelSettings.ConfigPooler;
 import main.java.DeepModelSettings.ConfigBaseLayer;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
@@ -15,7 +14,8 @@ import org.apache.spark.mllib.linalg.Vectors;
 public class MaxPoolerExtended implements Pooler {
 
 	private static final long serialVersionUID = 1505267555549652215L;
-	protected ConfigPooler config;
+	private int pool_size;
+
 	// Only relevant for 2D input
 	protected int input_dim1;
 	protected int input_dim2;
@@ -25,9 +25,7 @@ public class MaxPoolerExtended implements Pooler {
 	 */
 	protected boolean poolOver2DInput;
 	public MaxPoolerExtended(ConfigBaseLayer c) {
-		if (c.hasConfigPooler()) {
-			config = c.getConfigPooler();
-		}
+		pool_size = c.getConfigPooler().getPoolSize();
 		poolOver2DInput = false;
 		// Look at the extractor and see if it is pooling over 2d or 1d input
 		if (c.hasConfigFeatureExtractor()) {
@@ -58,7 +56,6 @@ public class MaxPoolerExtended implements Pooler {
 	 * @return 1D vector with reduced size
 	 */
 	public Vector poolOver1D(Vector data)  {
-		int pool_size = config.getPoolSize();
 		// The size of the new pooled vector
 		int n = data.size()/pool_size;
 		// Check that the pool size is not too big
@@ -85,7 +82,6 @@ public class MaxPoolerExtended implements Pooler {
 	 */
 	public Vector poolOver2D(Vector data)  {
 		
-		int pool_size = config.getPoolSize();
 
 		int output_dim1 = (int)Math.floor((double)input_dim1 / pool_size);
 		int output_dim2 = (int)Math.floor((double)input_dim2 / pool_size);
@@ -111,12 +107,7 @@ public class MaxPoolerExtended implements Pooler {
 		}
 		return Vectors.dense(output);
 	}
-	public ConfigPooler getConfig() {
-		return config;
-	}
-	public void setConfig(ConfigPooler c) {
-		config = c;
-	}
+
 	public boolean isPoolOver2DInput() {
 		return poolOver2DInput;
 	}

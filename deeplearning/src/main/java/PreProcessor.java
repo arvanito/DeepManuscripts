@@ -2,6 +2,7 @@ package main.java;
 
 import main.java.DeepModelSettings.ConfigBaseLayer;
 
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.linalg.Vector;
@@ -40,4 +41,16 @@ public interface PreProcessor extends Function<Vector, Vector>{
 	 */
 	public Vector call(Vector data) throws Exception;
 	
+	/**
+	 *  Sets up the preprocessor. It loads the saved weights from the disk.
+	 * @param filename
+	 **/
+	public void loadFromFile(String filename, JavaSparkContext sc);
+	
+	/**
+	 *  Saves the fields necessary to reconstruct a preprocessor object. 
+	 *  Depending on the preprocessor type, more than one file will be saved.
+	 * @param filename
+	 **/
+	public void saveToFile(String filename, JavaSparkContext sc);
 }

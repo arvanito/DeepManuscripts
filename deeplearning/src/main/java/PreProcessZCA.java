@@ -1,7 +1,11 @@
 package main.java;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import main.java.DeepModelSettings.ConfigBaseLayer;
 
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.linalg.BLAS;
@@ -155,10 +159,10 @@ public class PreProcessZCA implements PreProcessor {
 	public JavaRDD<Vector> preprocessData(JavaRDD<Vector> data) {
 
 		// assign eps1 for pre-processing
-		double eps1 = configLayer.getConfigPreprocess().getEps1();
+		//double eps1 = configLayer.getConfigPreprocess().getEps1();
 
 		// apply contrast normalization
-		data = data.map(new ContrastNormalization(eps1));
+		//data = data.map(new ContrastNormalization(eps1));
 
 		// convert the JavaRRD<Vector> to a distributed RowMatrix (through Scala RDD<Vector>)
 		RowMatrix rowData = new RowMatrix(data.rdd());
@@ -227,4 +231,29 @@ public class PreProcessZCA implements PreProcessor {
 		return outVec;
 	}
 	
+	/**
+	 *  Sets up the preprocessor. It loads the saved weights from the disk.
+	 * @param filename
+	 **/
+	public void loadFromFile(String filename, JavaSparkContext sc) {
+		//NOTE Since ZCA and mean are both expected to be small (max 64x64)
+		// their loading/saving should not be a bottleneck
+		mean = (DenseVector) LinAlgebraIOUtils.loadVectorFromObject(filename+"_mean", sc);
+		ZCA = (DenseMatrix) LinAlgebraIOUtils.loadMatrixFromObject(filename + "_zca", sc);
+
+	}
+	
+	/**
+	 *  Saves the fields necessary to reconstruct a preprocessor object. 
+	 *  Depending on the preprocessor type, more than one file will be saved.
+	 * @param filename common base filename path at which a suffix is added for every field
+	 * 					that is saved
+	 **/
+	public void saveToFile(String filename, JavaSparkContext sc) {
+		//TODO
+		//NOTE Since ZCA and mean are both expected to be small (max 64x64)
+		// their loading/saving should not be a bottleneck
+		LinAlgebraIOUtils.saveVectorToObject(this.mean, filename + "_mean", sc);
+		LinAlgebraIOUtils.saveMatrixToObject(this.ZCA, filename + "_zca", sc);
+	}
 }

@@ -20,6 +20,7 @@ import org.apache.spark.mllib.linalg.Vectors;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -102,5 +103,5 @@ public class MaxPoolerTest implements Serializable{
 		double[] expected_outputs = {8,10,12,20,22,24};
 		Assert.assertArrayEquals(expected_outputs, output.toArray(), 1e-6);
 	}
-
+	//TODO add MaxPoolerExtended test
 }

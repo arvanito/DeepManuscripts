@@ -2,6 +2,8 @@ package main.java;
 
 import main.java.DeepModelSettings.ConfigBaseLayer;
 
+import org.apache.spark.mllib.linalg.DenseMatrix;
+import org.apache.spark.mllib.linalg.DenseVector;
 import org.apache.spark.mllib.linalg.Vector;
 
 /**
@@ -26,6 +28,10 @@ public class DummyExtractor implements Extractor {
 	
 	@Override
 	public void setFeatures(Vector[] features) {
+	}
+
+	@Override
+	public void setPreProcessZCA(DenseMatrix zca, DenseVector mean) {
 	}
 
 }

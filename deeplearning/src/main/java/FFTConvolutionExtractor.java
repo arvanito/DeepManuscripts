@@ -20,7 +20,9 @@ import org.apache.spark.mllib.linalg.Vector;
 public class FFTConvolutionExtractor implements Extractor {
 
 	private static final long serialVersionUID = -6605790709668749617L;
-	private PreProcessZCA preProcess; 		// pre-processing information 
+
+	private DenseMatrix zca;
+	private DenseVector mean;
 	
 	double[][][][] featureFFTs = null; // 1. features 2. rows 3. cols 4. real/img
 	double[] featureAdds = null;
@@ -32,11 +34,18 @@ public class FFTConvolutionExtractor implements Extractor {
 	private int validRows;
 	private int validCols;
 	
-	public FFTConvolutionExtractor(ConfigBaseLayer configLayer, PreProcessZCA preProcess) {
+	private ConfigFeatureExtractor.NonLinearity nonLinearity = null;  
+	private double alpha; // non-linearity (threshold)
+	
+	public FFTConvolutionExtractor(ConfigBaseLayer configLayer) {
 		setConfigLayer(configLayer);
-		this.preProcess = preProcess;
 	}
 	
+	@Override
+	public void setPreProcessZCA(DenseMatrix zca, DenseVector mean) {
+		this.zca = zca;
+		this.mean = mean;
+	}
 	
 	/* (non-Javadoc)
 	 * @see main.java.Extractor#setFeatures(org.apache.spark.mllib.linalg.Vector[])
@@ -46,18 +55,15 @@ public class FFTConvolutionExtractor implements Extractor {
 		/**
 		 * Should pre-process features, flip 'em, pad them to match input data size and calculate their FFT's
 		 */
-		//this.features = features;
-		final DenseMatrix zca = preProcess != null ? preProcess.getZCA() : null;
-		final DenseVector mean = preProcess != null ? preProcess.getMean() : null;
 		featureFFTs = new double[features.length][][][];
 		
-		if(zca != null) {
+		if(zca != null && mean != null) {
 			featureAdds = new double[features.length];
 		}
 		
 		for(int i = 0; i < features.length; ++i) {
 			DenseVector feature = (DenseVector)features[i];
-			if(zca != null) {
+			if(zca != null && mean != null) {
 				DenseVector temp = new DenseVector(new double[features[0].size()]);
 				//System.out.println("before: "+feature);
 				BLAS.gemv(1.0, zca.transpose(), feature, 0.0, temp); // "de-whiten" features, instead of whitening data
@@ -84,6 +90,12 @@ public class FFTConvolutionExtractor implements Extractor {
 		
 		validRows = inputRows - featureRows + 1;
 		validCols = inputCols - featureCols + 1;
+		nonLinearity = conf.getNonLinearity();
+		System.out.println(nonLinearity);
+		if (conf.hasSoftThreshold()) {
+			alpha = conf.getSoftThreshold();
+		}
+		
 	}
 
 	/* (non-Javadoc)
@@ -104,7 +116,9 @@ public class FFTConvolutionExtractor implements Extractor {
 			System.arraycopy(tmp, 0, result, resultPos, tmp.length);
 			resultPos += tmp.length;
 		}
-		return new DenseVector(result);
+		DenseVector res = new DenseVector(result);
+		if(nonLinearity != null) res = MatrixOps.applyNonLinearityVec(res, nonLinearity, alpha);
+		return res;
 	}
 	
 	/**
@@ -114,7 +128,7 @@ public class FFTConvolutionExtractor implements Extractor {
 	 * @return A transformed array of (real,img)-pairs
 	 */
 	private double[][][] FFT(double[][] x) {
-		return FFT.fftReal1Dor2D(x);
+		return FFTConvolution.fftReal1Dor2D(x);
 	}
 
 	/**
@@ -129,7 +143,7 @@ public class FFTConvolutionExtractor implements Extractor {
 		//System.out.println(Arrays.deepToString(fftx));
 		//System.out.println(Arrays.deepToString(ffty));
 		
-		double[][] convolved = FFT.convolveWithPreFFT(fftx,ffty);
+		double[][] convolved = FFTConvolution.convolveWithPreFFT(fftx,ffty);
 		//System.out.println(Arrays.deepToString(convolved));
 		int rows = convolved.length;
 		int cols = convolved[0].length;

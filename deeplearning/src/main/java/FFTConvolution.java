@@ -1,6 +1,9 @@
 package main.java;
 
-public class FFT {
+public class FFTConvolution {
+	/** TRUE uses internal naïve FFT impl, FALSE uses Fft.java:transform(). */ 
+	private static final boolean USE_INTERNAL = false;
+
 	/**
 	 * A naïve recursive implementation of the Cooley-Tukey FFT algorithm.
 	 * http://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm
@@ -36,12 +39,18 @@ public class FFT {
 	
 	/**
 	 * A proxy to call fftCooleyTukeyRec. Maybe extend to choose between different FFT-implementations?
+	 * For example http://www.nayuki.io/res/free-small-fft-in-multiple-languages/Fft.java
 	 * 
 	 * @param x An array of (real,img)-pairs to be transformed 
 	 * @return A transformed array of (real,img)-pairs
 	 */
 	private static double[][] fft1D(double [][] x) {
-		return fftCooleyTukeyRec(x, x.length, 1, 0);
+		if(USE_INTERNAL) {
+			return fftCooleyTukeyRec(x, x.length, 1, 0);
+		} else {
+			Fft.transform(x);
+			return x;
+		}
 	}
 	
 	

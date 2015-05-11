@@ -3,6 +3,8 @@ package main.java;
 import main.java.DeepModelSettings.ConfigBaseLayer;
 
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.mllib.linalg.DenseMatrix;
+import org.apache.spark.mllib.linalg.DenseVector;
 import org.apache.spark.mllib.linalg.Vector;
 
 /**
@@ -20,6 +22,14 @@ public interface Extractor extends Function<Vector, Vector> {
 	 */
 	public void setConfigLayer(ConfigBaseLayer configLayer);
 	
+	/**
+	 * Set the ZCA matrix and mean vector, results of PreProcessingZCA.
+	 * By default those should be null, in which case preprocessing is not used.
+	 * 
+	 * @param zca
+	 * @param mean
+	 */
+	public void setPreProcessZCA(DenseMatrix zca, DenseVector mean);
 	
 	/**
 	 * Set features to be used by this extractor.

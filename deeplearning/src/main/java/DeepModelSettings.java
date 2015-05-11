@@ -1458,6 +1458,26 @@ public final class DeepModelSettings {
      * <code>required int32 feature_dim2 = 4;</code>
      */
     int getFeatureDim2();
+
+    // optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];
+    /**
+     * <code>optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];</code>
+     */
+    boolean hasNonLinearity();
+    /**
+     * <code>optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];</code>
+     */
+    main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity getNonLinearity();
+
+    // optional double soft_threshold = 6;
+    /**
+     * <code>optional double soft_threshold = 6;</code>
+     */
+    boolean hasSoftThreshold();
+    /**
+     * <code>optional double soft_threshold = 6;</code>
+     */
+    double getSoftThreshold();
   }
   /**
    * Protobuf type {@code main.java.ConfigFeatureExtractor}
@@ -1530,6 +1550,22 @@ public final class DeepModelSettings {
               featureDim2_ = input.readInt32();
               break;
             }
+            case 40: {
+              int rawValue = input.readEnum();
+              main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity value = main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(5, rawValue);
+              } else {
+                bitField0_ |= 0x00000010;
+                nonLinearity_ = value;
+              }
+              break;
+            }
+            case 49: {
+              bitField0_ |= 0x00000020;
+              softThreshold_ = input.readDouble();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1567,6 +1603,97 @@ public final class DeepModelSettings {
     @java.lang.Override
     public com.google.protobuf.Parser<ConfigFeatureExtractor> getParserForType() {
       return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code main.java.ConfigFeatureExtractor.NonLinearity}
+     */
+    public enum NonLinearity
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>NONE = 0;</code>
+       */
+      NONE(0, 0),
+      /**
+       * <code>ABS = 1;</code>
+       */
+      ABS(1, 1),
+      /**
+       * <code>SOFT = 2;</code>
+       */
+      SOFT(2, 2),
+      ;
+
+      /**
+       * <code>NONE = 0;</code>
+       */
+      public static final int NONE_VALUE = 0;
+      /**
+       * <code>ABS = 1;</code>
+       */
+      public static final int ABS_VALUE = 1;
+      /**
+       * <code>SOFT = 2;</code>
+       */
+      public static final int SOFT_VALUE = 2;
+
+
+      public final int getNumber() { return value; }
+
+      public static NonLinearity valueOf(int value) {
+        switch (value) {
+          case 0: return NONE;
+          case 1: return ABS;
+          case 2: return SOFT;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<NonLinearity>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<NonLinearity>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<NonLinearity>() {
+              public NonLinearity findValueByNumber(int number) {
+                return NonLinearity.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return main.java.DeepModelSettings.ConfigFeatureExtractor.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final NonLinearity[] VALUES = values();
+
+      public static NonLinearity valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private NonLinearity(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:main.java.ConfigFeatureExtractor.NonLinearity)
     }
 
     private int bitField0_;
@@ -1652,11 +1779,45 @@ public final class DeepModelSettings {
       return featureDim2_;
     }
 
+    // optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];
+    public static final int NON_LINEARITY_FIELD_NUMBER = 5;
+    private main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity nonLinearity_;
+    /**
+     * <code>optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];</code>
+     */
+    public boolean hasNonLinearity() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];</code>
+     */
+    public main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity getNonLinearity() {
+      return nonLinearity_;
+    }
+
+    // optional double soft_threshold = 6;
+    public static final int SOFT_THRESHOLD_FIELD_NUMBER = 6;
+    private double softThreshold_;
+    /**
+     * <code>optional double soft_threshold = 6;</code>
+     */
+    public boolean hasSoftThreshold() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional double soft_threshold = 6;</code>
+     */
+    public double getSoftThreshold() {
+      return softThreshold_;
+    }
+
     private void initFields() {
       inputDim1_ = 0;
       inputDim2_ = 0;
       featureDim1_ = 0;
       featureDim2_ = 0;
+      nonLinearity_ = main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity.NONE;
+      softThreshold_ = 0D;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1698,6 +1859,12 @@ public final class DeepModelSettings {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeInt32(4, featureDim2_);
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeEnum(5, nonLinearity_.getNumber());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeDouble(6, softThreshold_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1722,6 +1889,14 @@ public final class DeepModelSettings {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(4, featureDim2_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(5, nonLinearity_.getNumber());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(6, softThreshold_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1847,6 +2022,10 @@ public final class DeepModelSettings {
         bitField0_ = (bitField0_ & ~0x00000004);
         featureDim2_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
+        nonLinearity_ = main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity.NONE;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        softThreshold_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -1891,6 +2070,14 @@ public final class DeepModelSettings {
           to_bitField0_ |= 0x00000008;
         }
         result.featureDim2_ = featureDim2_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.nonLinearity_ = nonLinearity_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.softThreshold_ = softThreshold_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1918,6 +2105,12 @@ public final class DeepModelSettings {
         }
         if (other.hasFeatureDim2()) {
           setFeatureDim2(other.getFeatureDim2());
+        }
+        if (other.hasNonLinearity()) {
+          setNonLinearity(other.getNonLinearity());
+        }
+        if (other.hasSoftThreshold()) {
+          setSoftThreshold(other.getSoftThreshold());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2126,6 +2319,75 @@ public final class DeepModelSettings {
       public Builder clearFeatureDim2() {
         bitField0_ = (bitField0_ & ~0x00000008);
         featureDim2_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];
+      private main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity nonLinearity_ = main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity.NONE;
+      /**
+       * <code>optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];</code>
+       */
+      public boolean hasNonLinearity() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];</code>
+       */
+      public main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity getNonLinearity() {
+        return nonLinearity_;
+      }
+      /**
+       * <code>optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];</code>
+       */
+      public Builder setNonLinearity(main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000010;
+        nonLinearity_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];</code>
+       */
+      public Builder clearNonLinearity() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        nonLinearity_ = main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity.NONE;
+        onChanged();
+        return this;
+      }
+
+      // optional double soft_threshold = 6;
+      private double softThreshold_ ;
+      /**
+       * <code>optional double soft_threshold = 6;</code>
+       */
+      public boolean hasSoftThreshold() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional double soft_threshold = 6;</code>
+       */
+      public double getSoftThreshold() {
+        return softThreshold_;
+      }
+      /**
+       * <code>optional double soft_threshold = 6;</code>
+       */
+      public Builder setSoftThreshold(double value) {
+        bitField0_ |= 0x00000020;
+        softThreshold_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double soft_threshold = 6;</code>
+       */
+      public Builder clearSoftThreshold() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        softThreshold_ = 0D;
         onChanged();
         return this;
       }
@@ -4791,22 +5053,26 @@ public final class DeepModelSettings {
       "_2\030\002 \002(\001\"H\n\014ConfigKMeans\022\032\n\022number_of_cl" +
       "usters\030\001 \002(\005\022\034\n\024number_of_iterations\030\002 \002" +
       "(\005\"-\n\022ConfigAutoencoders\022\027\n\017number_of_un" +
-      "its\030\001 \002(\005\"l\n\026ConfigFeatureExtractor\022\022\n\ni" +
-      "nput_dim1\030\001 \002(\005\022\022\n\ninput_dim2\030\002 \002(\005\022\024\n\014f" +
-      "eature_dim1\030\003 \002(\005\022\024\n\014feature_dim2\030\004 \002(\005\"" +
-      "}\n\014ConfigPooler\022\021\n\tpool_size\030\001 \002(\005\0228\n\tpo" +
-      "ol_type\030\002 \001(\0162 .main.java.ConfigPooler.P",
-      "oolType:\003MAX\" \n\010PoolType\022\007\n\003MAX\020\000\022\013\n\007AVE" +
-      "RAGE\020\001\"\252\002\n\017ConfigBaseLayer\0226\n\021config_pre" +
-      "process\030\001 \001(\0132\033.main.java.ConfigPreproce" +
-      "ss\022.\n\rconfig_kmeans\030\002 \001(\0132\027.main.java.Co" +
-      "nfigKMeans\022:\n\023config_autoencoders\030\003 \001(\0132" +
-      "\035.main.java.ConfigAutoencoders\022C\n\030config" +
-      "_feature_extractor\030\004 \001(\0132!.main.java.Con" +
-      "figFeatureExtractor\022.\n\rconfig_pooler\030\005 \002" +
-      "(\0132\027.main.java.ConfigPooler\"E\n\021ConfigMan" +
-      "uscripts\0220\n\014config_layer\030\001 \003(\0132\032.main.ja",
-      "va.ConfigBaseLayer"
+      "its\030\001 \002(\005\"\376\001\n\026ConfigFeatureExtractor\022\022\n\n" +
+      "input_dim1\030\001 \002(\005\022\022\n\ninput_dim2\030\002 \002(\005\022\024\n\014" +
+      "feature_dim1\030\003 \002(\005\022\024\n\014feature_dim2\030\004 \002(\005" +
+      "\022K\n\rnon_linearity\030\005 \001(\0162..main.java.Conf" +
+      "igFeatureExtractor.NonLinearity:\004NONE\022\026\n",
+      "\016soft_threshold\030\006 \001(\001\"+\n\014NonLinearity\022\010\n" +
+      "\004NONE\020\000\022\007\n\003ABS\020\001\022\010\n\004SOFT\020\002\"}\n\014ConfigPool" +
+      "er\022\021\n\tpool_size\030\001 \002(\005\0228\n\tpool_type\030\002 \001(\016" +
+      "2 .main.java.ConfigPooler.PoolType:\003MAX\"" +
+      " \n\010PoolType\022\007\n\003MAX\020\000\022\013\n\007AVERAGE\020\001\"\252\002\n\017Co" +
+      "nfigBaseLayer\0226\n\021config_preprocess\030\001 \001(\013" +
+      "2\033.main.java.ConfigPreprocess\022.\n\rconfig_" +
+      "kmeans\030\002 \001(\0132\027.main.java.ConfigKMeans\022:\n" +
+      "\023config_autoencoders\030\003 \001(\0132\035.main.java.C" +
+      "onfigAutoencoders\022C\n\030config_feature_extr",
+      "actor\030\004 \001(\0132!.main.java.ConfigFeatureExt" +
+      "ractor\022.\n\rconfig_pooler\030\005 \002(\0132\027.main.jav" +
+      "a.ConfigPooler\"E\n\021ConfigManuscripts\0220\n\014c" +
+      "onfig_layer\030\001 \003(\0132\032.main.java.ConfigBase" +
+      "Layer"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4836,7 +5102,7 @@ public final class DeepModelSettings {
           internal_static_main_java_ConfigFeatureExtractor_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_java_ConfigFeatureExtractor_descriptor,
-              new java.lang.String[] { "InputDim1", "InputDim2", "FeatureDim1", "FeatureDim2", });
+              new java.lang.String[] { "InputDim1", "InputDim2", "FeatureDim1", "FeatureDim2", "NonLinearity", "SoftThreshold", });
           internal_static_main_java_ConfigPooler_descriptor =
             getDescriptor().getMessageTypes().get(4);
           internal_static_main_java_ConfigPooler_fieldAccessorTable = new
