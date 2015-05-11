@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -44,8 +47,9 @@ public class DeepLearningMain {
 		try {
 			ConfigManuscripts.Builder builder = ConfigManuscripts.newBuilder();
 			//BufferedReader reader = new BufferedReader(new FileReader(prototxt_file));
-			FileInputStream fs = new FileInputStream(prototxt_file);
-			InputStreamReader reader = new InputStreamReader(fs);
+			FileSystem fs = FileSystem.get(new  Configuration());			
+			//FileInputStream fs = new FileInputStream(prototxt_file);
+			InputStreamReader reader = new InputStreamReader(fs.open(new Path(prototxt_file)));
 			TextFormat.merge(reader, builder);
 			
 			// Settings file created
@@ -122,7 +126,7 @@ public class DeepLearningMain {
 	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
 	 		
 	 		// set up the current layer 
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, "x_"+testId);
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, testId+"_x_");
 			layer.setSparkContext(sc);
 			// The configLayer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
