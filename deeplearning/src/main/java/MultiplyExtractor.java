@@ -6,7 +6,6 @@ import main.java.DeepModelSettings.ConfigFeatureExtractor;
 import org.apache.spark.mllib.linalg.BLAS;
 import org.apache.spark.mllib.linalg.DenseMatrix;
 import org.apache.spark.mllib.linalg.DenseVector;
-import org.apache.spark.mllib.linalg.Matrix;
 import org.apache.spark.mllib.linalg.Vector;
 
 
@@ -34,11 +33,10 @@ public class MultiplyExtractor implements Extractor {
 	 * @param preProcess The input PreProcess configuration
 	 */
 	public MultiplyExtractor(ConfigBaseLayer configLayer) {
-		setConfigLayer(configLayer);
+		setConfig(configLayer);
 	}
 	
-	@Override
-	public void setConfigLayer(ConfigBaseLayer configLayer) {
+	private void setConfig(ConfigBaseLayer configLayer) {
 		ConfigFeatureExtractor conf = configLayer.getConfigFeatureExtractor();
 		nonLinearity = conf.getNonLinearity();
 		System.out.println(nonLinearity);
@@ -51,15 +49,6 @@ public class MultiplyExtractor implements Extractor {
 	public void setPreProcessZCA(DenseMatrix zca, DenseVector mean) {
 		this.zca = zca;
 		this.mean = mean;
-	}
-	
-	/**
-	 * Getter method for the learned features.
-	 * 
-	 * @return The learned features
-	 */
-	public Vector[] getFeatures() {
-		return features;
 	}
 
 	/**

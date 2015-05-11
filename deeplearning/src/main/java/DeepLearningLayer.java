@@ -1,7 +1,5 @@
 package main.java;
 
-import main.java.DeepModelSettings.ConfigBaseLayer;
-
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.Vector;
@@ -44,7 +42,7 @@ public interface DeepLearningLayer {
 	 * @param features An RDD of Vectors, where each Vector is a feature
 	 * @return An RDD of extracted features, where each Vector corresponds to one Vector in data
 	 */
-	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, ConfigBaseLayer configLayer, Vector[] features);
+	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, Vector[] features);
 	
 	
 	/**

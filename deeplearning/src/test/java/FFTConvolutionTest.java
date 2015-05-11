@@ -230,9 +230,7 @@ public class FFTConvolutionTest implements Serializable {
 		DenseVector mean = new DenseVector(m);
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca);
 		
-		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
-		preProcess.setConfigLayer(conf);
-				
+		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA, conf);
 		
 		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf);
 		extractor.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
@@ -279,9 +277,7 @@ public class FFTConvolutionTest implements Serializable {
 		DenseVector mean = new DenseVector(m);
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca).transpose(); // just for principle - col vs row major
 		
-		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
-		preProcess.setConfigLayer(conf);
-				
+		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA, conf);
 		
 		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf);
 		extractor.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
@@ -329,9 +325,7 @@ public class FFTConvolutionTest implements Serializable {
 		DenseVector mean = new DenseVector(m);
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca).transpose(); // Matrix creation is column-major, ours is row-major
 		
-		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
-		preProcess.setConfigLayer(conf);
-				
+		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA, conf);
 		
 		FFTConvolutionExtractor extractor = new FFTConvolutionExtractor(conf);
 		extractor.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
@@ -386,8 +380,7 @@ public class FFTConvolutionTest implements Serializable {
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca).transpose();
 		
 		// create a PreProcessZCA object with the input mean and ZCA variables
-		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
-		preProcess.setConfigLayer(conf);
+		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA, conf);
 		
 		// create a parallel dataset from the local matrix
 		List<Vector> matX = new ArrayList<Vector>(1);
@@ -441,8 +434,7 @@ public class FFTConvolutionTest implements Serializable {
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca);
 		
 		// create a PreProcessZCA object with the input mean and ZCA variables
-		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
-		preProcess.setConfigLayer(conf);
+		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA, conf);
 		
 		// create a parallel dataset from the local matrix
 		List<Vector> matX = new ArrayList<Vector>(1);

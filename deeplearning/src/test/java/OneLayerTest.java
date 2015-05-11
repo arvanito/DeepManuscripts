@@ -79,7 +79,7 @@ public class OneLayerTest implements Serializable {
 		Assert.assertEquals(3, features.length);
 		Assert.assertEquals(4, features[0].size());
 		
-		JavaRDD<Vector> represent = layer.extractFeatures(imgwords, c, features);
+		JavaRDD<Vector> represent = layer.extractFeatures(imgwords, features);
 		
 		List<Vector> t = represent.collect();
 		Assert.assertEquals(50, t.size());

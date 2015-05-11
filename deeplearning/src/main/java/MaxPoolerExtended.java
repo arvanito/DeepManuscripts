@@ -55,7 +55,7 @@ public class MaxPoolerExtended implements Pooler {
 	 * @param data 1D vector of doubles
 	 * @return 1D vector with reduced size
 	 */
-	public Vector poolOver1D(Vector data)  {
+	private Vector poolOver1D(Vector data)  {
 		// The size of the new pooled vector
 		int n = data.size()/pool_size;
 		// Check that the pool size is not too big
@@ -80,7 +80,7 @@ public class MaxPoolerExtended implements Pooler {
 	 * @param data 1D vector storing column-wise a 2D image/feature patch
 	 * @return 1D vector with reduced size storing the pooled data
 	 */
-	public Vector poolOver2D(Vector data)  {
+	private Vector poolOver2D(Vector data)  {
 		
 
 		int output_dim1 = (int)Math.floor((double)input_dim1 / pool_size);

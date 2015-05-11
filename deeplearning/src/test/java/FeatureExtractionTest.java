@@ -122,8 +122,7 @@ public class FeatureExtractionTest implements Serializable {
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca);
 		
 		// create a PreProcessZCA object with the input mean and ZCA variables
-		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
-		preProcess.setConfigLayer(conf);
+		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA, conf);
 		
 		// create a parallel dataset from the local matrix
 		List<Vector> matX = new ArrayList<Vector>(4);
@@ -190,8 +189,7 @@ public class FeatureExtractionTest implements Serializable {
 		DenseMatrix ZCA = new DenseMatrix(4,4,zca);
 		
 		// create a PreProcessZCA object with the input mean and ZCA variables
-		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA);
-		preProcess.setConfigLayer(conf);
+		PreProcessZCA preProcess = new PreProcessZCA(mean, ZCA, conf);
 		
 		// create a parallel dataset from the local matrix
 		List<Vector> matX = new ArrayList<Vector>(1);

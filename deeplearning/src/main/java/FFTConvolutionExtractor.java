@@ -38,7 +38,7 @@ public class FFTConvolutionExtractor implements Extractor {
 	private double alpha; // non-linearity (threshold)
 	
 	public FFTConvolutionExtractor(ConfigBaseLayer configLayer) {
-		setConfigLayer(configLayer);
+		setConfig(configLayer);
 	}
 	
 	@Override
@@ -75,8 +75,7 @@ public class FFTConvolutionExtractor implements Extractor {
 		}
 	}
 	
-	@Override
-	public void setConfigLayer(ConfigBaseLayer configLayer) {
+	private void setConfig(ConfigBaseLayer configLayer) {
 		ConfigFeatureExtractor conf = configLayer.getConfigFeatureExtractor(); 
 		inputCols = conf.getInputDim1();
 		inputRows = conf.getInputDim2();

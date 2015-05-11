@@ -41,7 +41,7 @@ public class ConvMultiplyExtractor implements Extractor {
 	 * @param preProcess The input PreProcess configuration
 	 */
 	public ConvMultiplyExtractor(ConfigBaseLayer configLayer) {
-		setConfigLayer(configLayer);
+		setConfig(configLayer);
 	}
 
 
@@ -52,27 +52,16 @@ public class ConvMultiplyExtractor implements Extractor {
 	 * @param features The input feature learned from the previous step
 	 */
 	public ConvMultiplyExtractor(ConfigBaseLayer configLayer, PreProcessZCA preProcess, Vector[] features) {
-		setConfigLayer(configLayer);
+		setConfig(configLayer);
 		this.features = features;
 	}
-
-	/**
-	 * Getter method for the learned features.
-	 * 
-	 * @return The learned features
-	 */
-	public Vector[] getFeatures() {
-		return features;
-	}
-	
 	
 	/**
 	 * Setter method for the ConfigBaseLayer object.
 	 * 
 	 * @param configLayer The ConfigBaseLayer object
 	 */
-	//@Override
-	public void setConfigLayer(ConfigBaseLayer configLayer) {
+	private void setConfig(ConfigBaseLayer configLayer) {
 		ConfigFeatureExtractor conf = configLayer.getConfigFeatureExtractor();
 		inputCols = conf.getInputDim1();
 		inputRows = conf.getInputDim2();

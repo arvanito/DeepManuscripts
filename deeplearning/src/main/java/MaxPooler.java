@@ -1,7 +1,6 @@
 package main.java;
 
 import main.java.DeepModelSettings.ConfigFeatureExtractor;
-import main.java.DeepModelSettings.ConfigPooler;
 import main.java.DeepModelSettings.ConfigBaseLayer;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
@@ -39,7 +38,7 @@ public class MaxPooler implements Pooler {
 		}
 	}
 	@Override
-	public Vector call(Vector data) throws Exception {
+	public Vector call(Vector data) {
 		//TODO(viviana) The pooler needs to know if the input vector comes from
 		//  a 2D or 1D data  
 		if (this.poolOver2DInput == false)
@@ -55,7 +54,7 @@ public class MaxPooler implements Pooler {
 	 * @param data 1D vector of doubles
 	 * @return 1D vector with reduced size
 	 */
-	public Vector poolOver1D(Vector data)  {
+	private Vector poolOver1D(Vector data)  {
 		// The size of the new pooled vector
 		int n = data.size()/pool_size;
 		// Check that the pool size is not too big
@@ -80,7 +79,7 @@ public class MaxPooler implements Pooler {
 	 * @param data 1D vector storing column-wise a 2D image/feature patch
 	 * @return 1D vector with reduced size storing the pooled data
 	 */
-	public Vector poolOver2D(Vector data)  {
+	private Vector poolOver2D(Vector data)  {
 		int output_dim1 = (int)Math.floor((double)input_dim1 / pool_size);
 		int output_dim2 = (int)Math.floor((double)input_dim2 / pool_size);
 		double[] output = new double[output_dim1 * output_dim2];

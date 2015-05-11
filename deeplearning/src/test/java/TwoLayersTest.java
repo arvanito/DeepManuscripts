@@ -101,7 +101,7 @@ public class TwoLayersTest implements Serializable {
 		Assert.assertEquals(4, features.length);
 		Assert.assertEquals(27, features[0].size());
 		Assert.assertEquals(64,imgwords.collect().get(0).size());
-		JavaRDD<Vector> represent = layer2.extractFeatures(result, config2, features);
+		JavaRDD<Vector> represent = layer2.extractFeatures(result, features);
 		Assert.assertEquals(50, represent.collect().size());
 		Assert.assertEquals(4, represent.collect().get(0).size());
 		

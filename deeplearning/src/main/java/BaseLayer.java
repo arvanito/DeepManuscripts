@@ -63,8 +63,7 @@ public class BaseLayer implements DeepLearningLayer {
 
 	
 	@Override
-	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, ConfigBaseLayer configLayer, Vector[] features) {
-		extract.setConfigLayer(configLayer);
+	public JavaRDD<Vector> extractFeatures(JavaRDD<Vector> data, Vector[] features) {
 		if(preprocess != null) {
 			extract.setPreProcessZCA(((PreProcessZCA)preprocess).getZCA(), ((PreProcessZCA)preprocess).getMean());
 		}
@@ -98,7 +97,7 @@ public class BaseLayer implements DeepLearningLayer {
 		if (save_model == true)
 			LinAlgebraIOUtils.saveVectorArrayToObject(features, pathPrefix + "_features", spark_context);
 		
-		JavaRDD<Vector> represent = extractFeatures(input_word_patches, configLayer, features);
+		JavaRDD<Vector> represent = extractFeatures(input_word_patches, features);
 		JavaRDD<Vector> pooled = pool(represent);
 		return pooled;
 	}
@@ -115,13 +114,11 @@ public class BaseLayer implements DeepLearningLayer {
     	System.out.println("Features info");
     	System.out.println(features.length);
     	System.out.println(features[0].size());
-    	
-    	JavaRDD<Vector> represent = extractFeatures(data, configLayer, features);
+    	JavaRDD<Vector> represent = extractFeatures(data, features);
     	JavaRDD<Vector> pooled = pool(represent);
     	return pooled;
     }
-   
-    
+
     public String getPathPrefix() {
     	return pathPrefix;
     }
