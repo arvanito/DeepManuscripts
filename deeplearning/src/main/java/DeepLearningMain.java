@@ -86,14 +86,34 @@ public class DeepLearningMain {
 	 * @throws Exception
 	 */
 	public static void train(List<ConfigBaseLayer> globalConfig, String inputFileSmallPatches, 
-							String inputFileLargePatches, String outputFile) throws Exception {
+							String inputFileLargePatches, String outputFile, String testId) throws Exception {
 		
 		// open files and convert them to JavaRDD<Vector> datasets
 //		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
 //    	JavaSparkContext sc = new JavaSparkContext(conf);
  
-		JavaRDD<Vector> inputSmallPatches = sc.textFile(inputFileSmallPatches).map(new Parse());
-		JavaRDD<Vector> inputWordPatches = sc.textFile(inputFileLargePatches).map(new Parse());
+		JavaRDD<Vector> inputSmallPatches = sc.textFile(inputFileSmallPatches).map(new Parse()).filter(new Function<Vector, Boolean>() {
+			
+			@Override
+			public Boolean call(Vector arg0) throws Exception {
+				if (arg0.size() == 1024){
+					return true;
+				}
+				return false;
+			}
+		});
+;
+		JavaRDD<Vector> inputWordPatches = sc.textFile(inputFileLargePatches).map(new Parse()).filter(new Function<Vector, Boolean>() {
+			
+			@Override
+			public Boolean call(Vector arg0) throws Exception {
+				if (arg0.size() == 4096){
+					return true;
+				}
+				return false;
+			}
+		});
+;
 
 		//testMe(inputSmallPatches);
 		
@@ -102,8 +122,8 @@ public class DeepLearningMain {
 	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
 	 		
 	 		// set up the current layer 
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, "x");
-			
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, "x_"+testId);
+			layer.setSparkContext(sc);
 			// The configLayer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
 			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
@@ -366,15 +386,15 @@ public class DeepLearningMain {
 		
 		// check if settings file .prototxt is provided, maybe do this better!
 		List<ConfigBaseLayer> globalConfig = null;
-		if (args.length == 4) {
+		if (args.length == 5) {
 		    globalConfig = loadSettings(args[0]);
 		} else {
-			System.out.print("Usage: spark-submit --class main.java.DeepLearningMain --master local[1] target/DeepManuscriptLearning-0.0.1.jar  <config.prototxt> <test_in1.txt> <test_in2.txt>  <test_out>");
+			System.out.print("Usage: spark-submit --class main.java.DeepLearningMain --master local[1] target/DeepManuscriptLearning-0.0.1.jar  <config.prototxt> <test_in1.txt> <test_in2.txt>  <test_out> <test_id>");
 			throw new Exception("Missing command line arguments!");
 		}
 		
 		//TODO add option for train/test/rank in main
-		train(globalConfig, args[1], args[2], args[3]);
+		train(globalConfig, args[1], args[2], args[3], args[4]);
 
 	}
 }
