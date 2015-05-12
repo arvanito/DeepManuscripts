@@ -126,7 +126,7 @@ public class OneLayerTest implements Serializable {
 		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
 		JavaRDD<Vector> imgwords = sc.parallelize(input_word_patches);
 		
-		JavaRDD<Vector> result = layer.train(patches, imgwords);
+		JavaRDD<Vector> result = layer.train(patches, imgwords,false);
 
 		List<Vector> res = result.collect();
 		Assert.assertEquals(50, res.size());

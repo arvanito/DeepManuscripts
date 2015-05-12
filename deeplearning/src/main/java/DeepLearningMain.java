@@ -96,6 +96,7 @@ public class DeepLearningMain {
 //		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
 //    	JavaSparkContext sc = new JavaSparkContext(conf);
  
+		int numPartitions = 40*12*3; //Num-workers * cores_per_worker * succesive tasks
 		JavaRDD<Vector> inputSmallPatches = sc.textFile(inputFileSmallPatches).map(new Parse()).filter(new Function<Vector, Boolean>() {
 			
 			@Override
@@ -105,7 +106,7 @@ public class DeepLearningMain {
 				}
 				return false;
 			}
-		});
+		}).repartition(numPartitions);
 ;
 		JavaRDD<Vector> inputWordPatches = sc.textFile(inputFileLargePatches).map(new Parse()).filter(new Function<Vector, Boolean>() {
 			
@@ -116,27 +117,45 @@ public class DeepLearningMain {
 				}
 				return false;
 			}
-		});
+		}).repartition(numPartitions);
 ;
 
 		//testMe(inputSmallPatches);
 		
-		// The main loop calls train() on each of the layers
+
+//		DeepLearningLayer layer0 = BaseLayerFactory.createBaseLayer(globalConfig.get(0), 0, testId+"_x_");
+//		layer0.setSparkContext(sc);
+//		JavaRDD<Vector> result0 = layer0.train(inputSmallPatches, inputWordPatches);
+//		
+//		JavaRDD<Vector> result1 = result0.repartition(numPartitions);
+//		JavaRDD<Vector> result2 = result0.repartition(numPartitions);
+//		
+//		result0.saveAsTextFile(outputFile);
+//		DeepLearningLayer layer1 = BaseLayerFactory.createBaseLayer(globalConfig.get(1), 1 , testId+"_x_");
+//		layer1.setSparkContext(sc);
+//		
+//		JavaRDD<Vector> result = layer1.train(result1, result2);
+//		
+//		result.saveAsTextFile(outputFile);
+		
+//		// The main loop calls train() on each of the layers
 		JavaRDD<Vector> result = null;
 	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
-	 		
+	 		boolean notLast = (layerIndex == globalConfig.size()-1) ? true : false;
 	 		// set up the current layer 
 			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, testId+"_x_");
 			layer.setSparkContext(sc);
 			// The configLayer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
 			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
-				result = layer.train(inputSmallPatches, inputWordPatches);
+				result = layer.train(inputSmallPatches, inputWordPatches,notLast);
 			} else {
-				result = layer.train(result, result);
+				JavaRDD<Vector> result1 = result.repartition(numPartitions);
+				JavaRDD<Vector> result2 = result.repartition(numPartitions).cache();
+				result = layer.train(result1, result2,notLast);
 			}	
 	 	}
-		//TODO save also last file
+//		//TODO save also last file
 		result.saveAsTextFile(outputFile);
 		
 		

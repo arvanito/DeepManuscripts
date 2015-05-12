@@ -104,9 +104,9 @@ public class LoadSaveModelTest implements Serializable {
 			// The config layer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
 			if (config_layer.hasConfigFeatureExtractor()) {
-				result = layer.train(patches, imgwords);
+				result = layer.train(patches, imgwords,false);
 			} else {
-				result = layer.train(result, result);
+				result = layer.train(result, result,false);
 			}	
 	 	}
 		List<Vector> out = result.collect();

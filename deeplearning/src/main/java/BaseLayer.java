@@ -46,7 +46,7 @@ public class BaseLayer implements DeepLearningLayer {
 		this.extract = extract;
 		this.pool = pool;
 		
-		save_model = false;
+		save_model = true;
 	}
 	
 	
@@ -81,24 +81,30 @@ public class BaseLayer implements DeepLearningLayer {
 	//TODO:: Input two datasets, one is patch-based and the other is larger parts of the image.
     @Override
 	public JavaRDD<Vector> train(JavaRDD<Vector> input_small_patches, 
-			                       JavaRDD<Vector> input_word_patches) throws Exception {
+			                       JavaRDD<Vector> input_word_patches, boolean notLast) throws Exception {
+    	
+		JavaRDD<Vector> input_small_patchesProccesed;
 		if(preprocess != null) {
-		input_small_patches = preProcess(input_small_patches);
+		input_small_patchesProccesed = preProcess(input_small_patches);
 			if (save_model == true) { // save the ZCA matrix and mean
 				preprocess.saveToFile(pathPrefix + "_preprocess", spark_context);
 			}
+		}else{
+			input_small_patchesProccesed = input_small_patches;
 		}
-		Vector[] features = learnFeatures(input_small_patches);
+		Vector[] features = learnFeatures(input_small_patchesProccesed.cache());
 		
 		// TODO:: do preprocessing on the second dataset
 		//JavaRDD<Vector> preprocessedBig = dataBig.map(preprocess);
 		
 		// Ugly hack, move this to the Learner class
 		if (save_model == true)
+			//LinAlgebraIOUtils.saveVectorArrayToText(features, pathPrefix + "_features", spark_context);
 			LinAlgebraIOUtils.saveVectorArrayToObject(features, pathPrefix + "_features", spark_context);
 		
 		JavaRDD<Vector> represent = extractFeatures(input_word_patches, features);
-		JavaRDD<Vector> pooled = pool(represent);
+		JavaRDD<Vector> pooled = pool(represent).cache();
+		if (notLast) pooled.count(); //force materialization
 		return pooled;
 	}
 

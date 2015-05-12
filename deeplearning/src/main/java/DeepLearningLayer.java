@@ -62,7 +62,7 @@ public interface DeepLearningLayer {
 	 * @return An RDD containing a new representation of the data
 	 * @throws Exception
 	 */
-	public JavaRDD<Vector> train(JavaRDD<Vector> data1, JavaRDD<Vector> data2) throws Exception;
+	public JavaRDD<Vector> train(JavaRDD<Vector> data1, JavaRDD<Vector> data2, boolean notLast) throws Exception;
 
 	
     /**
