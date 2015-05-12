@@ -106,7 +106,7 @@ public class Autoencoder {
 				boolean notFound = true;
 				int steps = 0;
 				alpha = alpha_init;
-				double oldFctValue = result.getValue();
+				double oldFctValue = linesearch.computeTestError(0.0);
 				while(notFound && steps++<=alpha_max_steps){
 					double curFctValue = linesearch.computeTestError(alpha);
 					System.out.println("Line search:"+oldFctValue+" <> "+curFctValue);
