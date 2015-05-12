@@ -200,7 +200,30 @@ public class SpectralClustering {
 				result[i + j * nbRow] = d[i][j];
 			}
 		}
-		return Matrices.dense(nbRow, nbCol, result);
+		return Matrices.sparse(nbRow, nbCol,rowStart(nbRow, nbCol),columnStart(nbRow, nbCol), result);
+	}
+	
+	private int[] rowStart(int m, int n) {
+		int[] index = new int[m * n];
+		for (int i = 0; i < m * n; i++) {
+			index[i] = i;
+		}
+		return index;
+	}
+
+	/**
+	 * Return the indexes of all the beginnings of a column for a matrix of size m*n.
+	 * 
+	 * @param n
+	 *            Size of the matrix
+	 * @return An array of indexes
+	 */
+	private int[] columnStart(int m, int n) {
+		int[] index = new int[n + 1];
+		for (int i = 0; i < n + 1; i++) {
+			index[i] = i * m;
+		}
+		return index;
 	}
 
 	/**

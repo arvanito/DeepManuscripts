@@ -69,7 +69,7 @@ public class KNearestNeighbor {
 	 * @param sigma
 	 *            The value of sigma for the Gaussian similarity function
 	 */
-	public KNearestNeighbor(Vector[] input, int k,double sigma) {
+	public KNearestNeighbor(Vector[] input, int k, double sigma) {
 		this.input = input;
 		this.maxDistance = 0;
 		this.matrixType = 1;
@@ -77,7 +77,7 @@ public class KNearestNeighbor {
 		this.neighborType = 1;
 		this.sigma = sigma;
 	}
-	
+
 	/**
 	 * Smallest constructor for WeightedMatrix
 	 * 
@@ -128,36 +128,44 @@ public class KNearestNeighbor {
 		}
 		output = Matrices.sparse(n, n, columnStart(n), rowStart(n), result);
 	}
-	
+
 	/**
-	 * Return the indexes of all the beginnings of a row for a flatten square matrix of size n.
-	 * @param n Size of the matrix
+	 * Return the indexes of all the beginnings of a row for a flatten square
+	 * matrix of size n.
+	 * 
+	 * @param n
+	 *            Size of the matrix
 	 * @return An array of indexes
 	 */
 	private int[] rowStart(int n) {
-		int[] index = new int[n*n];
-		for(int i=0; i<n*n;i++){
+		int[] index = new int[n * n];
+		for (int i = 0; i < n * n; i++) {
 			index[i] = i;
 		}
 		return index;
 	}
 
 	/**
-	 * Return the indexes of all the beginnings of a column for a flatten square matrix of size n.
-	 * @param n Size of the matrix
+	 * Return the indexes of all the beginnings of a column for a flatten square
+	 * matrix of size n.
+	 * 
+	 * @param n
+	 *            Size of the matrix
 	 * @return An array of indexes
 	 */
 	private int[] columnStart(int n) {
-		int[] index = new int[n+1];
-		for(int i=0; i<n+1;i++){
-			index[i] = i*n;
+		int[] index = new int[n + 1];
+		for (int i = 0; i < n + 1; i++) {
+			index[i] = i * n;
 		}
 		return index;
 	}
 
 	/**
 	 * Compute the Gaussian similarity function for non-zero values.
-	 * @param d Input value
+	 * 
+	 * @param d
+	 *            Input value
 	 * @return Calculated value
 	 */
 	private double gaussian(double d) {
