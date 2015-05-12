@@ -140,7 +140,7 @@ public class DeepLearningMain {
 		
 //		// The main loop calls train() on each of the layers
 		JavaRDD<Vector> result = null;
-	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
+	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); layerIndex++) {
 	 		boolean notLast = (layerIndex == globalConfig.size()-1) ? true : false;
 	 		// set up the current layer 
 			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, testId+"_x_");
