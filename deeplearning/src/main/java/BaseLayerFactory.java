@@ -43,8 +43,7 @@ public class BaseLayerFactory {
 		}
 		if (configLayer.hasConfigAutoencoders()) {
 			System.out.printf("Autoencoders units %d\n", configLayer.getConfigAutoencoders().getNumberOfUnits());
-			// Not yet implemented
-			System.out.printf("WARNING - WARNING - not yet implemented");
+			learner = new AutoencoderLearner(configLayer);
 		}
 		
 		// set up the extractor, depending on the layer, either FFT convolutional extraction, 
