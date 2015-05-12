@@ -21,7 +21,7 @@ spark-submit --class main.java.DeepLearningMain --master yarn-cluster --executor
 ---------------------------
 
 For autoencoders we need an extra parameter 
---driver-maxResultSize=4096 (or larger) 
+--conf spark.driver.maxResultSize=4096  (or larger) 
 
 or set it in DeepLearningMain.main as
 
