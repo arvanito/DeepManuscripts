@@ -67,7 +67,7 @@ public class MaxPoolerTest implements Serializable{
 		MaxPooler pooler = new MaxPooler(conf);
 		double[] input = {1,2,3,4,5,6,7,8,9,10};
 		Vector data = Vectors.dense(input);
-		Vector output = pooler.poolOver1D(data);
+		Vector output = pooler.call(data); //poolOver1D
 		Assert.assertEquals(5, output.size());
 		double[] expected_outputs = {2,4,6,8,10};
 		Assert.assertArrayEquals(expected_outputs, output.toArray(), 1e-6);
@@ -98,7 +98,7 @@ public class MaxPoolerTest implements Serializable{
 		Assert.assertEquals(6, pooler.getInputDim1());
 		Assert.assertEquals(4, pooler.getInputDim2());
 		Assert.assertEquals(2, conf.getConfigPooler().getPoolSize());
-		Vector output = pooler.poolOver2D(data);
+		Vector output = pooler.call(data); // poolOver2D
 		Assert.assertEquals(6, output.size());
 		double[] expected_outputs = {8,10,12,20,22,24};
 		Assert.assertArrayEquals(expected_outputs, output.toArray(), 1e-6);

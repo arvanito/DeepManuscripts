@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -44,8 +47,9 @@ public class DeepLearningMain {
 		try {
 			ConfigManuscripts.Builder builder = ConfigManuscripts.newBuilder();
 			//BufferedReader reader = new BufferedReader(new FileReader(prototxt_file));
-			FileInputStream fs = new FileInputStream(prototxt_file);
-			InputStreamReader reader = new InputStreamReader(fs);
+			FileSystem fs = FileSystem.get(new  Configuration());			
+			//FileInputStream fs = new FileInputStream(prototxt_file);
+			InputStreamReader reader = new InputStreamReader(fs.open(new Path(prototxt_file)));
 			TextFormat.merge(reader, builder);
 			
 			// Settings file created
@@ -86,33 +90,72 @@ public class DeepLearningMain {
 	 * @throws Exception
 	 */
 	public static void train(List<ConfigBaseLayer> globalConfig, String inputFileSmallPatches, 
-							String inputFileLargePatches, String outputFile) throws Exception {
+							String inputFileLargePatches, String outputFile, String testId) throws Exception {
 		
 		// open files and convert them to JavaRDD<Vector> datasets
 //		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
 //    	JavaSparkContext sc = new JavaSparkContext(conf);
  
-		JavaRDD<Vector> inputSmallPatches = sc.textFile(inputFileSmallPatches).map(new Parse());
-		JavaRDD<Vector> inputWordPatches = sc.textFile(inputFileLargePatches).map(new Parse());
+		int numPartitions = 40*12*3; //Num-workers * cores_per_worker * succesive tasks
+		JavaRDD<Vector> inputSmallPatches = sc.textFile(inputFileSmallPatches).map(new Parse()).filter(new Function<Vector, Boolean>() {
+			
+			@Override
+			public Boolean call(Vector arg0) throws Exception {
+				if (arg0.size() == 1024){
+					return true;
+				}
+				return false;
+			}
+		}).repartition(numPartitions);
+;
+		JavaRDD<Vector> inputWordPatches = sc.textFile(inputFileLargePatches).map(new Parse()).filter(new Function<Vector, Boolean>() {
+			
+			@Override
+			public Boolean call(Vector arg0) throws Exception {
+				if (arg0.size() == 4096){
+					return true;
+				}
+				return false;
+			}
+		}).repartition(numPartitions);
+;
 
 		//testMe(inputSmallPatches);
 		
-		// The main loop calls train() on each of the layers
+
+//		DeepLearningLayer layer0 = BaseLayerFactory.createBaseLayer(globalConfig.get(0), 0, testId+"_x_");
+//		layer0.setSparkContext(sc);
+//		JavaRDD<Vector> result0 = layer0.train(inputSmallPatches, inputWordPatches);
+//		
+//		JavaRDD<Vector> result1 = result0.repartition(numPartitions);
+//		JavaRDD<Vector> result2 = result0.repartition(numPartitions);
+//		
+//		result0.saveAsTextFile(outputFile);
+//		DeepLearningLayer layer1 = BaseLayerFactory.createBaseLayer(globalConfig.get(1), 1 , testId+"_x_");
+//		layer1.setSparkContext(sc);
+//		
+//		JavaRDD<Vector> result = layer1.train(result1, result2);
+//		
+//		result.saveAsTextFile(outputFile);
+		
+//		// The main loop calls train() on each of the layers
 		JavaRDD<Vector> result = null;
 	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
-	 		
+	 		boolean notLast = (layerIndex == globalConfig.size()-1) ? true : false;
 	 		// set up the current layer 
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, "x");
-			
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, testId+"_x_");
+			layer.setSparkContext(sc);
 			// The configLayer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
 			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
-				result = layer.train(inputSmallPatches, inputWordPatches);
+				result = layer.train(inputSmallPatches, inputWordPatches,notLast);
 			} else {
-				result = layer.train(result, result);
+				JavaRDD<Vector> result1 = result.repartition(numPartitions);
+				JavaRDD<Vector> result2 = result.repartition(numPartitions).cache();
+				result = layer.train(result1, result2,notLast);
 			}	
 	 	}
-		//TODO save also last file
+//		//TODO save also last file
 		result.saveAsTextFile(outputFile);
 		
 		
@@ -366,15 +409,15 @@ public class DeepLearningMain {
 		
 		// check if settings file .prototxt is provided, maybe do this better!
 		List<ConfigBaseLayer> globalConfig = null;
-		if (args.length == 4) {
+		if (args.length == 5) {
 		    globalConfig = loadSettings(args[0]);
 		} else {
-			System.out.print("Usage: spark-submit --class main.java.DeepLearningMain --master local[1] target/DeepManuscriptLearning-0.0.1.jar  <config.prototxt> <test_in1.txt> <test_in2.txt>  <test_out>");
+			System.out.print("Usage: spark-submit --class main.java.DeepLearningMain --master local[1] target/DeepManuscriptLearning-0.0.1.jar  <config.prototxt> <test_in1.txt> <test_in2.txt>  <test_out> <test_id>");
 			throw new Exception("Missing command line arguments!");
 		}
 		
 		//TODO add option for train/test/rank in main
-		train(globalConfig, args[1], args[2], args[3]);
+		train(globalConfig, args[1], args[2], args[3], args[4]);
 
 	}
 }

@@ -1,7 +1,5 @@
 package main.java;
 
-import main.java.DeepModelSettings.ConfigBaseLayer;
-
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
@@ -15,15 +13,6 @@ import org.apache.spark.mllib.linalg.Vector;
  *
  */
 public interface PreProcessor extends Function<Vector, Vector>{
-
-	/**
-	 * Method that sets the layer configuration.
-	 * 
-	 * @param configLayer Layer configuration object
-	 */
-	public void setConfigLayer(ConfigBaseLayer configLayer);
-	
-	
 	/**
 	 * Main method that runs a preprocessing pipeline on the data points.
 	 * 

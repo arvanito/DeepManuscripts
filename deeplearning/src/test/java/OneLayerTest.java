@@ -79,7 +79,7 @@ public class OneLayerTest implements Serializable {
 		Assert.assertEquals(3, features.length);
 		Assert.assertEquals(4, features[0].size());
 		
-		JavaRDD<Vector> represent = layer.extractFeatures(imgwords, c, features);
+		JavaRDD<Vector> represent = layer.extractFeatures(imgwords, features);
 		
 		List<Vector> t = represent.collect();
 		Assert.assertEquals(50, t.size());
@@ -126,7 +126,7 @@ public class OneLayerTest implements Serializable {
 		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
 		JavaRDD<Vector> imgwords = sc.parallelize(input_word_patches);
 		
-		JavaRDD<Vector> result = layer.train(patches, imgwords);
+		JavaRDD<Vector> result = layer.train(patches, imgwords,false);
 
 		List<Vector> res = result.collect();
 		Assert.assertEquals(50, res.size());

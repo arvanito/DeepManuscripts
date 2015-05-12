@@ -13,7 +13,27 @@ message ConfigKMeans {
 } 
 
 message ConfigAutoencoders {
-        required int32 number_of_units = 1;
+ 	required int32 number_of_units = 1;
+    
+    optional double rho = 2;
+	optional double lambda = 3;
+	optional double beta = 4;
+
+	optional int32 numEpochs  = 5;
+	optional int32 numBatches = 6;
+	
+	optional double alpha_init = 7;
+	optional double alpha_step = 8;
+	optional int32  alpha_max_steps = 9;
+	
+	optional int32 lineSearchStrategy = 10;
+	
+	optional double alpha = 11;
+	optional double momentum = 12;
+	optional double initMomentum = 13;
+	optional double increaseMomentum = 14;
+    optional int32 num_input  = 15;   
+    
 }
 
 message ConfigFeatureExtractor {

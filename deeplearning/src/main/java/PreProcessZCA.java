@@ -1,13 +1,9 @@
 package main.java;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import main.java.DeepModelSettings.ConfigBaseLayer;
 
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.linalg.BLAS;
 import org.apache.spark.mllib.linalg.DenseMatrix;
 import org.apache.spark.mllib.linalg.DenseVector;
@@ -39,22 +35,13 @@ public class PreProcessZCA implements PreProcessor {
 	
 	public PreProcessZCA() {}
 	public PreProcessZCA(ConfigBaseLayer c) {
-		configLayer = c;
+		setConfig(c);
 	}
-	public PreProcessZCA(DenseVector mean, DenseMatrix ZCA) {
+	public PreProcessZCA(DenseVector mean, DenseMatrix ZCA, ConfigBaseLayer conf) {
+		setConfig(conf);
 		this.mean = mean;
 		this.ZCA = ZCA;
 	}
-	
-	/**
-	 * Getter method for the ConfigBaseLayer object.
-	 * 
-	 * @return The ConfigBaseLayer object
-	 */
-	public ConfigBaseLayer getConfigLayer() {
-		return configLayer;
-	}
-	
 	
 	/**
 	 * Getter method for the mean vector.
@@ -81,8 +68,7 @@ public class PreProcessZCA implements PreProcessor {
 	 * 
 	 * @param configLayer The layer configuration object
 	 */
-	@Override
-	public void setConfigLayer(ConfigBaseLayer configLayer) {
+	private void setConfig(ConfigBaseLayer configLayer) {
 		this.configLayer = configLayer;
 		if (this.configLayer.hasConfigPreprocess()) {
 			conv = true;
@@ -97,7 +83,7 @@ public class PreProcessZCA implements PreProcessor {
 	 * 
 	 * @param mean Mean vector
 	 */
-	public void setMean(DenseVector mean) {
+	private void setMean(DenseVector mean) {
 		this.mean = mean;
 	}
 	
@@ -107,7 +93,7 @@ public class PreProcessZCA implements PreProcessor {
 	 * 
 	 * @param ZCA The ZCA matrix
 	 */
-	public void setZCA(DenseMatrix ZCA) {
+	private void setZCA(DenseMatrix ZCA) {
 		this.ZCA = ZCA;
 	}
 	
@@ -119,7 +105,7 @@ public class PreProcessZCA implements PreProcessor {
 	 * @param e Parameter for eigenvalue normalization
 	 * @return ZCA matrix of type DenseMatrix
 	 */
-	public DenseMatrix performZCA(RowMatrix mat, double e) {
+	private DenseMatrix performZCA(RowMatrix mat, double e) {
 		
 		// compute SVD of the data Matrix
 		// the right singular Vectors are the eigenvectors of the covariance, do the integer casting here!!!

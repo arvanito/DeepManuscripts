@@ -1006,6 +1006,146 @@ public final class DeepModelSettings {
      * <code>required int32 number_of_units = 1;</code>
      */
     int getNumberOfUnits();
+
+    // optional double rho = 2;
+    /**
+     * <code>optional double rho = 2;</code>
+     */
+    boolean hasRho();
+    /**
+     * <code>optional double rho = 2;</code>
+     */
+    double getRho();
+
+    // optional double lambda = 3;
+    /**
+     * <code>optional double lambda = 3;</code>
+     */
+    boolean hasLambda();
+    /**
+     * <code>optional double lambda = 3;</code>
+     */
+    double getLambda();
+
+    // optional double beta = 4;
+    /**
+     * <code>optional double beta = 4;</code>
+     */
+    boolean hasBeta();
+    /**
+     * <code>optional double beta = 4;</code>
+     */
+    double getBeta();
+
+    // optional int32 numEpochs = 5;
+    /**
+     * <code>optional int32 numEpochs = 5;</code>
+     */
+    boolean hasNumEpochs();
+    /**
+     * <code>optional int32 numEpochs = 5;</code>
+     */
+    int getNumEpochs();
+
+    // optional int32 numBatches = 6;
+    /**
+     * <code>optional int32 numBatches = 6;</code>
+     */
+    boolean hasNumBatches();
+    /**
+     * <code>optional int32 numBatches = 6;</code>
+     */
+    int getNumBatches();
+
+    // optional double alpha_init = 7;
+    /**
+     * <code>optional double alpha_init = 7;</code>
+     */
+    boolean hasAlphaInit();
+    /**
+     * <code>optional double alpha_init = 7;</code>
+     */
+    double getAlphaInit();
+
+    // optional double alpha_step = 8;
+    /**
+     * <code>optional double alpha_step = 8;</code>
+     */
+    boolean hasAlphaStep();
+    /**
+     * <code>optional double alpha_step = 8;</code>
+     */
+    double getAlphaStep();
+
+    // optional int32 alpha_max_steps = 9;
+    /**
+     * <code>optional int32 alpha_max_steps = 9;</code>
+     */
+    boolean hasAlphaMaxSteps();
+    /**
+     * <code>optional int32 alpha_max_steps = 9;</code>
+     */
+    int getAlphaMaxSteps();
+
+    // optional int32 lineSearchStrategy = 10;
+    /**
+     * <code>optional int32 lineSearchStrategy = 10;</code>
+     */
+    boolean hasLineSearchStrategy();
+    /**
+     * <code>optional int32 lineSearchStrategy = 10;</code>
+     */
+    int getLineSearchStrategy();
+
+    // optional double alpha = 11;
+    /**
+     * <code>optional double alpha = 11;</code>
+     */
+    boolean hasAlpha();
+    /**
+     * <code>optional double alpha = 11;</code>
+     */
+    double getAlpha();
+
+    // optional double momentum = 12;
+    /**
+     * <code>optional double momentum = 12;</code>
+     */
+    boolean hasMomentum();
+    /**
+     * <code>optional double momentum = 12;</code>
+     */
+    double getMomentum();
+
+    // optional double initMomentum = 13;
+    /**
+     * <code>optional double initMomentum = 13;</code>
+     */
+    boolean hasInitMomentum();
+    /**
+     * <code>optional double initMomentum = 13;</code>
+     */
+    double getInitMomentum();
+
+    // optional double increaseMomentum = 14;
+    /**
+     * <code>optional double increaseMomentum = 14;</code>
+     */
+    boolean hasIncreaseMomentum();
+    /**
+     * <code>optional double increaseMomentum = 14;</code>
+     */
+    double getIncreaseMomentum();
+
+    // optional int32 num_input = 15;
+    /**
+     * <code>optional int32 num_input = 15;</code>
+     */
+    boolean hasNumInput();
+    /**
+     * <code>optional int32 num_input = 15;</code>
+     */
+    int getNumInput();
   }
   /**
    * Protobuf type {@code main.java.ConfigAutoencoders}
@@ -1061,6 +1201,76 @@ public final class DeepModelSettings {
             case 8: {
               bitField0_ |= 0x00000001;
               numberOfUnits_ = input.readInt32();
+              break;
+            }
+            case 17: {
+              bitField0_ |= 0x00000002;
+              rho_ = input.readDouble();
+              break;
+            }
+            case 25: {
+              bitField0_ |= 0x00000004;
+              lambda_ = input.readDouble();
+              break;
+            }
+            case 33: {
+              bitField0_ |= 0x00000008;
+              beta_ = input.readDouble();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              numEpochs_ = input.readInt32();
+              break;
+            }
+            case 48: {
+              bitField0_ |= 0x00000020;
+              numBatches_ = input.readInt32();
+              break;
+            }
+            case 57: {
+              bitField0_ |= 0x00000040;
+              alphaInit_ = input.readDouble();
+              break;
+            }
+            case 65: {
+              bitField0_ |= 0x00000080;
+              alphaStep_ = input.readDouble();
+              break;
+            }
+            case 72: {
+              bitField0_ |= 0x00000100;
+              alphaMaxSteps_ = input.readInt32();
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000200;
+              lineSearchStrategy_ = input.readInt32();
+              break;
+            }
+            case 89: {
+              bitField0_ |= 0x00000400;
+              alpha_ = input.readDouble();
+              break;
+            }
+            case 97: {
+              bitField0_ |= 0x00000800;
+              momentum_ = input.readDouble();
+              break;
+            }
+            case 105: {
+              bitField0_ |= 0x00001000;
+              initMomentum_ = input.readDouble();
+              break;
+            }
+            case 113: {
+              bitField0_ |= 0x00002000;
+              increaseMomentum_ = input.readDouble();
+              break;
+            }
+            case 120: {
+              bitField0_ |= 0x00004000;
+              numInput_ = input.readInt32();
               break;
             }
           }
@@ -1119,8 +1329,246 @@ public final class DeepModelSettings {
       return numberOfUnits_;
     }
 
+    // optional double rho = 2;
+    public static final int RHO_FIELD_NUMBER = 2;
+    private double rho_;
+    /**
+     * <code>optional double rho = 2;</code>
+     */
+    public boolean hasRho() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional double rho = 2;</code>
+     */
+    public double getRho() {
+      return rho_;
+    }
+
+    // optional double lambda = 3;
+    public static final int LAMBDA_FIELD_NUMBER = 3;
+    private double lambda_;
+    /**
+     * <code>optional double lambda = 3;</code>
+     */
+    public boolean hasLambda() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional double lambda = 3;</code>
+     */
+    public double getLambda() {
+      return lambda_;
+    }
+
+    // optional double beta = 4;
+    public static final int BETA_FIELD_NUMBER = 4;
+    private double beta_;
+    /**
+     * <code>optional double beta = 4;</code>
+     */
+    public boolean hasBeta() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional double beta = 4;</code>
+     */
+    public double getBeta() {
+      return beta_;
+    }
+
+    // optional int32 numEpochs = 5;
+    public static final int NUMEPOCHS_FIELD_NUMBER = 5;
+    private int numEpochs_;
+    /**
+     * <code>optional int32 numEpochs = 5;</code>
+     */
+    public boolean hasNumEpochs() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional int32 numEpochs = 5;</code>
+     */
+    public int getNumEpochs() {
+      return numEpochs_;
+    }
+
+    // optional int32 numBatches = 6;
+    public static final int NUMBATCHES_FIELD_NUMBER = 6;
+    private int numBatches_;
+    /**
+     * <code>optional int32 numBatches = 6;</code>
+     */
+    public boolean hasNumBatches() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 numBatches = 6;</code>
+     */
+    public int getNumBatches() {
+      return numBatches_;
+    }
+
+    // optional double alpha_init = 7;
+    public static final int ALPHA_INIT_FIELD_NUMBER = 7;
+    private double alphaInit_;
+    /**
+     * <code>optional double alpha_init = 7;</code>
+     */
+    public boolean hasAlphaInit() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional double alpha_init = 7;</code>
+     */
+    public double getAlphaInit() {
+      return alphaInit_;
+    }
+
+    // optional double alpha_step = 8;
+    public static final int ALPHA_STEP_FIELD_NUMBER = 8;
+    private double alphaStep_;
+    /**
+     * <code>optional double alpha_step = 8;</code>
+     */
+    public boolean hasAlphaStep() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional double alpha_step = 8;</code>
+     */
+    public double getAlphaStep() {
+      return alphaStep_;
+    }
+
+    // optional int32 alpha_max_steps = 9;
+    public static final int ALPHA_MAX_STEPS_FIELD_NUMBER = 9;
+    private int alphaMaxSteps_;
+    /**
+     * <code>optional int32 alpha_max_steps = 9;</code>
+     */
+    public boolean hasAlphaMaxSteps() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional int32 alpha_max_steps = 9;</code>
+     */
+    public int getAlphaMaxSteps() {
+      return alphaMaxSteps_;
+    }
+
+    // optional int32 lineSearchStrategy = 10;
+    public static final int LINESEARCHSTRATEGY_FIELD_NUMBER = 10;
+    private int lineSearchStrategy_;
+    /**
+     * <code>optional int32 lineSearchStrategy = 10;</code>
+     */
+    public boolean hasLineSearchStrategy() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional int32 lineSearchStrategy = 10;</code>
+     */
+    public int getLineSearchStrategy() {
+      return lineSearchStrategy_;
+    }
+
+    // optional double alpha = 11;
+    public static final int ALPHA_FIELD_NUMBER = 11;
+    private double alpha_;
+    /**
+     * <code>optional double alpha = 11;</code>
+     */
+    public boolean hasAlpha() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>optional double alpha = 11;</code>
+     */
+    public double getAlpha() {
+      return alpha_;
+    }
+
+    // optional double momentum = 12;
+    public static final int MOMENTUM_FIELD_NUMBER = 12;
+    private double momentum_;
+    /**
+     * <code>optional double momentum = 12;</code>
+     */
+    public boolean hasMomentum() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>optional double momentum = 12;</code>
+     */
+    public double getMomentum() {
+      return momentum_;
+    }
+
+    // optional double initMomentum = 13;
+    public static final int INITMOMENTUM_FIELD_NUMBER = 13;
+    private double initMomentum_;
+    /**
+     * <code>optional double initMomentum = 13;</code>
+     */
+    public boolean hasInitMomentum() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>optional double initMomentum = 13;</code>
+     */
+    public double getInitMomentum() {
+      return initMomentum_;
+    }
+
+    // optional double increaseMomentum = 14;
+    public static final int INCREASEMOMENTUM_FIELD_NUMBER = 14;
+    private double increaseMomentum_;
+    /**
+     * <code>optional double increaseMomentum = 14;</code>
+     */
+    public boolean hasIncreaseMomentum() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    /**
+     * <code>optional double increaseMomentum = 14;</code>
+     */
+    public double getIncreaseMomentum() {
+      return increaseMomentum_;
+    }
+
+    // optional int32 num_input = 15;
+    public static final int NUM_INPUT_FIELD_NUMBER = 15;
+    private int numInput_;
+    /**
+     * <code>optional int32 num_input = 15;</code>
+     */
+    public boolean hasNumInput() {
+      return ((bitField0_ & 0x00004000) == 0x00004000);
+    }
+    /**
+     * <code>optional int32 num_input = 15;</code>
+     */
+    public int getNumInput() {
+      return numInput_;
+    }
+
     private void initFields() {
       numberOfUnits_ = 0;
+      rho_ = 0D;
+      lambda_ = 0D;
+      beta_ = 0D;
+      numEpochs_ = 0;
+      numBatches_ = 0;
+      alphaInit_ = 0D;
+      alphaStep_ = 0D;
+      alphaMaxSteps_ = 0;
+      lineSearchStrategy_ = 0;
+      alpha_ = 0D;
+      momentum_ = 0D;
+      initMomentum_ = 0D;
+      increaseMomentum_ = 0D;
+      numInput_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1141,6 +1589,48 @@ public final class DeepModelSettings {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeInt32(1, numberOfUnits_);
       }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeDouble(2, rho_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeDouble(3, lambda_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeDouble(4, beta_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(5, numEpochs_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(6, numBatches_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeDouble(7, alphaInit_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeDouble(8, alphaStep_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeInt32(9, alphaMaxSteps_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeInt32(10, lineSearchStrategy_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeDouble(11, alpha_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeDouble(12, momentum_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeDouble(13, initMomentum_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeDouble(14, increaseMomentum_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        output.writeInt32(15, numInput_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1153,6 +1643,62 @@ public final class DeepModelSettings {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(1, numberOfUnits_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(2, rho_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(3, lambda_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(4, beta_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, numEpochs_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, numBatches_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(7, alphaInit_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(8, alphaStep_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(9, alphaMaxSteps_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(10, lineSearchStrategy_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(11, alpha_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(12, momentum_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(13, initMomentum_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(14, increaseMomentum_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(15, numInput_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1272,6 +1818,34 @@ public final class DeepModelSettings {
         super.clear();
         numberOfUnits_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
+        rho_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        lambda_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        beta_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        numEpochs_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        numBatches_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        alphaInit_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        alphaStep_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        alphaMaxSteps_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        lineSearchStrategy_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000200);
+        alpha_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000400);
+        momentum_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000800);
+        initMomentum_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00001000);
+        increaseMomentum_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00002000);
+        numInput_ = 0;
+        bitField0_ = (bitField0_ & ~0x00004000);
         return this;
       }
 
@@ -1304,6 +1878,62 @@ public final class DeepModelSettings {
           to_bitField0_ |= 0x00000001;
         }
         result.numberOfUnits_ = numberOfUnits_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.rho_ = rho_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.lambda_ = lambda_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.beta_ = beta_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.numEpochs_ = numEpochs_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.numBatches_ = numBatches_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.alphaInit_ = alphaInit_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.alphaStep_ = alphaStep_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.alphaMaxSteps_ = alphaMaxSteps_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.lineSearchStrategy_ = lineSearchStrategy_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.alpha_ = alpha_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.momentum_ = momentum_;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.initMomentum_ = initMomentum_;
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        result.increaseMomentum_ = increaseMomentum_;
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00004000;
+        }
+        result.numInput_ = numInput_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1322,6 +1952,48 @@ public final class DeepModelSettings {
         if (other == main.java.DeepModelSettings.ConfigAutoencoders.getDefaultInstance()) return this;
         if (other.hasNumberOfUnits()) {
           setNumberOfUnits(other.getNumberOfUnits());
+        }
+        if (other.hasRho()) {
+          setRho(other.getRho());
+        }
+        if (other.hasLambda()) {
+          setLambda(other.getLambda());
+        }
+        if (other.hasBeta()) {
+          setBeta(other.getBeta());
+        }
+        if (other.hasNumEpochs()) {
+          setNumEpochs(other.getNumEpochs());
+        }
+        if (other.hasNumBatches()) {
+          setNumBatches(other.getNumBatches());
+        }
+        if (other.hasAlphaInit()) {
+          setAlphaInit(other.getAlphaInit());
+        }
+        if (other.hasAlphaStep()) {
+          setAlphaStep(other.getAlphaStep());
+        }
+        if (other.hasAlphaMaxSteps()) {
+          setAlphaMaxSteps(other.getAlphaMaxSteps());
+        }
+        if (other.hasLineSearchStrategy()) {
+          setLineSearchStrategy(other.getLineSearchStrategy());
+        }
+        if (other.hasAlpha()) {
+          setAlpha(other.getAlpha());
+        }
+        if (other.hasMomentum()) {
+          setMomentum(other.getMomentum());
+        }
+        if (other.hasInitMomentum()) {
+          setInitMomentum(other.getInitMomentum());
+        }
+        if (other.hasIncreaseMomentum()) {
+          setIncreaseMomentum(other.getIncreaseMomentum());
+        }
+        if (other.hasNumInput()) {
+          setNumInput(other.getNumInput());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1383,6 +2055,468 @@ public final class DeepModelSettings {
       public Builder clearNumberOfUnits() {
         bitField0_ = (bitField0_ & ~0x00000001);
         numberOfUnits_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional double rho = 2;
+      private double rho_ ;
+      /**
+       * <code>optional double rho = 2;</code>
+       */
+      public boolean hasRho() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional double rho = 2;</code>
+       */
+      public double getRho() {
+        return rho_;
+      }
+      /**
+       * <code>optional double rho = 2;</code>
+       */
+      public Builder setRho(double value) {
+        bitField0_ |= 0x00000002;
+        rho_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double rho = 2;</code>
+       */
+      public Builder clearRho() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        rho_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      // optional double lambda = 3;
+      private double lambda_ ;
+      /**
+       * <code>optional double lambda = 3;</code>
+       */
+      public boolean hasLambda() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional double lambda = 3;</code>
+       */
+      public double getLambda() {
+        return lambda_;
+      }
+      /**
+       * <code>optional double lambda = 3;</code>
+       */
+      public Builder setLambda(double value) {
+        bitField0_ |= 0x00000004;
+        lambda_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double lambda = 3;</code>
+       */
+      public Builder clearLambda() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        lambda_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      // optional double beta = 4;
+      private double beta_ ;
+      /**
+       * <code>optional double beta = 4;</code>
+       */
+      public boolean hasBeta() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional double beta = 4;</code>
+       */
+      public double getBeta() {
+        return beta_;
+      }
+      /**
+       * <code>optional double beta = 4;</code>
+       */
+      public Builder setBeta(double value) {
+        bitField0_ |= 0x00000008;
+        beta_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double beta = 4;</code>
+       */
+      public Builder clearBeta() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        beta_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 numEpochs = 5;
+      private int numEpochs_ ;
+      /**
+       * <code>optional int32 numEpochs = 5;</code>
+       */
+      public boolean hasNumEpochs() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional int32 numEpochs = 5;</code>
+       */
+      public int getNumEpochs() {
+        return numEpochs_;
+      }
+      /**
+       * <code>optional int32 numEpochs = 5;</code>
+       */
+      public Builder setNumEpochs(int value) {
+        bitField0_ |= 0x00000010;
+        numEpochs_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 numEpochs = 5;</code>
+       */
+      public Builder clearNumEpochs() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        numEpochs_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 numBatches = 6;
+      private int numBatches_ ;
+      /**
+       * <code>optional int32 numBatches = 6;</code>
+       */
+      public boolean hasNumBatches() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional int32 numBatches = 6;</code>
+       */
+      public int getNumBatches() {
+        return numBatches_;
+      }
+      /**
+       * <code>optional int32 numBatches = 6;</code>
+       */
+      public Builder setNumBatches(int value) {
+        bitField0_ |= 0x00000020;
+        numBatches_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 numBatches = 6;</code>
+       */
+      public Builder clearNumBatches() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        numBatches_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional double alpha_init = 7;
+      private double alphaInit_ ;
+      /**
+       * <code>optional double alpha_init = 7;</code>
+       */
+      public boolean hasAlphaInit() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional double alpha_init = 7;</code>
+       */
+      public double getAlphaInit() {
+        return alphaInit_;
+      }
+      /**
+       * <code>optional double alpha_init = 7;</code>
+       */
+      public Builder setAlphaInit(double value) {
+        bitField0_ |= 0x00000040;
+        alphaInit_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double alpha_init = 7;</code>
+       */
+      public Builder clearAlphaInit() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        alphaInit_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      // optional double alpha_step = 8;
+      private double alphaStep_ ;
+      /**
+       * <code>optional double alpha_step = 8;</code>
+       */
+      public boolean hasAlphaStep() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional double alpha_step = 8;</code>
+       */
+      public double getAlphaStep() {
+        return alphaStep_;
+      }
+      /**
+       * <code>optional double alpha_step = 8;</code>
+       */
+      public Builder setAlphaStep(double value) {
+        bitField0_ |= 0x00000080;
+        alphaStep_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double alpha_step = 8;</code>
+       */
+      public Builder clearAlphaStep() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        alphaStep_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 alpha_max_steps = 9;
+      private int alphaMaxSteps_ ;
+      /**
+       * <code>optional int32 alpha_max_steps = 9;</code>
+       */
+      public boolean hasAlphaMaxSteps() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional int32 alpha_max_steps = 9;</code>
+       */
+      public int getAlphaMaxSteps() {
+        return alphaMaxSteps_;
+      }
+      /**
+       * <code>optional int32 alpha_max_steps = 9;</code>
+       */
+      public Builder setAlphaMaxSteps(int value) {
+        bitField0_ |= 0x00000100;
+        alphaMaxSteps_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 alpha_max_steps = 9;</code>
+       */
+      public Builder clearAlphaMaxSteps() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        alphaMaxSteps_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 lineSearchStrategy = 10;
+      private int lineSearchStrategy_ ;
+      /**
+       * <code>optional int32 lineSearchStrategy = 10;</code>
+       */
+      public boolean hasLineSearchStrategy() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional int32 lineSearchStrategy = 10;</code>
+       */
+      public int getLineSearchStrategy() {
+        return lineSearchStrategy_;
+      }
+      /**
+       * <code>optional int32 lineSearchStrategy = 10;</code>
+       */
+      public Builder setLineSearchStrategy(int value) {
+        bitField0_ |= 0x00000200;
+        lineSearchStrategy_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 lineSearchStrategy = 10;</code>
+       */
+      public Builder clearLineSearchStrategy() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        lineSearchStrategy_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional double alpha = 11;
+      private double alpha_ ;
+      /**
+       * <code>optional double alpha = 11;</code>
+       */
+      public boolean hasAlpha() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional double alpha = 11;</code>
+       */
+      public double getAlpha() {
+        return alpha_;
+      }
+      /**
+       * <code>optional double alpha = 11;</code>
+       */
+      public Builder setAlpha(double value) {
+        bitField0_ |= 0x00000400;
+        alpha_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double alpha = 11;</code>
+       */
+      public Builder clearAlpha() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        alpha_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      // optional double momentum = 12;
+      private double momentum_ ;
+      /**
+       * <code>optional double momentum = 12;</code>
+       */
+      public boolean hasMomentum() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional double momentum = 12;</code>
+       */
+      public double getMomentum() {
+        return momentum_;
+      }
+      /**
+       * <code>optional double momentum = 12;</code>
+       */
+      public Builder setMomentum(double value) {
+        bitField0_ |= 0x00000800;
+        momentum_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double momentum = 12;</code>
+       */
+      public Builder clearMomentum() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        momentum_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      // optional double initMomentum = 13;
+      private double initMomentum_ ;
+      /**
+       * <code>optional double initMomentum = 13;</code>
+       */
+      public boolean hasInitMomentum() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      /**
+       * <code>optional double initMomentum = 13;</code>
+       */
+      public double getInitMomentum() {
+        return initMomentum_;
+      }
+      /**
+       * <code>optional double initMomentum = 13;</code>
+       */
+      public Builder setInitMomentum(double value) {
+        bitField0_ |= 0x00001000;
+        initMomentum_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double initMomentum = 13;</code>
+       */
+      public Builder clearInitMomentum() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        initMomentum_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      // optional double increaseMomentum = 14;
+      private double increaseMomentum_ ;
+      /**
+       * <code>optional double increaseMomentum = 14;</code>
+       */
+      public boolean hasIncreaseMomentum() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
+      }
+      /**
+       * <code>optional double increaseMomentum = 14;</code>
+       */
+      public double getIncreaseMomentum() {
+        return increaseMomentum_;
+      }
+      /**
+       * <code>optional double increaseMomentum = 14;</code>
+       */
+      public Builder setIncreaseMomentum(double value) {
+        bitField0_ |= 0x00002000;
+        increaseMomentum_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double increaseMomentum = 14;</code>
+       */
+      public Builder clearIncreaseMomentum() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        increaseMomentum_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 num_input = 15;
+      private int numInput_ ;
+      /**
+       * <code>optional int32 num_input = 15;</code>
+       */
+      public boolean hasNumInput() {
+        return ((bitField0_ & 0x00004000) == 0x00004000);
+      }
+      /**
+       * <code>optional int32 num_input = 15;</code>
+       */
+      public int getNumInput() {
+        return numInput_;
+      }
+      /**
+       * <code>optional int32 num_input = 15;</code>
+       */
+      public Builder setNumInput(int value) {
+        bitField0_ |= 0x00004000;
+        numInput_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 num_input = 15;</code>
+       */
+      public Builder clearNumInput() {
+        bitField0_ = (bitField0_ & ~0x00004000);
+        numInput_ = 0;
         onChanged();
         return this;
       }
@@ -5052,27 +6186,34 @@ public final class DeepModelSettings {
       "\n\020ConfigPreprocess\022\r\n\005eps_1\030\001 \002(\001\022\r\n\005eps" +
       "_2\030\002 \002(\001\"H\n\014ConfigKMeans\022\032\n\022number_of_cl" +
       "usters\030\001 \002(\005\022\034\n\024number_of_iterations\030\002 \002" +
-      "(\005\"-\n\022ConfigAutoencoders\022\027\n\017number_of_un" +
-      "its\030\001 \002(\005\"\376\001\n\026ConfigFeatureExtractor\022\022\n\n" +
-      "input_dim1\030\001 \002(\005\022\022\n\ninput_dim2\030\002 \002(\005\022\024\n\014" +
-      "feature_dim1\030\003 \002(\005\022\024\n\014feature_dim2\030\004 \002(\005" +
-      "\022K\n\rnon_linearity\030\005 \001(\0162..main.java.Conf" +
-      "igFeatureExtractor.NonLinearity:\004NONE\022\026\n",
-      "\016soft_threshold\030\006 \001(\001\"+\n\014NonLinearity\022\010\n" +
-      "\004NONE\020\000\022\007\n\003ABS\020\001\022\010\n\004SOFT\020\002\"}\n\014ConfigPool" +
-      "er\022\021\n\tpool_size\030\001 \002(\005\0228\n\tpool_type\030\002 \001(\016" +
-      "2 .main.java.ConfigPooler.PoolType:\003MAX\"" +
-      " \n\010PoolType\022\007\n\003MAX\020\000\022\013\n\007AVERAGE\020\001\"\252\002\n\017Co" +
-      "nfigBaseLayer\0226\n\021config_preprocess\030\001 \001(\013" +
-      "2\033.main.java.ConfigPreprocess\022.\n\rconfig_" +
-      "kmeans\030\002 \001(\0132\027.main.java.ConfigKMeans\022:\n" +
-      "\023config_autoencoders\030\003 \001(\0132\035.main.java.C" +
-      "onfigAutoencoders\022C\n\030config_feature_extr",
-      "actor\030\004 \001(\0132!.main.java.ConfigFeatureExt" +
-      "ractor\022.\n\rconfig_pooler\030\005 \002(\0132\027.main.jav" +
-      "a.ConfigPooler\"E\n\021ConfigManuscripts\0220\n\014c" +
-      "onfig_layer\030\001 \003(\0132\032.main.java.ConfigBase" +
-      "Layer"
+      "(\005\"\300\002\n\022ConfigAutoencoders\022\027\n\017number_of_u" +
+      "nits\030\001 \002(\005\022\013\n\003rho\030\002 \001(\001\022\016\n\006lambda\030\003 \001(\001\022" +
+      "\014\n\004beta\030\004 \001(\001\022\021\n\tnumEpochs\030\005 \001(\005\022\022\n\nnumB" +
+      "atches\030\006 \001(\005\022\022\n\nalpha_init\030\007 \001(\001\022\022\n\nalph" +
+      "a_step\030\010 \001(\001\022\027\n\017alpha_max_steps\030\t \001(\005\022\032\n" +
+      "\022lineSearchStrategy\030\n \001(\005\022\r\n\005alpha\030\013 \001(\001",
+      "\022\020\n\010momentum\030\014 \001(\001\022\024\n\014initMomentum\030\r \001(\001" +
+      "\022\030\n\020increaseMomentum\030\016 \001(\001\022\021\n\tnum_input\030" +
+      "\017 \001(\005\"\376\001\n\026ConfigFeatureExtractor\022\022\n\ninpu" +
+      "t_dim1\030\001 \002(\005\022\022\n\ninput_dim2\030\002 \002(\005\022\024\n\014feat" +
+      "ure_dim1\030\003 \002(\005\022\024\n\014feature_dim2\030\004 \002(\005\022K\n\r" +
+      "non_linearity\030\005 \001(\0162..main.java.ConfigFe" +
+      "atureExtractor.NonLinearity:\004NONE\022\026\n\016sof" +
+      "t_threshold\030\006 \001(\001\"+\n\014NonLinearity\022\010\n\004NON" +
+      "E\020\000\022\007\n\003ABS\020\001\022\010\n\004SOFT\020\002\"}\n\014ConfigPooler\022\021" +
+      "\n\tpool_size\030\001 \002(\005\0228\n\tpool_type\030\002 \001(\0162 .m",
+      "ain.java.ConfigPooler.PoolType:\003MAX\" \n\010P" +
+      "oolType\022\007\n\003MAX\020\000\022\013\n\007AVERAGE\020\001\"\252\002\n\017Config" +
+      "BaseLayer\0226\n\021config_preprocess\030\001 \001(\0132\033.m" +
+      "ain.java.ConfigPreprocess\022.\n\rconfig_kmea" +
+      "ns\030\002 \001(\0132\027.main.java.ConfigKMeans\022:\n\023con" +
+      "fig_autoencoders\030\003 \001(\0132\035.main.java.Confi" +
+      "gAutoencoders\022C\n\030config_feature_extracto" +
+      "r\030\004 \001(\0132!.main.java.ConfigFeatureExtract" +
+      "or\022.\n\rconfig_pooler\030\005 \002(\0132\027.main.java.Co" +
+      "nfigPooler\"E\n\021ConfigManuscripts\0220\n\014confi",
+      "g_layer\030\001 \003(\0132\032.main.java.ConfigBaseLaye" +
+      "r"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5096,7 +6237,7 @@ public final class DeepModelSettings {
           internal_static_main_java_ConfigAutoencoders_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_java_ConfigAutoencoders_descriptor,
-              new java.lang.String[] { "NumberOfUnits", });
+              new java.lang.String[] { "NumberOfUnits", "Rho", "Lambda", "Beta", "NumEpochs", "NumBatches", "AlphaInit", "AlphaStep", "AlphaMaxSteps", "LineSearchStrategy", "Alpha", "Momentum", "InitMomentum", "IncreaseMomentum", "NumInput", });
           internal_static_main_java_ConfigFeatureExtractor_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_main_java_ConfigFeatureExtractor_fieldAccessorTable = new

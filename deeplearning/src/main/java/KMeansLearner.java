@@ -29,7 +29,7 @@ public class KMeansLearner implements Learner {
 	
 	@Override
 	public Vector[] call(JavaRDD<Vector> data) throws Exception {
-	    KMeansModel clusters = KMeans.train(data.rdd(), numClusters, numIterations);
+	    KMeansModel clusters = KMeans.train(data.rdd(), numClusters, numIterations, 5, KMeans.RANDOM());
 		return clusters.clusterCenters();
 	}
 

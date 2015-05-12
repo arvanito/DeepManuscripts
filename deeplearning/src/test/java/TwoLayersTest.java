@@ -85,7 +85,7 @@ public class TwoLayersTest implements Serializable {
 		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
 		JavaRDD<Vector> imgwords = sc.parallelize(input_word_patches);
 		
-		JavaRDD<Vector> result = layer.train(patches, imgwords);
+		JavaRDD<Vector> result = layer.train(patches, imgwords,false);
 
 		List<Vector> res = result.collect();
 		Assert.assertEquals(50, res.size());
@@ -101,7 +101,7 @@ public class TwoLayersTest implements Serializable {
 		Assert.assertEquals(4, features.length);
 		Assert.assertEquals(27, features[0].size());
 		Assert.assertEquals(64,imgwords.collect().get(0).size());
-		JavaRDD<Vector> represent = layer2.extractFeatures(result, config2, features);
+		JavaRDD<Vector> represent = layer2.extractFeatures(result, features);
 		Assert.assertEquals(50, represent.collect().size());
 		Assert.assertEquals(4, represent.collect().get(0).size());
 		
@@ -145,7 +145,7 @@ public class TwoLayersTest implements Serializable {
 		JavaRDD<Vector> patches = sc.parallelize(input_small_patches);
 		JavaRDD<Vector> imgwords = sc.parallelize(input_word_patches);
 		
-		JavaRDD<Vector> result = layer.train(patches, imgwords);
+		JavaRDD<Vector> result = layer.train(patches, imgwords,false);
 
 		List<Vector> res = result.collect();
 		Assert.assertEquals(50, res.size());
@@ -160,7 +160,7 @@ public class TwoLayersTest implements Serializable {
 		
 	 	layer_index = 1;
 	 	DeepLearningLayer layer2 = BaseLayerFactory.createBaseLayer(c2, layer_index, "two_layer_2");
-		JavaRDD<Vector> result2 = layer2.train(result, result);
+		JavaRDD<Vector> result2 = layer2.train(result, result,false);
 
 		List<Vector> out = result2.collect();
 		Assert.assertEquals(50, out.size());
@@ -199,9 +199,9 @@ public class TwoLayersTest implements Serializable {
 			// The config layer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
 			if (config_layer.hasConfigFeatureExtractor()) {
-				result = layer.train(patches, imgwords);
+				result = layer.train(patches, imgwords,false);
 			} else {
-				result = layer.train(result, result);
+				result = layer.train(result, result,false);
 			}	
 	 	}
 		List<Vector> out = result.collect();
