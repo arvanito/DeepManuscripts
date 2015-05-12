@@ -46,7 +46,6 @@ public class CandidatePatchesMain {
         JavaPairRDD<String, ImageData> dataImages = loadImg(sc, inputFile1, dirRegex);
         JavaPairRDD<String, String> dataJSON = loadJSON(sc, inputFile2, dirRegex);
         JavaPairRDD<String, Tuple2<ImageData,String>> data=  dataImages.join(dataJSON);
-        System.out.println("join result: " + data.count());
         JavaRDD<Tuple2<Vector,Vector>> patches = data.flatMap(new FlatMapFunction<Tuple2<String,Tuple2<ImageData,String>>, Tuple2<Vector,Vector>>(){
         	
 			@Override
