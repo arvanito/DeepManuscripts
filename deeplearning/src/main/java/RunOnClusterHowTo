@@ -1,0 +1,29 @@
+
+----------------------------
+Add/modify .bashrc with
+export SPARK_HOME=/localhome/hadoop/spark-1.3.0-bin-hadoop2.4
+
+export SPARK_JAR=${SPARK_HOME}/lib/spark-assembly-1.3.0-hadoop2.4.0.jar
+
+export SPARK_MEM=40g
+
+----------------------------
+
+Have a copy of a prototxt file
+Copy it to hdfs (if you want to overwrite remove first the old version from hdfs - command "hdfs dfs -rm ..." "hdfs dfs -put ..."
+
+---------------------------
+
+Be sure to have the last two paths unique for each run
+
+spark-submit --class main.java.DeepLearningMain --master yarn-cluster --executor-memory=40g --executor-cores=12 --driver-memory=40g --driver-cores=12 --num-executors 40 DeepManuscriptLearning-0.0.1.jar /user/rcionesc/two_layers_kmeans_model.prototxt /projects/deep-learning/patch_output/train/32X32/ /projects/deep-learning/patch_output/train/64X64/ /user/rcionesc/testDeep21/ /user/rcionesc/testDeep21filters
+
+---------------------------
+
+For autoencoders we need an extra parameter 
+--driver-maxResultSize=4096 (or larger) 
+
+or set it in DeepLearningMain.main as
+
+SparkConf().setAppName("DeepManuscript learning").set("spark.driver.maxResultSize","4096");
+    	sc = new JavaSparkContext(conf);

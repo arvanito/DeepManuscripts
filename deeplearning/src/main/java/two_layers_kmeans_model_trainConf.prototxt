@@ -1,0 +1,35 @@
+config_layer {
+
+  config_preprocess {
+  	eps_1 : 10
+  	eps_2 : 0.1
+  }
+
+  config_kmeans {
+    number_of_clusters: 3000
+    number_of_iterations: 300
+  }
+
+  config_feature_extractor {
+    input_dim1: 64
+    input_dim2: 64
+    feature_dim1: 32
+    feature_dim2: 32
+  }
+  config_pooler {
+    pool_size: 16
+  }  
+
+}
+
+config_layer {
+
+  config_kmeans {
+    number_of_clusters: 20000
+    number_of_iterations: 500
+  }
+
+  config_pooler {
+    pool_size: 4
+  }  
+}
