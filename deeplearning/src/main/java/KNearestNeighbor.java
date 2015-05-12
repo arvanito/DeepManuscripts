@@ -126,7 +126,33 @@ public class KNearestNeighbor {
 				}
 			}
 		}
-		output = Matrices.dense(n, n, result);
+		output = Matrices.sparse(n, n, columnStart(n), rowStart(n), result);
+	}
+	
+	/**
+	 * Return the indexes of all the beginnings of a row for a flatten square matrix of size n.
+	 * @param n Size of the matrix
+	 * @return An array of indexes
+	 */
+	private int[] rowStart(int n) {
+		int[] index = new int[n*n];
+		for(int i=0; i<n*n;i++){
+			index[i] = i;
+		}
+		return index;
+	}
+
+	/**
+	 * Return the indexes of all the beginnings of a column for a flatten square matrix of size n.
+	 * @param n Size of the matrix
+	 * @return An array of indexes
+	 */
+	private int[] columnStart(int n) {
+		int[] index = new int[n+1];
+		for(int i=0; i<n+1;i++){
+			index[i] = i*n;
+		}
+		return index;
 	}
 
 	/**
