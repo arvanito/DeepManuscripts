@@ -317,7 +317,7 @@ public class AutoencoderLinAlgebra {
 				new double[rows*cols]);
 		for (int i=0;i<rows;i++){
 			for (int j=0;j<cols;j++){
-				result.update(i, j, w1.apply(i, j) - alpha* w2.apply(i, j));
+				result.update(i, j, w1.apply(i, j) + alpha* w2.apply(i, j));
 			}
 		}
 		return result;
@@ -330,7 +330,7 @@ public class AutoencoderLinAlgebra {
 		};
 		double[] result = new double[rows];
 		for (int i=0;i<rows;i++){			
-				result[i] = b1.apply(i) - alpha* b2.apply(i);
+				result[i] = b1.apply(i) + alpha* b2.apply(i);
 		
 		}
 		return new DenseVector(result);

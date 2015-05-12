@@ -54,10 +54,10 @@ public class AutoencoderLineSearch {
 	private Broadcast<AutoencoderParams> computeNewParameters(double alpha) throws Exception {
 		JavaSparkContext sc = JavaSparkContext.fromSparkContext(data.context());
 		
-		return sc.broadcast(new AutoencoderParams(AutoencoderLinAlgebra.MMAM(params.getValue().getW1(),grad.getValue().getW1(),alpha),
-												  AutoencoderLinAlgebra.MMAM(params.getValue().getW2(),grad.getValue().getW2(),alpha), 
-												  AutoencoderLinAlgebra.VVAM(params.getValue().getB1(),grad.getValue().getB1(),alpha),
-												  AutoencoderLinAlgebra.VVAM(params.getValue().getB2(),grad.getValue().getB2(),alpha)));
+		return sc.broadcast(new AutoencoderParams(AutoencoderLinAlgebra.MMAM(params.getValue().getW1(),grad.getValue().getW1(),-alpha),
+												  AutoencoderLinAlgebra.MMAM(params.getValue().getW2(),grad.getValue().getW2(),-alpha), 
+												  AutoencoderLinAlgebra.VVAM(params.getValue().getB1(),grad.getValue().getB1(),-alpha),
+												  AutoencoderLinAlgebra.VVAM(params.getValue().getB2(),grad.getValue().getB2(),-alpha)));
 	}
 	
 	public double computeTestError(double alpha) throws Exception{

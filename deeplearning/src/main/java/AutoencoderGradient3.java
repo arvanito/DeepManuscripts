@@ -19,10 +19,9 @@ import org.apache.spark.mllib.linalg.Vectors;
 import scala.Tuple2;
 
 public class AutoencoderGradient3 {
-	//TO DO
+			//TO DO
 			// 1 - regenerate serialID for Function2
 			// 2 - Singleton Sigmoid function
-			// 3 - Use parameters from protobuf
 			// 5 - replace faulty log code
 			
 			private Broadcast<AutoencoderParams> params;

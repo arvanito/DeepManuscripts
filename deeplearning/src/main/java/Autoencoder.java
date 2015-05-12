@@ -13,9 +13,17 @@ import org.apache.spark.mllib.linalg.Vector;
 
 public class Autoencoder {
 
+	
+	
 	private JavaRDD<Vector> trainData;
 	private JavaRDD<Vector> testData;
-
+	private JavaSparkContext sc;
+	private long train_size;
+	private AutoencoderConfig conf;
+	private AutoencoderParams params;
+	private AutoencoderParams oldGrad;
+	
+	//Loaded from conf
 	private double rho = 0.05;
 	private double lambda = 0.001;
 	private double beta = 6;
@@ -29,14 +37,14 @@ public class Autoencoder {
 	private int numBatches = 2;
 
 	private int num_input = 32*32;
-	private int num_hidden = 32*32/2;
+	private int num_hidden = 1000;
 
-	private AutoencoderParams params;
-	private AutoencoderParams oldGrad;
+	private double alpha_init = 0.05;
+	private double alpha_decrease = 2.0;
+	private int    alpha_max_steps = 10;
 
-	private JavaSparkContext sc;
-
-	private AutoencoderConfig conf;
+	
+	
 	
 	public Autoencoder(AutoencoderConfig conf){
 		this.conf = conf;
@@ -54,49 +62,72 @@ public class Autoencoder {
 		this.numBatches = conf.getNumBatches();
 		
 		this.num_hidden = conf.getNum_hidden();
+		
+		double[] lineConf = conf.getAlphaSteps();
+		this.alpha_init = lineConf[0];
+		this.alpha_decrease = lineConf[1];
+		this.alpha_max_steps = (int) Math.round(lineConf[2]);
 	}
 	
-	public Vector[] train(JavaRDD<Vector> data){
+	public Vector[] train(JavaRDD<Vector> data) throws Exception{
 
 		sc = JavaSparkContext.fromSparkContext(data.context());
 		num_input = data.take(1).iterator().next().size();
-		
+		conf.setNum_input(num_input);
 		
 		//Split to train and test data
 		split(data);
-
+		train_size = trainData.count();
+		
 		params = initializeWeights();
 		for (int i=0;i<numEpochs;i++){
 			//suffle randomly data
-			JavaRDD<Vector>[] batches = splitBatches(trainData);
-
+			
 			momentum = initMomentum;
-
+			Broadcast<AutoencoderParams> brParams = null;
 			oldGrad = null;
 			for (int j=0;j<numBatches;j++){
 				if(j==20){
 					momentum = increaseMomentum;
 				}
-				Broadcast<AutoencoderParams> brParams = sc.broadcast(params);
+				 brParams = sc.broadcast(params);
 
-				AutoencoderGradient3 gradient = new AutoencoderGradient3(brParams,batches[j],conf);
+				AutoencoderGradient3 gradient = new AutoencoderGradient3(brParams,trainData.sample(false, 1.0/ (double) numBatches),conf);
 				AutoencoderFctGrd    result = gradient.getGradient();
-
-//				AutoencoderFct autoencoderFct = new AutoencoderFct(brParams, testData, conf);
-//				double testError = autoencoderFct.computeTestError();
+				
+				AutoencoderLineSearch linesearch = new AutoencoderLineSearch( brParams, sc.broadcast(result), 
+						trainData.sample(false, 1.0/100.0/numBatches), conf);
+				try {
+					linesearch.precompute();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				boolean notFound = true;
+				int steps = 0;
+				alpha = alpha_init;
+				double oldFctValue = result.getValue();
+				while(notFound && steps++<=alpha_max_steps){
+					double curFctValue = linesearch.computeTestError(alpha);
+					System.out.println("Line search:"+oldFctValue+" <> "+curFctValue);
+					if (curFctValue<oldFctValue) notFound = true;
+					alpha /= alpha_decrease;
+				}
 
 				if (oldGrad == null){
 					oldGrad = AutoencoderLinAlgebra.updateInitial(result,alpha);
 				}else{
-					oldGrad = AutoencoderLinAlgebra.update(oldGrad,result,alpha,momentum);
+					oldGrad = AutoencoderLinAlgebra.update(oldGrad,result,alpha,0.0);
 				}
 
 				params = AutoencoderLinAlgebra.updateParams(params,oldGrad);
 
 				System.out.println("Epoch "+i+", batch "+j+" train="+result.getValue());//+" test="+testError);
 			}
-
-			alpha = alpha / 2.0;
+			
+			AutoencoderFct autoencoderFct = new AutoencoderFct(brParams, testData, conf);
+			double testError = autoencoderFct.computeTestError();
+			System.out.println("Epoch "+i+" test="+testError);
 		}
 
 		return AutoencoderLinAlgebra.getFilters(params);
@@ -108,22 +139,11 @@ public class Autoencoder {
 
 	private void split(JavaRDD<Vector> data){
 		JavaRDD<Vector>[] splits = data.randomSplit(new double[]{0.8,0.2}, System.currentTimeMillis());
-		trainData = splits[0];
-		testData  = splits[1];
+		trainData = splits[0].cache();
+		testData  = splits[1].cache();
 	}
 
-	private JavaRDD<Vector>[] splitBatches(JavaRDD<Vector> data){
-		double[] arraySplit = new double[numBatches];
-		double part = 1.0/numBatches;
-		for(int i=0;i<numBatches;i++){
-			if (i==(numBatches-1)){
-				arraySplit[i] = 1 - part*(numBatches-1);
-			}else{
-				arraySplit[i] = part;
-			}
-		}
-		return data.randomSplit(arraySplit,System.currentTimeMillis());
-	}
+	
 
 	
 

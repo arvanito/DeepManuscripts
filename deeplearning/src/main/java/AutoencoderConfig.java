@@ -29,7 +29,50 @@ public class AutoencoderConfig {
 		if (conf.hasNumberOfUnits()){
 			this.num_hidden = conf.getNumberOfUnits();
 		}
-		//.... for the rest
+		if (conf.hasRho()){
+			this.rho = conf.getRho();
+		}
+		
+		if (conf.hasLambda()){
+			this.lambda = conf.getLambda();
+		}
+		if (conf.hasBeta()){
+			this.beta = conf.getBeta();
+		}
+		if (conf.hasNumEpochs()){
+			this.numEpochs = conf.getNumEpochs();
+		}
+		if (conf.hasNumBatches()){
+			this.numBatches = conf.getNumBatches();
+		}
+		if (conf.hasLineSearchStrategy()){
+			this.lineSearchStrategy = conf.getLineSearchStrategy();
+		}
+		if (conf.hasAlpha()){
+			this.alpha = conf.getAlpha();
+		}
+		if (conf.hasMomentum()){
+			this.momentum = conf.getMomentum();
+		}
+		if (conf.hasInitMomentum()){
+			this.initMomentum = conf.getInitMomentum();
+		}
+		if (conf.hasIncreaseMomentum()){
+			this.increaseMomentum = conf.getIncreaseMomentum();
+		}
+		if (conf.hasNumInput()){
+			this.num_input = conf.getNumInput();
+		}
+		
+		if (conf.hasAlphaInit()){
+			this.alphaSteps[0] = conf.getAlphaInit();
+		}
+		if (conf.hasAlphaStep()){
+			this.alphaSteps[1] = conf.getAlphaStep();
+		}
+		if (conf.hasAlphaMaxSteps()){
+			this.alphaSteps[2] = (double) conf.getAlphaMaxSteps();
+		}
 	}
 
 	public double getRho() {
