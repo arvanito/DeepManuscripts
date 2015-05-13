@@ -5,6 +5,7 @@ import main.java.DeepModelSettings.ConfigBaseLayer;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.linalg.Vector;
+import org.apache.spark.storage.StorageLevel;
 
 /**
  * 
@@ -83,28 +84,46 @@ public class BaseLayer implements DeepLearningLayer {
 	public JavaRDD<Vector> train(JavaRDD<Vector> input_small_patches, 
 			                       JavaRDD<Vector> input_word_patches, boolean notLast) throws Exception {
     	
+    	
+    	int numPartitions = 400*4; //Num-workers * cores_per_worker * succesive tasks
 		JavaRDD<Vector> input_small_patchesProccesed;
 		if(preprocess != null) {
 		input_small_patchesProccesed = preProcess(input_small_patches);
 			if (save_model == true) { // save the ZCA matrix and mean
-				preprocess.saveToFile(pathPrefix + "_preprocess", spark_context);
+				try{
+				preprocess.saveToFile(pathPrefix + "_preprocess"+System.currentTimeMillis(), spark_context);
+				}catch(Exception e){
+					// do nothing
+				}catch(Error e){
+					//do nothing
+				}				
 			}
 		}else{
 			input_small_patchesProccesed = input_small_patches;
 		}
-		Vector[] features = learnFeatures(input_small_patchesProccesed.cache());
+		
+		Vector[] features = learnFeatures(input_small_patchesProccesed);
 		
 		// TODO:: do preprocessing on the second dataset
 		//JavaRDD<Vector> preprocessedBig = dataBig.map(preprocess);
 		
 		// Ugly hack, move this to the Learner class
-		if (save_model == true)
-			//LinAlgebraIOUtils.saveVectorArrayToText(features, pathPrefix + "_features", spark_context);
-			LinAlgebraIOUtils.saveVectorArrayToObject(features, pathPrefix + "_features", spark_context);
+		if (save_model == true){
+			try{
+				//LinAlgebraIOUtils.saveVectorArrayToText(features, pathPrefix + "_features", spark_context);
+				LinAlgebraIOUtils.saveVectorArrayToObject(features, pathPrefix + "_features"+System.currentTimeMillis(), spark_context);
+
+			}catch(Exception e){
+				// do nothing
+			}catch(Error e){
+				//do nothing
+			}				
+
+		}
 		
 		JavaRDD<Vector> represent = extractFeatures(input_word_patches, features);
-		JavaRDD<Vector> pooled = pool(represent).cache();
-		if (notLast) pooled.count(); //force materialization
+		JavaRDD<Vector> pooled = pool(represent).repartition(numPartitions).persist(StorageLevel.MEMORY_AND_DISK_SER());;
+		//if (notLast) pooled.count(); //force materialization
 		return pooled;
 	}
 

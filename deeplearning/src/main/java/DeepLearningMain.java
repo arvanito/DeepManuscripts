@@ -17,6 +17,7 @@ import org.apache.spark.api.java.function.Function;
 import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
+import org.apache.spark.storage.StorageLevel;
 
 import scala.Tuple2;
 import scala.reflect.ClassTag;
@@ -93,10 +94,8 @@ public class DeepLearningMain {
 							String inputFileLargePatches, String outputFile, String testId) throws Exception {
 		
 		// open files and convert them to JavaRDD<Vector> datasets
-//		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
-//    	JavaSparkContext sc = new JavaSparkContext(conf);
  
-		int numPartitions = 40*12*3; //Num-workers * cores_per_worker * succesive tasks
+		int numPartitions = 400*4; //Num-workers * cores_per_worker * succesive tasks
 		JavaRDD<Vector> inputSmallPatches = sc.textFile(inputFileSmallPatches).map(new Parse()).filter(new Function<Vector, Boolean>() {
 			
 			@Override
@@ -106,7 +105,7 @@ public class DeepLearningMain {
 				}
 				return false;
 			}
-		}).repartition(numPartitions);
+		}).repartition(numPartitions).persist(StorageLevel.MEMORY_AND_DISK_SER());//.repartition(numPartitions);
 ;
 		JavaRDD<Vector> inputWordPatches = sc.textFile(inputFileLargePatches).map(new Parse()).filter(new Function<Vector, Boolean>() {
 			
@@ -118,7 +117,7 @@ public class DeepLearningMain {
 				return false;
 			}
 		}).repartition(numPartitions);
-;
+
 
 		//testMe(inputSmallPatches);
 		
@@ -140,6 +139,7 @@ public class DeepLearningMain {
 		
 //		// The main loop calls train() on each of the layers
 		JavaRDD<Vector> result = null;
+		//JavaRDD<Vector> intermediateResult = null;
 	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); layerIndex++) {
 	 		boolean notLast = (layerIndex == globalConfig.size()-1) ? true : false;
 	 		// set up the current layer 
@@ -150,9 +150,9 @@ public class DeepLearningMain {
 			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
 				result = layer.train(inputSmallPatches, inputWordPatches,notLast);
 			} else {
-				JavaRDD<Vector> result1 = result.repartition(numPartitions);
-				JavaRDD<Vector> result2 = result.repartition(numPartitions).cache();
-				result = layer.train(result1, result2,notLast);
+				//intermediateResult = result.repartition(numPartitions).persist(StorageLevel.MEMORY_AND_DISK_SER());
+				result = layer.train(result,result,notLast);
+				//intermediateResult.unpersist();
 			}	
 	 	}
 //		//TODO save also last file
