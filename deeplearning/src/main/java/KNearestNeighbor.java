@@ -2,14 +2,22 @@ package main.java;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.Matrices;
 import org.apache.spark.mllib.linalg.Matrix;
 import org.apache.spark.mllib.linalg.Vector;
+import org.apache.spark.mllib.linalg.distributed.CoordinateMatrix;
+import org.apache.spark.mllib.linalg.distributed.MatrixEntry;
 
 public class KNearestNeighbor {
 	private Vector[] input;
-	private Matrix output;
+	private Matrix outputD;
+	private Matrix outputS;
+	private CoordinateMatrix outputC;
 	private double maxDistance;
 	private int matrixType;
 	private int k;
@@ -17,15 +25,35 @@ public class KNearestNeighbor {
 	private double sigma;
 
 	/**
-	 * @return the weighted Matrix
+	 * @return the dense weighted Matrix
 	 */
-	public Matrix getWeightedMatrix() {
-		if (output == null) {
+	public Matrix getDenseWeightedMatrix() {
+		if (outputD == null) {
 			this.compute();
 		}
-		return output;
+		return outputD;
 	}
 
+	/**
+	 * @return the sparse weighted Matrix
+	 */
+	public Matrix getSparseWeightedMatrix() {
+		if (outputS == null) {
+			this.compute();
+		}
+		return outputS;
+	}
+	
+	/**
+	 * @return the weighted CoordinateMatrix
+	 */
+	public CoordinateMatrix getWeightedCoordinateMatrix() {
+		if (outputC == null) {
+			this.compute();
+		}
+		return outputC;
+	}
+	
 	/**
 	 * Constructor for WeightedMatrix
 	 * 
@@ -126,12 +154,36 @@ public class KNearestNeighbor {
 				}
 			}
 		}
-		output = Matrices.sparse(n, n, columnStart(n), rowStart(n), result);
+		outputD = Matrices.dense(n, n, result);
+		outputS = Matrices.sparse(n, n, columnStart(n), rowStart(n), result);
+		outputC = coordinateMatrix(n,n,result);
 	}
 
 	/**
-	 * Return the indexes of all the beginnings of a row for a flatten square
-	 * matrix of size n.
+	 * Create a CoordinateMatrix from an array of doubles.
+	 * @param m Number of row
+	 * @param n Number of column
+	 * @param result Array of doubles.
+	 * @return A CoordinateMatrix
+	 */
+	private CoordinateMatrix coordinateMatrix(int m,int n, double[] result) {
+		MatrixEntry[] array = new MatrixEntry[m*n];
+		for(int i=0; i<m*n; i++){
+			array[i]= new MatrixEntry(i%m,(int)i/n,result[i]);
+		}
+		
+		List<MatrixEntry> data = Arrays.asList(array);
+
+		SparkConf conf = new SparkConf()
+				.setAppName("CoordinateMatrix for kNN in Spectral Clustering");
+		JavaSparkContext sc = new JavaSparkContext(conf);
+		JavaRDD<MatrixEntry> distData = sc.parallelize(data);
+		sc.close();
+		return new CoordinateMatrix(distData.rdd());
+	}
+
+	/**
+	 * Return the indexes in the row of all the elements.
 	 * 
 	 * @param n
 	 *            Size of the matrix
@@ -140,7 +192,7 @@ public class KNearestNeighbor {
 	private int[] rowStart(int n) {
 		int[] index = new int[n * n];
 		for (int i = 0; i < n * n; i++) {
-			index[i] = i;
+			index[i] = i % n;
 		}
 		return index;
 	}
@@ -261,14 +313,6 @@ public class KNearestNeighbor {
 		});
 		return toSort;
 	}
-
-	/*
-	 * private double[][] invertMatrix(double[][] distances) { int size =
-	 * distances.length; double[][] results = new double[size][size]; for (int i
-	 * = 0; i < size; i++) { for (int j = i; j < size; j++) { double w =
-	 * (maxDistance - distances[i][j]) / maxDistance; results[i][j] = w;
-	 * results[j][i] = w; } } return results; }
-	 */
 
 	/**
 	 * Compute the matrix of the distances between all the vectors of the

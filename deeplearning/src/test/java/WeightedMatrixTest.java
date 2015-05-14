@@ -17,17 +17,19 @@ public class WeightedMatrixTest {
 			vectors[i] = Vectors.dense(testArray[i]);
 			System.out.println("Vector " + i +": " + vectors[i].toArray()[0] + " " + vectors[i].toArray()[1] + " " + vectors[i].toArray()[2] + " " + vectors[i].toArray()[3] + " " + vectors[i].toArray()[4] + " " + vectors[i].toArray()[5] + " ");
 		}
-		KNearestNeighbor w = new KNearestNeighbor(vectors, 3,0,1,1);
+		KNearestNeighbor w = new KNearestNeighbor(vectors, 3,0,0,1);
 		Matrix m = w.getWeightedMatrix();
 		System.out.println("Matrix:");
 		int size = m.numCols();
+		System.out.println(m.toString());
+		/*
 		double[] mA = m.toArray();
 		for(int i=0; i<size; i++){
 			for(int j=0; j<size; j++){
 				System.out.print(mA[i + j*size] + " ");
 			}
 			System.out.print("\n");
-		}
+		}*/
 
     }
 }
