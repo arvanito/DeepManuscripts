@@ -77,7 +77,7 @@ public interface DeepLearningLayer {
 	 * @return An RDD containing a new representation of the data, of size N x (descriptor size)
 	 * @throws Exception
 	 */
-	 public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data) throws Exception;
+	 public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data,String[] featFile) throws Exception;
 	 
 	 
 	 /**
