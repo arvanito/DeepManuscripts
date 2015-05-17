@@ -244,11 +244,11 @@ public class PreProcessZCA implements PreProcessor {
 	 *  Sets up the preprocessor. It loads the saved weights from the disk.
 	 * @param filename
 	 **/
-	public void loadFromFile(String filename, JavaSparkContext sc) {
+	public void loadFromFile(String[] filename, JavaSparkContext sc) {
 		//NOTE Since ZCA and mean are both expected to be small (max 64x64)
 		// their loading/saving should not be a bottleneck
-		mean = (DenseVector) LinAlgebraIOUtils.loadVectorFromObject(filename+"_mean", sc);
-		ZCA = (DenseMatrix) LinAlgebraIOUtils.loadMatrixFromObject(filename + "_zca", sc);
+		mean = (DenseVector) LinAlgebraIOUtils.loadVectorFromObject(filename[0], sc);
+		ZCA = (DenseMatrix) LinAlgebraIOUtils.loadMatrixFromObject(filename[1], sc);
 
 	}
 	
