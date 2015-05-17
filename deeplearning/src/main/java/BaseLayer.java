@@ -5,6 +5,7 @@ import main.java.DeepModelSettings.ConfigBaseLayer;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.linalg.Vector;
+import org.apache.spark.storage.StorageLevel;
 
 import scala.Tuple2;
 
@@ -107,20 +108,26 @@ public class BaseLayer implements DeepLearningLayer {
 	}
 
     
-    public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data) throws Exception {
+    public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data,String[] featFile) throws Exception {
+    	int numPartitions = 400*4; //Num-workers * cores_per_worker * succesive tasks
+
     	// Setup the preprocessor
-    	this.preprocess.loadFromFile(pathPrefix + "_preprocess", spark_context);
+    	if (layer_index<1){
+    	this.preprocess.loadFromFile(featFile, spark_context); //this needs to be changed
+    	}
 //    	JavaRDD<Vector> preprocessed = preProcess(data);
     	
     	//TODO load the features from file.
-    	Vector[] features = LinAlgebraIOUtils.loadVectorArrayFromObject(pathPrefix + "_features", spark_context);
+    	Vector[] features = LinAlgebraIOUtils.loadVectorArrayFromObject(featFile[layer_index+2], spark_context);
+    	QuickSortVector.quickSort(features, 0, features.length);
 
     	System.out.println("Features info");
     	System.out.println(features.length);
     	System.out.println(features[0].size());
     	
     	JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(data, configLayer, features);
-    	JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent);
+    	JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent).repartition(numPartitions).persist(StorageLevel.MEMORY_AND_DISK_SER());
+    	pooled.saveAsObjectFile(pathPrefix+"_"+layer_index+"_"+System.currentTimeMillis());
     	return pooled;
     }
    
