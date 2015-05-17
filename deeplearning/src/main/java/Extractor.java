@@ -29,6 +29,7 @@ public interface Extractor extends Function<Vector, Vector> {
 	 */
 	public void setFeatures(Vector[] features);
 
+	public void setEps1(double eps1);
 	
 	/**
 	 * Main method that is called by passing it to a map call. 

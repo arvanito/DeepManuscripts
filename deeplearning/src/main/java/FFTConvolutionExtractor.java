@@ -230,4 +230,10 @@ public class FFTConvolutionExtractor implements Extractor {
 		return y;
 	}
 
+	@Override
+	public void setEps1(double eps1) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

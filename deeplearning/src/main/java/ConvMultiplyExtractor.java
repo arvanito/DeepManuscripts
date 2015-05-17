@@ -29,6 +29,7 @@ public class ConvMultiplyExtractor implements Extractor {
 	private int inputCols;
 	private int featureRows;
 	private int featureCols;
+	private double eps1;
 	//private int validRows;
 	//private int validCols;
 
@@ -99,6 +100,9 @@ public class ConvMultiplyExtractor implements Extractor {
 		this.features = features;
 	}
 	
+	public void setEps1(double eps1){
+		this.eps1 = eps1;
+	}
 	
 	/**
 	 * Method that is called during a map call.
@@ -139,7 +143,7 @@ public class ConvMultiplyExtractor implements Extractor {
 			//double eps1 = configLayer.getConfigPreprocess().getEps1();
 			
 			// preprocess the data point with contrast normalization and ZCA whitening
-			//patches = MatrixOps.localMatContrastNorm(patches, eps1);
+			patches = MatrixOps.localMatContrastNorm(patches, eps1);
 			patches = MatrixOps.localMatSubtractMean(patches, mean);
 			
 			//patches = patches.multiply(zca);

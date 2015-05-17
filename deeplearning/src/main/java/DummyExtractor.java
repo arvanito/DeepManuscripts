@@ -28,4 +28,10 @@ public class DummyExtractor implements Extractor {
 	public void setPreProcessZCA(DenseMatrix zca, DenseVector mean) {
 	}
 
+	@Override
+	public void setEps1(double eps1) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
