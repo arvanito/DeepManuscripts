@@ -74,6 +74,7 @@ public class BaseLayer implements DeepLearningLayer {
 			extract.setPreProcessZCA(((PreProcessZCA)preprocess).getZCA(), ((PreProcessZCA)preprocess).getMean());
 		}
 		extract.setFeatures(features);
+		extract.setEps1(configLayer.getConfigPreprocess().getEps1());
 		return data.map(extract);
 	}
 

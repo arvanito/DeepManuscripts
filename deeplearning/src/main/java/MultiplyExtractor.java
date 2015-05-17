@@ -147,4 +147,10 @@ public class MultiplyExtractor implements Extractor {
 		return new Tuple2<Vector, Vector>(pairData._1, dataOut);
 	}
 
+	@Override
+	public void setEps1(double eps1) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

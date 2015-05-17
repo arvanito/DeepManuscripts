@@ -27,6 +27,7 @@ public class ConvMultiplyExtractor implements Extractor {
 	private DenseVector mean;
 	private Vector[] features;				// array of learned feature Vectors
 
+	private double eps1;
 	
 	/**
 	 * Constructor 
@@ -128,7 +129,7 @@ public class ConvMultiplyExtractor implements Extractor {
 			//double eps1 = configLayer.getConfigPreprocess().getEps1();
 			
 			// preprocess the data point with contrast normalization and ZCA whitening
-			//patches = MatrixOps.localMatContrastNorm(patches, eps1);
+			patches = MatrixOps.localMatContrastNorm(patches, eps1);
 			patches = MatrixOps.localMatSubtractMean(patches, mean);
 			
 			//patches = patches.multiply(zca);
@@ -151,6 +152,13 @@ public class ConvMultiplyExtractor implements Extractor {
 		outVec = MatrixOps.applyNonLinearityVec(outVec, nonLinearity, alpha);
 		
 		return new Tuple2<Vector, Vector>(pairData._1, outVec);
+	}
+
+
+	@Override
+	public void setEps1(double eps1) {
+		this.eps1 = eps1;
+		
 	}
 	
 }
