@@ -143,13 +143,13 @@ public class ConvMultiplyExtractor implements Extractor {
 		DenseVector outVec = MatrixOps.reshapeMat2Vec(out);
 		
 		// apply non-linearity
-		ConfigFeatureExtractor.NonLinearity nonLinearity = configLayer.getConfigFeatureExtractor().getNonLinearity();
-		double alpha = 0.0;
-		if (configLayer.getConfigFeatureExtractor().hasSoftThreshold()) {
-			System.out.println("We do not have a threshold");
-			alpha = configLayer.getConfigFeatureExtractor().getSoftThreshold();
-		}
-		outVec = MatrixOps.applyNonLinearityVec(outVec, nonLinearity, alpha);
+		//ConfigFeatureExtractor.NonLinearity nonLinearity = configLayer.getConfigFeatureExtractor().getNonLinearity();
+		//double alpha = 0.0;
+		//if (configLayer.getConfigFeatureExtractor().hasSoftThreshold()) {
+		//	System.out.println("We do not have a threshold");
+		//	alpha = configLayer.getConfigFeatureExtractor().getSoftThreshold();
+		//}
+		//outVec = MatrixOps.applyNonLinearityVec(outVec, nonLinearity, alpha);
 		
 		return new Tuple2<Vector, Vector>(pairData._1, outVec);
 	}
