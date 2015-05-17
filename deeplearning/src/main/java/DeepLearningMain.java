@@ -156,7 +156,7 @@ public class DeepLearningMain {
 			}	
 	 	}
 //		//TODO save also last file
-		result.saveAsTextFile(outputFile);
+		//result.saveAsTextFile(outputFile);
 		
 		
 		
