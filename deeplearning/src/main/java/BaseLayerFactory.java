@@ -50,7 +50,8 @@ public class BaseLayerFactory {
 		// or matrix-vector multiplication extraction
 		Extractor extractor = null;
 		if (configLayer.hasConfigFeatureExtractor()) {
-				extractor = new FFTConvolutionExtractor(configLayer);
+				extractor = new ConvMultiplyExtractor(configLayer); // to be used with normalized input patches
+				//extractor = new FFTConvolutionExtractor(configLayer);
 		} else {
 				extractor = new MultiplyExtractor(configLayer);
 		}
