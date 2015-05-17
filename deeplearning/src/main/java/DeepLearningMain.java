@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -236,6 +237,77 @@ public static void test1(List<ConfigBaseLayer> globalConfig,String[] featFile, S
 		sc.close();
 	}
 
+public static void rank(List<ConfigBaseLayer> globalConfig,String[] featFile, String inputFile, String imagesFile, String testId) throws Exception {
+	
+	// open the test file and convert it to a JavaRDD<Vector> dataset
+	int numPartitions = 400*4; //Num-workers * cores_per_worker * succesive tasks
+
+	JavaRDD<Tuple2<Vector, Vector>> testPatches = sc.textFile(inputFile).map(new ParseTuples()).filter(new Function<Tuple2<Vector,Vector>, Boolean>() {
+		
+		@Override
+		public Boolean call(Tuple2<Vector,Vector> arg0) throws Exception {
+			if (arg0._2.size() == 4096){
+				return true;
+			}
+			return false;
+		}
+	}).repartition(numPartitions);
+	
+	// The main loop calls test() on each of the layers
+	JavaRDD<Tuple2<Vector, Vector>> result = null;
+ 	for (int layerIndex = 0; layerIndex < globalConfig.size(); layerIndex++) {
+ 		
+ 		// set up the current layer 
+		DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, testId);
+		layer.setSparkContext(sc);
+		// The configLayer has configExtractor only if it convolutional,
+		// The multiply Extractor does not need any parameters.
+		if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
+			result = layer.test(testPatches,featFile);
+		} else {
+			result = layer.test(result,featFile);
+		}	
+ 	}
+ 	
+ 	//TODO save the result to a file 
+ 	
+ 	JavaRDD<Object> imagePatchesObject = sc.objectFile(imagesFile).repartition(numPartitions);
+ 	JavaRDD<Tuple2<Vector,Vector>> imagePatches = imagePatchesObject.map(new Function<Object, Tuple2<Vector,Vector>>() {
+
+		@Override
+		public Tuple2<Vector, Vector> call(Object arg0) throws Exception {
+			// TODO Auto-generated method stub
+			return (Tuple2<Vector, Vector>) arg0 ;
+		}
+	}); //hope it works
+ 	
+ 	Iterator<Tuple2<Vector, Vector>> testPatchesList = testPatches.collect().iterator();
+ 	
+ 	while(testPatchesList.hasNext()){
+ 		Tuple2<Vector,Vector> querryPair = testPatchesList.next();
+ 		ComputeSimilarityPair compSim = new ComputeSimilarityPair(querryPair);
+ 		List<Tuple2<Vector, Double>> sim = imagePatches.map(compSim).map(new Function<Tuple2<Vector,Double>, Tuple2<Vector,Double>>() {
+
+			@Override
+			public Tuple2<Vector, Double> call(Tuple2<Vector, Double> arg0)
+					throws Exception {
+				// TODO Auto-generated method stub
+				return new Tuple2<Vector,Double> (arg0._1,-arg0._2);
+			}
+		}).takeOrdered(10, new Comparator<Tuple2<Vector,Double>>() {
+			
+			@Override
+			public int compare(Tuple2<Vector, Double> o1, Tuple2<Vector, Double> o2) {
+				return o1._2 < o2._2 ? -1 : o1._2 == o2._2 ? 0 : 1;
+			}
+		});
+ 		
+ 		//decide how to save
+ 	}
+ 	
+	sc.close();
+}
+
 	/**
 	 * Main method for testing the trained model. 
 	 * 
@@ -394,7 +466,7 @@ public static void test1(List<ConfigBaseLayer> globalConfig,String[] featFile, S
 		if (args.length == 4) {
 		    globalConfig = loadSettings(args[0]);
 		} else {
-			System.out.print("Usage: spark-submit --class main.java.DeepLearningMain --master local[1] target/DeepManuscriptLearning-0.0.1.jar  <config.prototxt> <mean.txt> <zca.txt> <layer_1> <layer_2> <in> <test_id> <what> <test_words>");
+			System.out.print("Usage: spark-submit --class main.java.DeepLearningMain --master local[1] target/DeepManuscriptLearning-0.0.1.jar  <config.prototxt> <mean.txt> <zca.txt> <layer_1> <layer_2> <in> <test_id> <what> <test_images>");
 			throw new Exception("Missing command line arguments!");
 		}
 		
@@ -419,7 +491,7 @@ public static void test1(List<ConfigBaseLayer> globalConfig,String[] featFile, S
 		}
 		if (action==3){
 		//rank	
-		//test1(globalConfig, featFiles, args[5],"",args[6]);
+		rank(globalConfig, featFiles, args[5],args[8],args[6]);
 		}
 	}
 }
