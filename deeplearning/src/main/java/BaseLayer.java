@@ -1,9 +1,13 @@
 package main.java;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import main.java.DeepModelSettings.ConfigBaseLayer;
 
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.storage.StorageLevel;
 
@@ -102,6 +106,25 @@ public class BaseLayer implements DeepLearningLayer {
 			input_small_patchesProccesed = input_small_patches;
 		}
 		
+		StorageLevel storageLevel = input_small_patchesProccesed.getStorageLevel();
+		if (storageLevel == StorageLevel.NONE()){
+			input_small_patchesProccesed.persist(StorageLevel.MEMORY_AND_DISK_SER());
+		}
+
+//Might take a long time
+//		long inputPartitions = input_small_patchesProccesed.mapPartitions(new FlatMapFunction<Iterator<Vector>, Integer>() {
+//
+//			@Override
+//			public Iterable<Integer> call(Iterator<Vector> arg0) throws Exception {
+//				ArrayList<Integer> result = new ArrayList<Integer>();
+//				result.add(1);
+//				return result;
+//			}
+//		}).count();
+//		if (inputPartitions != numPartitions){
+//			input_small_patchesProccesed.repartition(numPartitions);
+//		} 
+		
 		Vector[] features = learnFeatures(input_small_patchesProccesed);
 		
 		// TODO:: do preprocessing on the second dataset
@@ -122,8 +145,8 @@ public class BaseLayer implements DeepLearningLayer {
 		}
 		
 		JavaRDD<Vector> represent = extractFeatures(input_word_patches, features);
-		JavaRDD<Vector> pooled = pool(represent).repartition(numPartitions).persist(StorageLevel.MEMORY_AND_DISK_SER());;
-		//if (notLast) pooled.count(); //force materialization
+		JavaRDD<Vector> pooled = pool(represent).repartition(numPartitions).persist(StorageLevel.MEMORY_AND_DISK_SER());
+		if (notLast) pooled.count(); //force materialization
 		return pooled;
 	}
 
