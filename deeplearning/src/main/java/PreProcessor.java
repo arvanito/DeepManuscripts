@@ -47,7 +47,7 @@ public interface PreProcessor extends Function<Vector, Vector>{
 	 *  Sets up the preprocessor. It loads the saved weights from the disk.
 	 * @param filename
 	 **/
-	public void loadFromFile(String filename, JavaSparkContext sc);
+	public void loadFromFile(String[] filename, JavaSparkContext sc);
 	
 	/**
 	 *  Saves the fields necessary to reconstruct a preprocessor object. 
