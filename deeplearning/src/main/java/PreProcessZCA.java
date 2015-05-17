@@ -145,10 +145,10 @@ public class PreProcessZCA implements PreProcessor {
 	public JavaRDD<Vector> preprocessData(JavaRDD<Vector> data) {
 
 		// assign eps1 for pre-processing
-		//double eps1 = configLayer.getConfigPreprocess().getEps1();
+		double eps1 = configLayer.getConfigPreprocess().getEps1();
 
 		// apply contrast normalization
-		//data = data.map(new ContrastNormalization(eps1));
+		data = data.map(new ContrastNormalization(eps1));
 
 		// convert the JavaRRD<Vector> to a distributed RowMatrix (through Scala RDD<Vector>)
 		RowMatrix rowData = new RowMatrix(data.rdd());
