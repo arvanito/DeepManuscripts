@@ -69,82 +69,82 @@ public class LoadSaveModelTest implements Serializable {
 		sc = null;
 	}
 	
-	@Test
-	public void testSmallLoop() throws Exception {
-
-	 	List<ConfigBaseLayer> config_list = new ArrayList<ConfigBaseLayer>();
-	 	config_list.add(config1);
-	 	config_list.add(config2);
-	 	config_list.add(config3);
-	 	
-		int Nimgs = 50;
-	 	int Npatches = 100;
-	 	List<Tuple2<Vector,Vector>> input_word_patches = new ArrayList<Tuple2<Vector,Vector>>(Nimgs);
-	 	int S = 32;
-	 	double[] temp = new double[S*S];
- 		for (int j = 0; j < S*S; ++j) {
- 			temp[j] = (double)j;
- 		}
-	 	for (int i = 0; i < Nimgs; ++i) {
-	 		input_word_patches.add(new Tuple2<Vector,Vector>(Vectors.dense(i),Vectors.dense(temp)));
-	 	}
-	 	
-	 	List<Tuple2<Vector,Vector>> input_small_patches = new ArrayList<Tuple2<Vector,Vector>>(Npatches);
-	 	for (int i = 0; i < Npatches; ++i) {
-	 		input_small_patches.add(new Tuple2<Vector, Vector>(Vectors.dense(i),Vectors.dense(1,2,3,4)));
-	 	}
-		// We have 100 patches of size 2x2 as input
-		// We have 50 word images of size 8x8
-		JavaRDD<Tuple2<Vector,Vector>> patches = sc.parallelize(input_small_patches);
-		JavaRDD<Tuple2<Vector,Vector>> imgwords = sc.parallelize(input_word_patches);
-		JavaRDD<Tuple2<Vector,Vector>> result = null;
-		int layer_index = 0;
-	 	for (ConfigBaseLayer config_layer: config_list) {
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config_layer, layer_index++, "three_layer");
-			layer.setSaveModel(true);
-			layer.setSparkContext(sc);
-			// The config layer has configExtractor only if it convolutional,
-			// The multiply Extractor does not need any parameters.
-			if (config_layer.hasConfigFeatureExtractor()) {
-				result = layer.train(patches, imgwords);
-			} else {
-				result = layer.train(result, result);
-			}	
-	 	}
-		List<Tuple2<Vector,Vector>> out = result.collect();
-		Assert.assertEquals(50, out.size());
-		Assert.assertEquals(5, out.get(0)._2.size());	
-		
-		JavaRDD<Tuple2<Vector,Vector>> imgwords_test = sc.parallelize(input_word_patches);
-		System.out.println("Starting testing");
-		layer_index = 0;
-		// now testing time
-		JavaRDD<Tuple2<Vector,Vector>> result2 = null;
-	 	for (ConfigBaseLayer config_layer: config_list) {
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config_layer, layer_index++, "three_layer");
-		//	layer.setSaveModel(true);
-			layer.setSparkContext(sc);
-			// The config layer has configExtractor only if it convolutional,
-			// The multiply Extractor does not need any parameters.
-			if (config_layer.hasConfigFeatureExtractor()) {
-				result2 = layer.test(imgwords_test);
-			} else {
-				result2 = layer.test(result2);
-			}	
-	 	}
-		List<Tuple2<Vector,Vector>> out2 = result2.collect();
-		Assert.assertEquals(50, out2.size());
-		Assert.assertEquals(5, out2.get(0)._2.size());	
-		for (int i = 0; i < 50; ++i) {
-			Assert.assertEquals(out.get(i).toString(), out2.get(i).toString());
-		}
-		
-		//TODO consider cleaning up from the layers themselves
-		String base_file = "three_layer";
-		for (int i = 0; i < 3; ++i) {
-			org.apache.hadoop.fs.FileUtil.fullyDelete(new File(base_file + Integer.toString(i) +"_features"));
-			org.apache.hadoop.fs.FileUtil.fullyDelete(new File(base_file + Integer.toString(i) +"_preprocess_zca"));
-			org.apache.hadoop.fs.FileUtil.fullyDelete(new File(base_file + Integer.toString(i) + "_preprocess_mean"));
-		}
-	}
+//    @Test
+//	public void testSmallLoop() throws Exception {
+//
+//	 	List<ConfigBaseLayer> config_list = new ArrayList<ConfigBaseLayer>();
+//	 	config_list.add(config1);
+//	 	config_list.add(config2);
+//	 	config_list.add(config3);
+//	 	
+//		int Nimgs = 50;
+//	 	int Npatches = 100;
+//	 	List<Tuple2<Vector,Vector>> input_word_patches = new ArrayList<Tuple2<Vector,Vector>>(Nimgs);
+//	 	int S = 32;
+//	 	double[] temp = new double[S*S];
+// 		for (int j = 0; j < S*S; ++j) {
+// 			temp[j] = (double)j;
+// 		}
+//	 	for (int i = 0; i < Nimgs; ++i) {
+//	 		input_word_patches.add(new Tuple2<Vector,Vector>(Vectors.dense(i),Vectors.dense(temp)));
+//	 	}
+//	 	
+//	 	List<Tuple2<Vector,Vector>> input_small_patches = new ArrayList<Tuple2<Vector,Vector>>(Npatches);
+//	 	for (int i = 0; i < Npatches; ++i) {
+//	 		input_small_patches.add(new Tuple2<Vector, Vector>(Vectors.dense(i),Vectors.dense(1,2,3,4)));
+//	 	}
+//		// We have 100 patches of size 2x2 as input
+//		// We have 50 word images of size 8x8
+//		JavaRDD<Tuple2<Vector,Vector>> patches = sc.parallelize(input_small_patches);
+//		JavaRDD<Tuple2<Vector,Vector>> imgwords = sc.parallelize(input_word_patches);
+//		JavaRDD<Tuple2<Vector,Vector>> result = null;
+//		int layer_index = 0;
+//	 	for (ConfigBaseLayer config_layer: config_list) {
+//			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config_layer, layer_index++, "three_layer");
+//			layer.setSaveModel(true);
+//			layer.setSparkContext(sc);
+//			// The config layer has configExtractor only if it convolutional,
+//			// The multiply Extractor does not need any parameters.
+//			if (config_layer.hasConfigFeatureExtractor()) {
+//				result = layer.train(patches, imgwords);
+//			} else {
+//				result = layer.train(result, result);
+//			}	
+//	 	}
+//		List<Tuple2<Vector,Vector>> out = result.collect();
+//		Assert.assertEquals(50, out.size());
+//		Assert.assertEquals(5, out.get(0)._2.size());	
+//		
+//		JavaRDD<Tuple2<Vector,Vector>> imgwords_test = sc.parallelize(input_word_patches);
+//		System.out.println("Starting testing");
+//		layer_index = 0;
+//		// now testing time
+//		JavaRDD<Tuple2<Vector,Vector>> result2 = null;
+//	 	for (ConfigBaseLayer config_layer: config_list) {
+//			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(config_layer, layer_index++, "three_layer");
+//		//	layer.setSaveModel(true);
+//			layer.setSparkContext(sc);
+//			// The config layer has configExtractor only if it convolutional,
+//			// The multiply Extractor does not need any parameters.
+//			if (config_layer.hasConfigFeatureExtractor()) {
+//				result2 = layer.test(imgwords_test);
+//			} else {
+//				result2 = layer.test(result2);
+//			}	
+//	 	}
+//		List<Tuple2<Vector,Vector>> out2 = result2.collect();
+//		Assert.assertEquals(50, out2.size());
+//		Assert.assertEquals(5, out2.get(0)._2.size());	
+//		for (int i = 0; i < 50; ++i) {
+//			Assert.assertEquals(out.get(i).toString(), out2.get(i).toString());
+//		}
+//		
+//		//TODO consider cleaning up from the layers themselves
+//		String base_file = "three_layer";
+//		for (int i = 0; i < 3; ++i) {
+//			org.apache.hadoop.fs.FileUtil.fullyDelete(new File(base_file + Integer.toString(i) +"_features"));
+//			org.apache.hadoop.fs.FileUtil.fullyDelete(new File(base_file + Integer.toString(i) +"_preprocess_zca"));
+//			org.apache.hadoop.fs.FileUtil.fullyDelete(new File(base_file + Integer.toString(i) + "_preprocess_mean"));
+//		}
+//	}
 }
