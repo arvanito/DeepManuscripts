@@ -41,6 +41,8 @@ Example on how to extract patches from the manuscripts provided that the corresp
 
 `spark-submit --class main.java.CandidatePatchesMain --master yarn-client --num-executors 25 --jars DeepManuscriptPreprocessing-0.0.1.jar original-DeepManuscriptPreprocessing-0.0.1.jar /projects/deep-learning/segmentation-output-cropped /projects/deep-learning/segmentation-output-json nouvelles/*/* /projects/deep-learning/patch_output/train/32X32/nouvelles`
 
+The first input argument is the path to the parent folder where manuscript pages are located (`/projects/deep-learning/segmentation-output-cropped`), the second argument is the path to the parent folder where json files are located (`/projects/deep-learning/segmentation-output-json`), the third argument is the directory regex for both the manuscript pages and the json files (`nouvelles/*/*`) and the last argument is the path to the output folder where the extracted patches will be located (`/projects/deep-learning/patch_output/train/32X32/nouvelles`).
+
 ### OpenCV compilation (DEPRECATED NOW) ###
 
 Because we need image processing tools, OpenCV is a very good choice. However we can not just add the library to the `pom.xml` of Maven (or if someone can find a way... tell me).
