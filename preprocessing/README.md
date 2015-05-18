@@ -36,6 +36,11 @@ When you program on your machine and you want to be able to debug/test etc... :
 
 The IDE should get the jar from maven but needs help to find the native library hence the VM parameter.
 
+### Candidate Patch Extraction ###
+Example on how to extract patches from the manuscripts provided that the corresponding pages (tif images) and the json files are located ın cluster:
+
+spark-submit --class main.java.CandidatePatchesMain --master yarn-client --num-executors 25 --jars DeepManuscriptPreprocessing-0.0.1.jar original-DeepManuscriptPreprocessing-0.0.1.jar /projects/deep-learning/segmentation-output-cropped /projects/deep-learning/segmentation-output-json nouvelles/*/* /projects/deep-learning/patch_output/train/32X32/nouvelles
+
 ### OpenCV compilation (DEPRECATED NOW) ###
 
 Because we need image processing tools, OpenCV is a very good choice. However we can not just add the library to the `pom.xml` of Maven (or if someone can find a way... tell me).
