@@ -37,7 +37,7 @@ When you program on your machine and you want to be able to debug/test etc... :
 The IDE should get the jar from maven but needs help to find the native library hence the VM parameter.
 
 ### Candidate Patch Extraction ###
-Example on how to extract patches from the manuscripts provided that the corresponding pages (tif images) and the JSON files are located ın cluster:
+Example on how to extract patches from the manuscripts provided that the corresponding pages (tif images) and the JSON files are located in cluster:
 
 `spark-submit --class main.java.CandidatePatchesMain --master yarn-client --num-executors 100 --jars DeepManuscriptPreprocessing-0.0.1.jar original-DeepManuscriptPreprocessing-0.0.1.jar /projects/deep-learning/segmentation-output-cropped /projects/deep-learning/segmentation-output-json nouvelles/*/* /projects/deep-learning/patch_output/train/32X32/nouvelles`
 
