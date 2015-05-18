@@ -39,7 +39,7 @@ The IDE should get the jar from maven but needs help to find the native library 
 ### Candidate Patch Extraction ###
 Example on how to extract patches from the manuscripts provided that the corresponding pages (tif images) and the json files are located ın cluster:
 
-`spark-submit --class main.java.CandidatePatchesMain --master yarn-client --num-executors 25 --jars DeepManuscriptPreprocessing-0.0.1.jar original-DeepManuscriptPreprocessing-0.0.1.jar /projects/deep-learning/segmentation-output-cropped /projects/deep-learning/segmentation-output-json nouvelles/*/* /projects/deep-learning/patch_output/train/32X32/nouvelles`
+`spark-submit --class main.java.CandidatePatchesMain --master yarn-client --num-executors 100 --jars DeepManuscriptPreprocessing-0.0.1.jar original-DeepManuscriptPreprocessing-0.0.1.jar /projects/deep-learning/segmentation-output-cropped /projects/deep-learning/segmentation-output-json nouvelles/*/* /projects/deep-learning/patch_output/train/32X32/nouvelles`
 
 The first input argument is the path to the parent folder where manuscript pages are located (`/projects/deep-learning/segmentation-output-cropped`), the second argument is the path to the parent folder where json files are located (`/projects/deep-learning/segmentation-output-json`), the third argument is the directory regex for both the manuscript pages and the json files (`nouvelles/*/*`) and the last argument is the path to the output folder where the extracted patches will be located (`/projects/deep-learning/patch_output/train/32X32/nouvelles`).
 
