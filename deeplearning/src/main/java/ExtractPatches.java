@@ -53,6 +53,7 @@ public class ExtractPatches implements FlatMapFunction<Tuple2<Vector, Vector>	, 
 		
 		// main loop for patch extraction
 		// TODO use a step size for the patch extraction process, NOT all overlapping patches!!!
+		int totalNum = 0;
 		int countDim = 0;
 		for (int j = 0; j < sizeSmall[1]; j++) {
 			for (int i = 0; i < sizeSmall[0]; i++) {	
@@ -66,11 +67,18 @@ public class ExtractPatches implements FlatMapFunction<Tuple2<Vector, Vector>	, 
 						countDim++;
 					}
 				}
+				totalNum++;
 				countDim = 0;
 				
 				// add the current extracted patch to the list together with its meta-data
-				// the meta-data gets replicated
-				patchList.add(new Tuple2<Vector, Vector>(meta, Vectors.dense(out)));
+				// the meta-data gets replicated plus a new element which denotes the number of 
+				// current extracted patch
+				double[] metaAppend = new double[meta.size()+1];
+				for (int m = 0; m < metaAppend.length-1; m++) {
+					metaAppend[m] = meta.apply(m);
+				}
+				metaAppend[metaAppend.length-1] = totalNum;
+				patchList.add(new Tuple2<Vector, Vector>(Vectors.dense(metaAppend), Vectors.dense(out)));
 			}
 		}
 		

@@ -109,12 +109,12 @@ public class BaseLayer implements DeepLearningLayer {
 	}
 
     
-    public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data,String[] featFile) throws Exception {
+    public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data, String[] featFile) throws Exception {
     	int numPartitions = 400*4; //Num-workers * cores_per_worker * succesive tasks
 
     	// Setup the preprocessor
-    	if (layer_index<1){
-    	this.preprocess.loadFromFile(featFile, spark_context); //this needs to be changed
+    	if (layer_index < 1) {
+    		this.preprocess.loadFromFile(featFile, spark_context); //this needs to be changed
     	}
 //    	JavaRDD<Vector> preprocessed = preProcess(data);
     	
@@ -128,7 +128,7 @@ public class BaseLayer implements DeepLearningLayer {
     	
     	JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(data, configLayer, features);
     	JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent).repartition(numPartitions).persist(StorageLevel.MEMORY_AND_DISK_SER());
-    	pooled.saveAsObjectFile(pathPrefix+"_"+layer_index+"_"+System.currentTimeMillis());
+    	pooled.saveAsObjectFile(pathPrefix + "_" + layer_index + "_" + System.currentTimeMillis());
     	return pooled;
     }
    

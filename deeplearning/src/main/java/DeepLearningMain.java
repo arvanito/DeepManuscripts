@@ -209,7 +209,7 @@ public class DeepLearningMain {
 		sc.close();
 	}
 	
-public static void test1(List<ConfigBaseLayer> globalConfig,String[] featFile, String inputFile, String outputFile, String testId) throws Exception {
+public static void test1(List<ConfigBaseLayer> globalConfig, String[] featFile, String inputFile, String outputFile, String testId) throws Exception {
 		
 		// open the test file and convert it to a JavaRDD<Vector> dataset
 		int numPartitions = 400*4; //Num-workers * cores_per_worker * succesive tasks
@@ -223,6 +223,7 @@ public static void test1(List<ConfigBaseLayer> globalConfig,String[] featFile, S
 	 		// set up the current layer 
 			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, testId);
 			layer.setSparkContext(sc);
+			
 			// The configLayer has configExtractor only if it convolutional,
 			// The multiply Extractor does not need any parameters.
 			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
@@ -237,7 +238,7 @@ public static void test1(List<ConfigBaseLayer> globalConfig,String[] featFile, S
 		sc.close();
 	}
 
-public static void rank(List<ConfigBaseLayer> globalConfig,String[] featFile, String inputFile, String imagesFile, String testId) throws Exception {
+public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, String inputFile, String imagesFile, String testId) throws Exception {
 	
 	// open the test file and convert it to a JavaRDD<Vector> dataset
 	int numPartitions = 400*4; //Num-workers * cores_per_worker * succesive tasks
@@ -352,6 +353,8 @@ public static void rank(List<ConfigBaseLayer> globalConfig,String[] featFile, St
 //    	JavaSparkContext sc = new JavaSparkContext(conf);
 //    	
 //		// load query 
+//    	// TODO make it work for multiple queries at the same time, do a loop over the queries
+//    	// The same procedure of the test patches should apply to the queries
 //		JavaRDD<Tuple2<Vector, Vector>> query = sc.textFile(inputFileQuery).map(new ParseTuples());
 //		Tuple2<Vector, Vector> queryTuple = query.collect().get(0);
 //		//JavaRDD<Tuple2<Vector, Vector>> query = sc.objectFile(inputFileQuery);
@@ -364,6 +367,7 @@ public static void rank(List<ConfigBaseLayer> globalConfig,String[] featFile, St
 //		int[] inputDims = {globalConfig.get(0).getConfigFeatureExtractor().getInputDim1(), globalConfig.get(0).getConfigFeatureExtractor().getInputDim2()};
 //		
 //		// extract (overlapping?) patches from the input query and candidate patches
+//		// TODO Check this!
 //		Vector vecSize = queryTuple._1;
 //		int[] vecSizeInt = new int[vecSize.size()];
 //		for (int i = 0; i < vecSize.size(); i++) {
@@ -376,8 +380,13 @@ public static void rank(List<ConfigBaseLayer> globalConfig,String[] featFile, St
 //		JavaRDD<Tuple2<Vector, Vector>> queryReps = testRDD(globalConfig, queryPatches);
 //		JavaRDD<Tuple2<Vector, Vector>> testReps = testRDD(globalConfig, testPatches);
 //		
+//		// sort by key the query and test patches representations
+//		Comparator<Vector> compareVectors = new CompareVectors();
+//		JavaPairRDD<Vector, Vector> queryPairs = JavaPairRDD.fromJavaRDD(queryReps).sortByKey(compareVectors);
+//		JavaPairRDD<Vector, Vector> testPairs = JavaPairRDD.fromJavaRDD(testReps).sortByKey(compareVectors);
+//		
 //		// concatenate patch representations to represent the original query
-//		List<Tuple2<Vector, Vector>> queryRepList = queryReps.collect();
+//		List<Tuple2<Vector, Vector>> queryRepList = queryPairs.collect();
 //		int queryRepLength = queryRepList.size();			// size of the list
 //		int vecLength = queryRepList.get(0)._2.size();		// size of the patch representations in the list
 //		double[] queryData = new double[queryRepLength*vecLength];
@@ -390,8 +399,8 @@ public static void rank(List<ConfigBaseLayer> globalConfig,String[] featFile, St
 //		Tuple2<Vector, Vector> queryRep = new Tuple2<Vector, Vector>(queryTuple._1, Vectors.dense(queryData));
 //		
 //		// concatenate patch representations from the RDD
-//		JavaPairRDD<Vector, Vector> testRepsPair = JavaPairRDD.fromJavaRDD(testReps);
-//		testRepsPair = testRepsPair.reduceByKey(
+//		// TODO Correct this !!!!!!!!
+//		testPairs = testPairs.reduceByKey(
 //				new Function2<Vector, Vector, Vector>() {
 //					private static final long serialVersionUID = 5851620097719920872L;
 //
@@ -406,7 +415,7 @@ public static void rank(List<ConfigBaseLayer> globalConfig,String[] featFile, St
 //					}
 //				}
 //			);
-//		testReps = testRepsPair.rdd().toJavaRDD();	// convert back to JavaRDD<Tuple2<Vector, Vector>>
+//		testReps = testPairs.rdd().toJavaRDD();	// convert back to JavaRDD<Tuple2<Vector, Vector>>
 //		
 //		// compute cosine similarities between the query representation and the candidate patches' representations
 //		JavaRDD<Tuple2<Vector, Double>> cosineSim = testReps.map(new ComputeSimilarityPair(queryRep));
@@ -442,13 +451,14 @@ public static void rank(List<ConfigBaseLayer> globalConfig,String[] featFile, St
 //		}
 //		
 //		// sort the List<Vector> of metaData according to the indices
-//		//TODO
 //		for (int i = 0; i < simListSize; i++) {
 //			System.out.println(simMeta.get(idx[i]));
 //		}
 //		/**************** finished ranking **********************/
+//		
+//		sc.close();
 //	}
-//	
+	
 	
 	/**
 	 * Main method. Starting place for the execution.
