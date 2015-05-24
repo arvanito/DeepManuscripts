@@ -127,7 +127,7 @@ public class BaseLayer implements DeepLearningLayer {
     	System.out.println(features[0].size());
     	
     	JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(data, configLayer, features);
-    	JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent).repartition(numPartitions).persist(StorageLevel.MEMORY_AND_DISK_SER());
+    	JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent).repartition(numPartitions).cache();
     	pooled.saveAsObjectFile(pathPrefix + "_" + layer_index + "_" + System.currentTimeMillis());
     	return pooled;
     }

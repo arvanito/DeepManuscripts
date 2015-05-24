@@ -205,6 +205,7 @@ public class DeepLearningMain {
 	 	}
 	 	
 	 	//TODO save the result to a file 
+	 	result.saveAsObjectFile(testId+"_img_pairs");
 	 	
 		sc.close();
 	}
