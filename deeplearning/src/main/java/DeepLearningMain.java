@@ -105,7 +105,7 @@ public class DeepLearningMain {
 				}
 				return false;
 			}
-		}).repartition(numPartitions).persist(StorageLevel.MEMORY_AND_DISK_SER());//.repartition(numPartitions);
+		}).repartition(numPartitions).cache();//.repartition(numPartitions);
 ;
 		JavaRDD<Vector> inputWordPatches = sc.textFile(inputFileLargePatches).map(new Parse()).filter(new Function<Vector, Boolean>() {
 			
@@ -121,27 +121,15 @@ public class DeepLearningMain {
 
 		//testMe(inputSmallPatches);
 		
-
-//		DeepLearningLayer layer0 = BaseLayerFactory.createBaseLayer(globalConfig.get(0), 0, testId+"_x_");
-//		layer0.setSparkContext(sc);
-//		JavaRDD<Vector> result0 = layer0.train(inputSmallPatches, inputWordPatches);
-//		
-//		JavaRDD<Vector> result1 = result0.repartition(numPartitions);
-//		JavaRDD<Vector> result2 = result0.repartition(numPartitions);
-//		
-//		result0.saveAsTextFile(outputFile);
-//		DeepLearningLayer layer1 = BaseLayerFactory.createBaseLayer(globalConfig.get(1), 1 , testId+"_x_");
-//		layer1.setSparkContext(sc);
-//		
-//		JavaRDD<Vector> result = layer1.train(result1, result2);
-//		
-//		result.saveAsTextFile(outputFile);
 		
 //		// The main loop calls train() on each of the layers
 		JavaRDD<Vector> result = null;
+		boolean notLast = true;
 		//JavaRDD<Vector> intermediateResult = null;
 	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); layerIndex++) {
-	 		boolean notLast = (layerIndex == globalConfig.size()-1) ? true : false;
+	 		if (layerIndex == 1) {
+	 			notLast = false;
+	 		}
 	 		// set up the current layer 
 			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, testId+"_x_");
 			layer.setSparkContext(sc);

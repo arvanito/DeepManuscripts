@@ -523,6 +523,16 @@ public final class DeepModelSettings {
      * <code>required int32 number_of_iterations = 2;</code>
      */
     int getNumberOfIterations();
+
+    // required int32 type = 3;
+    /**
+     * <code>required int32 type = 3;</code>
+     */
+    boolean hasType();
+    /**
+     * <code>required int32 type = 3;</code>
+     */
+    int getType();
   }
   /**
    * Protobuf type {@code main.java.ConfigKMeans}
@@ -583,6 +593,11 @@ public final class DeepModelSettings {
             case 16: {
               bitField0_ |= 0x00000002;
               numberOfIterations_ = input.readInt32();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              type_ = input.readInt32();
               break;
             }
           }
@@ -657,9 +672,26 @@ public final class DeepModelSettings {
       return numberOfIterations_;
     }
 
+    // required int32 type = 3;
+    public static final int TYPE_FIELD_NUMBER = 3;
+    private int type_;
+    /**
+     * <code>required int32 type = 3;</code>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required int32 type = 3;</code>
+     */
+    public int getType() {
+      return type_;
+    }
+
     private void initFields() {
       numberOfClusters_ = 0;
       numberOfIterations_ = 0;
+      type_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -671,6 +703,10 @@ public final class DeepModelSettings {
         return false;
       }
       if (!hasNumberOfIterations()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasType()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -686,6 +722,9 @@ public final class DeepModelSettings {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeInt32(2, numberOfIterations_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, type_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -703,6 +742,10 @@ public final class DeepModelSettings {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(2, numberOfIterations_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, type_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -824,6 +867,8 @@ public final class DeepModelSettings {
         bitField0_ = (bitField0_ & ~0x00000001);
         numberOfIterations_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
+        type_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -860,6 +905,10 @@ public final class DeepModelSettings {
           to_bitField0_ |= 0x00000002;
         }
         result.numberOfIterations_ = numberOfIterations_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.type_ = type_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -882,6 +931,9 @@ public final class DeepModelSettings {
         if (other.hasNumberOfIterations()) {
           setNumberOfIterations(other.getNumberOfIterations());
         }
+        if (other.hasType()) {
+          setType(other.getType());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -892,6 +944,10 @@ public final class DeepModelSettings {
           return false;
         }
         if (!hasNumberOfIterations()) {
+          
+          return false;
+        }
+        if (!hasType()) {
           
           return false;
         }
@@ -979,6 +1035,39 @@ public final class DeepModelSettings {
       public Builder clearNumberOfIterations() {
         bitField0_ = (bitField0_ & ~0x00000002);
         numberOfIterations_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // required int32 type = 3;
+      private int type_ ;
+      /**
+       * <code>required int32 type = 3;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required int32 type = 3;</code>
+       */
+      public int getType() {
+        return type_;
+      }
+      /**
+       * <code>required int32 type = 3;</code>
+       */
+      public Builder setType(int value) {
+        bitField0_ |= 0x00000004;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 type = 3;</code>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        type_ = 0;
         onChanged();
         return this;
       }
@@ -6184,36 +6273,36 @@ public final class DeepModelSettings {
     java.lang.String[] descriptorData = {
       "\n\031deep_model_settings.proto\022\tmain.java\"0" +
       "\n\020ConfigPreprocess\022\r\n\005eps_1\030\001 \002(\001\022\r\n\005eps" +
-      "_2\030\002 \002(\001\"H\n\014ConfigKMeans\022\032\n\022number_of_cl" +
+      "_2\030\002 \002(\001\"V\n\014ConfigKMeans\022\032\n\022number_of_cl" +
       "usters\030\001 \002(\005\022\034\n\024number_of_iterations\030\002 \002" +
-      "(\005\"\300\002\n\022ConfigAutoencoders\022\027\n\017number_of_u" +
-      "nits\030\001 \002(\005\022\013\n\003rho\030\002 \001(\001\022\016\n\006lambda\030\003 \001(\001\022" +
-      "\014\n\004beta\030\004 \001(\001\022\021\n\tnumEpochs\030\005 \001(\005\022\022\n\nnumB" +
-      "atches\030\006 \001(\005\022\022\n\nalpha_init\030\007 \001(\001\022\022\n\nalph" +
-      "a_step\030\010 \001(\001\022\027\n\017alpha_max_steps\030\t \001(\005\022\032\n" +
-      "\022lineSearchStrategy\030\n \001(\005\022\r\n\005alpha\030\013 \001(\001",
-      "\022\020\n\010momentum\030\014 \001(\001\022\024\n\014initMomentum\030\r \001(\001" +
-      "\022\030\n\020increaseMomentum\030\016 \001(\001\022\021\n\tnum_input\030" +
-      "\017 \001(\005\"\376\001\n\026ConfigFeatureExtractor\022\022\n\ninpu" +
-      "t_dim1\030\001 \002(\005\022\022\n\ninput_dim2\030\002 \002(\005\022\024\n\014feat" +
-      "ure_dim1\030\003 \002(\005\022\024\n\014feature_dim2\030\004 \002(\005\022K\n\r" +
-      "non_linearity\030\005 \001(\0162..main.java.ConfigFe" +
-      "atureExtractor.NonLinearity:\004NONE\022\026\n\016sof" +
-      "t_threshold\030\006 \001(\001\"+\n\014NonLinearity\022\010\n\004NON" +
-      "E\020\000\022\007\n\003ABS\020\001\022\010\n\004SOFT\020\002\"}\n\014ConfigPooler\022\021" +
-      "\n\tpool_size\030\001 \002(\005\0228\n\tpool_type\030\002 \001(\0162 .m",
-      "ain.java.ConfigPooler.PoolType:\003MAX\" \n\010P" +
-      "oolType\022\007\n\003MAX\020\000\022\013\n\007AVERAGE\020\001\"\252\002\n\017Config" +
-      "BaseLayer\0226\n\021config_preprocess\030\001 \001(\0132\033.m" +
-      "ain.java.ConfigPreprocess\022.\n\rconfig_kmea" +
-      "ns\030\002 \001(\0132\027.main.java.ConfigKMeans\022:\n\023con" +
-      "fig_autoencoders\030\003 \001(\0132\035.main.java.Confi" +
-      "gAutoencoders\022C\n\030config_feature_extracto" +
-      "r\030\004 \001(\0132!.main.java.ConfigFeatureExtract" +
-      "or\022.\n\rconfig_pooler\030\005 \002(\0132\027.main.java.Co" +
-      "nfigPooler\"E\n\021ConfigManuscripts\0220\n\014confi",
-      "g_layer\030\001 \003(\0132\032.main.java.ConfigBaseLaye" +
-      "r"
+      "(\005\022\014\n\004type\030\003 \002(\005\"\300\002\n\022ConfigAutoencoders\022" +
+      "\027\n\017number_of_units\030\001 \002(\005\022\013\n\003rho\030\002 \001(\001\022\016\n" +
+      "\006lambda\030\003 \001(\001\022\014\n\004beta\030\004 \001(\001\022\021\n\tnumEpochs" +
+      "\030\005 \001(\005\022\022\n\nnumBatches\030\006 \001(\005\022\022\n\nalpha_init" +
+      "\030\007 \001(\001\022\022\n\nalpha_step\030\010 \001(\001\022\027\n\017alpha_max_" +
+      "steps\030\t \001(\005\022\032\n\022lineSearchStrategy\030\n \001(\005\022",
+      "\r\n\005alpha\030\013 \001(\001\022\020\n\010momentum\030\014 \001(\001\022\024\n\014init" +
+      "Momentum\030\r \001(\001\022\030\n\020increaseMomentum\030\016 \001(\001" +
+      "\022\021\n\tnum_input\030\017 \001(\005\"\376\001\n\026ConfigFeatureExt" +
+      "ractor\022\022\n\ninput_dim1\030\001 \002(\005\022\022\n\ninput_dim2" +
+      "\030\002 \002(\005\022\024\n\014feature_dim1\030\003 \002(\005\022\024\n\014feature_" +
+      "dim2\030\004 \002(\005\022K\n\rnon_linearity\030\005 \001(\0162..main" +
+      ".java.ConfigFeatureExtractor.NonLinearit" +
+      "y:\004NONE\022\026\n\016soft_threshold\030\006 \001(\001\"+\n\014NonLi" +
+      "nearity\022\010\n\004NONE\020\000\022\007\n\003ABS\020\001\022\010\n\004SOFT\020\002\"}\n\014" +
+      "ConfigPooler\022\021\n\tpool_size\030\001 \002(\005\0228\n\tpool_",
+      "type\030\002 \001(\0162 .main.java.ConfigPooler.Pool" +
+      "Type:\003MAX\" \n\010PoolType\022\007\n\003MAX\020\000\022\013\n\007AVERAG" +
+      "E\020\001\"\252\002\n\017ConfigBaseLayer\0226\n\021config_prepro" +
+      "cess\030\001 \001(\0132\033.main.java.ConfigPreprocess\022" +
+      ".\n\rconfig_kmeans\030\002 \001(\0132\027.main.java.Confi" +
+      "gKMeans\022:\n\023config_autoencoders\030\003 \001(\0132\035.m" +
+      "ain.java.ConfigAutoencoders\022C\n\030config_fe" +
+      "ature_extractor\030\004 \001(\0132!.main.java.Config" +
+      "FeatureExtractor\022.\n\rconfig_pooler\030\005 \002(\0132" +
+      "\027.main.java.ConfigPooler\"E\n\021ConfigManusc",
+      "ripts\0220\n\014config_layer\030\001 \003(\0132\032.main.java." +
+      "ConfigBaseLayer"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -6231,7 +6320,7 @@ public final class DeepModelSettings {
           internal_static_main_java_ConfigKMeans_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_java_ConfigKMeans_descriptor,
-              new java.lang.String[] { "NumberOfClusters", "NumberOfIterations", });
+              new java.lang.String[] { "NumberOfClusters", "NumberOfIterations", "Type", });
           internal_static_main_java_ConfigAutoencoders_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_main_java_ConfigAutoencoders_fieldAccessorTable = new

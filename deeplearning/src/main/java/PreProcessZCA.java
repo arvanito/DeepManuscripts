@@ -226,7 +226,9 @@ public class PreProcessZCA implements PreProcessor {
 		// their loading/saving should not be a bottleneck
 		mean = (DenseVector) LinAlgebraIOUtils.loadVectorFromObject(filename+"_mean", sc);
 		ZCA = (DenseMatrix) LinAlgebraIOUtils.loadMatrixFromObject(filename + "_zca", sc);
-
+		//this part was used for training of second layer from first layer
+//		mean = (DenseVector) LinAlgebraIOUtils.loadVectorFromObject("testDeep26000filters_x_0_preprocess1431876315796_mean", sc);
+//		ZCA = (DenseMatrix) LinAlgebraIOUtils.loadMatrixFromObject("testDeep26000filters_x_0_preprocess1431876315796_zca", sc);
 	}
 	
 	/**

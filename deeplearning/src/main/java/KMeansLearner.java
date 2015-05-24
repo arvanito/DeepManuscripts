@@ -20,16 +20,22 @@ public class KMeansLearner implements Learner {
 
 	final int numClusters;
 	final int numIterations;
+	final String initType;
 	
 	public KMeansLearner(ConfigBaseLayer configLayer) {
 		ConfigKMeans conf = configLayer.getConfigKmeans();
 		numClusters = conf.getNumberOfClusters();
 		numIterations = conf.getNumberOfIterations();
+		if (conf.getType()==1){
+			initType = KMeans.RANDOM();
+		}else{
+			initType = KMeans.K_MEANS_PARALLEL();
+		}
 	}
 	
 	@Override
 	public Vector[] call(JavaRDD<Vector> data) throws Exception {
-	    KMeansModel clusters = KMeans.train(data.rdd(), numClusters, numIterations, 5, KMeans.K_MEANS_PARALLEL());
+	    KMeansModel clusters = KMeans.train(data.rdd(), numClusters, numIterations, 5, initType);
 		return clusters.clusterCenters();
 	}
 
