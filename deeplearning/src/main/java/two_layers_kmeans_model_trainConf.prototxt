@@ -1,13 +1,14 @@
 config_layer {
 
   config_preprocess {
-  	eps_1 : 10
+  	eps_1 : 10 
   	eps_2 : 0.1
   }
 
   config_kmeans {
     number_of_clusters: 3000
     number_of_iterations: 300
+    type: 2
   }
 
   config_feature_extractor {
@@ -27,6 +28,7 @@ config_layer {
   config_kmeans {
     number_of_clusters: 20000
     number_of_iterations: 500
+    type: 1
   }
 
   config_pooler {
