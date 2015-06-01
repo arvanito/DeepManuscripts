@@ -285,7 +285,11 @@ public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, S
  	
  	Iterator<Tuple2<Vector, Vector>> testPatchesList = testPatches.collect().iterator();
  	
- 	while(testPatchesList.hasNext()){
+ 	String path = "/projects/deep-learning/test-output/";
+ 	int testPatch = 0;
+ 	while(testPatchesList.hasNext()) {
+ 		testPatch++;
+ 		
  		Tuple2<Vector,Vector> querryPair = testPatchesList.next();
  		ComputeSimilarityPair compSim = new ComputeSimilarityPair(querryPair);
  		List<Tuple2<Vector, Double>> sim = imagePatches.map(compSim).map(new Function<Tuple2<Vector,Double>, Tuple2<Vector,Double>>() {
@@ -305,6 +309,7 @@ public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, S
 		});
  		
  		//decide how to save
+ 		sc.parallelize(sim).saveAsTextFile(path + "test-patch-" + testPatch);
  	}
  	
 	sc.close();
@@ -474,7 +479,7 @@ public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, S
 		
 		// check if settings file .prototxt is provided, maybe do this better!
 		List<ConfigBaseLayer> globalConfig = null;
-		if (args.length == 4) {
+		if (args.length == 9) {
 		    globalConfig = loadSettings(args[0]);
 		} else {
 			System.out.print("Usage: spark-submit --class main.java.DeepLearningMain --master local[1] target/DeepManuscriptLearning-0.0.1.jar  <config.prototxt> <mean.txt> <zca.txt> <layer_1> <layer_2> <in> <test_id> <what> <test_images>");
