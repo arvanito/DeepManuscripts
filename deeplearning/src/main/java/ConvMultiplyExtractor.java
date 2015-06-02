@@ -22,7 +22,7 @@ public class ConvMultiplyExtractor implements Extractor {
 
 	private static final long serialVersionUID = 7991635895652585866L;
 
-	private ConfigBaseLayer configLayer = null;		// layer configuration from the protocol buffer
+	//private ConfigBaseLayer configLayer = null;		// layer configuration from the protocol buffer
 	private DenseMatrix zca;
 	private DenseVector mean;
 	private Vector[] features;				// array of learned feature Vectors
@@ -76,7 +76,7 @@ public class ConvMultiplyExtractor implements Extractor {
 	 * 
 	 * @param configLayer The ConfigBaseLayer object
 	 */
-	@Override
+	//@Override
 	public void setConfigLayer(ConfigBaseLayer configLayer) {
 		this.configLayer = configLayer;
 	}

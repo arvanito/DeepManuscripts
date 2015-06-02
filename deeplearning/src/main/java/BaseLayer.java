@@ -66,8 +66,8 @@ public class BaseLayer implements DeepLearningLayer {
 
 	
 	@Override
-	public JavaRDD<Tuple2<Vector, Vector>> extractFeatures(JavaRDD<Tuple2<Vector, Vector>> data, ConfigBaseLayer configLayer, Vector[] features) {
-		extract.setConfigLayer(configLayer);
+	public JavaRDD<Tuple2<Vector, Vector>> extractFeatures(JavaRDD<Tuple2<Vector, Vector>> data, Vector[] features) {
+		//extract.setConfigLayer(configLayer);
 		
 		// check this!!
 		if(preprocess != null) {
@@ -103,7 +103,7 @@ public class BaseLayer implements DeepLearningLayer {
 		if (save_model == true)
 			LinAlgebraIOUtils.saveVectorArrayToObject(features, pathPrefix + "_features", spark_context);
 		
-		JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(input_word_patches, configLayer, features);
+		JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(input_word_patches, features);
 		JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent);
 		return pooled;
 	}
@@ -126,7 +126,7 @@ public class BaseLayer implements DeepLearningLayer {
     	System.out.println(features.length);
     	System.out.println(features[0].size());
     	
-    	JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(data, configLayer, features);
+    	JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(data, features);
     	JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent).repartition(numPartitions).cache();
     	pooled.saveAsObjectFile(pathPrefix + "_" + layer_index + "_" + System.currentTimeMillis());
     	return pooled;
