@@ -22,7 +22,7 @@ public interface Extractor extends Function<Tuple2<Vector, Vector>, Tuple2<Vecto
 	 * 
 	 * @param configLayer The configuration for the BaseLayer
 	 */
-	public void setConfigLayer(ConfigBaseLayer configLayer);
+	//public void setConfigLayer(ConfigBaseLayer configLayer);
 	
 	
 	/**

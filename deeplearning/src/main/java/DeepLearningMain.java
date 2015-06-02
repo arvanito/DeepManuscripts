@@ -3,6 +3,7 @@ package main.java;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -32,8 +33,12 @@ import main.java.DeepModelSettings.*;
  * Main class.
  * 
  */
-public class DeepLearningMain {
+public class DeepLearningMain implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1047810200264089489L;
 	private static JavaSparkContext sc;
 
 
@@ -255,8 +260,21 @@ public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, S
 		}
 	}).repartition(numPartitions);
 	
+	JavaRDD<Tuple2<Vector, Vector>> imagePatches = sc.textFile(imagesFile).map(new ParseTuples2()).filter(new Function<Tuple2<Vector,Vector>, Boolean>() {
+		
+		@Override
+		public Boolean call(Tuple2<Vector,Vector> arg0) throws Exception {
+			if (arg0._2.size() == 4096){
+				return true;
+			}
+			return false;
+		}
+	}).repartition(numPartitions);
+	
 	// The main loop calls test() on each of the layers
-	JavaRDD<Tuple2<Vector, Vector>> result = null;
+	JavaRDD<Tuple2<Vector, Vector>> resultTest = null;
+	JavaRDD<Tuple2<Vector, Vector>> resultImage = null;
+	
  	for (int layerIndex = 0; layerIndex < globalConfig.size(); layerIndex++) {
  		
  		// set up the current layer 
@@ -265,25 +283,17 @@ public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, S
 		// The configLayer has configExtractor only if it convolutional,
 		// The multiply Extractor does not need any parameters.
 		if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
-			result = layer.test(testPatches,featFile);
+			resultTest = layer.test(testPatches, featFile);
+			resultImage = layer.test(imagePatches, featFile);
 		} else {
-			result = layer.test(result,featFile);
+			resultTest = layer.test(resultTest, featFile);
+			resultImage = layer.test(resultImage, featFile);
 		}	
  	}
+ 	resultTest.saveAsTextFile("/projects/deep-learning/resultTest");
+ 	resultImage.saveAsTextFile("/projects/deep-learning/resultImage");
  	
- 	//TODO save the result to a file 
- 	
- 	JavaRDD<Object> imagePatchesObject = sc.objectFile(imagesFile).repartition(numPartitions);
- 	JavaRDD<Tuple2<Vector,Vector>> imagePatches = imagePatchesObject.map(new Function<Object, Tuple2<Vector,Vector>>() {
-
-		@Override
-		public Tuple2<Vector, Vector> call(Object arg0) throws Exception {
-			// TODO Auto-generated method stub
-			return (Tuple2<Vector, Vector>) arg0 ;
-		}
-	}); //hope it works
- 	
- 	Iterator<Tuple2<Vector, Vector>> testPatchesList = testPatches.collect().iterator();
+ 	Iterator<Tuple2<Vector, Vector>> testPatchesList = resultTest.collect().iterator();
  	
  	String path = "/projects/deep-learning/test-output/";
  	int testPatch = 0;
@@ -292,7 +302,11 @@ public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, S
  		
  		Tuple2<Vector,Vector> querryPair = testPatchesList.next();
  		ComputeSimilarityPair compSim = new ComputeSimilarityPair(querryPair);
- 		List<Tuple2<Vector, Double>> sim = imagePatches.map(compSim).map(new Function<Tuple2<Vector,Double>, Tuple2<Vector,Double>>() {
+ 		List<Tuple2<Vector, Double>> sim = resultImage.map(compSim).map(new Function<Tuple2<Vector,Double>, Tuple2<Vector,Double>>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -566603841854522173L;
 
 			@Override
 			public Tuple2<Vector, Double> call(Tuple2<Vector, Double> arg0)
@@ -300,13 +314,7 @@ public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, S
 				// TODO Auto-generated method stub
 				return new Tuple2<Vector,Double> (arg0._1,-arg0._2);
 			}
-		}).takeOrdered(10, new Comparator<Tuple2<Vector,Double>>() {
-			
-			@Override
-			public int compare(Tuple2<Vector, Double> o1, Tuple2<Vector, Double> o2) {
-				return o1._2 < o2._2 ? -1 : o1._2 == o2._2 ? 0 : 1;
-			}
-		});
+		}).takeOrdered(300, new VectorComparator());
  		
  		//decide how to save
  		sc.parallelize(sim).saveAsTextFile(path + "test-patch-" + testPatch);

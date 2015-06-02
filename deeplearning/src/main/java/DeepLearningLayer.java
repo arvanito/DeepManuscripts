@@ -46,7 +46,7 @@ public interface DeepLearningLayer {
 	 * @param features An RDD of Vectors, where each Vector is a feature
 	 * @return An RDD of extracted features, where each Vector corresponds to one Vector in data
 	 */
-	public JavaRDD<Tuple2<Vector, Vector>> extractFeatures(JavaRDD<Tuple2<Vector, Vector>> data, ConfigBaseLayer configLayer, Vector[] features);
+	public JavaRDD<Tuple2<Vector, Vector>> extractFeatures(JavaRDD<Tuple2<Vector, Vector>> data, Vector[] features);
 	
 	
 	/**

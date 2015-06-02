@@ -23,10 +23,6 @@ public class DummyExtractor implements Extractor {
 	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> data) throws Exception {
 		return data;
 	}
-
-	@Override
-	public void setConfigLayer(ConfigBaseLayer configLayer) {
-	}
 	
 	@Override
 	public void setFeatures(Vector[] features) {
