@@ -60,6 +60,7 @@ public class ConvMultiplyExtractor implements Extractor {
 		return configLayer;
 	}
 	
+	
 	/**
 	 * Getter method for the learned features.
 	 * 
@@ -75,7 +76,7 @@ public class ConvMultiplyExtractor implements Extractor {
 	 * 
 	 * @param configLayer The ConfigBaseLayer object
 	 */
-	//@Override
+	@Override
 	public void setConfigLayer(ConfigBaseLayer configLayer) {
 		this.configLayer = configLayer;
 	}

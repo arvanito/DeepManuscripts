@@ -18,8 +18,8 @@ public class ParseTuples implements Function<String, Tuple2<Vector, Vector>> {
 	@Override
 	public Tuple2<Vector, Vector> call(String line) throws Exception {
 		
-		// remove the parentheses from the start and the end of the string
-		line = line.substring(1, line.length()-1);
+		// remove the parentheses from the start and the end of the string, CHECK THIS!!!
+		line = line.substring(1, line.length());
 		
 		// find the first part of the tuple
 		// it should be contained in the first square brackets

@@ -8,10 +8,10 @@ public final class DeepModelSettings {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface ConfigPreprocessOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface ConfigPreprocessOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:main.java.ConfigPreprocess)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required double eps_1 = 1;
     /**
      * <code>required double eps_1 = 1;</code>
      */
@@ -21,7 +21,6 @@ public final class DeepModelSettings {
      */
     double getEps1();
 
-    // required double eps_2 = 2;
     /**
      * <code>required double eps_2 = 2;</code>
      */
@@ -35,8 +34,9 @@ public final class DeepModelSettings {
    * Protobuf type {@code main.java.ConfigPreprocess}
    */
   public static final class ConfigPreprocess extends
-      com.google.protobuf.GeneratedMessage
-      implements ConfigPreprocessOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:main.java.ConfigPreprocess)
+      ConfigPreprocessOrBuilder {
     // Use ConfigPreprocess.newBuilder() to construct.
     private ConfigPreprocess(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -132,7 +132,6 @@ public final class DeepModelSettings {
     }
 
     private int bitField0_;
-    // required double eps_1 = 1;
     public static final int EPS_1_FIELD_NUMBER = 1;
     private double eps1_;
     /**
@@ -148,7 +147,6 @@ public final class DeepModelSettings {
       return eps1_;
     }
 
-    // required double eps_2 = 2;
     public static final int EPS_2_FIELD_NUMBER = 2;
     private double eps2_;
     /**
@@ -171,7 +169,8 @@ public final class DeepModelSettings {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasEps1()) {
         memoizedIsInitialized = 0;
@@ -293,8 +292,9 @@ public final class DeepModelSettings {
      * Protobuf type {@code main.java.ConfigPreprocess}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements main.java.DeepModelSettings.ConfigPreprocessOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:main.java.ConfigPreprocess)
+        main.java.DeepModelSettings.ConfigPreprocessOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return main.java.DeepModelSettings.internal_static_main_java_ConfigPreprocess_descriptor;
@@ -424,7 +424,6 @@ public final class DeepModelSettings {
       }
       private int bitField0_;
 
-      // required double eps_1 = 1;
       private double eps1_ ;
       /**
        * <code>required double eps_1 = 1;</code>
@@ -457,7 +456,6 @@ public final class DeepModelSettings {
         return this;
       }
 
-      // required double eps_2 = 2;
       private double eps2_ ;
       /**
        * <code>required double eps_2 = 2;</code>
@@ -501,10 +499,10 @@ public final class DeepModelSettings {
     // @@protoc_insertion_point(class_scope:main.java.ConfigPreprocess)
   }
 
-  public interface ConfigKMeansOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface ConfigKMeansOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:main.java.ConfigKMeans)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 number_of_clusters = 1;
     /**
      * <code>required int32 number_of_clusters = 1;</code>
      */
@@ -514,7 +512,6 @@ public final class DeepModelSettings {
      */
     int getNumberOfClusters();
 
-    // required int32 number_of_iterations = 2;
     /**
      * <code>required int32 number_of_iterations = 2;</code>
      */
@@ -523,13 +520,23 @@ public final class DeepModelSettings {
      * <code>required int32 number_of_iterations = 2;</code>
      */
     int getNumberOfIterations();
+
+    /**
+     * <code>required int32 type = 3;</code>
+     */
+    boolean hasType();
+    /**
+     * <code>required int32 type = 3;</code>
+     */
+    int getType();
   }
   /**
    * Protobuf type {@code main.java.ConfigKMeans}
    */
   public static final class ConfigKMeans extends
-      com.google.protobuf.GeneratedMessage
-      implements ConfigKMeansOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:main.java.ConfigKMeans)
+      ConfigKMeansOrBuilder {
     // Use ConfigKMeans.newBuilder() to construct.
     private ConfigKMeans(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -585,6 +592,11 @@ public final class DeepModelSettings {
               numberOfIterations_ = input.readInt32();
               break;
             }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              type_ = input.readInt32();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -625,7 +637,6 @@ public final class DeepModelSettings {
     }
 
     private int bitField0_;
-    // required int32 number_of_clusters = 1;
     public static final int NUMBER_OF_CLUSTERS_FIELD_NUMBER = 1;
     private int numberOfClusters_;
     /**
@@ -641,7 +652,6 @@ public final class DeepModelSettings {
       return numberOfClusters_;
     }
 
-    // required int32 number_of_iterations = 2;
     public static final int NUMBER_OF_ITERATIONS_FIELD_NUMBER = 2;
     private int numberOfIterations_;
     /**
@@ -657,20 +667,41 @@ public final class DeepModelSettings {
       return numberOfIterations_;
     }
 
+    public static final int TYPE_FIELD_NUMBER = 3;
+    private int type_;
+    /**
+     * <code>required int32 type = 3;</code>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required int32 type = 3;</code>
+     */
+    public int getType() {
+      return type_;
+    }
+
     private void initFields() {
       numberOfClusters_ = 0;
       numberOfIterations_ = 0;
+      type_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasNumberOfClusters()) {
         memoizedIsInitialized = 0;
         return false;
       }
       if (!hasNumberOfIterations()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasType()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -686,6 +717,9 @@ public final class DeepModelSettings {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeInt32(2, numberOfIterations_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, type_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -703,6 +737,10 @@ public final class DeepModelSettings {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(2, numberOfIterations_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, type_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -786,8 +824,9 @@ public final class DeepModelSettings {
      * Protobuf type {@code main.java.ConfigKMeans}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements main.java.DeepModelSettings.ConfigKMeansOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:main.java.ConfigKMeans)
+        main.java.DeepModelSettings.ConfigKMeansOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return main.java.DeepModelSettings.internal_static_main_java_ConfigKMeans_descriptor;
@@ -824,6 +863,8 @@ public final class DeepModelSettings {
         bitField0_ = (bitField0_ & ~0x00000001);
         numberOfIterations_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
+        type_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -860,6 +901,10 @@ public final class DeepModelSettings {
           to_bitField0_ |= 0x00000002;
         }
         result.numberOfIterations_ = numberOfIterations_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.type_ = type_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -882,6 +927,9 @@ public final class DeepModelSettings {
         if (other.hasNumberOfIterations()) {
           setNumberOfIterations(other.getNumberOfIterations());
         }
+        if (other.hasType()) {
+          setType(other.getType());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -892,6 +940,10 @@ public final class DeepModelSettings {
           return false;
         }
         if (!hasNumberOfIterations()) {
+          
+          return false;
+        }
+        if (!hasType()) {
           
           return false;
         }
@@ -917,7 +969,6 @@ public final class DeepModelSettings {
       }
       private int bitField0_;
 
-      // required int32 number_of_clusters = 1;
       private int numberOfClusters_ ;
       /**
        * <code>required int32 number_of_clusters = 1;</code>
@@ -950,7 +1001,6 @@ public final class DeepModelSettings {
         return this;
       }
 
-      // required int32 number_of_iterations = 2;
       private int numberOfIterations_ ;
       /**
        * <code>required int32 number_of_iterations = 2;</code>
@@ -983,6 +1033,38 @@ public final class DeepModelSettings {
         return this;
       }
 
+      private int type_ ;
+      /**
+       * <code>required int32 type = 3;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required int32 type = 3;</code>
+       */
+      public int getType() {
+        return type_;
+      }
+      /**
+       * <code>required int32 type = 3;</code>
+       */
+      public Builder setType(int value) {
+        bitField0_ |= 0x00000004;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 type = 3;</code>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        type_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:main.java.ConfigKMeans)
     }
 
@@ -994,10 +1076,10 @@ public final class DeepModelSettings {
     // @@protoc_insertion_point(class_scope:main.java.ConfigKMeans)
   }
 
-  public interface ConfigAutoencodersOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface ConfigAutoencodersOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:main.java.ConfigAutoencoders)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 number_of_units = 1;
     /**
      * <code>required int32 number_of_units = 1;</code>
      */
@@ -1006,13 +1088,140 @@ public final class DeepModelSettings {
      * <code>required int32 number_of_units = 1;</code>
      */
     int getNumberOfUnits();
+
+    /**
+     * <code>optional double rho = 2;</code>
+     */
+    boolean hasRho();
+    /**
+     * <code>optional double rho = 2;</code>
+     */
+    double getRho();
+
+    /**
+     * <code>optional double lambda = 3;</code>
+     */
+    boolean hasLambda();
+    /**
+     * <code>optional double lambda = 3;</code>
+     */
+    double getLambda();
+
+    /**
+     * <code>optional double beta = 4;</code>
+     */
+    boolean hasBeta();
+    /**
+     * <code>optional double beta = 4;</code>
+     */
+    double getBeta();
+
+    /**
+     * <code>optional int32 numEpochs = 5;</code>
+     */
+    boolean hasNumEpochs();
+    /**
+     * <code>optional int32 numEpochs = 5;</code>
+     */
+    int getNumEpochs();
+
+    /**
+     * <code>optional int32 numBatches = 6;</code>
+     */
+    boolean hasNumBatches();
+    /**
+     * <code>optional int32 numBatches = 6;</code>
+     */
+    int getNumBatches();
+
+    /**
+     * <code>optional double alpha_init = 7;</code>
+     */
+    boolean hasAlphaInit();
+    /**
+     * <code>optional double alpha_init = 7;</code>
+     */
+    double getAlphaInit();
+
+    /**
+     * <code>optional double alpha_step = 8;</code>
+     */
+    boolean hasAlphaStep();
+    /**
+     * <code>optional double alpha_step = 8;</code>
+     */
+    double getAlphaStep();
+
+    /**
+     * <code>optional int32 alpha_max_steps = 9;</code>
+     */
+    boolean hasAlphaMaxSteps();
+    /**
+     * <code>optional int32 alpha_max_steps = 9;</code>
+     */
+    int getAlphaMaxSteps();
+
+    /**
+     * <code>optional int32 lineSearchStrategy = 10;</code>
+     */
+    boolean hasLineSearchStrategy();
+    /**
+     * <code>optional int32 lineSearchStrategy = 10;</code>
+     */
+    int getLineSearchStrategy();
+
+    /**
+     * <code>optional double alpha = 11;</code>
+     */
+    boolean hasAlpha();
+    /**
+     * <code>optional double alpha = 11;</code>
+     */
+    double getAlpha();
+
+    /**
+     * <code>optional double momentum = 12;</code>
+     */
+    boolean hasMomentum();
+    /**
+     * <code>optional double momentum = 12;</code>
+     */
+    double getMomentum();
+
+    /**
+     * <code>optional double initMomentum = 13;</code>
+     */
+    boolean hasInitMomentum();
+    /**
+     * <code>optional double initMomentum = 13;</code>
+     */
+    double getInitMomentum();
+
+    /**
+     * <code>optional double increaseMomentum = 14;</code>
+     */
+    boolean hasIncreaseMomentum();
+    /**
+     * <code>optional double increaseMomentum = 14;</code>
+     */
+    double getIncreaseMomentum();
+
+    /**
+     * <code>optional int32 num_input = 15;</code>
+     */
+    boolean hasNumInput();
+    /**
+     * <code>optional int32 num_input = 15;</code>
+     */
+    int getNumInput();
   }
   /**
    * Protobuf type {@code main.java.ConfigAutoencoders}
    */
   public static final class ConfigAutoencoders extends
-      com.google.protobuf.GeneratedMessage
-      implements ConfigAutoencodersOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:main.java.ConfigAutoencoders)
+      ConfigAutoencodersOrBuilder {
     // Use ConfigAutoencoders.newBuilder() to construct.
     private ConfigAutoencoders(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -1063,6 +1272,76 @@ public final class DeepModelSettings {
               numberOfUnits_ = input.readInt32();
               break;
             }
+            case 17: {
+              bitField0_ |= 0x00000002;
+              rho_ = input.readDouble();
+              break;
+            }
+            case 25: {
+              bitField0_ |= 0x00000004;
+              lambda_ = input.readDouble();
+              break;
+            }
+            case 33: {
+              bitField0_ |= 0x00000008;
+              beta_ = input.readDouble();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              numEpochs_ = input.readInt32();
+              break;
+            }
+            case 48: {
+              bitField0_ |= 0x00000020;
+              numBatches_ = input.readInt32();
+              break;
+            }
+            case 57: {
+              bitField0_ |= 0x00000040;
+              alphaInit_ = input.readDouble();
+              break;
+            }
+            case 65: {
+              bitField0_ |= 0x00000080;
+              alphaStep_ = input.readDouble();
+              break;
+            }
+            case 72: {
+              bitField0_ |= 0x00000100;
+              alphaMaxSteps_ = input.readInt32();
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000200;
+              lineSearchStrategy_ = input.readInt32();
+              break;
+            }
+            case 89: {
+              bitField0_ |= 0x00000400;
+              alpha_ = input.readDouble();
+              break;
+            }
+            case 97: {
+              bitField0_ |= 0x00000800;
+              momentum_ = input.readDouble();
+              break;
+            }
+            case 105: {
+              bitField0_ |= 0x00001000;
+              initMomentum_ = input.readDouble();
+              break;
+            }
+            case 113: {
+              bitField0_ |= 0x00002000;
+              increaseMomentum_ = input.readDouble();
+              break;
+            }
+            case 120: {
+              bitField0_ |= 0x00004000;
+              numInput_ = input.readInt32();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1103,7 +1382,6 @@ public final class DeepModelSettings {
     }
 
     private int bitField0_;
-    // required int32 number_of_units = 1;
     public static final int NUMBER_OF_UNITS_FIELD_NUMBER = 1;
     private int numberOfUnits_;
     /**
@@ -1119,13 +1397,238 @@ public final class DeepModelSettings {
       return numberOfUnits_;
     }
 
+    public static final int RHO_FIELD_NUMBER = 2;
+    private double rho_;
+    /**
+     * <code>optional double rho = 2;</code>
+     */
+    public boolean hasRho() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional double rho = 2;</code>
+     */
+    public double getRho() {
+      return rho_;
+    }
+
+    public static final int LAMBDA_FIELD_NUMBER = 3;
+    private double lambda_;
+    /**
+     * <code>optional double lambda = 3;</code>
+     */
+    public boolean hasLambda() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional double lambda = 3;</code>
+     */
+    public double getLambda() {
+      return lambda_;
+    }
+
+    public static final int BETA_FIELD_NUMBER = 4;
+    private double beta_;
+    /**
+     * <code>optional double beta = 4;</code>
+     */
+    public boolean hasBeta() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional double beta = 4;</code>
+     */
+    public double getBeta() {
+      return beta_;
+    }
+
+    public static final int NUMEPOCHS_FIELD_NUMBER = 5;
+    private int numEpochs_;
+    /**
+     * <code>optional int32 numEpochs = 5;</code>
+     */
+    public boolean hasNumEpochs() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional int32 numEpochs = 5;</code>
+     */
+    public int getNumEpochs() {
+      return numEpochs_;
+    }
+
+    public static final int NUMBATCHES_FIELD_NUMBER = 6;
+    private int numBatches_;
+    /**
+     * <code>optional int32 numBatches = 6;</code>
+     */
+    public boolean hasNumBatches() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 numBatches = 6;</code>
+     */
+    public int getNumBatches() {
+      return numBatches_;
+    }
+
+    public static final int ALPHA_INIT_FIELD_NUMBER = 7;
+    private double alphaInit_;
+    /**
+     * <code>optional double alpha_init = 7;</code>
+     */
+    public boolean hasAlphaInit() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional double alpha_init = 7;</code>
+     */
+    public double getAlphaInit() {
+      return alphaInit_;
+    }
+
+    public static final int ALPHA_STEP_FIELD_NUMBER = 8;
+    private double alphaStep_;
+    /**
+     * <code>optional double alpha_step = 8;</code>
+     */
+    public boolean hasAlphaStep() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional double alpha_step = 8;</code>
+     */
+    public double getAlphaStep() {
+      return alphaStep_;
+    }
+
+    public static final int ALPHA_MAX_STEPS_FIELD_NUMBER = 9;
+    private int alphaMaxSteps_;
+    /**
+     * <code>optional int32 alpha_max_steps = 9;</code>
+     */
+    public boolean hasAlphaMaxSteps() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional int32 alpha_max_steps = 9;</code>
+     */
+    public int getAlphaMaxSteps() {
+      return alphaMaxSteps_;
+    }
+
+    public static final int LINESEARCHSTRATEGY_FIELD_NUMBER = 10;
+    private int lineSearchStrategy_;
+    /**
+     * <code>optional int32 lineSearchStrategy = 10;</code>
+     */
+    public boolean hasLineSearchStrategy() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional int32 lineSearchStrategy = 10;</code>
+     */
+    public int getLineSearchStrategy() {
+      return lineSearchStrategy_;
+    }
+
+    public static final int ALPHA_FIELD_NUMBER = 11;
+    private double alpha_;
+    /**
+     * <code>optional double alpha = 11;</code>
+     */
+    public boolean hasAlpha() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>optional double alpha = 11;</code>
+     */
+    public double getAlpha() {
+      return alpha_;
+    }
+
+    public static final int MOMENTUM_FIELD_NUMBER = 12;
+    private double momentum_;
+    /**
+     * <code>optional double momentum = 12;</code>
+     */
+    public boolean hasMomentum() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>optional double momentum = 12;</code>
+     */
+    public double getMomentum() {
+      return momentum_;
+    }
+
+    public static final int INITMOMENTUM_FIELD_NUMBER = 13;
+    private double initMomentum_;
+    /**
+     * <code>optional double initMomentum = 13;</code>
+     */
+    public boolean hasInitMomentum() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>optional double initMomentum = 13;</code>
+     */
+    public double getInitMomentum() {
+      return initMomentum_;
+    }
+
+    public static final int INCREASEMOMENTUM_FIELD_NUMBER = 14;
+    private double increaseMomentum_;
+    /**
+     * <code>optional double increaseMomentum = 14;</code>
+     */
+    public boolean hasIncreaseMomentum() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    /**
+     * <code>optional double increaseMomentum = 14;</code>
+     */
+    public double getIncreaseMomentum() {
+      return increaseMomentum_;
+    }
+
+    public static final int NUM_INPUT_FIELD_NUMBER = 15;
+    private int numInput_;
+    /**
+     * <code>optional int32 num_input = 15;</code>
+     */
+    public boolean hasNumInput() {
+      return ((bitField0_ & 0x00004000) == 0x00004000);
+    }
+    /**
+     * <code>optional int32 num_input = 15;</code>
+     */
+    public int getNumInput() {
+      return numInput_;
+    }
+
     private void initFields() {
       numberOfUnits_ = 0;
+      rho_ = 0D;
+      lambda_ = 0D;
+      beta_ = 0D;
+      numEpochs_ = 0;
+      numBatches_ = 0;
+      alphaInit_ = 0D;
+      alphaStep_ = 0D;
+      alphaMaxSteps_ = 0;
+      lineSearchStrategy_ = 0;
+      alpha_ = 0D;
+      momentum_ = 0D;
+      initMomentum_ = 0D;
+      increaseMomentum_ = 0D;
+      numInput_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasNumberOfUnits()) {
         memoizedIsInitialized = 0;
@@ -1141,6 +1644,48 @@ public final class DeepModelSettings {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeInt32(1, numberOfUnits_);
       }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeDouble(2, rho_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeDouble(3, lambda_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeDouble(4, beta_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(5, numEpochs_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(6, numBatches_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeDouble(7, alphaInit_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeDouble(8, alphaStep_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeInt32(9, alphaMaxSteps_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeInt32(10, lineSearchStrategy_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeDouble(11, alpha_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeDouble(12, momentum_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeDouble(13, initMomentum_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeDouble(14, increaseMomentum_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        output.writeInt32(15, numInput_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1153,6 +1698,62 @@ public final class DeepModelSettings {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(1, numberOfUnits_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(2, rho_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(3, lambda_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(4, beta_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, numEpochs_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, numBatches_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(7, alphaInit_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(8, alphaStep_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(9, alphaMaxSteps_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(10, lineSearchStrategy_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(11, alpha_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(12, momentum_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(13, initMomentum_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(14, increaseMomentum_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(15, numInput_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1236,8 +1837,9 @@ public final class DeepModelSettings {
      * Protobuf type {@code main.java.ConfigAutoencoders}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements main.java.DeepModelSettings.ConfigAutoencodersOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:main.java.ConfigAutoencoders)
+        main.java.DeepModelSettings.ConfigAutoencodersOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return main.java.DeepModelSettings.internal_static_main_java_ConfigAutoencoders_descriptor;
@@ -1272,6 +1874,34 @@ public final class DeepModelSettings {
         super.clear();
         numberOfUnits_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
+        rho_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        lambda_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        beta_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        numEpochs_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        numBatches_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        alphaInit_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        alphaStep_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        alphaMaxSteps_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        lineSearchStrategy_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000200);
+        alpha_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000400);
+        momentum_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000800);
+        initMomentum_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00001000);
+        increaseMomentum_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00002000);
+        numInput_ = 0;
+        bitField0_ = (bitField0_ & ~0x00004000);
         return this;
       }
 
@@ -1304,6 +1934,62 @@ public final class DeepModelSettings {
           to_bitField0_ |= 0x00000001;
         }
         result.numberOfUnits_ = numberOfUnits_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.rho_ = rho_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.lambda_ = lambda_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.beta_ = beta_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.numEpochs_ = numEpochs_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.numBatches_ = numBatches_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.alphaInit_ = alphaInit_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.alphaStep_ = alphaStep_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.alphaMaxSteps_ = alphaMaxSteps_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.lineSearchStrategy_ = lineSearchStrategy_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.alpha_ = alpha_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.momentum_ = momentum_;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.initMomentum_ = initMomentum_;
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        result.increaseMomentum_ = increaseMomentum_;
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00004000;
+        }
+        result.numInput_ = numInput_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1322,6 +2008,48 @@ public final class DeepModelSettings {
         if (other == main.java.DeepModelSettings.ConfigAutoencoders.getDefaultInstance()) return this;
         if (other.hasNumberOfUnits()) {
           setNumberOfUnits(other.getNumberOfUnits());
+        }
+        if (other.hasRho()) {
+          setRho(other.getRho());
+        }
+        if (other.hasLambda()) {
+          setLambda(other.getLambda());
+        }
+        if (other.hasBeta()) {
+          setBeta(other.getBeta());
+        }
+        if (other.hasNumEpochs()) {
+          setNumEpochs(other.getNumEpochs());
+        }
+        if (other.hasNumBatches()) {
+          setNumBatches(other.getNumBatches());
+        }
+        if (other.hasAlphaInit()) {
+          setAlphaInit(other.getAlphaInit());
+        }
+        if (other.hasAlphaStep()) {
+          setAlphaStep(other.getAlphaStep());
+        }
+        if (other.hasAlphaMaxSteps()) {
+          setAlphaMaxSteps(other.getAlphaMaxSteps());
+        }
+        if (other.hasLineSearchStrategy()) {
+          setLineSearchStrategy(other.getLineSearchStrategy());
+        }
+        if (other.hasAlpha()) {
+          setAlpha(other.getAlpha());
+        }
+        if (other.hasMomentum()) {
+          setMomentum(other.getMomentum());
+        }
+        if (other.hasInitMomentum()) {
+          setInitMomentum(other.getInitMomentum());
+        }
+        if (other.hasIncreaseMomentum()) {
+          setIncreaseMomentum(other.getIncreaseMomentum());
+        }
+        if (other.hasNumInput()) {
+          setNumInput(other.getNumInput());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1354,7 +2082,6 @@ public final class DeepModelSettings {
       }
       private int bitField0_;
 
-      // required int32 number_of_units = 1;
       private int numberOfUnits_ ;
       /**
        * <code>required int32 number_of_units = 1;</code>
@@ -1387,6 +2114,454 @@ public final class DeepModelSettings {
         return this;
       }
 
+      private double rho_ ;
+      /**
+       * <code>optional double rho = 2;</code>
+       */
+      public boolean hasRho() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional double rho = 2;</code>
+       */
+      public double getRho() {
+        return rho_;
+      }
+      /**
+       * <code>optional double rho = 2;</code>
+       */
+      public Builder setRho(double value) {
+        bitField0_ |= 0x00000002;
+        rho_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double rho = 2;</code>
+       */
+      public Builder clearRho() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        rho_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      private double lambda_ ;
+      /**
+       * <code>optional double lambda = 3;</code>
+       */
+      public boolean hasLambda() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional double lambda = 3;</code>
+       */
+      public double getLambda() {
+        return lambda_;
+      }
+      /**
+       * <code>optional double lambda = 3;</code>
+       */
+      public Builder setLambda(double value) {
+        bitField0_ |= 0x00000004;
+        lambda_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double lambda = 3;</code>
+       */
+      public Builder clearLambda() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        lambda_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      private double beta_ ;
+      /**
+       * <code>optional double beta = 4;</code>
+       */
+      public boolean hasBeta() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional double beta = 4;</code>
+       */
+      public double getBeta() {
+        return beta_;
+      }
+      /**
+       * <code>optional double beta = 4;</code>
+       */
+      public Builder setBeta(double value) {
+        bitField0_ |= 0x00000008;
+        beta_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double beta = 4;</code>
+       */
+      public Builder clearBeta() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        beta_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      private int numEpochs_ ;
+      /**
+       * <code>optional int32 numEpochs = 5;</code>
+       */
+      public boolean hasNumEpochs() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional int32 numEpochs = 5;</code>
+       */
+      public int getNumEpochs() {
+        return numEpochs_;
+      }
+      /**
+       * <code>optional int32 numEpochs = 5;</code>
+       */
+      public Builder setNumEpochs(int value) {
+        bitField0_ |= 0x00000010;
+        numEpochs_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 numEpochs = 5;</code>
+       */
+      public Builder clearNumEpochs() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        numEpochs_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int numBatches_ ;
+      /**
+       * <code>optional int32 numBatches = 6;</code>
+       */
+      public boolean hasNumBatches() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional int32 numBatches = 6;</code>
+       */
+      public int getNumBatches() {
+        return numBatches_;
+      }
+      /**
+       * <code>optional int32 numBatches = 6;</code>
+       */
+      public Builder setNumBatches(int value) {
+        bitField0_ |= 0x00000020;
+        numBatches_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 numBatches = 6;</code>
+       */
+      public Builder clearNumBatches() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        numBatches_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private double alphaInit_ ;
+      /**
+       * <code>optional double alpha_init = 7;</code>
+       */
+      public boolean hasAlphaInit() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional double alpha_init = 7;</code>
+       */
+      public double getAlphaInit() {
+        return alphaInit_;
+      }
+      /**
+       * <code>optional double alpha_init = 7;</code>
+       */
+      public Builder setAlphaInit(double value) {
+        bitField0_ |= 0x00000040;
+        alphaInit_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double alpha_init = 7;</code>
+       */
+      public Builder clearAlphaInit() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        alphaInit_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      private double alphaStep_ ;
+      /**
+       * <code>optional double alpha_step = 8;</code>
+       */
+      public boolean hasAlphaStep() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional double alpha_step = 8;</code>
+       */
+      public double getAlphaStep() {
+        return alphaStep_;
+      }
+      /**
+       * <code>optional double alpha_step = 8;</code>
+       */
+      public Builder setAlphaStep(double value) {
+        bitField0_ |= 0x00000080;
+        alphaStep_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double alpha_step = 8;</code>
+       */
+      public Builder clearAlphaStep() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        alphaStep_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      private int alphaMaxSteps_ ;
+      /**
+       * <code>optional int32 alpha_max_steps = 9;</code>
+       */
+      public boolean hasAlphaMaxSteps() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional int32 alpha_max_steps = 9;</code>
+       */
+      public int getAlphaMaxSteps() {
+        return alphaMaxSteps_;
+      }
+      /**
+       * <code>optional int32 alpha_max_steps = 9;</code>
+       */
+      public Builder setAlphaMaxSteps(int value) {
+        bitField0_ |= 0x00000100;
+        alphaMaxSteps_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 alpha_max_steps = 9;</code>
+       */
+      public Builder clearAlphaMaxSteps() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        alphaMaxSteps_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int lineSearchStrategy_ ;
+      /**
+       * <code>optional int32 lineSearchStrategy = 10;</code>
+       */
+      public boolean hasLineSearchStrategy() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional int32 lineSearchStrategy = 10;</code>
+       */
+      public int getLineSearchStrategy() {
+        return lineSearchStrategy_;
+      }
+      /**
+       * <code>optional int32 lineSearchStrategy = 10;</code>
+       */
+      public Builder setLineSearchStrategy(int value) {
+        bitField0_ |= 0x00000200;
+        lineSearchStrategy_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 lineSearchStrategy = 10;</code>
+       */
+      public Builder clearLineSearchStrategy() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        lineSearchStrategy_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private double alpha_ ;
+      /**
+       * <code>optional double alpha = 11;</code>
+       */
+      public boolean hasAlpha() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional double alpha = 11;</code>
+       */
+      public double getAlpha() {
+        return alpha_;
+      }
+      /**
+       * <code>optional double alpha = 11;</code>
+       */
+      public Builder setAlpha(double value) {
+        bitField0_ |= 0x00000400;
+        alpha_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double alpha = 11;</code>
+       */
+      public Builder clearAlpha() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        alpha_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      private double momentum_ ;
+      /**
+       * <code>optional double momentum = 12;</code>
+       */
+      public boolean hasMomentum() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional double momentum = 12;</code>
+       */
+      public double getMomentum() {
+        return momentum_;
+      }
+      /**
+       * <code>optional double momentum = 12;</code>
+       */
+      public Builder setMomentum(double value) {
+        bitField0_ |= 0x00000800;
+        momentum_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double momentum = 12;</code>
+       */
+      public Builder clearMomentum() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        momentum_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      private double initMomentum_ ;
+      /**
+       * <code>optional double initMomentum = 13;</code>
+       */
+      public boolean hasInitMomentum() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      /**
+       * <code>optional double initMomentum = 13;</code>
+       */
+      public double getInitMomentum() {
+        return initMomentum_;
+      }
+      /**
+       * <code>optional double initMomentum = 13;</code>
+       */
+      public Builder setInitMomentum(double value) {
+        bitField0_ |= 0x00001000;
+        initMomentum_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double initMomentum = 13;</code>
+       */
+      public Builder clearInitMomentum() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        initMomentum_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      private double increaseMomentum_ ;
+      /**
+       * <code>optional double increaseMomentum = 14;</code>
+       */
+      public boolean hasIncreaseMomentum() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
+      }
+      /**
+       * <code>optional double increaseMomentum = 14;</code>
+       */
+      public double getIncreaseMomentum() {
+        return increaseMomentum_;
+      }
+      /**
+       * <code>optional double increaseMomentum = 14;</code>
+       */
+      public Builder setIncreaseMomentum(double value) {
+        bitField0_ |= 0x00002000;
+        increaseMomentum_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional double increaseMomentum = 14;</code>
+       */
+      public Builder clearIncreaseMomentum() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        increaseMomentum_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      private int numInput_ ;
+      /**
+       * <code>optional int32 num_input = 15;</code>
+       */
+      public boolean hasNumInput() {
+        return ((bitField0_ & 0x00004000) == 0x00004000);
+      }
+      /**
+       * <code>optional int32 num_input = 15;</code>
+       */
+      public int getNumInput() {
+        return numInput_;
+      }
+      /**
+       * <code>optional int32 num_input = 15;</code>
+       */
+      public Builder setNumInput(int value) {
+        bitField0_ |= 0x00004000;
+        numInput_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 num_input = 15;</code>
+       */
+      public Builder clearNumInput() {
+        bitField0_ = (bitField0_ & ~0x00004000);
+        numInput_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:main.java.ConfigAutoencoders)
     }
 
@@ -1398,10 +2573,10 @@ public final class DeepModelSettings {
     // @@protoc_insertion_point(class_scope:main.java.ConfigAutoencoders)
   }
 
-  public interface ConfigFeatureExtractorOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface ConfigFeatureExtractorOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:main.java.ConfigFeatureExtractor)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 input_dim1 = 1;
     /**
      * <code>required int32 input_dim1 = 1;</code>
      *
@@ -1429,7 +2604,6 @@ public final class DeepModelSettings {
      */
     int getInputDim1();
 
-    // required int32 input_dim2 = 2;
     /**
      * <code>required int32 input_dim2 = 2;</code>
      */
@@ -1439,7 +2613,6 @@ public final class DeepModelSettings {
      */
     int getInputDim2();
 
-    // required int32 feature_dim1 = 3;
     /**
      * <code>required int32 feature_dim1 = 3;</code>
      */
@@ -1449,7 +2622,6 @@ public final class DeepModelSettings {
      */
     int getFeatureDim1();
 
-    // required int32 feature_dim2 = 4;
     /**
      * <code>required int32 feature_dim2 = 4;</code>
      */
@@ -1459,7 +2631,6 @@ public final class DeepModelSettings {
      */
     int getFeatureDim2();
 
-    // optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];
     /**
      * <code>optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];</code>
      */
@@ -1469,7 +2640,6 @@ public final class DeepModelSettings {
      */
     main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity getNonLinearity();
 
-    // optional double soft_threshold = 6;
     /**
      * <code>optional double soft_threshold = 6;</code>
      */
@@ -1483,8 +2653,9 @@ public final class DeepModelSettings {
    * Protobuf type {@code main.java.ConfigFeatureExtractor}
    */
   public static final class ConfigFeatureExtractor extends
-      com.google.protobuf.GeneratedMessage
-      implements ConfigFeatureExtractorOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:main.java.ConfigFeatureExtractor)
+      ConfigFeatureExtractorOrBuilder {
     // Use ConfigFeatureExtractor.newBuilder() to construct.
     private ConfigFeatureExtractor(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -1697,7 +2868,6 @@ public final class DeepModelSettings {
     }
 
     private int bitField0_;
-    // required int32 input_dim1 = 1;
     public static final int INPUT_DIM1_FIELD_NUMBER = 1;
     private int inputDim1_;
     /**
@@ -1731,7 +2901,6 @@ public final class DeepModelSettings {
       return inputDim1_;
     }
 
-    // required int32 input_dim2 = 2;
     public static final int INPUT_DIM2_FIELD_NUMBER = 2;
     private int inputDim2_;
     /**
@@ -1747,7 +2916,6 @@ public final class DeepModelSettings {
       return inputDim2_;
     }
 
-    // required int32 feature_dim1 = 3;
     public static final int FEATURE_DIM1_FIELD_NUMBER = 3;
     private int featureDim1_;
     /**
@@ -1763,7 +2931,6 @@ public final class DeepModelSettings {
       return featureDim1_;
     }
 
-    // required int32 feature_dim2 = 4;
     public static final int FEATURE_DIM2_FIELD_NUMBER = 4;
     private int featureDim2_;
     /**
@@ -1779,7 +2946,6 @@ public final class DeepModelSettings {
       return featureDim2_;
     }
 
-    // optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];
     public static final int NON_LINEARITY_FIELD_NUMBER = 5;
     private main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity nonLinearity_;
     /**
@@ -1795,7 +2961,6 @@ public final class DeepModelSettings {
       return nonLinearity_;
     }
 
-    // optional double soft_threshold = 6;
     public static final int SOFT_THRESHOLD_FIELD_NUMBER = 6;
     private double softThreshold_;
     /**
@@ -1822,7 +2987,8 @@ public final class DeepModelSettings {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasInputDim1()) {
         memoizedIsInitialized = 0;
@@ -1980,8 +3146,9 @@ public final class DeepModelSettings {
      * Protobuf type {@code main.java.ConfigFeatureExtractor}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements main.java.DeepModelSettings.ConfigFeatureExtractorOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:main.java.ConfigFeatureExtractor)
+        main.java.DeepModelSettings.ConfigFeatureExtractorOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return main.java.DeepModelSettings.internal_static_main_java_ConfigFeatureExtractor_descriptor;
@@ -2155,7 +3322,6 @@ public final class DeepModelSettings {
       }
       private int bitField0_;
 
-      // required int32 input_dim1 = 1;
       private int inputDim1_ ;
       /**
        * <code>required int32 input_dim1 = 1;</code>
@@ -2224,7 +3390,6 @@ public final class DeepModelSettings {
         return this;
       }
 
-      // required int32 input_dim2 = 2;
       private int inputDim2_ ;
       /**
        * <code>required int32 input_dim2 = 2;</code>
@@ -2257,7 +3422,6 @@ public final class DeepModelSettings {
         return this;
       }
 
-      // required int32 feature_dim1 = 3;
       private int featureDim1_ ;
       /**
        * <code>required int32 feature_dim1 = 3;</code>
@@ -2290,7 +3454,6 @@ public final class DeepModelSettings {
         return this;
       }
 
-      // required int32 feature_dim2 = 4;
       private int featureDim2_ ;
       /**
        * <code>required int32 feature_dim2 = 4;</code>
@@ -2323,7 +3486,6 @@ public final class DeepModelSettings {
         return this;
       }
 
-      // optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];
       private main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity nonLinearity_ = main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity.NONE;
       /**
        * <code>optional .main.java.ConfigFeatureExtractor.NonLinearity non_linearity = 5 [default = NONE];</code>
@@ -2359,7 +3521,6 @@ public final class DeepModelSettings {
         return this;
       }
 
-      // optional double soft_threshold = 6;
       private double softThreshold_ ;
       /**
        * <code>optional double soft_threshold = 6;</code>
@@ -2403,10 +3564,10 @@ public final class DeepModelSettings {
     // @@protoc_insertion_point(class_scope:main.java.ConfigFeatureExtractor)
   }
 
-  public interface ConfigPoolerOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface ConfigPoolerOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:main.java.ConfigPooler)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 pool_size = 1;
     /**
      * <code>required int32 pool_size = 1;</code>
      */
@@ -2416,7 +3577,6 @@ public final class DeepModelSettings {
      */
     int getPoolSize();
 
-    // optional .main.java.ConfigPooler.PoolType pool_type = 2 [default = MAX];
     /**
      * <code>optional .main.java.ConfigPooler.PoolType pool_type = 2 [default = MAX];</code>
      */
@@ -2430,8 +3590,9 @@ public final class DeepModelSettings {
    * Protobuf type {@code main.java.ConfigPooler}
    */
   public static final class ConfigPooler extends
-      com.google.protobuf.GeneratedMessage
-      implements ConfigPoolerOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:main.java.ConfigPooler)
+      ConfigPoolerOrBuilder {
     // Use ConfigPooler.newBuilder() to construct.
     private ConfigPooler(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -2615,7 +3776,6 @@ public final class DeepModelSettings {
     }
 
     private int bitField0_;
-    // required int32 pool_size = 1;
     public static final int POOL_SIZE_FIELD_NUMBER = 1;
     private int poolSize_;
     /**
@@ -2631,7 +3791,6 @@ public final class DeepModelSettings {
       return poolSize_;
     }
 
-    // optional .main.java.ConfigPooler.PoolType pool_type = 2 [default = MAX];
     public static final int POOL_TYPE_FIELD_NUMBER = 2;
     private main.java.DeepModelSettings.ConfigPooler.PoolType poolType_;
     /**
@@ -2654,7 +3813,8 @@ public final class DeepModelSettings {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasPoolSize()) {
         memoizedIsInitialized = 0;
@@ -2772,8 +3932,9 @@ public final class DeepModelSettings {
      * Protobuf type {@code main.java.ConfigPooler}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements main.java.DeepModelSettings.ConfigPoolerOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:main.java.ConfigPooler)
+        main.java.DeepModelSettings.ConfigPoolerOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return main.java.DeepModelSettings.internal_static_main_java_ConfigPooler_descriptor;
@@ -2899,7 +4060,6 @@ public final class DeepModelSettings {
       }
       private int bitField0_;
 
-      // required int32 pool_size = 1;
       private int poolSize_ ;
       /**
        * <code>required int32 pool_size = 1;</code>
@@ -2932,7 +4092,6 @@ public final class DeepModelSettings {
         return this;
       }
 
-      // optional .main.java.ConfigPooler.PoolType pool_type = 2 [default = MAX];
       private main.java.DeepModelSettings.ConfigPooler.PoolType poolType_ = main.java.DeepModelSettings.ConfigPooler.PoolType.MAX;
       /**
        * <code>optional .main.java.ConfigPooler.PoolType pool_type = 2 [default = MAX];</code>
@@ -2979,10 +4138,10 @@ public final class DeepModelSettings {
     // @@protoc_insertion_point(class_scope:main.java.ConfigPooler)
   }
 
-  public interface ConfigBaseLayerOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface ConfigBaseLayerOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:main.java.ConfigBaseLayer)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional .main.java.ConfigPreprocess config_preprocess = 1;
     /**
      * <code>optional .main.java.ConfigPreprocess config_preprocess = 1;</code>
      */
@@ -2996,7 +4155,6 @@ public final class DeepModelSettings {
      */
     main.java.DeepModelSettings.ConfigPreprocessOrBuilder getConfigPreprocessOrBuilder();
 
-    // optional .main.java.ConfigKMeans config_kmeans = 2;
     /**
      * <code>optional .main.java.ConfigKMeans config_kmeans = 2;</code>
      */
@@ -3010,7 +4168,6 @@ public final class DeepModelSettings {
      */
     main.java.DeepModelSettings.ConfigKMeansOrBuilder getConfigKmeansOrBuilder();
 
-    // optional .main.java.ConfigAutoencoders config_autoencoders = 3;
     /**
      * <code>optional .main.java.ConfigAutoencoders config_autoencoders = 3;</code>
      */
@@ -3024,7 +4181,6 @@ public final class DeepModelSettings {
      */
     main.java.DeepModelSettings.ConfigAutoencodersOrBuilder getConfigAutoencodersOrBuilder();
 
-    // optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;
     /**
      * <code>optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;</code>
      */
@@ -3038,7 +4194,6 @@ public final class DeepModelSettings {
      */
     main.java.DeepModelSettings.ConfigFeatureExtractorOrBuilder getConfigFeatureExtractorOrBuilder();
 
-    // required .main.java.ConfigPooler config_pooler = 5;
     /**
      * <code>required .main.java.ConfigPooler config_pooler = 5;</code>
      */
@@ -3056,8 +4211,9 @@ public final class DeepModelSettings {
    * Protobuf type {@code main.java.ConfigBaseLayer}
    */
   public static final class ConfigBaseLayer extends
-      com.google.protobuf.GeneratedMessage
-      implements ConfigBaseLayerOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:main.java.ConfigBaseLayer)
+      ConfigBaseLayerOrBuilder {
     // Use ConfigBaseLayer.newBuilder() to construct.
     private ConfigBaseLayer(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -3208,7 +4364,6 @@ public final class DeepModelSettings {
     }
 
     private int bitField0_;
-    // optional .main.java.ConfigPreprocess config_preprocess = 1;
     public static final int CONFIG_PREPROCESS_FIELD_NUMBER = 1;
     private main.java.DeepModelSettings.ConfigPreprocess configPreprocess_;
     /**
@@ -3230,7 +4385,6 @@ public final class DeepModelSettings {
       return configPreprocess_;
     }
 
-    // optional .main.java.ConfigKMeans config_kmeans = 2;
     public static final int CONFIG_KMEANS_FIELD_NUMBER = 2;
     private main.java.DeepModelSettings.ConfigKMeans configKmeans_;
     /**
@@ -3252,7 +4406,6 @@ public final class DeepModelSettings {
       return configKmeans_;
     }
 
-    // optional .main.java.ConfigAutoencoders config_autoencoders = 3;
     public static final int CONFIG_AUTOENCODERS_FIELD_NUMBER = 3;
     private main.java.DeepModelSettings.ConfigAutoencoders configAutoencoders_;
     /**
@@ -3274,7 +4427,6 @@ public final class DeepModelSettings {
       return configAutoencoders_;
     }
 
-    // optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;
     public static final int CONFIG_FEATURE_EXTRACTOR_FIELD_NUMBER = 4;
     private main.java.DeepModelSettings.ConfigFeatureExtractor configFeatureExtractor_;
     /**
@@ -3296,7 +4448,6 @@ public final class DeepModelSettings {
       return configFeatureExtractor_;
     }
 
-    // required .main.java.ConfigPooler config_pooler = 5;
     public static final int CONFIG_POOLER_FIELD_NUMBER = 5;
     private main.java.DeepModelSettings.ConfigPooler configPooler_;
     /**
@@ -3328,7 +4479,8 @@ public final class DeepModelSettings {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasConfigPooler()) {
         memoizedIsInitialized = 0;
@@ -3495,8 +4647,9 @@ public final class DeepModelSettings {
      * Protobuf type {@code main.java.ConfigBaseLayer}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements main.java.DeepModelSettings.ConfigBaseLayerOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:main.java.ConfigBaseLayer)
+        main.java.DeepModelSettings.ConfigBaseLayerOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return main.java.DeepModelSettings.internal_static_main_java_ConfigBaseLayer_descriptor;
@@ -3722,7 +4875,6 @@ public final class DeepModelSettings {
       }
       private int bitField0_;
 
-      // optional .main.java.ConfigPreprocess config_preprocess = 1;
       private main.java.DeepModelSettings.ConfigPreprocess configPreprocess_ = main.java.DeepModelSettings.ConfigPreprocess.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           main.java.DeepModelSettings.ConfigPreprocess, main.java.DeepModelSettings.ConfigPreprocess.Builder, main.java.DeepModelSettings.ConfigPreprocessOrBuilder> configPreprocessBuilder_;
@@ -3831,7 +4983,7 @@ public final class DeepModelSettings {
         if (configPreprocessBuilder_ == null) {
           configPreprocessBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               main.java.DeepModelSettings.ConfigPreprocess, main.java.DeepModelSettings.ConfigPreprocess.Builder, main.java.DeepModelSettings.ConfigPreprocessOrBuilder>(
-                  configPreprocess_,
+                  getConfigPreprocess(),
                   getParentForChildren(),
                   isClean());
           configPreprocess_ = null;
@@ -3839,7 +4991,6 @@ public final class DeepModelSettings {
         return configPreprocessBuilder_;
       }
 
-      // optional .main.java.ConfigKMeans config_kmeans = 2;
       private main.java.DeepModelSettings.ConfigKMeans configKmeans_ = main.java.DeepModelSettings.ConfigKMeans.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           main.java.DeepModelSettings.ConfigKMeans, main.java.DeepModelSettings.ConfigKMeans.Builder, main.java.DeepModelSettings.ConfigKMeansOrBuilder> configKmeansBuilder_;
@@ -3948,7 +5099,7 @@ public final class DeepModelSettings {
         if (configKmeansBuilder_ == null) {
           configKmeansBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               main.java.DeepModelSettings.ConfigKMeans, main.java.DeepModelSettings.ConfigKMeans.Builder, main.java.DeepModelSettings.ConfigKMeansOrBuilder>(
-                  configKmeans_,
+                  getConfigKmeans(),
                   getParentForChildren(),
                   isClean());
           configKmeans_ = null;
@@ -3956,7 +5107,6 @@ public final class DeepModelSettings {
         return configKmeansBuilder_;
       }
 
-      // optional .main.java.ConfigAutoencoders config_autoencoders = 3;
       private main.java.DeepModelSettings.ConfigAutoencoders configAutoencoders_ = main.java.DeepModelSettings.ConfigAutoencoders.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           main.java.DeepModelSettings.ConfigAutoencoders, main.java.DeepModelSettings.ConfigAutoencoders.Builder, main.java.DeepModelSettings.ConfigAutoencodersOrBuilder> configAutoencodersBuilder_;
@@ -4065,7 +5215,7 @@ public final class DeepModelSettings {
         if (configAutoencodersBuilder_ == null) {
           configAutoencodersBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               main.java.DeepModelSettings.ConfigAutoencoders, main.java.DeepModelSettings.ConfigAutoencoders.Builder, main.java.DeepModelSettings.ConfigAutoencodersOrBuilder>(
-                  configAutoencoders_,
+                  getConfigAutoencoders(),
                   getParentForChildren(),
                   isClean());
           configAutoencoders_ = null;
@@ -4073,7 +5223,6 @@ public final class DeepModelSettings {
         return configAutoencodersBuilder_;
       }
 
-      // optional .main.java.ConfigFeatureExtractor config_feature_extractor = 4;
       private main.java.DeepModelSettings.ConfigFeatureExtractor configFeatureExtractor_ = main.java.DeepModelSettings.ConfigFeatureExtractor.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           main.java.DeepModelSettings.ConfigFeatureExtractor, main.java.DeepModelSettings.ConfigFeatureExtractor.Builder, main.java.DeepModelSettings.ConfigFeatureExtractorOrBuilder> configFeatureExtractorBuilder_;
@@ -4182,7 +5331,7 @@ public final class DeepModelSettings {
         if (configFeatureExtractorBuilder_ == null) {
           configFeatureExtractorBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               main.java.DeepModelSettings.ConfigFeatureExtractor, main.java.DeepModelSettings.ConfigFeatureExtractor.Builder, main.java.DeepModelSettings.ConfigFeatureExtractorOrBuilder>(
-                  configFeatureExtractor_,
+                  getConfigFeatureExtractor(),
                   getParentForChildren(),
                   isClean());
           configFeatureExtractor_ = null;
@@ -4190,7 +5339,6 @@ public final class DeepModelSettings {
         return configFeatureExtractorBuilder_;
       }
 
-      // required .main.java.ConfigPooler config_pooler = 5;
       private main.java.DeepModelSettings.ConfigPooler configPooler_ = main.java.DeepModelSettings.ConfigPooler.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           main.java.DeepModelSettings.ConfigPooler, main.java.DeepModelSettings.ConfigPooler.Builder, main.java.DeepModelSettings.ConfigPoolerOrBuilder> configPoolerBuilder_;
@@ -4299,7 +5447,7 @@ public final class DeepModelSettings {
         if (configPoolerBuilder_ == null) {
           configPoolerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               main.java.DeepModelSettings.ConfigPooler, main.java.DeepModelSettings.ConfigPooler.Builder, main.java.DeepModelSettings.ConfigPoolerOrBuilder>(
-                  configPooler_,
+                  getConfigPooler(),
                   getParentForChildren(),
                   isClean());
           configPooler_ = null;
@@ -4318,10 +5466,10 @@ public final class DeepModelSettings {
     // @@protoc_insertion_point(class_scope:main.java.ConfigBaseLayer)
   }
 
-  public interface ConfigManuscriptsOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface ConfigManuscriptsOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:main.java.ConfigManuscripts)
+      com.google.protobuf.MessageOrBuilder {
 
-    // repeated .main.java.ConfigBaseLayer config_layer = 1;
     /**
      * <code>repeated .main.java.ConfigBaseLayer config_layer = 1;</code>
      */
@@ -4350,8 +5498,9 @@ public final class DeepModelSettings {
    * Protobuf type {@code main.java.ConfigManuscripts}
    */
   public static final class ConfigManuscripts extends
-      com.google.protobuf.GeneratedMessage
-      implements ConfigManuscriptsOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:main.java.ConfigManuscripts)
+      ConfigManuscriptsOrBuilder {
     // Use ConfigManuscripts.newBuilder() to construct.
     private ConfigManuscripts(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -4447,7 +5596,6 @@ public final class DeepModelSettings {
       return PARSER;
     }
 
-    // repeated .main.java.ConfigBaseLayer config_layer = 1;
     public static final int CONFIG_LAYER_FIELD_NUMBER = 1;
     private java.util.List<main.java.DeepModelSettings.ConfigBaseLayer> configLayer_;
     /**
@@ -4489,7 +5637,8 @@ public final class DeepModelSettings {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       for (int i = 0; i < getConfigLayerCount(); i++) {
         if (!getConfigLayer(i).isInitialized()) {
@@ -4602,8 +5751,9 @@ public final class DeepModelSettings {
      * Protobuf type {@code main.java.ConfigManuscripts}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements main.java.DeepModelSettings.ConfigManuscriptsOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:main.java.ConfigManuscripts)
+        main.java.DeepModelSettings.ConfigManuscriptsOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return main.java.DeepModelSettings.internal_static_main_java_ConfigManuscripts_descriptor;
@@ -4753,7 +5903,6 @@ public final class DeepModelSettings {
       }
       private int bitField0_;
 
-      // repeated .main.java.ConfigBaseLayer config_layer = 1;
       private java.util.List<main.java.DeepModelSettings.ConfigBaseLayer> configLayer_ =
         java.util.Collections.emptyList();
       private void ensureConfigLayerIsMutable() {
@@ -4895,7 +6044,8 @@ public final class DeepModelSettings {
           java.lang.Iterable<? extends main.java.DeepModelSettings.ConfigBaseLayer> values) {
         if (configLayerBuilder_ == null) {
           ensureConfigLayerIsMutable();
-          super.addAll(values, configLayer_);
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, configLayer_);
           onChanged();
         } else {
           configLayerBuilder_.addAllMessages(values);
@@ -5004,37 +6154,37 @@ public final class DeepModelSettings {
     // @@protoc_insertion_point(class_scope:main.java.ConfigManuscripts)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_main_java_ConfigPreprocess_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_main_java_ConfigPreprocess_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_main_java_ConfigKMeans_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_main_java_ConfigKMeans_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_main_java_ConfigAutoencoders_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_main_java_ConfigAutoencoders_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_main_java_ConfigFeatureExtractor_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_main_java_ConfigFeatureExtractor_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_main_java_ConfigPooler_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_main_java_ConfigPooler_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_main_java_ConfigBaseLayer_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_main_java_ConfigBaseLayer_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_main_java_ConfigManuscripts_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -5050,84 +6200,91 @@ public final class DeepModelSettings {
     java.lang.String[] descriptorData = {
       "\n\031deep_model_settings.proto\022\tmain.java\"0" +
       "\n\020ConfigPreprocess\022\r\n\005eps_1\030\001 \002(\001\022\r\n\005eps" +
-      "_2\030\002 \002(\001\"H\n\014ConfigKMeans\022\032\n\022number_of_cl" +
+      "_2\030\002 \002(\001\"V\n\014ConfigKMeans\022\032\n\022number_of_cl" +
       "usters\030\001 \002(\005\022\034\n\024number_of_iterations\030\002 \002" +
-      "(\005\"-\n\022ConfigAutoencoders\022\027\n\017number_of_un" +
-      "its\030\001 \002(\005\"\376\001\n\026ConfigFeatureExtractor\022\022\n\n" +
-      "input_dim1\030\001 \002(\005\022\022\n\ninput_dim2\030\002 \002(\005\022\024\n\014" +
-      "feature_dim1\030\003 \002(\005\022\024\n\014feature_dim2\030\004 \002(\005" +
-      "\022K\n\rnon_linearity\030\005 \001(\0162..main.java.Conf" +
-      "igFeatureExtractor.NonLinearity:\004NONE\022\026\n",
-      "\016soft_threshold\030\006 \001(\001\"+\n\014NonLinearity\022\010\n" +
-      "\004NONE\020\000\022\007\n\003ABS\020\001\022\010\n\004SOFT\020\002\"}\n\014ConfigPool" +
-      "er\022\021\n\tpool_size\030\001 \002(\005\0228\n\tpool_type\030\002 \001(\016" +
-      "2 .main.java.ConfigPooler.PoolType:\003MAX\"" +
-      " \n\010PoolType\022\007\n\003MAX\020\000\022\013\n\007AVERAGE\020\001\"\252\002\n\017Co" +
-      "nfigBaseLayer\0226\n\021config_preprocess\030\001 \001(\013" +
-      "2\033.main.java.ConfigPreprocess\022.\n\rconfig_" +
-      "kmeans\030\002 \001(\0132\027.main.java.ConfigKMeans\022:\n" +
-      "\023config_autoencoders\030\003 \001(\0132\035.main.java.C" +
-      "onfigAutoencoders\022C\n\030config_feature_extr",
-      "actor\030\004 \001(\0132!.main.java.ConfigFeatureExt" +
-      "ractor\022.\n\rconfig_pooler\030\005 \002(\0132\027.main.jav" +
-      "a.ConfigPooler\"E\n\021ConfigManuscripts\0220\n\014c" +
-      "onfig_layer\030\001 \003(\0132\032.main.java.ConfigBase" +
-      "Layer"
+      "(\005\022\014\n\004type\030\003 \002(\005\"\300\002\n\022ConfigAutoencoders\022" +
+      "\027\n\017number_of_units\030\001 \002(\005\022\013\n\003rho\030\002 \001(\001\022\016\n" +
+      "\006lambda\030\003 \001(\001\022\014\n\004beta\030\004 \001(\001\022\021\n\tnumEpochs" +
+      "\030\005 \001(\005\022\022\n\nnumBatches\030\006 \001(\005\022\022\n\nalpha_init" +
+      "\030\007 \001(\001\022\022\n\nalpha_step\030\010 \001(\001\022\027\n\017alpha_max_" +
+      "steps\030\t \001(\005\022\032\n\022lineSearchStrategy\030\n \001(\005\022",
+      "\r\n\005alpha\030\013 \001(\001\022\020\n\010momentum\030\014 \001(\001\022\024\n\014init" +
+      "Momentum\030\r \001(\001\022\030\n\020increaseMomentum\030\016 \001(\001" +
+      "\022\021\n\tnum_input\030\017 \001(\005\"\376\001\n\026ConfigFeatureExt" +
+      "ractor\022\022\n\ninput_dim1\030\001 \002(\005\022\022\n\ninput_dim2" +
+      "\030\002 \002(\005\022\024\n\014feature_dim1\030\003 \002(\005\022\024\n\014feature_" +
+      "dim2\030\004 \002(\005\022K\n\rnon_linearity\030\005 \001(\0162..main" +
+      ".java.ConfigFeatureExtractor.NonLinearit" +
+      "y:\004NONE\022\026\n\016soft_threshold\030\006 \001(\001\"+\n\014NonLi" +
+      "nearity\022\010\n\004NONE\020\000\022\007\n\003ABS\020\001\022\010\n\004SOFT\020\002\"}\n\014" +
+      "ConfigPooler\022\021\n\tpool_size\030\001 \002(\005\0228\n\tpool_",
+      "type\030\002 \001(\0162 .main.java.ConfigPooler.Pool" +
+      "Type:\003MAX\" \n\010PoolType\022\007\n\003MAX\020\000\022\013\n\007AVERAG" +
+      "E\020\001\"\252\002\n\017ConfigBaseLayer\0226\n\021config_prepro" +
+      "cess\030\001 \001(\0132\033.main.java.ConfigPreprocess\022" +
+      ".\n\rconfig_kmeans\030\002 \001(\0132\027.main.java.Confi" +
+      "gKMeans\022:\n\023config_autoencoders\030\003 \001(\0132\035.m" +
+      "ain.java.ConfigAutoencoders\022C\n\030config_fe" +
+      "ature_extractor\030\004 \001(\0132!.main.java.Config" +
+      "FeatureExtractor\022.\n\rconfig_pooler\030\005 \002(\0132" +
+      "\027.main.java.ConfigPooler\"E\n\021ConfigManusc",
+      "ripts\0220\n\014config_layer\030\001 \003(\0132\032.main.java." +
+      "ConfigBaseLayer"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_main_java_ConfigPreprocess_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_main_java_ConfigPreprocess_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_main_java_ConfigPreprocess_descriptor,
-              new java.lang.String[] { "Eps1", "Eps2", });
-          internal_static_main_java_ConfigKMeans_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_main_java_ConfigKMeans_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_main_java_ConfigKMeans_descriptor,
-              new java.lang.String[] { "NumberOfClusters", "NumberOfIterations", });
-          internal_static_main_java_ConfigAutoencoders_descriptor =
-            getDescriptor().getMessageTypes().get(2);
-          internal_static_main_java_ConfigAutoencoders_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_main_java_ConfigAutoencoders_descriptor,
-              new java.lang.String[] { "NumberOfUnits", });
-          internal_static_main_java_ConfigFeatureExtractor_descriptor =
-            getDescriptor().getMessageTypes().get(3);
-          internal_static_main_java_ConfigFeatureExtractor_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_main_java_ConfigFeatureExtractor_descriptor,
-              new java.lang.String[] { "InputDim1", "InputDim2", "FeatureDim1", "FeatureDim2", "NonLinearity", "SoftThreshold", });
-          internal_static_main_java_ConfigPooler_descriptor =
-            getDescriptor().getMessageTypes().get(4);
-          internal_static_main_java_ConfigPooler_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_main_java_ConfigPooler_descriptor,
-              new java.lang.String[] { "PoolSize", "PoolType", });
-          internal_static_main_java_ConfigBaseLayer_descriptor =
-            getDescriptor().getMessageTypes().get(5);
-          internal_static_main_java_ConfigBaseLayer_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_main_java_ConfigBaseLayer_descriptor,
-              new java.lang.String[] { "ConfigPreprocess", "ConfigKmeans", "ConfigAutoencoders", "ConfigFeatureExtractor", "ConfigPooler", });
-          internal_static_main_java_ConfigManuscripts_descriptor =
-            getDescriptor().getMessageTypes().get(6);
-          internal_static_main_java_ConfigManuscripts_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_main_java_ConfigManuscripts_descriptor,
-              new java.lang.String[] { "ConfigLayer", });
-          return null;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
+    internal_static_main_java_ConfigPreprocess_descriptor =
+      getDescriptor().getMessageTypes().get(0);
+    internal_static_main_java_ConfigPreprocess_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_main_java_ConfigPreprocess_descriptor,
+        new java.lang.String[] { "Eps1", "Eps2", });
+    internal_static_main_java_ConfigKMeans_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_main_java_ConfigKMeans_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_main_java_ConfigKMeans_descriptor,
+        new java.lang.String[] { "NumberOfClusters", "NumberOfIterations", "Type", });
+    internal_static_main_java_ConfigAutoencoders_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_main_java_ConfigAutoencoders_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_main_java_ConfigAutoencoders_descriptor,
+        new java.lang.String[] { "NumberOfUnits", "Rho", "Lambda", "Beta", "NumEpochs", "NumBatches", "AlphaInit", "AlphaStep", "AlphaMaxSteps", "LineSearchStrategy", "Alpha", "Momentum", "InitMomentum", "IncreaseMomentum", "NumInput", });
+    internal_static_main_java_ConfigFeatureExtractor_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_main_java_ConfigFeatureExtractor_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_main_java_ConfigFeatureExtractor_descriptor,
+        new java.lang.String[] { "InputDim1", "InputDim2", "FeatureDim1", "FeatureDim2", "NonLinearity", "SoftThreshold", });
+    internal_static_main_java_ConfigPooler_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_main_java_ConfigPooler_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_main_java_ConfigPooler_descriptor,
+        new java.lang.String[] { "PoolSize", "PoolType", });
+    internal_static_main_java_ConfigBaseLayer_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_main_java_ConfigBaseLayer_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_main_java_ConfigBaseLayer_descriptor,
+        new java.lang.String[] { "ConfigPreprocess", "ConfigKmeans", "ConfigAutoencoders", "ConfigFeatureExtractor", "ConfigPooler", });
+    internal_static_main_java_ConfigManuscripts_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_main_java_ConfigManuscripts_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_main_java_ConfigManuscripts_descriptor,
+        new java.lang.String[] { "ConfigLayer", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

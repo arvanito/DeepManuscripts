@@ -120,7 +120,7 @@ public class BaseLayer implements DeepLearningLayer {
     	
     	//TODO load the features from file.
     	Vector[] features = LinAlgebraIOUtils.loadVectorArrayFromObject(featFile[layer_index+2], spark_context);
-    	QuickSortVector.quickSort(features, 0, features.length);
+    	QuickSortVector.quickSort(features, 0, features.length-1);
 
     	System.out.println("Features info");
     	System.out.println(features.length);
