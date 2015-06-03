@@ -75,69 +75,111 @@ public class MaxPoolerExtended implements Pooler {
 	 * It pools over every 'poolSize' contiguous elements
 	 * of the vector by keeping only the one with the maximum value.
 	 * 
-	 * @param data 1D vector of doubles
-	 * @return 1D vector with reduced size
+	 * @param data Input 1-d data.
+	 * @return Pooled 1-d vector.
 	 */
 	public Vector poolOver1D(Vector data)  {
+		
 		// The size of the new pooled vector
-		int n = data.size()/poolSize;
+		int n = data.size() / poolSize;
+		
 		// Check that the pool size is not too big
 		assert n >= 1: "Consider reducing the pool size";
 		
-		double[] pooled_data = new double[n];
-		for (int i = 0; i < n; ++i) {
+		// perform pooling
+		double[] pooledData = new double[n];
+		for (int i = 0; i < n; i++) {
+			
 			// Find minimum in patch
 			double maxPatch = -Double.MAX_VALUE;
-			for (int k = 0; k < poolSize; ++k) {
-			  maxPatch = Math.max(maxPatch, data.apply(i*poolSize + k));
+			for (int k = 0; k < poolSize; k++) {
+				maxPatch = Math.max(maxPatch, data.apply(i * poolSize + k));
 			}
-			pooled_data[i] = maxPatch;
+			pooledData[i] = maxPatch;
 		}
-		return Vectors.dense(pooled_data);
+		
+		return Vectors.dense(pooledData);
 	}
+	
+	
 	/**
-	 * The method shrinks the input array.
-	 * It pools over every 'pool_size x pool_size' block
+	 * The method shrinks the input array. 
+	 * It pools over every 'poolSize x poolSize' block
 	 * of the corresponding matrix by keeping only the one with the maximum value.
 	 * 
-	 * @param data 1D vector storing column-wise a 2D image/feature patch
-	 * @return 1D vector with reduced size storing the pooled data
+	 * @param data 1-d vector storing column-wise a series of 2-d patches.
+	 * @return Pooled 1-d vector.
 	 */
 	public Vector poolOver2D(Vector data)  {
 		
-
-		int output_dim1 = (int)Math.floor((double)inputDim1 / poolSize);
-		int output_dim2 = (int)Math.floor((double)inputDim2 / poolSize);
-		int nbr_features = data.size() / (inputDim1*inputDim2);
-		double[] output = new double[output_dim1 * output_dim2* nbr_features];
+		// output dimensions of the pooled data
+		int outputDim1 = (int) Math.floor((double) inputDim1 / poolSize);
+		int outputDim2 = (int) Math.floor((double) inputDim2 / poolSize);
 		
-		for (int f = 0; f < nbr_features; ++f) {
-			int foffset = inputDim1*inputDim2* f;
-			int fnewoffset = output_dim1*output_dim2*f;
-			for (int i = 0; i < output_dim1; ++i) {
-				for (int j = 0; j < output_dim2; ++j) {
+		// number of features
+		int numFeatures = data.size() / (inputDim1 * inputDim2);
+		
+		// perform pooling over features
+		double[] output = new double[outputDim1 * outputDim2 * numFeatures];
+		for (int f = 0; f < numFeatures; f++) {	// loop over features
+			
+			// linear indices of the current feature block
+			int foffset = inputDim1 * inputDim2 * f;
+			int fnewoffset = outputDim1 * outputDim2 * f;
+			
+			// loop over the two dimensions
+			for (int i = 0; i < outputDim1; i++) {
+				for (int j = 0; j < outputDim2; j++) {
+					
+					// find the maximum over the current 2-d block
 					double maxPatch = -Double.MAX_VALUE;
-					for (int ki = 0; ki < poolSize; ++ki) {
-						for (int kj = 0; kj < poolSize; ++kj) {
-							int lookup_i = i*poolSize + ki;
-							int lookup_j = j*poolSize + kj;
-							maxPatch = Math.max(maxPatch, data.apply(foffset + lookup_j*inputDim1 + lookup_i));
+					for (int ki = 0; ki < poolSize; ki++) {
+						for (int kj = 0; kj < poolSize; kj++) {
+							
+							// linear indices of the current 2-d block
+							int lookup_i = i * poolSize + ki;
+							int lookup_j = j * poolSize + kj;
+							
+							// update the maximum
+							maxPatch = Math.max(maxPatch, data.apply(foffset + lookup_j * inputDim1 + lookup_i));
 						}
 					}
-					output[fnewoffset + j*output_dim1 + i] = maxPatch;
+					output[fnewoffset + j * outputDim1 + i] = maxPatch;
 				}
 			}
 		}
+		
 		return Vectors.dense(output);
 	}
 
+	
+	/**
+	 * Method that returns the boolean indicating pooling dimensions.
+	 * 	
+	 * @return Boolean value.
+	 */
 	public boolean isPoolOver2DInput() {
 		return poolOver2DInput;
 	}
+	
+	
+	/**
+	 * Method that returns the first input dimension.
+	 * 
+	 * @return First input dimension.
+	 */
 	public int getInputDim1() {
 		return inputDim1;
 	}
+	
+	
+	/**
+	 * Method that returns the second input dimension.
+	 * 
+	 * @return Second input dimension.
+	 */
 	public int getInputDim2() {
 		return inputDim2;
 	}
+	
 }

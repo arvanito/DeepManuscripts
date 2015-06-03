@@ -12,6 +12,13 @@ public class Parse implements Function<String, Vector> {
 
 	private static final long serialVersionUID = -5762727282965079666L;
 
+	
+	/**
+	 * Method that parses input data in form of vectors.
+	 * 
+	 * @param line Input string that represents one data point.
+	 * @return Vector data.
+	 */
 	@Override
 	public Vector call(String line) throws Exception {
 		
