@@ -6,7 +6,7 @@ import org.apache.spark.mllib.linalg.Vector;
 import scala.Tuple2;
 
 /**
- * All Poolers (Max pool, Group-and-maxpool,...) should implement this interface. See DummyPooler for example.
+ * All Poolers (Max pool, Group-and-maxpool,...) should implement this interface.
  * 
  * @author Arttu Voutilainen
  *

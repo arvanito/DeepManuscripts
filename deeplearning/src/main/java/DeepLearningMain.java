@@ -284,14 +284,18 @@ public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, S
 		// The multiply Extractor does not need any parameters.
 		if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
 			resultTest = layer.test(testPatches, featFile);
+			//resultTest.saveAsTextFile("/projects/deep-learning/" + testId + "_" + layerIndex);
+			
 			resultImage = layer.test(imagePatches, featFile);
 		} else {
 			resultTest = layer.test(resultTest, featFile);
+			//resultTest.saveAsTextFile("/projects/deep-learning/" + testId + "_" + layerIndex);
+			
 			resultImage = layer.test(resultImage, featFile);
 		}	
  	}
- 	resultTest.saveAsTextFile("/projects/deep-learning/resultTest");
- 	resultImage.saveAsTextFile("/projects/deep-learning/resultImage");
+ 	//resultTest.saveAsTextFile("/projects/deep-learning/resultTest");
+ 	//resultImage.saveAsTextFile("/projects/deep-learning/resultImage");
  	
  	Iterator<Tuple2<Vector, Vector>> testPatchesList = resultTest.collect().iterator();
  	
@@ -317,7 +321,7 @@ public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, S
 		}).takeOrdered(300, new VectorComparator());
  		
  		//decide how to save
- 		sc.parallelize(sim).saveAsTextFile(path + "test-patch-" + testPatch);
+ 		//sc.parallelize(sim).saveAsTextFile(path + "test-patch-" + testPatch);
  	}
  	
 	sc.close();

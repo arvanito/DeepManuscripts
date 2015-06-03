@@ -23,15 +23,34 @@ public class KMeansLearner implements Learner {
 
 	final int numClusters;
 	final int numIterations;
+	final String initType;
 	
+	/**
+	 * Constructor that set the current base layer configuration.
+	 * Sets the number of cluster, number of iterations and type of initialization.
+	 * 
+	 * @param configLayer Current base layer configuration object.
+	 */
 	public KMeansLearner(ConfigBaseLayer configLayer) {
 		ConfigKMeans conf = configLayer.getConfigKmeans();
 		numClusters = conf.getNumberOfClusters();
 		numIterations = conf.getNumberOfIterations();
+		if (conf.getType() == 1) {
+			initType = KMeans.RANDOM();
+		} else {
+			initType = KMeans.K_MEANS_PARALLEL();
+		}
 	}
 	
+	
+	/**
+	 * Method that performs the feature learning.
+	 * 
+	 * @param pairData Input dataset from which we learn the features.
+	 * @return Array of learned features.
+	 */
 	@Override
-	public Vector[] call(JavaRDD<Tuple2<Vector, Vector>> pairData) throws Exception {
+	public Vector[] call(JavaRDD<Tuple2<Vector, Vector>> pairData) {
 		
 		// extract second part of the pair
 		JavaRDD<Vector> data = pairData.map(
@@ -44,7 +63,10 @@ public class KMeansLearner implements Learner {
 					}
 				);
 		
-	    KMeansModel clusters = KMeans.train(data.rdd(), numClusters, numIterations);
+		// run K-means
+	    KMeansModel clusters = KMeans.train(data.rdd(), numClusters, numIterations, 5, initType);
+	    
+	    // return the cluster centers as the learned features
 		return clusters.clusterCenters();
 	}
 

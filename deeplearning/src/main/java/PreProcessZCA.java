@@ -36,22 +36,41 @@ public class PreProcessZCA implements PreProcessor {
 	private DenseMatrix ZCA;
 	
 	// checks if we are doing convolutional preprocessing or not
-	// TODO: Initialize it somewhere!
 	boolean conv;
 	
+	
+	/**
+	 * Empty Constructor.
+	 */
 	public PreProcessZCA() {}
+	
+	
+	/**
+	 * Constructor that set the base layer configuration.
+	 * 
+	 * @param c Base layer configuration.
+	 */
 	public PreProcessZCA(ConfigBaseLayer c) {
 		configLayer = c;
 	}
+	
+	
+	/**
+	 * Constructor that sets the mean and ZCA variables.
+	 * 
+	 * @param mean Mean vector.
+	 * @param ZCA ZCA matrix.
+	 */
 	public PreProcessZCA(DenseVector mean, DenseMatrix ZCA) {
 		this.mean = mean;
 		this.ZCA = ZCA;
 	}
 	
+	
 	/**
-	 * Getter method for the ConfigBaseLayer object.
+	 * Method that returns the ConfigBaseLayer object.
 	 * 
-	 * @return The ConfigBaseLayer object
+	 * @return The ConfigBaseLayer object.
 	 */
 	public ConfigBaseLayer getConfigLayer() {
 		return configLayer;
@@ -59,9 +78,9 @@ public class PreProcessZCA implements PreProcessor {
 	
 	
 	/**
-	 * Getter method for the mean vector.
+	 * Method that returns the mean vector.
 	 * 
-	 * @return The mean vector
+	 * @return The mean vector.
 	 */
 	public DenseVector getMean() {
 		return mean;
@@ -69,9 +88,9 @@ public class PreProcessZCA implements PreProcessor {
 	
 	
 	/**
-	 * Getter for the ZCA matrix.
+	 * Method that returns the ZCA matrix.
 	 * 
-	 * @return The ZCA matrix
+	 * @return The ZCA matrix.
 	 */
 	public DenseMatrix getZCA() {
 		return ZCA;
@@ -81,7 +100,7 @@ public class PreProcessZCA implements PreProcessor {
 	/**
 	 * Method that sets the layer configuration.
 	 * 
-	 * @param configLayer The layer configuration object
+	 * @param configLayer The layer configuration object.
 	 */
 	@Override
 	public void setConfigLayer(ConfigBaseLayer configLayer) {
@@ -95,9 +114,9 @@ public class PreProcessZCA implements PreProcessor {
 	
 	
 	/**
-	 * Setter for the mean vector.
+	 * Method that sets the mean vector.
 	 * 
-	 * @param mean Mean vector
+	 * @param mean Mean vector.
 	 */
 	public void setMean(DenseVector mean) {
 		this.mean = mean;
@@ -105,9 +124,9 @@ public class PreProcessZCA implements PreProcessor {
 	
 	
 	/**
-	 * Setter for the ZCA matrix.
+	 * Method that sets the ZCA matrix.
 	 * 
-	 * @param ZCA The ZCA matrix
+	 * @param ZCA The ZCA matrix.
 	 */
 	public void setZCA(DenseMatrix ZCA) {
 		this.ZCA = ZCA;
@@ -117,14 +136,14 @@ public class PreProcessZCA implements PreProcessor {
 	/**
 	 * Method that performs ZCA whitening on the data.
 	 * 
-	 * @param mat Input distributed RowMatrix
-	 * @param e Parameter for eigenvalue normalization
-	 * @return ZCA matrix of type DenseMatrix
+	 * @param mat Input distributed RowMatrix.
+	 * @param e Parameter for eigenvalue normalization.
+	 * @return ZCA matrix of type DenseMatrix.
 	 */
 	public DenseMatrix performZCA(RowMatrix mat, double e) {
 		
 		// compute SVD of the data Matrix
-		// the right singular Vectors are the eigenvectors of the covariance, do the integer casting here!!!
+		// the right singular Vectors are the eigenvectors of the covariance
 		SingularValueDecomposition<RowMatrix, Matrix> svd = mat.computeSVD((int) mat.numCols(), true, 1.0E-9d);
 		DenseMatrix V = (DenseMatrix) svd.V();		// right singular Vectors
 		DenseVector s = (DenseVector) svd.s();		// singular values
@@ -143,7 +162,6 @@ public class PreProcessZCA implements PreProcessor {
 		DenseMatrix ZCA = new DenseMatrix(ss, ss, new double[ss*ss]);
 		DenseMatrix ZCAout = new DenseMatrix(ss, ss, new double[ss*ss]);
 		BLAS.gemm(1.0, Matrices.diag(Vectors.dense(l)), V.transpose(), 0.0, ZCA);
-		//ZCA = V.multiply(ZCA);
 		BLAS.gemm(1.0, V, ZCA, 0.0, ZCAout);
 		
 		return ZCAout;
@@ -153,28 +171,28 @@ public class PreProcessZCA implements PreProcessor {
 	/**
 	 * Main method that preprocesses the dataset. 
 	 * 
-	 * @param data Input distributed dataset
-	 * @param configLayer Current layer configuration from the protocol buffer
-	 * @return Preprocessed distributed dataset
+	 * @param data Input distributed dataset.
+	 * @param configLayer Current base layer configuration.
+	 * @return Preprocessed distributed dataset.
 	 */
 	@Override
 	public JavaRDD<Tuple2<Vector, Vector>> preprocessData(JavaRDD<Tuple2<Vector, Vector>> pairData) {
 
-		// extract data part from the Tuple2 RDD
+		// extract data part from the Tuple RDD
 		JavaRDD<Vector> data = pairData.map(
 					new Function<Tuple2<Vector, Vector>, Vector>() {
+						private static final long serialVersionUID = 7953912605428885035L;
+
 						public Vector call(Tuple2<Vector, Vector> pair) {
 							return pair._2;
 						}
 					}
 				);
-		// assign eps1 for pre-processing
-		//double eps1 = configLayer.getConfigPreprocess().getEps1();
 
 		// apply contrast normalization
-		//data = data.map(new ContrastNormalization(eps1));
+		data = data.map(new ContrastNormalization(configLayer.getConfigPreprocess().getEps1()));
 
-		// convert the JavaRRD<Vector> to a distributed RowMatrix (through Scala RDD<Vector>)
+		// convert the JavaRRD<Vector> to a distributed RowMatrix
 		RowMatrix rowData = new RowMatrix(data.rdd());
 
 		// compute mean data Vector
@@ -188,12 +206,12 @@ public class PreProcessZCA implements PreProcessor {
 		// create distributed Matrix from centralized data, input to ZCA
 		rowData = new RowMatrix(data.rdd());
 		
-		// perform ZCA whitening and project the data to decorrelate them
+		// perform ZCA whitening and project the data to
 		DenseMatrix ZCA = performZCA(rowData, configLayer.getConfigPreprocess().getEps2());
 		setZCA(ZCA);
 			
 		// create a JavaRDD<Tuple2<Vector, Vector>> with the whitened data
-		pairData = pairData.map(new convert2Tuple2(ZCA, m));
+		pairData = pairData.map(new convert2Tuple2(m, ZCA));
 		
 		return pairData;
 	}
@@ -201,6 +219,7 @@ public class PreProcessZCA implements PreProcessor {
 	
 	/**
 	 * Method that preprocesses input data with the learned mean vector and ZCA matrix.
+	 * It is not needed!!!
 	 * 
 	 * @param data Input data in Vector format
 	 * @return Preprocessed output
@@ -240,29 +259,40 @@ public class PreProcessZCA implements PreProcessor {
 		return outVec;
 	}
 	
+	
 	/**
-	 *  Sets up the preprocessor. It loads the saved weights from the disk.
-	 * @param filename
+	 * Method that loads the pre-processing parameters from files.
+	 * First file name is the mean vector, second file name is the ZCA matrix.
+	 *  
+	 * @param filename Array of files that contain pre-processing variables.
+	 * @param sc Spark context variable.
 	 **/
+	@Override
 	public void loadFromFile(String[] filename, JavaSparkContext sc) {
-		//NOTE Since ZCA and mean are both expected to be small (max 64x64)
-		// their loading/saving should not be a bottleneck
+
+		// first file name is the mean
 		mean = (DenseVector) LinAlgebraIOUtils.loadVectorFromObject(filename[0], sc);
+		
+		// second file name is the ZCA
 		ZCA = (DenseMatrix) LinAlgebraIOUtils.loadMatrixFromObject(filename[1], sc);
 
 	}
 	
+	
 	/**
-	 *  Saves the fields necessary to reconstruct a preprocessor object. 
-	 *  Depending on the preprocessor type, more than one file will be saved.
-	 * @param filename common base filename path at which a suffix is added for every field
-	 * 					that is saved
+	 * Saves the fields necessary to reconstruct a preprocessor object. 
+	 * First file name is the mean vector, second file name is the ZCA matrix.
+	 * 
+	 * @param filename File names.
+	 * @param sc Spark context variable.
 	 **/
+	@Override
 	public void saveToFile(String filename, JavaSparkContext sc) {
-		//TODO
-		//NOTE Since ZCA and mean are both expected to be small (max 64x64)
-		// their loading/saving should not be a bottleneck
+
+		// first file name is the mean
 		LinAlgebraIOUtils.saveVectorToObject(this.mean, filename + "_mean", sc);
+		
+		// second file name is the ZCA matrix
 		LinAlgebraIOUtils.saveMatrixToObject(this.ZCA, filename + "_zca", sc);
 	}
 }
@@ -275,21 +305,32 @@ public class PreProcessZCA implements PreProcessor {
  */
 class convert2Tuple2 implements Function<Tuple2<Vector, Vector>, Tuple2<Vector, Vector>> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3141810027556534234L;
-	
-	private DenseMatrix M;
+
 	private DenseVector m;
+	private DenseMatrix M;
+	
 
-
-	public convert2Tuple2(DenseMatrix M, DenseVector m) {
-		this.M = M;
+	/**
+	 * Constructor that sets the mean vector and the ZCA matrix.
+	 * 
+	 * @param M ZCA matrix.
+	 * @param m Mean vector.
+	 */
+	public convert2Tuple2(DenseVector m, DenseMatrix M) {
 		this.m = m;
+		this.M = M;
 	}
 
 	
+	/**
+	 * Method that project the second part of the data tuples onto the new space. 
+	 * It assembles together the first tuple together with the projected data 
+	 * and returns a new tuple.
+	 * 
+	 * @param pair Input tuple.
+	 * @return New tuple with updated projected data.
+	 */
 	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pair) {
 
 		// compute multiplication between the second part of the pair and the DenseMatrix

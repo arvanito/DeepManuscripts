@@ -3,14 +3,14 @@ syntax="proto2";
 package main.java;
 
 message ConfigPreprocess {
-		required double eps_1 = 1;
-		required double eps_2 = 2;
+	required double eps_1 = 1;
+	required double eps_2 = 2;
 }
 
 message ConfigKMeans {
-        required int32 number_of_clusters = 1;
-        required int32 number_of_iterations = 2;
-        required int32 type = 3;
+	required int32 number_of_clusters = 1;
+ 	required int32 number_of_iterations = 2;
+  	required int32 type = 3;
 } 
 
 message ConfigAutoencoders {

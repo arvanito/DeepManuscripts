@@ -11,10 +11,9 @@ import scala.Tuple2;
 
 /**
  * 
- * A base implementation of a Layer. The constructor is given instances of the three classes,
- * Learner, Extractor and Pooler. For feature learning, we use the 'call'-function of the Learner class,
- * and for feature extraction and pooling we map the data through the respective classes.  
- * 
+ * A base implementation of a Layer. The constructor is given instances of the four classes,
+ * PreProcessor, Learner, Extractor and Pooler.
+ *  
  * @author Arttu Voutilainen
  *
  */
@@ -27,20 +26,32 @@ public class BaseLayer implements DeepLearningLayer {
 	Extractor extract;
 	Pooler pool;
 	
-	// The path to the folder of the .prototxt file, where the 
-	// weight will be saved. (This path should already exist.)
+	// path prefix for saving the trained model
 	String pathPrefix;
 	
-	// The layer number, starting from 0
-	int layer_index;
-	// Ugly hack. Spark context is needed by the preprocessor.
+	// the layer number, starting from 0
+	int layerIndex;
+	
+	// spark context is needed by the preprocessor.
 	// It needs to parallelize a DenseMatrix object.
-	JavaSparkContext spark_context; 
+	JavaSparkContext sparkContext; 
 	
-	// By default, saving of the model is false
-	boolean save_model;
+	// indicates if we save the trained model, or not
+	boolean saveModel;
+	
+	// indicates if we are the last layer, or not
+	boolean notLast;
 	
 	
+	/**
+	 * Constructor of a BaseLayer. Sets the necessary class objects. TODO:: Change this to put more parameters inside!!
+	 * 
+	 * @param configLayer Base layer configuration.
+	 * @param preprocess PreProcessor object.
+	 * @param learn Learner object.
+	 * @param extract Extractor object.
+	 * @param pool Pooler object.
+	 */
 	public BaseLayer(ConfigBaseLayer configLayer, PreProcessor preprocess, Learner learn, Extractor extract, Pooler pool) {
 		this.configLayer = configLayer;
 		
@@ -49,109 +60,243 @@ public class BaseLayer implements DeepLearningLayer {
 		this.extract = extract;
 		this.pool = pool;
 		
-		save_model = false;
+		saveModel = false;
 	}
 	
 	
+	/**
+	 * Overriden method for pre-processing the data. Calls the preprocessData from the PreProcessor class.
+	 * 
+	 * @param data Input distributed dataset.
+	 * @return Preprocessed distributed dataset.
+	 */
 	@Override
 	public JavaRDD<Tuple2<Vector, Vector>> preProcess(JavaRDD<Tuple2<Vector, Vector>> data) {
 		return preprocess.preprocessData(data);
 	}
 	
 	
+	/**
+	 * Overriden method for feature learning. Calls the call from the Learner class.
+	 * 
+	 * @param data Input distributed dataset.
+	 * @return Array of Vector objects that represent the learned features.
+	 */
 	@Override
-	public Vector[] learnFeatures(JavaRDD<Tuple2<Vector, Vector>> data) throws Exception {
+	public Vector[] learnFeatures(JavaRDD<Tuple2<Vector, Vector>> data) {
 		return learn.call(data);
 	}
 
 	
+	/**
+	 * Overriden method for feature extraction. Does a map for every data point in the distributed dataset.
+	 * 
+	 * @param data Input distributed dataset.
+	 * @param features Array of learned features from the learning step.
+	 * @return New distributed dataset that contains the new representations of the data points.
+	 */
 	@Override
 	public JavaRDD<Tuple2<Vector, Vector>> extractFeatures(JavaRDD<Tuple2<Vector, Vector>> data, Vector[] features) {
-		//extract.setConfigLayer(configLayer);
 		
-		// check this!!
+		// if we do pre-processing in the current layer, 
+		// set the mean and ZCA variables to the Extractor
+		// and the epsilon variable for the contrast normalization
 		if(preprocess != null) {
-			extract.setPreProcessZCA(((PreProcessZCA)preprocess).getZCA(), ((PreProcessZCA)preprocess).getMean());
+			extract.setPreProcessZCA(((PreProcessZCA) preprocess).getMean(), ((PreProcessZCA) preprocess).getZCA());
+			extract.setEps1(configLayer.getConfigPreprocess().getEps1());
 		}
+		
+		// set the learned features
 		extract.setFeatures(features);
-		extract.setEps1(configLayer.getConfigPreprocess().getEps1());
+		
+		// do the map
 		return data.map(extract);
 	}
 
 	
+	/**
+	 * Overriden method for pooling of representations. Does a map for every data point in the distributed dataset.
+	 * 
+	 * @param data Input distributed dataset.
+	 * @return New pooled distributed dataset.
+	 */
 	@Override
 	public JavaRDD<Tuple2<Vector, Vector>> pool(JavaRDD<Tuple2<Vector, Vector>> data) {
 		return data.map(pool);
 	}
 
 	
-	//TODO:: Input two datasets, one is patch-based and the other is larger parts of the image.
-    @Override
-	public JavaRDD<Tuple2<Vector, Vector>> train(JavaRDD<Tuple2<Vector, Vector>> input_small_patches, 
-			JavaRDD<Tuple2<Vector, Vector>> input_word_patches) throws Exception {
+	/**
+	 * Overriden method that performs a complete training of one layer.
+	 * 
+	 * @param input1 Initial distributed dataset. In the first layer, it will contain small patches. 
+	 * For the next layers, it will contain the pooled representations from the previous layer. 
+	 * @param input2 Second distributed dataset. In the first layer, it ill contain large patches.
+	 * For the next layers, it will be the same as the first input dataset.
+	 * @return Distributed dataset containing the final pooled representations for the current layer.
+	 * @throws Exception.
+	 */
+	@Override
+	public JavaRDD<Tuple2<Vector, Vector>> train(JavaRDD<Tuple2<Vector, Vector>> input1, JavaRDD<Tuple2<Vector, Vector>> input2) throws Exception {
     	
-    	JavaRDD<Tuple2<Vector, Vector>> preprocessed = preProcess(input_small_patches);
-    	if (save_model == true)
-    		this.preprocess.saveToFile(pathPrefix + "_preprocess", spark_context);
+		// TODO:: make this more automatic!
+    	int numPartitions = 400 * 4; // num-workers * cores_per_worker * succesive tasks
+		JavaRDD<Tuple2<Vector, Vector>> input1Preprocessed;
+		Vector[] features;
+		
+		// pre-process data
+		if (preprocess != null) {
+			input1Preprocessed = preProcess(input1);
+			
+			// save the mean and ZCA variables
+			if (saveModel == true) {
+				preprocess.saveToFile(pathPrefix + "_preprocess_" + System.currentTimeMillis(), sparkContext);
+			}
+		} else {
+			input1Preprocessed = input1;
+		}
     	
-		Vector[] features = learnFeatures(preprocessed);
+		// cache the pre-processed data, if possible
+		StorageLevel storageLevel = input1Preprocessed.getStorageLevel();
+		if (storageLevel == StorageLevel.NONE()){
+			input1Preprocessed.cache();
+		}
 		
-		// TODO:: do preprocessing on the second dataset
-		//JavaRDD<Vector> preprocessedBig = dataBig.map(preprocess);
+		// learn the features
+		features = learnFeatures(input1Preprocessed);
 		
-		// Ugly hack, move this to the Learner class
-		if (save_model == true)
-			LinAlgebraIOUtils.saveVectorArrayToObject(features, pathPrefix + "_features", spark_context);
+		// Ugly hack, move this to the Learner class, TODO
+		if (saveModel == true)
+			LinAlgebraIOUtils.saveVectorArrayToObject(features, pathPrefix + "_features_" + System.currentTimeMillis(), sparkContext);
 		
-		JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(input_word_patches, features);
-		JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent);
+		// perform feature extraction
+		JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(input2, features);
+		
+		// perform pooling
+		JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent).repartition(numPartitions).cache();
+		if (notLast) {
+			// we are not in the last layer, therefore we force the previous computation
+			pooled.count();
+		}
+		
 		return pooled;
 	}
 
-    
+	
+	/**
+	 * Overriden method the performs a test pass through the data for the current layer.
+	 * 
+	 * @param data Input distributed dataset for the current layer.
+	 * @param featFile Array of input files that contain saved parameters of the trained model.
+	 * What is the convention here?
+	 * @throws Exception
+	 */
+    @Override
     public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data, String[] featFile) throws Exception {
-    	int numPartitions = 400*4; //Num-workers * cores_per_worker * succesive tasks
+    	
+    	// TODO:: Make this more automatic!
+    	int numPartitions = 400 * 4; // num-workers * cores_per_worker * succesive tasks
 
-    	// Setup the preprocessor
-    	if (layer_index < 1) {
-    		this.preprocess.loadFromFile(featFile, spark_context); //this needs to be changed
+    	// setup the preprocessor
+    	if (preprocess != null) {
+    		preprocess.loadFromFile(featFile, sparkContext); //this needs to be changed
     	}
-//    	JavaRDD<Vector> preprocessed = preProcess(data);
     	
-    	//TODO load the features from file.
-    	Vector[] features = LinAlgebraIOUtils.loadVectorArrayFromObject(featFile[layer_index+2], spark_context);
+    	// load the features from file.
+    	Vector[] features = LinAlgebraIOUtils.loadVectorArrayFromObject(featFile[layerIndex+2], sparkContext);
     	QuickSortVector.quickSort(features, 0, features.length-1);
-
-    	System.out.println("Features info");
-    	System.out.println(features.length);
-    	System.out.println(features[0].size());
+    	//LinAlgebraIOUtils.saveVectorArrayToText(features, "/projects/deep-learning/features_" + layer_index + System.currentTimeMillis(), spark_context);
     	
+    	// perform feature extraction
     	JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(data, features);
+    	
+    	// perform pooling
     	JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent).repartition(numPartitions).cache();
-    	pooled.saveAsObjectFile(pathPrefix + "_" + layer_index + "_" + System.currentTimeMillis());
+    	//pooled.saveAsTextFile("/projects/deep-learning/" + pathPrefix + "_" + layer_index + "_" + System.currentTimeMillis());
+    	
     	return pooled;
     }
    
     
+    /**
+     * Return the path prefix for saving files.
+     * 
+     * @return Path prefix.
+     */
     public String getPathPrefix() {
     	return pathPrefix;
     }
+    
+    
+    /**
+     * Set the path prefix parameter for saving files.
+     * 
+     * @param s Input path prefix.
+     */
     public void setPathPrefix(String s) {
     	pathPrefix = s;
     }
+    
+    
+    /**
+     * Return the layer index.
+     * 
+     * @return Layer index.
+     */
     public int getLayerIndex() {
-    	return layer_index;
+    	return layerIndex;
     }
+    
+    
+    /**
+     * Set the layer index.
+     * 
+     * @param l Input layer index.
+     */
     public void setLayerIndex(int l) {
-    	layer_index = l;
+    	layerIndex = l;
     }
+    
+    
+    /**
+     * Set the spark context for saving files.
+     * 
+     * @param sc Input spark context.
+     */
+    @Override
     public void setSparkContext(JavaSparkContext sc) {
-    	spark_context = sc;
+    	sparkContext = sc;
     }
-	public void setSaveModel(boolean value) {
-		save_model = value;
+    
+    
+    /**
+     * Set the saveModel parameter, which indicates saving or not.
+     * 
+     * @param saveModel Input boolean.
+     */
+    @Override
+	public void setSaveModel(boolean saveModel) {
+		this.saveModel = saveModel;
 	}
+	
+	
+	/**
+	 * Return the boolean that indicates saving.
+	 * 
+	 * @return Boolean value.
+	 */
+    @Override
 	public boolean getSaveModel() {
-		return this.save_model;
+		return saveModel;
+	}
+	
+	
+	/**
+	 * Sets the notLast boolean, indicating if we are in the last layer.
+	 * 
+	 * @param notLast Indicator for last layer.
+	 */
+	public void setNotLast(boolean notLast) {
+		this.notLast = notLast;
 	}
 }

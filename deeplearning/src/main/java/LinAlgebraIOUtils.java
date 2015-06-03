@@ -212,6 +212,22 @@ public class LinAlgebraIOUtils {
 	
 	
 	/**
+	 * Saves an array of Vectors to a text file.
+	 * 
+	 * @param input
+	 * @param outFile
+	 * @param sc
+	 */
+	public static void saveVectorArrayToText(Vector[] input, String outFile, JavaSparkContext sc) {
+		List<Vector> temp_input = new ArrayList<Vector>();
+		for (int i = 0; i < input.length; ++i)
+			temp_input.add(input[i]);
+		// Transform it to JavaRDD and save it to file
+		sc.parallelize(temp_input).saveAsTextFile(outFile);
+	}
+	
+	
+	/**
 	 * Loads an array of Vectors from an object file.
 	 * 
 	 * @param inFile

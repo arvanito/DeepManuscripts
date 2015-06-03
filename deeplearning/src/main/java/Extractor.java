@@ -1,7 +1,5 @@
 package main.java;
 
-import main.java.DeepModelSettings.ConfigBaseLayer;
-
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.linalg.DenseMatrix;
 import org.apache.spark.mllib.linalg.DenseVector;
@@ -10,48 +8,45 @@ import org.apache.spark.mllib.linalg.Vector;
 import scala.Tuple2;
 
 /**
- * All Extractors (Matrix multiply, Convolution,..) should implement this interface. See DummyExtractor for example.
+ * All Extractors (Matrix multiply, Convolution,..) should implement this interface.
  * 
  * @author Arttu Voutilainen
  *
  */
 public interface Extractor extends Function<Tuple2<Vector, Vector>, Tuple2<Vector, Vector>> {
-
+	
 	/**
-	 * Set BaseLayer configuration to be used by this extractor.
+	 * Sets the mean vector and the ZCA matrix, results of PreProcessZCA.
+	 * By default those should be null, in which case pre-processing is not used.
 	 * 
-	 * @param configLayer The configuration for the BaseLayer
+	 * @param mean Input mean vector.
+	 * @param zca Input ZCA matrix.
 	 */
-	//public void setConfigLayer(ConfigBaseLayer configLayer);
+	public void setPreProcessZCA(DenseVector mean, DenseMatrix zca);
 	
 	
 	/**
-	 * Set the ZCA matrix and mean vector, results of PreProcessingZCA.
-	 * By default those should be null, in which case preprocessing is not used.
-	 * 
-	 * @param zca
-	 * @param mean
-	 */
-	public void setPreProcessZCA(DenseMatrix zca, DenseVector mean);
-	
-	
-	/**
-	 * Set features to be used by this extractor.
+	 * Sets features to be used by this extractor.
 	 *
-	 * @param features The features this extractor will use
+	 * @param features The features this extractor will use.
 	 */
 	public void setFeatures(Vector[] features);
 
-	public void setEps1(double eps1);
 	
 	/**
-	 * Main method that is called by passing it to a map call. 
-	 * This method will be applied to each data point independently.
-	 * Here, 2-d convolution will be implmented based on FFT.
-	 *
-	 * @param data Vector representing one data point
-	 * @return A new representation of the input after applying the feature extraction
+	 * Sets the epsilon parameter for contrast normalization.
+	 * 
+	 * @param eps1 Variable for contrast normalization.
 	 */
-	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> data) throws Exception;
+	public void setEps1(double eps1);
+	
+	
+	/**
+	 * Main method that performs feature extraction.
+	 *
+	 * @param data Input distributed dataset for feature extraction.
+	 * @return New data representations.
+	 */
+	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> data);
 
 }

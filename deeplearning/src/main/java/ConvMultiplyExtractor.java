@@ -14,122 +14,123 @@ import scala.Tuple2;
 /**
  * Class for feature extraction using multiplication for the first layer of learning.
  * Extraction of overlapping patches and multiplication. Equivalent to convolution.
+ * It is used instead of FFTConvolution, because of the contrast normalization pre-processing 
+ * for the input patches.
  * 
  * @author Nikolaos Arvanitopoulos
  *
  */
-
 public class ConvMultiplyExtractor implements Extractor {
 
 	private static final long serialVersionUID = 7991635895652585866L;
 
-	private DenseMatrix zca;
 	private DenseVector mean;
-	private Vector[] features;	// array of learned feature Vectors
+	private DenseMatrix zca;
+	private Vector[] features;
 
 	private int inputRows;
 	private int inputCols;
 	private int featureRows;
 	private int featureCols;
+	
 	private double eps1;
-	//private int validRows;
-	//private int validCols;
 
 	private ConfigFeatureExtractor.NonLinearity nonLinearity = null;
 	private double alpha; // non-linearity (threshold)
 
+	
 	/**
-	 * Constructor 
-	 * @param configLayer The input configuration for the current layer
-	 * @param preProcess The input PreProcess configuration
+	 * Constructor that sets the current base layer configuration. 
+	 * 
+	 * @param configLayer The current base layer configuration.
 	 */
 	public ConvMultiplyExtractor(ConfigBaseLayer configLayer) {
 		setConfig(configLayer);
 	}
-
-
-	/**
-	 * Constructor 
-	 * @param configLayer The input configuration for the current layer
-	 * @param preProcess The input PreProcess configuration
-	 * @param features The input feature learned from the previous step
-	 */
-	public ConvMultiplyExtractor(ConfigBaseLayer configLayer, PreProcessZCA preProcess, Vector[] features) {
-		setConfig(configLayer);
-		this.features = features;
-	}
+	
 	
 	/**
-	 * Setter method for the ConfigBaseLayer object.
+	 * Method that sets the current base layer configuration.
 	 * 
-	 * @param configLayer The ConfigBaseLayer object
+	 * @param configLayer The ConfigBaseLayer object.
 	 */
 	private void setConfig(ConfigBaseLayer configLayer) {
+		
 		ConfigFeatureExtractor conf = configLayer.getConfigFeatureExtractor();
+		
+		// get input data dimensions
 		inputCols = conf.getInputDim1();
 		inputRows = conf.getInputDim2();
 		if(inputCols == 0) throw new RuntimeException("Configured input dimension 1 is 0");
 		if(inputCols == 0) throw new RuntimeException("Configured input dimension 2 is 0");
 
+		// get input feature dimensions
 		featureCols = conf.getFeatureDim1();
 		featureRows = conf.getFeatureDim2();
 		if(featureCols == 0 || featureCols > inputCols) throw new RuntimeException("Configured feature dimension 1 is 0 or > input dimension 1");
 		if(featureRows == 0 || featureRows > inputRows) throw new RuntimeException("Configured feature dimension 2 is 0 or > input dimension 2");
 
-		//validRows = inputRows - featureRows + 1;
-		//validCols = inputCols - featureCols + 1;
+		// get non-linearity
 		nonLinearity = conf.getNonLinearity();
-		System.out.println(nonLinearity);
+		
+		// get the alpha threshold, in case of threshold non-linearity
 		if (conf.hasSoftThreshold()) {
 			alpha = conf.getSoftThreshold();
 		}
 	}
 	
+	
+	/**
+	 * Method that sets the pre-processing mean and ZCA variables.
+	 * 
+	 * @param mean Input mean vector.
+	 * @param zca Input ZCA matrix.
+	 */
 	@Override
-	public void setPreProcessZCA(DenseMatrix zca, DenseVector mean) {
-		this.zca = zca;
+	public void setPreProcessZCA(DenseVector mean, DenseMatrix zca) {
 		this.mean = mean;
+		this.zca = zca;
 	}
 	
 	
 	/**
-	 * Setter method for learned features.
+	 * Method that sets the learned features.
 	 * 
-	 * @param features Input learned features
+	 * @param features Input learned features.
 	 */
 	@Override
 	public void setFeatures(Vector[] features) {
 		this.features = features;
 	}
 	
-	public void setEps1(double eps1){
+	
+	/**
+	 * Method that set the epsilon parameter for contrast normalization.
+	 * 
+	 * @param eps1 Variable for contrast normalization.
+	 */
+	@Override
+	public void setEps1(double eps1) {
 		this.eps1 = eps1;
 	}
 	
+	
 	/**
-	 * Method that is called during a map call.
+	 * Main method that performs convolutional feature extraction.
 	 * 
-	 * @param data Input Vector
-	 * @return Extracted feature
+	 * @param pairData Input tuple.
+	 * @return New representation of the input tuple.
 	 */
 	@Override
-	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pairData) throws Exception {
+	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pairData) {
 		
-		/** Get necessary parameters for the feature extraction process **/
+		// get the data part of the tuple
 		Vector data = pairData._2;
 		
-		// number of features learned
-		/*int numFeatures = 0;
-		if (configLayer.hasConfigKmeans()) {
-			numFeatures = configLayer.getConfigKmeans().getNumberOfClusters();
-		} else if (configLayer.hasConfigAutoencoders()) {
-			numFeatures = configLayer.getConfigAutoencoders().getNumberOfUnits();
-		}*/
-		
-		// filters, convert from Vector[] to DenseMatrix
+		// convert the features from Vector[] to DenseMatrix
 		DenseMatrix D = MatrixOps.convertVectors2Mat(features);
 
-		// reshape data vector to a matrix and extract all overlapping patches
+		// reshape the input data vector to a matrix and extract all overlapping patches
 		int[] dims = {inputRows, inputCols};
 		int[] rfSize = {featureRows, featureCols};
 		DenseMatrix M = MatrixOps.reshapeVec2Mat((DenseVector) data, dims);	
@@ -139,23 +140,19 @@ public class ConvMultiplyExtractor implements Extractor {
 		DenseMatrix out = new DenseMatrix(patches.numRows(),D.numRows(),new double[patches.numRows()*D.numRows()]);	
 		DenseMatrix patchesOut = new DenseMatrix(patches.numRows(),patches.numCols(),new double[patches.numRows()*patches.numCols()]);
 		
-		// get necessary data from the PreProcessor
+		// do the feature extraction
 		if (zca != null && mean != null) {
-
-			// epsilon for pre-processing
-			//double eps1 = configLayer.getConfigPreprocess().getEps1();
 			
 			// preprocess the data point with contrast normalization and ZCA whitening
 			patches = MatrixOps.localMatContrastNorm(patches, eps1);
 			patches = MatrixOps.localMatSubtractMean(patches, mean);
 			
-			//patches = patches.multiply(zca);
 			BLAS.gemm(1.0, patches, zca, 0.0, patchesOut);
 		} else {
 			patchesOut = patches;
 		}
 	
-		// multiply the matrix of the learned features with the preprocessed data point
+		// multiply the matrix of the learned features with the pre-processed data point
 		BLAS.gemm(1.0, patchesOut, D.transpose(), 0.0, out);
 		DenseVector outVec = MatrixOps.reshapeMat2Vec(out);
 		

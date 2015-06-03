@@ -19,56 +19,61 @@ public class BaseLayerFactory {
 	/**
 	 * Main method that creates a BaseLayer from the loaded protocol buffer configuration.
 	 * 
-	 * @param configLayer ConfigBaseLayer object read from the protocol buffer file
-	 * @param layer_index Index that represents the number of layer created
-	 * @param pathPrefix Path prefix for saving the trained model
-	 * @return BaseLayer object that represents the current layer
+	 * @param configLayer ConfigBaseLayer object read from the protocol buffer file.
+	 * @param layerIndex Index that represents the number of layer created.
+	 * @param pathPrefix Path prefix for saving the trained model.
+	 * @return BaseLayer object that represents the current layer.
 	 */
-	static public BaseLayer createBaseLayer(ConfigBaseLayer configLayer, int layer_index, String pathPrefix) {
+	static public BaseLayer createBaseLayer(ConfigBaseLayer configLayer, int layerIndex, String pathPrefix) {
 		
-		// set up the preprocessor
+		// set up the preprocessor, optional for every layer
 		PreProcessZCA preprocessor = null;
 		if (configLayer.hasConfigPreprocess()) {
-					preprocessor = new PreProcessZCA(configLayer);
+			preprocessor = new PreProcessZCA(configLayer);
 		}
 		
-		// Assert one of this two needs to be true. We should have either K-means or Auto-encoders
+		// assert one of this two needs to be true. We should have either K-means or Auto-encoders
 		assert(configLayer.hasConfigAutoencoders() || configLayer.hasConfigKmeans());
 		
-		// set up the learner
+		// set up the learner, required for every layer
 		Learner learner = null;
 		if (configLayer.hasConfigKmeans()) {
 			learner = new KMeansLearner(configLayer);
-			System.out.printf("Kmeans clusters %d\n", configLayer.getConfigKmeans().getNumberOfClusters());
 		}
+		// TODO:: Put Autoencoder classes from master branch
 		if (configLayer.hasConfigAutoencoders()) {
-			System.out.printf("Autoencoders units %d\n", configLayer.getConfigAutoencoders().getNumberOfUnits());
-			// Not yet implemented
-			System.out.printf("WARNING - WARNING - not yet implemented");
+			//learner = new AutoencoderLearner(configLayer);	
 		}
 		
-		// set up the extractor, depending on the layer, either FFT convolutional extraction, 
-		// or matrix-vector multiplication extraction
+		// set up the extractor, depending on the layer 
+		// either FFT convolutional extraction, or matrix-vector multiplication extraction
 		Extractor extractor = null;
 		if (configLayer.hasConfigFeatureExtractor()) {
-				extractor = new ConvMultiplyExtractor(configLayer);
+			// we use the ConvMultiplyExtractor for contrast normalized patches
+			extractor = new ConvMultiplyExtractor(configLayer);
+			
+			// otherwise, we use the FFTConvolutionExtractor
+			//extractor = new FFTConvolutionExtractor(configLayer);
 		} else {
-				extractor = new MultiplyExtractor(configLayer);
+			extractor = new MultiplyExtractor(configLayer);
 		}
 		
 		// set up the pooler, by default max-pooler
-		ConfigPooler cpooler = configLayer.getConfigPooler();
+		// TODO:: Incorporate an average pooler
 		Pooler pooler = null;
-		if (cpooler.getPoolType() == ConfigPooler.PoolType.MAX) {
+		if (configLayer.getConfigPooler().getPoolType() == ConfigPooler.PoolType.MAX) {
 			pooler = new MaxPoolerExtended(configLayer);
 		}
-		System.out.printf("Pool size %d\n", cpooler.getPoolSize());
  
-		// create and return the base layer
+		// create and return the base layer, setting the current layer index
+		// TODO:: check is pathPrefix is empty and set up the necessary parameters
 		BaseLayer b = new BaseLayer(configLayer, preprocessor, learner, extractor, pooler);
-		b.setLayerIndex(layer_index);
-		//TODO change this
-		b.setPathPrefix(pathPrefix + Integer.toString(layer_index));
+		b.setLayerIndex(layerIndex);
+		
+		// set the path prefix for saving the files, using the layer index as indicator
+		//TODO change this, if pathPrefix is empty, do nothing
+		b.setPathPrefix(pathPrefix + Integer.toString(layerIndex));
+		
 		return b;
 	}
 }

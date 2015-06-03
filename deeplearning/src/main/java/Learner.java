@@ -7,7 +7,7 @@ import org.apache.spark.mllib.linalg.Vector;
 import scala.Tuple2;
 
 /**
- * All Learners (KMeans, Autoencoders,..) should implement this interface. See DummyLearner for example.
+ * All Learners (KMeans, Autoencoders,..) should implement this interface.
  * 
  * @author Arttu Voutilainen
  *
@@ -15,15 +15,14 @@ import scala.Tuple2;
 public interface Learner extends Function<JavaRDD<Tuple2<Vector, Vector>>,Vector[]> {
 
 	/**
-	 * Main method that run a specific learning procedure. 
-	 * Initially, three methods will be implemented:
+	 * Main method that runs a specific learning procedure. 
+	 * Initially, two methods will be implemented:
 	 * 	1. K-means
 	 *	2. Autoencoder
-	 *  3. Sparse coding
 	 *
-	 * @param data An RDD that represents the original data from which we learn filters
-	 * @return An array of Vectors that represent the learned filters
+	 * @param data An RDD that represents the original data from which we learn filters.
+	 * @return An array of Vectors that represent the learned filters.
 	**/
-	public Vector[] call(JavaRDD<Tuple2<Vector, Vector>> data) throws Exception;
+	public Vector[] call(JavaRDD<Tuple2<Vector, Vector>> data);
 
 }

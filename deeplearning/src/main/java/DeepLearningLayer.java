@@ -1,7 +1,5 @@
 package main.java;
 
-import main.java.DeepModelSettings.ConfigBaseLayer;
-
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.Vector;
@@ -17,89 +15,86 @@ import scala.Tuple2;
  */
 public interface DeepLearningLayer {
 	
+	
 	/**
-	 * Preprocesses data using ZCA whitening.
+	 * Method that performs pre-processing to the input data.
 	 * 
-	 * @param data An RDD containing the input data for preprocessing
-	 * @return Preprocessed data
+	 * @param data Input distributed dataset for preprocessing.
+	 * @return Preprocessed data.
 	 */
 	public JavaRDD<Tuple2<Vector, Vector>> preProcess(JavaRDD<Tuple2<Vector, Vector>> data);
 	
 	
 	/**
-	 * Takes in data, does for example K-means clustering and returns the features (like cluster centroids).
+	 * Method that performs feature learning.
 	 * 
-	 * @param data An RDD containing the data on which learning is to happen
-	 * @return An Vector array of the learned features
-	 * @throws Exception 
+	 * @param data Input distributed dataset.
+	 * @return A Vector array of the learned features.
 	 */
-	public Vector[] learnFeatures(JavaRDD<Tuple2<Vector, Vector>> data) throws Exception;
+	public Vector[] learnFeatures(JavaRDD<Tuple2<Vector, Vector>> data);
 	
 	
-	/**
-	 * Extracts a given set of features from a given set of data. Returns one Vector per input data Vector,
-	 * so for example convolution will have to reshape the resulting matrices (from one input data Vector) 
-	 * into vectors and append them into one big Vector. 
+	/** 
+	 * Method that performs feature extraction. 
 	 * 
-	 * @param data An RDD of Vectors, from which the features are to be extracted
-	 * @param configLayer Current layer configuration extracted from the protocol buffer description
-	 * @param features An RDD of Vectors, where each Vector is a feature
-	 * @return An RDD of extracted features, where each Vector corresponds to one Vector in data
+	 * @param data Input distributed dataset for feature extraction.
+	 * @param features Array of learned features.
+	 * @return New representations of the input data points.
 	 */
 	public JavaRDD<Tuple2<Vector, Vector>> extractFeatures(JavaRDD<Tuple2<Vector, Vector>> data, Vector[] features);
 	
 	
 	/**
-	 * Pools data to reduce dimensionality. Probably requires some knowledge of the input Vector's structure
-	 * (like "this is 1000 times 32x32 matrices"). 
+	 * Method that performs pooling of representations.
 	 * 
-	 * @param data An RDD of Vectors, where each Vector represents one element in input dataset (pooling happens only inside a Vector).
-	 * @return An RDD of the pooled Vectors
+	 * @param data Input distributed dataset for pooling.
+	 * @return Pooled data representations.
 	 */
 	public JavaRDD<Tuple2<Vector, Vector>> pool(JavaRDD<Tuple2<Vector, Vector>> data);
 
 	
      /**
-	 * Execute all of this layer for the given data.
+	 * Main method that performs a complete training for the current layer.
 	 *
-	 * @param data An RDD containing the original data
-	 * @return An RDD containing a new representation of the data
-	 * @throws Exception
+	 * @param data1 First input distributed dataset.
+	 * @param data2 Second input distributed dataset.
+	 * @return Output pooled representations for the current layer.
+ 	 * @throws Exception.
 	 */
 	public JavaRDD<Tuple2<Vector, Vector>> train(JavaRDD<Tuple2<Vector, Vector>> data1, JavaRDD<Tuple2<Vector, Vector>> data2) throws Exception;
 
 	
     /**
-	 * Computes the descriptors of the input image patches.
+	 * Main method that performs a complete test pass through the data for the current layer.
 	 *
-	 * @param data An RDD of size N x M containing candidate image patches where
-	 * 				N is the number of patches and M is the product of the patch sizes (width x height).
-	 * @return An RDD containing a new representation of the data, of size N x (descriptor size)
-	 * @throws Exception
+	 * @param data Input distributed dataset to perform testing over.
+	 * @param featFile Array of files to load the trained model from.
+	 * @return Output pooled representations for the current layer.
+	 * @throws Exception.
 	 */
 	 public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data,String[] featFile) throws Exception;
 	 
 	 
 	 /**
-	  * Sets the SparkContext, it is needed for saving data into files
+	  * Sets the SparkContext, it is needed for saving data into files.
 	  * 
-	  * @param sc The SparkContext variable
+	  * @param sc The SparkContext variable.
 	  */
 	 public void setSparkContext(JavaSparkContext sc);
 	 
 	 
 	 /**
-	  * Sets a boolean variable that checks if we save our trained model, or not
+	  * Sets a boolean variable that checks if we save our trained model, or not.
 	  * 
-	  * @param value True of false
+	  * @param value True of false.
 	  */
 	 public void setSaveModel(boolean value);
 	 
 	 
 	 /**
-	  * Gets the boolean variable that denotes if we save the trained model, or not
+	  * Gets the boolean variable that denotes if we save the trained model, or not.
 	  * 
-	  * @return True or false
+	  * @return True or false.
 	  */
 	 public boolean getSaveModel();
 }
