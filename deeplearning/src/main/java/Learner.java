@@ -20,9 +20,9 @@ public interface Learner extends Function<JavaRDD<Tuple2<Vector, Vector>>,Vector
 	 * 	1. K-means
 	 *	2. Autoencoder
 	 *
-	 * @param data An RDD that represents the original data from which we learn filters.
+	 * @param pairData An RDD that represents the original data from which we learn filters.
 	 * @return An array of Vectors that represent the learned filters.
 	**/
-	public Vector[] call(JavaRDD<Tuple2<Vector, Vector>> data);
+	public Vector[] call(JavaRDD<Tuple2<Vector, Vector>> pairData);
 
 }

@@ -29,10 +29,10 @@ public interface PreProcessor extends Function<Vector, Vector>{
 	/**
 	 * Main method that runs a pre-processing pipeline on the data points.
 	 * 
-	 * @param data Input data points in a distributed dataset.
+	 * @param pairData Input data points in a distributed dataset.
 	 * @return pre-processed distributed dataset.
 	 */
-	public JavaRDD<Tuple2<Vector, Vector>> preprocessData(JavaRDD<Tuple2<Vector, Vector>> data);
+	public JavaRDD<Tuple2<Vector, Vector>> preprocessData(JavaRDD<Tuple2<Vector, Vector>> pairData);
 	
 	
 	/**

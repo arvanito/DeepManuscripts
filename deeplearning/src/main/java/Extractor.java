@@ -44,9 +44,9 @@ public interface Extractor extends Function<Tuple2<Vector, Vector>, Tuple2<Vecto
 	/**
 	 * Main method that performs feature extraction.
 	 *
-	 * @param data Input distributed dataset for feature extraction.
+	 * @param pair Input data for feature extraction.
 	 * @return New data representations.
 	 */
-	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> data);
+	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pair);
 
 }

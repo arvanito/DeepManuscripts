@@ -97,14 +97,14 @@ public class MultiplyExtractor implements Extractor {
 	/**
 	 * Main method that performs feature extraction through matrix multiplications.
 	 * 
-	 * @param pairData Input tuple.
+	 * @param pair Input tuple.
 	 * @return New representation of the input tuple.
 	 */
 	@Override
-	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pairData) {
+	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pair) {
 		
 		// get the data part of the tuple
-		Vector data = pairData._2;
+		Vector data = pair._2;
 		DenseVector dataDense = (DenseVector) data;
 		
 		// convert the features from Vector[] to DenseMatrix
@@ -135,7 +135,7 @@ public class MultiplyExtractor implements Extractor {
 			dataOut = MatrixOps.applyNonLinearityVec(dataOut, nonLinearity, alpha);
 		}
 		
-		return new Tuple2<Vector, Vector>(pairData._1, dataOut);
+		return new Tuple2<Vector, Vector>(pair._1, dataOut);
 	}
 
 }

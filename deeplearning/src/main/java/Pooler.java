@@ -14,11 +14,10 @@ import scala.Tuple2;
 public interface Pooler extends Function<Tuple2<Vector, Vector>, Tuple2<Vector, Vector>>{
 
 	/**
-	 * Main method that implements pooling and non-linear activation.
-	 * This method will be passed to a map call and applied independently to each data point.
+	 * Main method that implements pooling. 
 	 * 
-	 * @param data A Vector representing one data point
+	 * @param pair A Vector representing one data point
 	 * @return A Vector after applying pooling and non-linear activation
 	**/
-	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> data) throws Exception;
+	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pair);
 }

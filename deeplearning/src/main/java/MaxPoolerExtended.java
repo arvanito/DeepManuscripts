@@ -17,45 +17,62 @@ import scala.Tuple2;
 public class MaxPoolerExtended implements Pooler {
 
 	private static final long serialVersionUID = 1505267555549652215L;
-	private int pool_size;
 
-	// Only relevant for 2D input
-	protected int input_dim1;
-	protected int input_dim2;
-	/**
-	 *  The field is true if the input Vector to the method call
-	 *  comes from a 2D matrix
-	 */
+	private int poolSize;
+
+	protected int inputDim1;
+	protected int inputDim2;
+	
 	protected boolean poolOver2DInput;
-	public MaxPoolerExtended(ConfigBaseLayer c) {
-		pool_size = c.getConfigPooler().getPoolSize();
+	
+	
+	/**
+	 * Constructor that sets the current base layer configuration.
+	 * 
+	 * @param configLayer Current base layer configuration.
+	 */
+	public MaxPoolerExtended(ConfigBaseLayer configLayer) {
+		
+		poolSize = configLayer.getConfigPooler().getPoolSize();
 		poolOver2DInput = false;
-		// Look at the extractor and see if it is pooling over 2d or 1d input
-		if (c.hasConfigFeatureExtractor()) {
-			ConfigFeatureExtractor cf = c.getConfigFeatureExtractor();
-			if (cf.getFeatureDim1() < cf.getInputDim1() ||
-			    cf.getFeatureDim2() < cf.getInputDim2()) {
+		
+		// check if we pool over 2-d or 1-d
+		if (configLayer.hasConfigFeatureExtractor()) {
+			ConfigFeatureExtractor cf = configLayer.getConfigFeatureExtractor();
+			if (cf.getFeatureDim1() < cf.getInputDim1() || cf.getFeatureDim2() < cf.getInputDim2()) {
 				poolOver2DInput = true;
-				input_dim1 = cf.getInputDim1() - cf.getFeatureDim1() + 1;
-				input_dim2 = cf.getInputDim2() - cf.getFeatureDim2() + 1;
+
+				// convolutional dimensions
+				inputDim1 = cf.getInputDim1() - cf.getFeatureDim1() + 1;
+				inputDim2 = cf.getInputDim2() - cf.getFeatureDim2() + 1;
 			}
 		}
 	}
+	
+	
+	/**
+	 * Main method that calls 1-d or 2-d pooling over the data point.
+	 * 
+	 * @param pair Input tuple data.
+	 * @return Pooled data.
+	 */
 	@Override
-	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> data) throws Exception {
-		//TODO(viviana) The pooler needs to know if the input vector comes from
-		//  a 2D or 1D data  
+	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pair) {
+
+		// pool over 1-d or 2-d input
 		Vector pooledVec = null;
 		if (this.poolOver2DInput == false)
-			pooledVec = poolOver1D(data._2);
+			pooledVec = poolOver1D(pair._2);	
 		else
-			pooledVec = poolOver2D(data._2);
+			pooledVec = poolOver2D(pair._2);
 		
-		return new Tuple2<Vector, Vector>(data._1, pooledVec);
+		return new Tuple2<Vector, Vector>(pair._1, pooledVec);
 	}
+	
+	
 	/**
 	 * The method shrinks the input array.
-	 * It pools over every 'pool_size' contiguous elements
+	 * It pools over every 'poolSize' contiguous elements
 	 * of the vector by keeping only the one with the maximum value.
 	 * 
 	 * @param data 1D vector of doubles
@@ -63,7 +80,7 @@ public class MaxPoolerExtended implements Pooler {
 	 */
 	public Vector poolOver1D(Vector data)  {
 		// The size of the new pooled vector
-		int n = data.size()/pool_size;
+		int n = data.size()/poolSize;
 		// Check that the pool size is not too big
 		assert n >= 1: "Consider reducing the pool size";
 		
@@ -71,8 +88,8 @@ public class MaxPoolerExtended implements Pooler {
 		for (int i = 0; i < n; ++i) {
 			// Find minimum in patch
 			double maxPatch = -Double.MAX_VALUE;
-			for (int k = 0; k < pool_size; ++k) {
-			  maxPatch = Math.max(maxPatch, data.apply(i*pool_size + k));
+			for (int k = 0; k < poolSize; ++k) {
+			  maxPatch = Math.max(maxPatch, data.apply(i*poolSize + k));
 			}
 			pooled_data[i] = maxPatch;
 		}
@@ -89,22 +106,22 @@ public class MaxPoolerExtended implements Pooler {
 	public Vector poolOver2D(Vector data)  {
 		
 
-		int output_dim1 = (int)Math.floor((double)input_dim1 / pool_size);
-		int output_dim2 = (int)Math.floor((double)input_dim2 / pool_size);
-		int nbr_features = data.size() / (input_dim1*input_dim2);
+		int output_dim1 = (int)Math.floor((double)inputDim1 / poolSize);
+		int output_dim2 = (int)Math.floor((double)inputDim2 / poolSize);
+		int nbr_features = data.size() / (inputDim1*inputDim2);
 		double[] output = new double[output_dim1 * output_dim2* nbr_features];
 		
 		for (int f = 0; f < nbr_features; ++f) {
-			int foffset = input_dim1*input_dim2* f;
+			int foffset = inputDim1*inputDim2* f;
 			int fnewoffset = output_dim1*output_dim2*f;
 			for (int i = 0; i < output_dim1; ++i) {
 				for (int j = 0; j < output_dim2; ++j) {
 					double maxPatch = -Double.MAX_VALUE;
-					for (int ki = 0; ki < pool_size; ++ki) {
-						for (int kj = 0; kj < pool_size; ++kj) {
-							int lookup_i = i*pool_size + ki;
-							int lookup_j = j*pool_size + kj;
-							maxPatch = Math.max(maxPatch, data.apply(foffset + lookup_j*input_dim1 + lookup_i));
+					for (int ki = 0; ki < poolSize; ++ki) {
+						for (int kj = 0; kj < poolSize; ++kj) {
+							int lookup_i = i*poolSize + ki;
+							int lookup_j = j*poolSize + kj;
+							maxPatch = Math.max(maxPatch, data.apply(foffset + lookup_j*inputDim1 + lookup_i));
 						}
 					}
 					output[fnewoffset + j*output_dim1 + i] = maxPatch;
@@ -118,9 +135,9 @@ public class MaxPoolerExtended implements Pooler {
 		return poolOver2DInput;
 	}
 	public int getInputDim1() {
-		return input_dim1;
+		return inputDim1;
 	}
 	public int getInputDim2() {
-		return input_dim2;
+		return inputDim2;
 	}
 }

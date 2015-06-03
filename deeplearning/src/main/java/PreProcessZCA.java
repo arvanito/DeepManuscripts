@@ -171,8 +171,7 @@ public class PreProcessZCA implements PreProcessor {
 	/**
 	 * Main method that preprocesses the dataset. 
 	 * 
-	 * @param data Input distributed dataset.
-	 * @param configLayer Current base layer configuration.
+	 * @param pairData Input distributed dataset.
 	 * @return Preprocessed distributed dataset.
 	 */
 	@Override

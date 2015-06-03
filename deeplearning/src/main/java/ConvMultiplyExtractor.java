@@ -118,14 +118,14 @@ public class ConvMultiplyExtractor implements Extractor {
 	/**
 	 * Main method that performs convolutional feature extraction.
 	 * 
-	 * @param pairData Input tuple.
+	 * @param pair Input tuple.
 	 * @return New representation of the input tuple.
 	 */
 	@Override
-	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pairData) {
+	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pair) {
 		
 		// get the data part of the tuple
-		Vector data = pairData._2;
+		Vector data = pair._2;
 		
 		// convert the features from Vector[] to DenseMatrix
 		DenseMatrix D = MatrixOps.convertVectors2Mat(features);
@@ -159,7 +159,7 @@ public class ConvMultiplyExtractor implements Extractor {
 		// apply non-linearity
 		outVec = MatrixOps.applyNonLinearityVec(outVec, nonLinearity, alpha);
 		
-		return new Tuple2<Vector, Vector>(pairData._1, outVec);
+		return new Tuple2<Vector, Vector>(pair._1, outVec);
 	}
 	
 }
