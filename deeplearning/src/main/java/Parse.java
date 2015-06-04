@@ -5,8 +5,7 @@ import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 
 /**
- * Parse input files to Vectors. From https://github.com/arvanito/test_spark/blob/master/src/main/java/PreProcess.java
- * Implements Function, so that this can be used inside JavaRDD::map.
+ * Class that parses input files to Vectors. 
  */
 public class Parse implements Function<String, Vector> {
 

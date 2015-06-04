@@ -90,7 +90,7 @@ public class MaxPoolerExtended implements Pooler {
 		double[] pooledData = new double[n];
 		for (int i = 0; i < n; i++) {
 			
-			// Find minimum in patch
+			// find minimum in patch
 			double maxPatch = -Double.MAX_VALUE;
 			for (int k = 0; k < poolSize; k++) {
 				maxPatch = Math.max(maxPatch, data.apply(i * poolSize + k));
@@ -113,14 +113,14 @@ public class MaxPoolerExtended implements Pooler {
 	public Vector poolOver2D(Vector data)  {
 		
 		// output dimensions of the pooled data
-		int outputDim1 = (int) Math.floor((double) inputDim1 / poolSize);
-		int outputDim2 = (int) Math.floor((double) inputDim2 / poolSize);
+		int outputDim1 = (int) Math.floor((double)inputDim1 / poolSize);
+		int outputDim2 = (int) Math.floor((double)inputDim2 / poolSize);
 		
 		// number of features
 		int numFeatures = data.size() / (inputDim1 * inputDim2);
 		
 		// perform pooling over features
-		double[] output = new double[outputDim1 * outputDim2 * numFeatures];
+		double[] output = new double[outputDim1*outputDim2*numFeatures];
 		for (int f = 0; f < numFeatures; f++) {	// loop over features
 			
 			// linear indices of the current feature block

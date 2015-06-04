@@ -13,20 +13,17 @@ import scala.Tuple2;
  *
  */
 public class ComputeSimilarityPair implements Function<Tuple2<Vector, Vector>, Tuple2<Vector, Double>> {
-	
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 7260655554465270778L;
-	private Tuple2<Vector, Vector> query;	// query representation
-	private double normQuery; //
+	
+	private Tuple2<Vector, Vector> query;
+	private double normQuery; 
 	
 	
 	/**
 	 * Constructor. It sets the query representation.
 	 * 
-	 * @param query The query representation
+	 * @param query The query representation.
 	 */
 	public ComputeSimilarityPair(Tuple2<Vector, Vector> query) {
 		this.query = query;
@@ -35,7 +32,7 @@ public class ComputeSimilarityPair implements Function<Tuple2<Vector, Vector>, T
 	
 	
 	/**
-	 * Method that computes the norm of the query
+	 * Method that computes the norm of the query.
 	 */
 	public void NormQuery() {
 		normQuery = Math.sqrt(BLAS.dot(query._2, query._2));
@@ -45,10 +42,10 @@ public class ComputeSimilarityPair implements Function<Tuple2<Vector, Vector>, T
 	/**
 	 * Method that is called during a map call. It computes the 
 	 * cosine similarity between the query representation and 
-	 * the representations of the candidate image patches
+	 * the representations of the candidate image patches.
 	 * 
-	 * @param v Candidate patch representation
-	 * @return Cosine similarity between query and current patch
+	 * @param v Candidate patch representation.
+	 * @return Cosine similarity between query and current patch.
 	 */
 	public Tuple2<Vector, Double> call(Tuple2<Vector, Vector> v) {
 		
