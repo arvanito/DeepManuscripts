@@ -19,7 +19,7 @@ public class SubtractMean implements Function<Vector, Vector> {
 	/**
 	 * Constructor
 	 * 
-	 * @param mean Input mean Vector
+	 * @param mean Input mean Vector.
 	 */
 	public SubtractMean(Vector mean) {
 		this.mean = mean;
@@ -29,9 +29,9 @@ public class SubtractMean implements Function<Vector, Vector> {
 	/**
 	 * Method that is called during a map call.
 	 * 
-	 * @param v Input Vector
-	 * @param m Mean Vector
-	 * @return Subtracted Vector result
+	 * @param v Input Vector.
+	 * @param m Mean Vector.
+	 * @return Subtracted Vector result.
 	 */
 	@Override
 	public Vector call(Vector v) {		
@@ -39,11 +39,9 @@ public class SubtractMean implements Function<Vector, Vector> {
 		if (v.size() != mean.size()) {
 			throw new IllegalArgumentException("Vector sizes are incompatible!");
 		}
-		
-		// Vector size
-		int s = v.size();
 
 		// loop over elements to subtract the two Vectors
+		int s = v.size();
 		double[] sub = new double[s];
 		for (int i = 0; i < s; i++) {
 			sub[i] = v.apply(i) - mean.apply(i);

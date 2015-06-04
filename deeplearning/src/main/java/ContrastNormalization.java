@@ -17,7 +17,7 @@ public class ContrastNormalization implements Function<Vector, Vector> {
 	
 	
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
 	 * @param e Parameter for contrast normalization.
 	 */
@@ -35,10 +35,8 @@ public class ContrastNormalization implements Function<Vector, Vector> {
 	@Override
 	public Vector call(Vector v) {	
 
-		// Vector size
-		int s = v.size();
-
 		// compute mean value of the Vector
+		int s = v.size();
 		double m = 0;
 		for (int i = 0; i < s; i++) {
 			m += v.apply(i);

@@ -33,7 +33,7 @@ public class BaseLayer implements DeepLearningLayer {
 	int layerIndex;
 	
 	// spark context is needed by the preprocessor.
-	// It needs to parallelize a DenseMatrix object.
+	// ιt needs to parallelize a DenseMatrix object.
 	JavaSparkContext sparkContext; 
 	
 	// indicates if we save the trained model, or not
@@ -60,6 +60,31 @@ public class BaseLayer implements DeepLearningLayer {
 		this.extract = extract;
 		this.pool = pool;
 		
+		saveModel = false;
+	}
+	
+	
+	/**
+	 * Constructor of a BaseLayer. Sets the necessary class objects. TODO:: Change this to put more parameters inside!!
+	 * 
+	 * @param configLayer Base layer configuration.
+	 * @param preprocess PreProcessor object.
+	 * @param learn Learner object.
+	 * @param extract Extractor object.
+	 * @param pool Pooler object.
+	 * @param layerIndex Current layer index.
+	 */
+	public BaseLayer(ConfigBaseLayer configLayer, PreProcessor preprocess, Learner learn, Extractor extract, Pooler pool, int layerIndex) {
+		this.configLayer = configLayer;
+		
+		this.preprocess = preprocess;
+		this.learn = learn;
+		this.extract = extract;
+		this.pool = pool;
+		
+		this.layerIndex = layerIndex;
+	
+		// by default, we do not save the model
 		saveModel = false;
 	}
 	

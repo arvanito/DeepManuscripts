@@ -66,13 +66,16 @@ public class BaseLayerFactory {
 		}
  
 		// create and return the base layer, setting the current layer index
-		// TODO:: check is pathPrefix is empty and set up the necessary parameters
-		BaseLayer b = new BaseLayer(configLayer, preprocessor, learner, extractor, pooler);
-		b.setLayerIndex(layerIndex);
+		BaseLayer b = new BaseLayer(configLayer, preprocessor, learner, extractor, pooler, layerIndex);
 		
 		// set the path prefix for saving the files, using the layer index as indicator
-		//TODO change this, if pathPrefix is empty, do nothing
-		b.setPathPrefix(pathPrefix + Integer.toString(layerIndex));
+		// if the path prefix is not empty, then we save the model
+		if (pathPrefix.length() == 0) {
+			b.setPathPrefix("");
+		} else {
+			b.setPathPrefix(pathPrefix + Integer.toString(layerIndex));
+			b.setSaveModel(true);
+		}
 		
 		return b;
 	}
