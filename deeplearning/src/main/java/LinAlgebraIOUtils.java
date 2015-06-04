@@ -22,37 +22,50 @@ public class LinAlgebraIOUtils {
 	
 	
 	/**
-	 * Saves a Vector as a text file.
+	 * Loads a Vector from an object file.
 	 * 
-	 * @param input Input vector.
-	 * @param outFile Output file to save.
+	 * @param inFile Input file to load.
 	 * @param sc Spark context.
+	 * @return Loaded vector.
 	 */
-	public static void saveVectorToText(Vector input, String outFile, JavaSparkContext sc) {
+	public static Vector loadVectorFromObject(String inFile, JavaSparkContext sc) {
 		
-		List<Vector> temp_input = new ArrayList<Vector>();
-		temp_input.add(input);
+		// read the object and collect
+		JavaRDD<Vector> out = sc.objectFile(inFile);
+		List<Vector> a = out.collect();
 		
-		// transform it to JavaRDD and save it to file
-		sc.parallelize(temp_input).saveAsTextFile(outFile);
+		return Vectors.dense(a.get(0).toArray());
 	}
 	
 	
 	/**
-	 * Saves a Vector as an object.
+	 * Loads a Matrix from an object file column by column.
 	 * 
-	 * @param input Input vector. 
-	 * @param outFile Output file to save.
+	 * @param inFile Input file to load.
 	 * @param sc Spark context.
+	 * @return Column-major matrix.
 	 */
-	public static void saveVectorToObject(Vector input, String outFile, JavaSparkContext sc) {
+	//TODO:: do this row-wise.
+	public static Matrix loadMatrixFromObject(String inFile, JavaSparkContext sc) {
 		
-		List<Vector> temp_input = new ArrayList<Vector>();
-		temp_input.add(input);
+		// load the file as a JavaRDD and collect
+		JavaRDD<Vector> input = sc.objectFile(inFile);
+		List<Vector> col_matrix = input.collect();
 		
-		// transform it to JavaRDD and save it to file
-		sc.parallelize(temp_input).saveAsObjectFile(outFile);
+		// create the column-major matrix
+		int nCols = col_matrix.size();
+		int nRows = col_matrix.get(0).size();
+		double[] temp = new double[nRows*nCols];
+		int idx = 0;
+		for (int i = 0; i < nCols; i++) {
+			for (int j = 0; j < nRows; j++) {
+				temp[idx++] = col_matrix.get(i).apply(j);
+			}
+		}
+		
+		return Matrices.dense(nRows, nCols, temp);
 	}
+	
 	
 	
 	/**
@@ -86,23 +99,6 @@ public class LinAlgebraIOUtils {
 		}
 		
 		return Vectors.dense(out_vector);
-	}
-	
-	
-	/**
-	 * Loads a Vector from an object file.
-	 * 
-	 * @param inFile Input file to load.
-	 * @param sc Spark context.
-	 * @return Loaded vector.
-	 */
-	public static Vector loadVectorFromObject(String inFile, JavaSparkContext sc) {
-		
-		// read the object and collect
-		JavaRDD<Vector> out = sc.objectFile(inFile);
-		List<Vector> a = out.collect();
-		
-		return Vectors.dense(a.get(0).toArray());
 	}
 	
 	
@@ -146,6 +142,67 @@ public class LinAlgebraIOUtils {
 	
 	
 	/**
+	 * Saves a Vector as an object.
+	 * 
+	 * @param input Input vector. 
+	 * @param outFile Output file to save.
+	 * @param sc Spark context.
+	 */
+	public static void saveVectorToObject(Vector input, String outFile, JavaSparkContext sc) {
+		
+		List<Vector> temp_input = new ArrayList<Vector>();
+		temp_input.add(input);
+		
+		// transform it to JavaRDD and save it to file
+		sc.parallelize(temp_input).saveAsObjectFile(outFile);
+	}
+	
+	
+	/**
+	 * Saves a Matrix to an object file column by column.
+	 * 
+	 * @param input Input matrix to save.
+	 * @param outFile Output file to save.
+	 * @param sc Spark context.
+	 */
+	//TODO:: do this row-wise
+	public static void saveMatrixToObject(Matrix input, String outFile, JavaSparkContext sc) {
+		
+		// create a list of vectors and add one by one 
+		// the columns of the matrix to the list
+		List<Vector> temp_input = new ArrayList<Vector>();
+		for (int i = 0; i < input.numCols(); i++) {
+			double[] temp = new double[input.numRows()];
+			for (int j = 0; j < input.numRows(); j++) {
+				temp[j] = input.apply(j, i);
+			} 
+			Vector col_vector = Vectors.dense(temp);
+			temp_input.add(col_vector);
+		}
+		
+		// Transform it to JavaRDD and save it to file
+		sc.parallelize(temp_input).saveAsObjectFile(outFile);
+	}
+	
+	
+	/**
+	 * Saves a Vector as a text file.
+	 * 
+	 * @param input Input vector.
+	 * @param outFile Output file to save.
+	 * @param sc Spark context.
+	 */
+	public static void saveVectorToText(Vector input, String outFile, JavaSparkContext sc) {
+		
+		List<Vector> temp_input = new ArrayList<Vector>();
+		temp_input.add(input);
+		
+		// transform it to JavaRDD and save it to file
+		sc.parallelize(temp_input).saveAsTextFile(outFile);
+	}
+	
+	
+	/**
 	 * Saves a Matrix to a text file.
 	 * 
 	 * @param input Input matrix.
@@ -174,58 +231,25 @@ public class LinAlgebraIOUtils {
 	
 	
 	/**
-	 * Loads a Matrix from an object file column by column.
+	 * Loads an array of Vectors from an object file.
 	 * 
 	 * @param inFile Input file to load.
 	 * @param sc Spark context.
-	 * @return Column-major matrix.
+	 * @return Array of vectors.
 	 */
-	//TODO:: do this row-wise.
-	public static Matrix loadMatrixFromObject(String inFile, JavaSparkContext sc) {
+	public static Vector[] loadVectorArrayFromObject(String inFile, JavaSparkContext sc) {
 		
-		// load the file as a JavaRDD and collect
-		JavaRDD<Vector> input = sc.objectFile(inFile);
-		List<Vector> col_matrix = input.collect();
+		// load from the object file and collect
+		JavaRDD<Vector> out = sc.objectFile(inFile);
+		List<Vector> a = out.collect();
 		
-		// create the column-major matrix
-		int nCols = col_matrix.size();
-		int nRows = col_matrix.get(0).size();
-		double[] temp = new double[nRows*nCols];
-		int idx = 0;
-		for (int i = 0; i < nCols; i++) {
-			for (int j = 0; j < nRows; j++) {
-				temp[idx++] = col_matrix.get(i).apply(j);
-			}
+		// convert the list of vectors to array.
+		Vector[] output = new Vector[a.size()];
+		for (int i = 0; i < a.size(); i++) {
+			output[i] = Vectors.dense(a.get(i).toArray());
 		}
 		
-		return Matrices.dense(nRows, nCols, temp);
-	}
-	
-	
-	/**
-	 * Saves a Matrix to an object file column by column.
-	 * 
-	 * @param input Input matrix to save.
-	 * @param outFile Output file to save.
-	 * @param sc Spark context.
-	 */
-	//TODO:: do this row-wise
-	public static void saveMatrixToObject(Matrix input, String outFile, JavaSparkContext sc) {
-		
-		// create a list of vectors and add one by one 
-		// the columns of the matrix to the list
-		List<Vector> temp_input = new ArrayList<Vector>();
-		for (int i = 0; i < input.numCols(); i++) {
-			double[] temp = new double[input.numRows()];
-			for (int j = 0; j < input.numRows(); j++) {
-				temp[j] = input.apply(j, i);
-			} 
-			Vector col_vector = Vectors.dense(temp);
-			temp_input.add(col_vector);
-		}
-		
-		// Transform it to JavaRDD and save it to file
-		sc.parallelize(temp_input).saveAsObjectFile(outFile);
+		return output;
 	}
 	
 	
@@ -266,29 +290,6 @@ public class LinAlgebraIOUtils {
 		
 		// transform it to JavaRDD and save it to file
 		sc.parallelize(temp_input).saveAsTextFile(outFile);
-	}
-	
-	
-	/**
-	 * Loads an array of Vectors from an object file.
-	 * 
-	 * @param inFile Input file to load.
-	 * @param sc Spark context.
-	 * @return Array of vectors.
-	 */
-	public static Vector[] loadVectorArrayFromObject(String inFile, JavaSparkContext sc) {
-		
-		// load from the object file and collect
-		JavaRDD<Vector> out = sc.objectFile(inFile);
-		List<Vector> a = out.collect();
-		
-		// convert the list of vectors to array.
-		Vector[] output = new Vector[a.size()];
-		for (int i = 0; i < a.size(); i++) {
-			output[i] = Vectors.dense(a.get(i).toArray());
-		}
-		
-		return output;
 	}
 	
 }

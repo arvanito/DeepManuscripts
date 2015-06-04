@@ -18,6 +18,7 @@ import scala.Tuple2;
  */
 public interface PreProcessor extends Function<Vector, Vector>{
 
+	
 	/**
 	 * Method that sets the layer configuration.
 	 * 

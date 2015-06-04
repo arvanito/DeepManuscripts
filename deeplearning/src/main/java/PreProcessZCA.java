@@ -1,8 +1,5 @@
 package main.java;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import main.java.DeepModelSettings.ConfigBaseLayer;
 
 import org.apache.spark.api.java.JavaSparkContext;
@@ -296,10 +293,11 @@ public class PreProcessZCA implements PreProcessor {
 	}
 }
 
+
 /**
  * Helper class that does the projection of the original data onto the whitened space. 
- * It uses a map that takes as input Tuple2<Vector, Vector> and projects the second part 
- * of the pair to the whitened space. It outputs a Tuple2<Vector, Vector> where the 
+ * It uses a map that takes as input a tuple of vectors and projects the second part 
+ * of the pair to the whitened space. It outputs a tuple of vectors where the 
  * first part of the pair remains the same.
  */
 class convert2Tuple2 implements Function<Tuple2<Vector, Vector>, Tuple2<Vector, Vector>> {

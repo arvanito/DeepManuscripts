@@ -4,6 +4,7 @@ import main.java.DeepModelSettings.ConfigBaseLayer;
 import main.java.DeepModelSettings.ConfigKMeans;
 
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.clustering.KMeans;
 import org.apache.spark.mllib.clustering.KMeansModel;
@@ -24,6 +25,7 @@ public class KMeansLearner implements Learner {
 	final int numClusters;
 	final int numIterations;
 	final String initType;
+	
 	
 	/**
 	 * Constructor that set the current base layer configuration.
@@ -68,6 +70,32 @@ public class KMeansLearner implements Learner {
 	    
 	    // return the cluster centers as the learned features
 		return clusters.clusterCenters();
+	}
+	
+	
+	/**
+	 * Method that loads the learned features from a file.
+	 * 
+	 * @param filename Input file name to load.
+	 * @param sc Spark context.
+	 * @return Array of learned features.
+	 */
+	@Override
+	public Vector[] loadFromFile(String filename, JavaSparkContext sc) {
+		return LinAlgebraIOUtils.loadVectorArrayFromObject(filename, sc);
+	}
+	
+	
+	/**
+	 * Method that saves the learned features to an object file.
+	 * 
+	 * @param features Input array of vectors to save.
+	 * @param filename Input file name to save.
+	 * @param sc Spark context.
+	 */
+	@Override
+	public void saveToFile(Vector[] features, String filename, JavaSparkContext sc) {
+		LinAlgebraIOUtils.saveVectorArrayToObject(features, filename, sc);
 	}
 
 }

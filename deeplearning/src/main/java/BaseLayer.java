@@ -51,27 +51,6 @@ public class BaseLayer implements DeepLearningLayer {
 	 * @param learn Learner object.
 	 * @param extract Extractor object.
 	 * @param pool Pooler object.
-	 */
-	public BaseLayer(ConfigBaseLayer configLayer, PreProcessor preprocess, Learner learn, Extractor extract, Pooler pool) {
-		this.configLayer = configLayer;
-		
-		this.preprocess = preprocess;
-		this.learn = learn;
-		this.extract = extract;
-		this.pool = pool;
-		
-		saveModel = false;
-	}
-	
-	
-	/**
-	 * Constructor of a BaseLayer. Sets the necessary class objects. TODO:: Change this to put more parameters inside!!
-	 * 
-	 * @param configLayer Base layer configuration.
-	 * @param preprocess PreProcessor object.
-	 * @param learn Learner object.
-	 * @param extract Extractor object.
-	 * @param pool Pooler object.
 	 * @param layerIndex Current layer index.
 	 */
 	public BaseLayer(ConfigBaseLayer configLayer, PreProcessor preprocess, Learner learn, Extractor extract, Pooler pool, int layerIndex) {
@@ -165,7 +144,8 @@ public class BaseLayer implements DeepLearningLayer {
 	public JavaRDD<Tuple2<Vector, Vector>> train(JavaRDD<Tuple2<Vector, Vector>> input1, JavaRDD<Tuple2<Vector, Vector>> input2) throws Exception {
     	
 		// TODO:: make this more automatic!
-    	int numPartitions = 400 * 4; // num-workers * cores_per_worker * succesive tasks
+    	int numPartitions = 400 * 4; 	// num-workers * cores_per_worker * succesive tasks
+    	
 		JavaRDD<Tuple2<Vector, Vector>> input1Preprocessed;
 		Vector[] features;
 		
@@ -187,20 +167,20 @@ public class BaseLayer implements DeepLearningLayer {
 			input1Preprocessed.cache();
 		}
 		
-		// learn the features
+		// learn the features and save them to a file
 		features = learnFeatures(input1Preprocessed);
-		
-		// Ugly hack, move this to the Learner class, TODO
-		if (saveModel == true)
-			LinAlgebraIOUtils.saveVectorArrayToObject(features, pathPrefix + "_features_" + System.currentTimeMillis(), sparkContext);
+		if (saveModel == true) {
+			learn.saveToFile(features, pathPrefix + "_features_" + System.currentTimeMillis(), sparkContext);
+		}
 		
 		// perform feature extraction
 		JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(input2, features);
 		
 		// perform pooling
 		JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent).repartition(numPartitions).cache();
+		
+		// we are not in the last layer, therefore we force the previous computation
 		if (notLast) {
-			// we are not in the last layer, therefore we force the previous computation
 			pooled.count();
 		}
 		
@@ -220,24 +200,22 @@ public class BaseLayer implements DeepLearningLayer {
     public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data, String[] featFile) throws Exception {
     	
     	// TODO:: Make this more automatic!
-    	int numPartitions = 400 * 4; // num-workers * cores_per_worker * succesive tasks
+    	int numPartitions = 400 * 4; 	// num-workers * cores_per_worker * succesive tasks
 
     	// setup the preprocessor
     	if (preprocess != null) {
     		preprocess.loadFromFile(featFile, sparkContext); //this needs to be changed
     	}
     	
-    	// load the features from file.
-    	Vector[] features = LinAlgebraIOUtils.loadVectorArrayFromObject(featFile[layerIndex+2], sparkContext);
+    	// load the features from file
+    	Vector[] features = learn.loadFromFile(featFile[layerIndex+2], sparkContext);
     	QuickSortVector.quickSort(features, 0, features.length-1);
-    	//LinAlgebraIOUtils.saveVectorArrayToText(features, "/projects/deep-learning/features_" + layer_index + System.currentTimeMillis(), spark_context);
     	
     	// perform feature extraction
     	JavaRDD<Tuple2<Vector, Vector>> represent = extractFeatures(data, features);
     	
     	// perform pooling
     	JavaRDD<Tuple2<Vector, Vector>> pooled = pool(represent).repartition(numPartitions).cache();
-    	//pooled.saveAsTextFile("/projects/deep-learning/" + pathPrefix + "_" + layer_index + "_" + System.currentTimeMillis());
     	
     	return pooled;
     }
@@ -321,6 +299,7 @@ public class BaseLayer implements DeepLearningLayer {
 	 * 
 	 * @param notLast Indicator for last layer.
 	 */
+    @Override
 	public void setNotLast(boolean notLast) {
 		this.notLast = notLast;
 	}

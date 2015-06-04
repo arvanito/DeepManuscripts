@@ -97,4 +97,13 @@ public interface DeepLearningLayer {
 	  * @return True or false.
 	  */
 	 public boolean getSaveModel();
+	 
+	 
+	 /**
+	  * Sets a boolean variable that checks if we are in the last layer.
+	  * 
+	  * @param value True of false.
+	  */
+	 public void setNotLast(boolean value);
+	 
 }

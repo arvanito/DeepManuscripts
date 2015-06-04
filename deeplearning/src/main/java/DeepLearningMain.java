@@ -1,12 +1,8 @@
 package main.java;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,7 +15,6 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 
@@ -30,14 +25,11 @@ import com.google.protobuf.TextFormat;
 import main.java.DeepModelSettings.*;
 
 /**
- * Main class.
+ * Main class that creates the layer configurations and performs training and testing. 
  * 
  */
 public class DeepLearningMain implements Serializable {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -1047810200264089489L;
 	private static JavaSparkContext sc;
 
@@ -46,40 +38,30 @@ public class DeepLearningMain implements Serializable {
 	 * Method that loads the layer configurations from .prototxt file. 
 	 * Makes use of the protocol buffers for describing the configuration. 
 	 * 
-	 * @param prototxt_file Input protocol buffer configuration
-	 * @return List of objects that describe the configuration in each layer
+	 * @param prototxt_file Input protocol buffer configuration.
+	 * @return List of objects that describe the configuration in each layer.
 	 */
 	public static List<ConfigBaseLayer> loadSettings(String prototxt_file) {
 		
 		List<ConfigBaseLayer> globalConfig = null;
 		try {
 			ConfigManuscripts.Builder builder = ConfigManuscripts.newBuilder();
-			//BufferedReader reader = new BufferedReader(new FileReader(prototxt_file));
+			
+// 			BufferedReader reader = new BufferedReader(new FileReader(prototxt_file));
 //			FileInputStream fs = new FileInputStream(prototxt_file);
 //			InputStreamReader reader = new InputStreamReader(fs);
 //			TextFormat.merge(reader, builder);
-			//Read from HDFS
 			
+			// read from HDFS
 			FileSystem fs = FileSystem.get(new  Configuration());			
 			InputStreamReader reader = new InputStreamReader(fs.open(new Path(prototxt_file)));
 			TextFormat.merge(reader, builder);
 
-			// Settings file created
+			// build the settings 
 			ConfigManuscripts settings = builder.build();
-			System.out.printf("# base layers is %d\n", settings.getConfigLayerCount());
 			
-			globalConfig = settings.getConfigLayerList();
-			for (ConfigBaseLayer blayer: globalConfig) {
-				if (blayer.hasConfigKmeans()) {
-					System.out.printf("Kmeans clusters %d\n", blayer.getConfigKmeans().getNumberOfClusters());
-				}
-				if (blayer.hasConfigAutoencoders()) {
-					System.out.printf("Autoencoders units %d\n", blayer.getConfigAutoencoders().getNumberOfUnits());
-				}
-				ConfigPooler cpooler = blayer.getConfigPooler();
-				System.out.printf("Pool size %d\n", cpooler.getPoolSize());
-			}
-			
+			// get list of configuration layer settings
+			globalConfig = settings.getConfigLayerList();			
 			reader.close();
 
 		} catch (IOException e) {
@@ -92,61 +74,78 @@ public class DeepLearningMain implements Serializable {
 		return globalConfig;
 	}
 	
+	
 	/**
 	 * Main method that trains the model layer by layer. 
 	 * 
-	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration
-	 * @param inputFileSmallPatches Small dataset input, represents small patch learning for the first layer
-	 * @param inputFileLargePatches Large dataset input, represents high-level learning for the remaining layers
-	 * @param outputFile File to save the final pooled representations after full training
+	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration.
+	 * @param input1 Initial distributed dataset. In the first layer, it will contain small patches. 
+	 * For the next layers, it will contain the pooled representations from the previous layer. 
+	 * @param input2 Second distributed dataset. In the first layer, it ill contain large patches.
+	 * For the next layers, it will be the same as the first input dataset.
+	 * @param pathPrefix Path prefix that is used for saving the model.
 	 * @throws Exception
 	 */
-	public static void train(List<ConfigBaseLayer> globalConfig, String inputFileSmallPatches, 
-							String inputFileLargePatches, String outputFile) throws Exception {
+	public static void train(List<ConfigBaseLayer> globalConfig, String input1, String input2, String pathPrefix) throws Exception {
 		
-		// open files and convert them to JavaRDD<Vector> datasets
-		SparkConf conf = new SparkConf().setAppName("DeepManuscript learning");
-    	JavaSparkContext sc = new JavaSparkContext(conf);
- 
-		JavaRDD<Tuple2<Vector, Vector>> inputSmallPatches = sc.textFile(inputFileSmallPatches).map(new ParseTuples());
-		JavaRDD<Tuple2<Vector, Vector>> inputWordPatches = sc.textFile(inputFileLargePatches).map(new ParseTuples());
+		// TODO:: do this more automatic??
+		int numPartitions = 400 * 4;
+		
+		// open the files and convert them to JavaRDD datasets
+    	// parse the input datasets to tuples of vectors
+		JavaRDD<Tuple2<Vector, Vector>> input1Patches = sc.textFile(input1).map(new ParseTuples()).repartition(numPartitions).cache();
+		JavaRDD<Tuple2<Vector, Vector>> input2Patches = sc.textFile(input2).map(new ParseTuples()).repartition(numPartitions).cache();
 
-		// The main loop calls train() on each of the layers
+		// the main loop calls the train method on each of the layers
 		JavaRDD<Tuple2<Vector, Vector>> result = null;
 	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
 	 		
-	 		// set up the current layer 
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, "x");
+	 		// set up the current layer
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, pathPrefix);
+			layer.setSparkContext(sc);
 			
-			// The configLayer has configExtractor only if it convolutional,
-			// The multiply Extractor does not need any parameters.
+			// check is we are in the last layer, if yes, we do not need to perform the last
+	 		// feature extraction and pooling
+	 		if (layerIndex == globalConfig.size() - 1) {
+	 			layer.setNotLast(false);;
+	 		} else {
+	 			layer.setNotLast(true);
+	 		}
+	 		
+			// the configLayer has configExtractor only if it convolutional,
+			// the multiply extractor does not need any parameters.
 			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
-				result = layer.train(inputSmallPatches, inputWordPatches);
+				result = layer.train(input1Patches, input2Patches);
 			} else {
 				result = layer.train(result, result);
 			}	
 	 	}
-		//TODO save also last file
-		result.saveAsTextFile(outputFile);
 		
+	 	//result.saveAsTextFile(outputFile);
 		sc.close();
 	}
 	
 	
 	/**
-	 * Main method for testing the trained model. 
+	 * Main method that tests the trained model. 
 	 * 
-	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration
-	 * @param inputFile Input file that contains the test patches for comparison
-	 * @param outputFile Output file that contains the final representations of the test patches
+	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration.
+	 * @param featFile Array of input files to load the model from.
+	 * @param inputFile Input file that contains the test patches for comparison.
+	 * @param pathPrefix Path prefix for saving the model.
+	 * @throws Exception
 	 */
-	public static void test(List<ConfigBaseLayer> globalConfig,String[] featFile, String inputFile, String outputFile, String testId) throws Exception {
+	public static void test(List<ConfigBaseLayer> globalConfig, String[] featFile, String inputFile, String pathPrefix) throws Exception {
 		
-		// open the test file and convert it to a JavaRDD<Vector> dataset
-		int numPartitions = 400*4; //Num-workers * cores_per_worker * succesive tasks
+		// TODO:: do this more automatic!!
+		int numPartitions = 400*4; 	//Num-workers * cores_per_worker * succesive tasks
 
+		// open the file and convert it to JavaRDD dataset
+    	// parse the input dataset to tuples of vectors
+		// TODO:: Change this!!
 		JavaRDD<Tuple2<Vector, Vector>> testPatches = sc.textFile(inputFile).map(new ParseTuples()).filter(new Function<Tuple2<Vector,Vector>, Boolean>() {
-			
+			private static final long serialVersionUID = 2227772572173267004L;
+
 			@Override
 			public Boolean call(Tuple2<Vector,Vector> arg0) throws Exception {
 				if (arg0._2.size() == 4096){
@@ -156,34 +155,47 @@ public class DeepLearningMain implements Serializable {
 			}
 		}).repartition(numPartitions);
     	
-		// The main loop calls test() on each of the layers
+		// the main loop calls the test method on each of the layers
 		JavaRDD<Tuple2<Vector, Vector>> result = null;
 	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); layerIndex++) {
 	 		
 	 		// set up the current layer 
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, testId);
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, pathPrefix);
 			layer.setSparkContext(sc);
-			// The configLayer has configExtractor only if it convolutional,
-			// The multiply Extractor does not need any parameters.
+			
+			// the configLayer has configExtractor only if it convolutional,
+			// the multiply Extractor does not need any parameters.
 			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
-				result = layer.test(testPatches,featFile);
+				result = layer.test(testPatches, featFile);
 			} else {
-				result = layer.test(result,featFile);
+				result = layer.test(result, featFile);
 			}	
 	 	}
 	 	
-	 	//TODO save the result to a file 
-	 	
+	 	//result.saveAsTextFile(outputFile);
 		sc.close();
 	}
 	
-	public static void test0(List<ConfigBaseLayer> globalConfig,String[] featFile, String inputFile, String outputFile, String testId) throws Exception {
-		
-		// open the test file and convert it to a JavaRDD<Vector> dataset
-		int numPartitions = 400*4; //Num-workers * cores_per_worker * succesive tasks
 
-		JavaRDD<Tuple2<Vector, Vector>> testPatches = sc.textFile(inputFile).map(new ParseTuples()).filter(new Function<Tuple2<Vector,Vector>, Boolean>() {
-			
+	/**
+	 * Method that performs a word spotting experiments and ranks patches according to their similarity with the input query.
+	 * 
+	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration.
+	 * @param featFile Array of input files to load the model from.
+	 * @param queryFile Input file that contains the query's patches.
+	 * @param patchesFile Input file that contains the test patches.
+	 * @param pathPrefix Path prefix for saving the model.
+	 * @throws Exception
+	 */
+	public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, String queryFile, String patchesFile, String pathPrefix) throws Exception {
+	
+		//TODO:: do this more automatic
+		int numPartitions = 400*4; 	//Num-workers * cores_per_worker * succesive tasks
+	
+		// load query's patches into a JavaRDD
+		JavaRDD<Tuple2<Vector, Vector>> queryPatches = sc.textFile(queryFile).map(new ParseTuples()).filter(new Function<Tuple2<Vector,Vector>, Boolean>() {
+			private static final long serialVersionUID = -5784495184084951735L;
+
 			@Override
 			public Boolean call(Tuple2<Vector,Vector> arg0) throws Exception {
 				if (arg0._2.size() == 4096){
@@ -192,141 +204,81 @@ public class DeepLearningMain implements Serializable {
 				return false;
 			}
 		}).repartition(numPartitions);
-    	
-		// The main loop calls test() on each of the layers
-		JavaRDD<Tuple2<Vector, Vector>> result = null;
-	 	for (int layerIndex = 0; layerIndex < 1; layerIndex++) {
-	 		
-	 		// set up the current layer 
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, testId);
-			layer.setSparkContext(sc);
-			// The configLayer has configExtractor only if it convolutional,
-			// The multiply Extractor does not need any parameters.
-			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
-				result = layer.test(testPatches,featFile);
-			} else {
-				result = layer.test(result,featFile);
-			}	
-	 	}
-	 	
-	 	//TODO save the result to a file 
-	 	result.saveAsObjectFile(testId+"_img_pairs");
-	 	
-		sc.close();
-	}
-	
-public static void test1(List<ConfigBaseLayer> globalConfig, String[] featFile, String inputFile, String outputFile, String testId) throws Exception {
 		
-		// open the test file and convert it to a JavaRDD<Vector> dataset
-		int numPartitions = 400*4; //Num-workers * cores_per_worker * succesive tasks
-
-		JavaRDD<Tuple2<Vector, Vector>> testPatches = sc.textFile(inputFile).map(new ParseTuples()).repartition(numPartitions);
-    	
-		// The main loop calls test() on each of the layers
-		JavaRDD<Tuple2<Vector, Vector>> result = null;
-	 	for (int layerIndex = 1; layerIndex < 2; layerIndex++) {
-	 		
-	 		// set up the current layer 
-			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, testId);
-			layer.setSparkContext(sc);
-			
-			// The configLayer has configExtractor only if it convolutional,
-			// The multiply Extractor does not need any parameters.
-			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
-				result = layer.test(testPatches,featFile);
-			} else {
-				result = layer.test(result,featFile);
-			}	
-	 	}
-	 	
-	 	//TODO save the result to a file 
-	 	
-		sc.close();
-	}
-
-public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, String inputFile, String imagesFile, String testId) throws Exception {
-	
-	// open the test file and convert it to a JavaRDD<Vector> dataset
-	int numPartitions = 400*4; //Num-workers * cores_per_worker * succesive tasks
-
-	JavaRDD<Tuple2<Vector, Vector>> testPatches = sc.textFile(inputFile).map(new ParseTuples()).filter(new Function<Tuple2<Vector,Vector>, Boolean>() {
-		
-		@Override
-		public Boolean call(Tuple2<Vector,Vector> arg0) throws Exception {
-			if (arg0._2.size() == 4096){
-				return true;
-			}
-			return false;
-		}
-	}).repartition(numPartitions);
-	
-	JavaRDD<Tuple2<Vector, Vector>> imagePatches = sc.textFile(imagesFile).map(new ParseTuples2()).filter(new Function<Tuple2<Vector,Vector>, Boolean>() {
-		
-		@Override
-		public Boolean call(Tuple2<Vector,Vector> arg0) throws Exception {
-			if (arg0._2.size() == 4096){
-				return true;
-			}
-			return false;
-		}
-	}).repartition(numPartitions);
-	
-	// The main loop calls test() on each of the layers
-	JavaRDD<Tuple2<Vector, Vector>> resultTest = null;
-	JavaRDD<Tuple2<Vector, Vector>> resultImage = null;
-	
- 	for (int layerIndex = 0; layerIndex < globalConfig.size(); layerIndex++) {
- 		
- 		// set up the current layer 
-		DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, testId);
-		layer.setSparkContext(sc);
-		// The configLayer has configExtractor only if it convolutional,
-		// The multiply Extractor does not need any parameters.
-		if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
-			resultTest = layer.test(testPatches, featFile);
-			//resultTest.saveAsTextFile("/projects/deep-learning/" + testId + "_" + layerIndex);
-			
-			resultImage = layer.test(imagePatches, featFile);
-		} else {
-			resultTest = layer.test(resultTest, featFile);
-			//resultTest.saveAsTextFile("/projects/deep-learning/" + testId + "_" + layerIndex);
-			
-			resultImage = layer.test(resultImage, featFile);
-		}	
- 	}
- 	//resultTest.saveAsTextFile("/projects/deep-learning/resultTest");
- 	//resultImage.saveAsTextFile("/projects/deep-learning/resultImage");
- 	
- 	Iterator<Tuple2<Vector, Vector>> testPatchesList = resultTest.collect().iterator();
- 	
- 	String path = "/projects/deep-learning/test-output/";
- 	int testPatch = 0;
- 	while(testPatchesList.hasNext()) {
- 		testPatch++;
- 		
- 		Tuple2<Vector,Vector> querryPair = testPatchesList.next();
- 		ComputeSimilarityPair compSim = new ComputeSimilarityPair(querryPair);
- 		List<Tuple2<Vector, Double>> sim = resultImage.map(compSim).map(new Function<Tuple2<Vector,Double>, Tuple2<Vector,Double>>() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -566603841854522173L;
+		// load test patches into a JavaRDD
+		JavaRDD<Tuple2<Vector, Vector>> imagePatches = sc.textFile(patchesFile).map(new ParseTuples2()).filter(new Function<Tuple2<Vector,Vector>, Boolean>() {
+			private static final long serialVersionUID = -6438205114031689814L;
 
 			@Override
-			public Tuple2<Vector, Double> call(Tuple2<Vector, Double> arg0)
-					throws Exception {
-				// TODO Auto-generated method stub
-				return new Tuple2<Vector,Double> (arg0._1,-arg0._2);
+			public Boolean call(Tuple2<Vector,Vector> arg0) throws Exception {
+				if (arg0._2.size() == 4096){
+					return true;
+				}
+				return false;
 			}
-		}).takeOrdered(300, new VectorComparator());
+		}).repartition(numPartitions);
+	
+		// the main loop calls test() on each of the layers
+		JavaRDD<Tuple2<Vector, Vector>> resultQuery = null;
+		JavaRDD<Tuple2<Vector, Vector>> resultImage = null;
+	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); layerIndex++) {
+	 		
+	 		// set up the current layer 
+			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, pathPrefix);
+			layer.setSparkContext(sc);
+			
+			// the configLayer has configExtractor only if it convolutional,
+			// the multiply Extractor does not need any parameters.
+			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
+				
+				// query
+				resultQuery = layer.test(queryPatches, featFile);
+				//resultQuery.saveAsTextFile("/projects/deep-learning/" + pathPrefix + "_" + layerIndex);
+				
+				// test patches
+				resultImage = layer.test(imagePatches, featFile);
+			} else {
+				
+				// query 
+				resultQuery = layer.test(resultQuery, featFile);
+				//resultQuery.saveAsTextFile("/projects/deep-learning/" + pathPrefix + "_" + layerIndex);
+				
+				//test patches
+				resultImage = layer.test(resultImage, featFile);
+			}	
+	 	}
+	 	//resultTest.saveAsTextFile("/projects/deep-learning/resultTest");
+	 	//resultImage.saveAsTextFile("/projects/deep-learning/resultImage");
+ 	
+	 	Iterator<Tuple2<Vector, Vector>> queryPatchesList = resultQuery.collect().iterator();
+	 	
+	 	// for each query patch, compute its most similar one from the test image patches
+	 	int testPatch = 0;
+	 	while(queryPatchesList.hasNext()) {
+	 		testPatch++;
+	 		
+	 		// next query patch
+	 		Tuple2<Vector,Vector> querryPair = queryPatchesList.next();
+	 		
+	 		// compute similarity between the current query patch and all test patches
+	 		ComputeSimilarityPair compSim = new ComputeSimilarityPair(querryPair);
+	 		List<Tuple2<Vector, Double>> sim = resultImage.map(compSim).map(new Function<Tuple2<Vector,Double>, Tuple2<Vector,Double>>() {
+				private static final long serialVersionUID = -566603841854522173L;
+	
+				@Override
+				public Tuple2<Vector, Double> call(Tuple2<Vector, Double> pair) throws Exception {
+					return new Tuple2<Vector,Double> (pair._1,-pair._2);
+				}
+			}).takeOrdered(300, new VectorComparator());	//TODO:: change this!!!
  		
- 		//decide how to save
- 		//sc.parallelize(sim).saveAsTextFile(path + "test-patch-" + testPatch);
- 	}
+	 		//decide how to save
+	 		sc.parallelize(sim).saveAsTextFile(pathPrefix + "_similarities_" + testPatch);
+	 	}
  	
 	sc.close();
-}
+	}
 
+	
 	/**
 	 * Main method for testing the trained model. 
 	 * 
@@ -481,7 +433,7 @@ public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, S
 	/**
 	 * Main method. Starting place for the execution.
 	 * 
-	 * @param args
+	 * @param args Input array of arguments
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
