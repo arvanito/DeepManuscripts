@@ -12,10 +12,6 @@ import org.apache.spark.mllib.linalg.Vectors;
 /**
  * Helper class for basic matrix manipulations.
  * 
- * Available methods:
- * 	- transpose:
- * 	- convertVectors2Mat:
- * 
  * @author Nikolaos Arvanitopoulos
  *
  */
@@ -23,8 +19,10 @@ public class MatrixOps {
 	
 	
 	/**
-	 * @param in Input array of double 
-	 * @return Transformed array by applying the abs function
+	 * Method that apply absolute non-linearity.
+	 * 
+	 * @param in Input array of double. 
+	 * @return Transformed array by applying the abs function.
 	 */
 	public static double[] applyAbsNonLinearity(double[] in) {
 		
@@ -41,9 +39,11 @@ public class MatrixOps {
 	
 	
 	/**
-	 * @param in Input array
-	 * @param alpha soft threshold parameter
-	 * @return Transformed array by applying soft thresholding
+	 * Method that apply the soft-threshold non-linearity.
+	 * 
+	 * @param in Input array.
+	 * @param alpha soft threshold parameter.
+	 * @return Transformed array by applying soft thresholding.
 	 */
 	public static double[] applySoftNonLinearity(double[] in, double alpha) {
 		
@@ -57,17 +57,16 @@ public class MatrixOps {
 		}
 		
 		return out;
-		
 	}
 	
 	
 	/**
 	 * Method that applies a nonlinear function element-wise to a DenseMatrix.
 	 * 
-	 * @param M Input DenseMatrix
-	 * @param nonLinearity Enumeration that denotes the applied non-linearity on the matrix
-	 * @param alpha Optional parameter for soft thresholding
-	 * @return Transformed DenseMatrix
+	 * @param M Input DenseMatrix.
+	 * @param nonLinearity Enumeration that denotes the applied non-linearity on the matrix.
+	 * @param alpha Optional parameter for soft thresholding.
+	 * @return Transformed DenseMatrix.
 	 */
 	public static DenseMatrix applyNonLinearityMat(DenseMatrix M, ConfigFeatureExtractor.NonLinearity nonLinearity, double... alpha) {
 		
@@ -98,10 +97,10 @@ public class MatrixOps {
 	/**
 	 * Method that applies a nonlinear function element-wise to a DenseVector.
 	 * 
-	 * @param v Input DenseVector
-	 * @param nonLinearity Enumeration that denotes the applied non-linearity on the vector
-	 * @param alpha Optional parameter for soft thresholding
-	 * @return Transformed DenseVector
+	 * @param v Input DenseVector.
+	 * @param nonLinearity Enumeration that denotes the applied non-linearity on the vector.
+	 * @param alpha Optional parameter for soft thresholding.
+	 * @return Transformed DenseVector.
 	 */
 	public static DenseVector applyNonLinearityVec(DenseVector v, ConfigFeatureExtractor.NonLinearity nonLinearity, double... alpha) {
 		
@@ -131,8 +130,8 @@ public class MatrixOps {
 	/** 
 	 * Method that converts an array of Vectors to a DenseMatrix.
 	 * 
-	 * @param V Array of type Vector that represents the learned features
-	 * @return A matrix of type DenseMatrix that contains in each row one learned feature
+	 * @param V Array of type Vector that represents the learned features.
+	 * @return A matrix of type DenseMatrix that contains in each row one learned feature.
 	 */
 	public static DenseMatrix convertVectors2Mat(Vector[] V) {
 
@@ -156,10 +155,10 @@ public class MatrixOps {
 	/**
 	 * Method that extracts a row from a matrix.
 	 * 
-	 * @param M Input DenseMatrix
-	 * @param r Row index
-	 * @return Row of type DenseVector
-	 * @throws IndexOutOfBoundsException
+	 * @param M Input DenseMatrix.
+	 * @param r Row index.
+	 * @return Row of type DenseVector.
+	 * @throws IndexOutOfBoundsException.
 	 */
 	public static DenseVector getRow(DenseMatrix M, int r) throws IndexOutOfBoundsException {
 		
@@ -184,9 +183,9 @@ public class MatrixOps {
 	/**
 	 * Method that computes all overlapping patches of a matrix. 
 	 * 
-	 * @param M DenseMatrix to extract patches from
-	 * @param blockSize Size of the extracted patches
-	 * @return Matrix where each row corresponds to one extracted patch
+	 * @param M DenseMatrix to extract patches from.
+	 * @param blockSize Size of the extracted patches.
+	 * @return Matrix where each row corresponds to one extracted patch.
 	 */
 	public static DenseMatrix im2colT(DenseMatrix M, int[] blockSize) {
 
@@ -223,11 +222,11 @@ public class MatrixOps {
 	
 	
 	/**
-	 * Method that performs local matrix contrast normalization
+	 * Method that performs local matrix contrast normalization.
 	 * 
-	 * @param M Input DenseMatrix
-	 * @param e Parameter for contrast normalization
-	 * @return Contrast normalized result
+	 * @param M Input DenseMatrix.
+	 * @param e Parameter for contrast normalization.
+	 * @return Contrast normalized result.
 	 */
 	public static DenseMatrix localMatContrastNorm(DenseMatrix M, double e) {
 
@@ -254,11 +253,11 @@ public class MatrixOps {
 	
 	
 	/**
-	 * Method that performs local matrix mean subtraction, row by row
+	 * Method that performs local matrix mean subtraction, row by row.
 	 * 
-	 * @param M Input DenseMatrix for mean subtraction
-	 * @param v Mean DenseVector
-	 * @return Mean subtracted result
+	 * @param M Input DenseMatrix for mean subtraction.
+	 * @param v Mean DenseVector.
+	 * @return Mean subtracted result.
 	 */
 	public static DenseMatrix localMatSubtractMean(DenseMatrix M, DenseVector v) {
 
@@ -290,9 +289,9 @@ public class MatrixOps {
 	/** 
 	 * Method that performs contrast normalization on a local DenseVector.
 	 * 
-	 * @param v Input DenseVector to be processed
-	 * @param e Parameter epsilon for the contrast normalization
-	 * @return Contrast normalized Vector
+	 * @param v Input DenseVector to be processed.
+	 * @param e Parameter epsilon for the contrast normalization.
+	 * @return Contrast normalized Vector.
 	 */
 	public static DenseVector localVecContrastNorm(DenseVector v, double e) {	
 
@@ -325,9 +324,9 @@ public class MatrixOps {
 	/** 
 	 * Method that subtracts the mean from a local DenseVector.
 	 * 
-	 * @param v Input DenseVector to be processed
-	 * @param m Mean DenseVector for subtraction
-	 * @return Mean subtracted DenseVector
+	 * @param v Input DenseVector to be processed.
+	 * @param m Mean DenseVector for subtraction.
+	 * @return Mean subtracted DenseVector.
 	 */
 	public static DenseVector localVecSubtractMean(DenseVector v, DenseVector m) throws IllegalArgumentException {
 
@@ -351,19 +350,20 @@ public class MatrixOps {
 	/**
 	 * Method that reshapes a matrix to a vector.
 	 * 
-	 * @param v Matrix of type DenseMatrix to be reshaped
-	 * @return Output vector
+	 * @param v Matrix of type DenseMatrix to be reshaped.
+	 * @return Output vector.
 	 */
 	public static DenseVector reshapeMat2Vec(DenseMatrix M) {
 		return new DenseVector(M.toArray()); 
 	}
 	
+	
 	/**
 	 * Method that reshapes a vector to a matrix.
 	 * 
-	 * @param v Vector of type DenseVector to be reshaped
-	 * @param dims Dimensions of the final matrix
-	 * @return Reshaped matrix
+	 * @param v Vector of type DenseVector to be reshaped.
+	 * @param dims Dimensions of the final matrix.
+	 * @return Reshaped matrix.
 	 */
 	public static DenseMatrix reshapeVec2Mat(DenseVector v, int[] dims) {
 		
@@ -378,8 +378,8 @@ public class MatrixOps {
 	/**
 	 * Method that transposes a DenseMatrix.
 	 * 
-	 * @param M Input DenseMatrix
-	 * @return Transposed DenseMatrix
+	 * @param M Input DenseMatrix.
+	 * @return Transposed DenseMatrix.
 	 */
 	public static DenseMatrix transpose(DenseMatrix M) {
 		

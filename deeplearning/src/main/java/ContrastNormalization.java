@@ -15,10 +15,11 @@ public class ContrastNormalization implements Function<Vector, Vector> {
 	private static final long serialVersionUID = 610489156631574927L;
 	private double e;	// epsilon parameter
 	
+	
 	/**
 	 * Constructor
 	 * 
-	 * @param e Parameter for contrast normalization
+	 * @param e Parameter for contrast normalization.
 	 */
 	public ContrastNormalization(double e) {
 		this.e = e;
@@ -28,8 +29,8 @@ public class ContrastNormalization implements Function<Vector, Vector> {
 	/**
 	 * Method that is called during a map call.
 	 * 
-	 * @param v Input Vector
-	 * @return The processed contrast normalized Vector
+	 * @param v Input Vector.
+	 * @return The processed contrast normalized Vector.
 	 */
 	@Override
 	public Vector call(Vector v) {	
