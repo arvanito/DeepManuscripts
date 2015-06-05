@@ -29,7 +29,7 @@ public class ExtractPatchesTuplesTest implements Serializable {
 	private transient JavaSparkContext sc;
 	
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception Standard Exception object.
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -37,7 +37,7 @@ public class ExtractPatchesTuplesTest implements Serializable {
 	}
 	
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception Standard Exception object.
 	 */
 	@After
 	public void tearDown() throws Exception {

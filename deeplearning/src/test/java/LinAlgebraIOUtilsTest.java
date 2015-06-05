@@ -29,7 +29,7 @@ public class LinAlgebraIOUtilsTest implements Serializable {
 	private static final long serialVersionUID = -2702473035418034246L;
 	private transient JavaSparkContext sc;
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception Standard Exception object.
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -37,7 +37,7 @@ public class LinAlgebraIOUtilsTest implements Serializable {
 	}
 
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception Standard Exception object.
 	 */
 	@After
 	public void tearDown() throws Exception {

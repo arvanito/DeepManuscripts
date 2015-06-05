@@ -158,7 +158,7 @@ public class MatrixOps {
 	 * @param M Input DenseMatrix.
 	 * @param r Row index.
 	 * @return Row of type DenseVector.
-	 * @throws IndexOutOfBoundsException.
+	 * @throws IndexOutOfBoundsException Exception when indices do not match.
 	 */
 	public static DenseVector getRow(DenseMatrix M, int r) throws IndexOutOfBoundsException {
 		
@@ -350,7 +350,7 @@ public class MatrixOps {
 	/**
 	 * Method that reshapes a matrix to a vector.
 	 * 
-	 * @param v Matrix of type DenseMatrix to be reshaped.
+	 * @param M Matrix of type DenseMatrix to be reshaped.
 	 * @return Output vector.
 	 */
 	public static DenseVector reshapeMat2Vec(DenseMatrix M) {

@@ -59,7 +59,7 @@ public interface DeepLearningLayer {
 	 * @param data1 First input distributed dataset.
 	 * @param data2 Second input distributed dataset.
 	 * @return Output pooled representations for the current layer.
- 	 * @throws Exception.
+ 	 * @throws Exception Standard Exception object.
 	 */
 	public JavaRDD<Tuple2<Vector, Vector>> train(JavaRDD<Tuple2<Vector, Vector>> data1, JavaRDD<Tuple2<Vector, Vector>> data2) throws Exception;
 
@@ -70,7 +70,7 @@ public interface DeepLearningLayer {
 	 * @param data Input distributed dataset to perform testing over.
 	 * @param featFile Array of files to load the trained model from.
 	 * @return Output pooled representations for the current layer.
-	 * @throws Exception.
+	 * @throws Exception Standard Exception object.
 	 */
 	 public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data,String[] featFile) throws Exception;
 	 

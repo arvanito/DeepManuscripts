@@ -4,12 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.ComputeSimilarity;
 import main.java.ExtractPatchesOld;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.junit.After;
@@ -27,7 +25,7 @@ public class ExtractPatchesTest implements Serializable {
 	private transient JavaSparkContext sc;
 	
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception Standard Exception object.
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -35,7 +33,7 @@ public class ExtractPatchesTest implements Serializable {
 	}
 	
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception Standard Exception object.
 	 */
 	@After
 	public void tearDown() throws Exception {

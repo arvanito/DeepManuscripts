@@ -31,7 +31,7 @@ public class MaxPoolerTest implements Serializable{
 	private static final long serialVersionUID = 145346357547456L;
 	private transient JavaSparkContext sc;
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception Standard Exception object.
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -39,7 +39,7 @@ public class MaxPoolerTest implements Serializable{
 	}
 
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception Standard Exception object.
 	 */
 	@After
 	public void tearDown() throws Exception {

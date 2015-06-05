@@ -16,10 +16,10 @@ public class ParseTuples implements Function<String, Tuple2<Vector, Vector>> {
 	private static final long serialVersionUID = -5762727282965079666L;
 
 	/**
-	 * Method that parses tuples of the form <Vector, Vector>.
+	 * Method that parses tuples of vectors.
 	 * 
-	 * @param line Input string that represents one Tuple2<Vector, Vector>.
-	 * @return Tuple2<Vector, Vector> data.
+	 * @param line Input string that represents one tuple of vectors.
+	 * @return Tuple data.
 	 */
 	@Override
 	public Tuple2<Vector, Vector> call(String line) throws Exception {

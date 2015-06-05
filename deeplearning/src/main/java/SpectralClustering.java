@@ -23,13 +23,12 @@ public class SpectralClustering {
 	JavaRDD<Integer> vectorsClusters;
 
 	/**
-	 * General constructor for Spectral Clustering. <br>
-	 * To cluster the input, first use the <i>.computeKNN</i> method and the
-	 * <i>.computeClustering</i> method and finnally get the result by using
-	 * <i>getVectorsClusters</i> method.
+	 * General constructor for Spectral Clustering.
+	 * To cluster the input, first use the computeKNNmethod() and the
+	 * computeClustering() method and finally get the result by using
+	 * getVectorsClusters() method.
 	 * 
-	 * @param input
-	 *            : Input array of Vectors to sort by clusters. </ul>
+	 * @param input Input array of Vectors to sort by clusters.
 	 */
 	public SpectralClustering(Vector[] input) {
 		this.input = input;
@@ -58,23 +57,21 @@ public class SpectralClustering {
 	}
 
 	/**
-	 * Compute the weighted Matrix using <i>k</i>-Nearest Neighbor algorithm.
+	 * Compute the weighted Matrix using k-Nearest Neighbor algorithm.
 	 * 
 	 * @param k
 	 *            Number of nearest neighbors to consider.
 	 * @param matrixType
 	 *            The type of the result matrix:
-	 *            <ul>
-	 *            <li>0: for an unweighted matrix.
-	 *            <li>1: for a Gaussian similarity function
-	 *            </ul>
+	 *            0: for an unweighted matrix.
+	 *            1: for a Gaussian similarity function
+	 *         	
 	 * @param neighborType
 	 *            The type of the kNN matrix:
-	 *            <ul>
-	 *            <li>0: Not symmetric
-	 *            <li>1: Mutual
-	 *            <li>2: Normal
-	 *            </ul>
+	 *            0: Not symmetric
+	 *            1: Mutual
+	 *            2: Normal
+	 *           
 	 * @param sigma
 	 *            The value of sigma for the Gaussian similarity function
 	 */

@@ -84,7 +84,7 @@ public class DeepLearningMain implements Serializable {
 	 * @param input2 Second distributed dataset. In the first layer, it ill contain large patches.
 	 * For the next layers, it will be the same as the first input dataset.
 	 * @param pathPrefix Path prefix that is used for saving the model.
-	 * @throws Exception
+	 * @throws Exception Standard exception.
 	 */
 	public static void train(List<ConfigBaseLayer> globalConfig, String input1, String input2, String pathPrefix) throws Exception {
 		
@@ -133,7 +133,7 @@ public class DeepLearningMain implements Serializable {
 	 * @param featFile Array of input files to load the model from.
 	 * @param inputFile Input file that contains the test patches for comparison.
 	 * @param pathPrefix Path prefix for saving the model.
-	 * @throws Exception
+	 * @throws Exception Standard exception.
 	 */
 	public static void test(List<ConfigBaseLayer> globalConfig, String[] featFile, String inputFile, String pathPrefix) throws Exception {
 		
@@ -185,7 +185,7 @@ public class DeepLearningMain implements Serializable {
 	 * @param queryFile Input file that contains the query's patches.
 	 * @param patchesFile Input file that contains the test patches.
 	 * @param pathPrefix Path prefix for saving the model.
-	 * @throws Exception
+	 * @throws Exception Standard exception.
 	 */
 	public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, String queryFile, String patchesFile, String pathPrefix) throws Exception {
 	
@@ -193,6 +193,7 @@ public class DeepLearningMain implements Serializable {
 		int numPartitions = 400*4; 	//Num-workers * cores_per_worker * succesive tasks
 	
 		// load query's patches into a JavaRDD
+		// change this!!
 		JavaRDD<Tuple2<Vector, Vector>> queryPatches = sc.textFile(queryFile).map(new ParseTuples()).filter(new Function<Tuple2<Vector,Vector>, Boolean>() {
 			private static final long serialVersionUID = -5784495184084951735L;
 
@@ -431,22 +432,30 @@ public class DeepLearningMain implements Serializable {
 	
 	
 	/**
-	 * Main method. Starting place for the execution.
+	 * Main method.
 	 * 
-	 * @param args Input array of arguments
-	 * @throws Exception
+	 * @param args Input arguments.
+	 * @throws Exception Standard exception. 
 	 */
+	//TODO:: Make it clean enough!!!
 	public static void main(String[] args) throws Exception {
 		
 		SparkConf conf = new SparkConf().setAppName("DeepManuscript testing");
     	sc = new JavaSparkContext(conf);
 		
+    	// the user should provide at least an input configuration and a running mode
+    	if (args.length < 2) {
+    		throw new Exception("Too few input arguments! The algorithm accepts at least two, the input configuration and the running mode!");
+    	}
+    	
 		// check if settings file .prototxt is provided, maybe do this better!
 		List<ConfigBaseLayer> globalConfig = null;
+		
+		
 		if (args.length == 9) {
 		    globalConfig = loadSettings(args[0]);
 		} else {
-			System.out.print("Usage: spark-submit --class main.java.DeepLearningMain --master local[1] target/DeepManuscriptLearning-0.0.1.jar  <config.prototxt> <mean.txt> <zca.txt> <layer_1> <layer_2> <in> <test_id> <what> <test_images>");
+			System.out.print("Usage: spark-submit --class main.java.DeepLearningMain --master local[1] target/DeepManuscriptLearning-0.0.1.jar  <config.prototxt> <option> <mean.txt> <zca.txt> <layer_1> <layer_2> <in> <test_id> <what> <test_images>");
 			throw new Exception("Missing command line arguments!");
 		}
 		
@@ -455,23 +464,24 @@ public class DeepLearningMain implements Serializable {
 		featFiles[1] = args[2];
 		featFiles[2] = args[3];
 		featFiles[3] = args[4];
+		
 		//TODO add option for train/test/rank in main
-		int action = Integer.parseInt(args[7]);
-		if (action==0){
-		//full test	
-		test(globalConfig, featFiles, args[5],"",args[6]);
+		int runningMode = Integer.parseInt(args[7]);
+		if (runningMode == 0){
+			//full test	
+			test(globalConfig, featFiles, args[5],"",args[6]);
 		}
-		if (action==1){
-		//first layer	
-		test0(globalConfig, featFiles, args[5],"",args[6]);
+		if (runningMode == 1){
+			//first layer	
+			test0(globalConfig, featFiles, args[5],"",args[6]);
 		}
-		if (action==2){
-		//secondlayer	
-		test1(globalConfig, featFiles, args[5],"",args[6]);
+		if (runningMode == 2){
+			//secondlayer	
+			test1(globalConfig, featFiles, args[5],"",args[6]);
 		}
-		if (action==3){
-		//rank	
-		rank(globalConfig, featFiles, args[5],args[8],args[6]);
+		if (runningMode == 3){
+			//rank	
+			rank(globalConfig, featFiles, args[5],args[8],args[6]);
 		}
 	}
 }

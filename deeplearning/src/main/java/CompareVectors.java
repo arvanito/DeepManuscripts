@@ -26,7 +26,7 @@ public class CompareVectors implements Comparator<Vector>, Serializable {
 	 * @param v1 First input Vector
 	 * @param v2 Second input Vector
 	 * @return Output of Double.compare()
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Exception if the two input vectors do not have the same length.
 	 */
 	@Override
 	public int compare(Vector v1, Vector v2) throws IllegalArgumentException  {

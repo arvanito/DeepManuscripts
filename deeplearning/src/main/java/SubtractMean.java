@@ -30,7 +30,6 @@ public class SubtractMean implements Function<Vector, Vector> {
 	 * Method that is called during a map call.
 	 * 
 	 * @param v Input Vector.
-	 * @param m Mean Vector.
 	 * @return Subtracted Vector result.
 	 */
 	@Override

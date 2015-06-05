@@ -30,7 +30,7 @@ public class MaxPooler implements Pooler {
 	/**
 	 * Constructor that sets the current base layer configuration.
 	 * 
-	 * @param configLayer Current base layer configuration.
+	 * @param c Current base layer configuration.
 	 */
 	public MaxPooler(ConfigBaseLayer c) {
 		
@@ -58,16 +58,16 @@ public class MaxPooler implements Pooler {
 	 * @return Pooled data.
 	 */
 	@Override
-	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> data) {
+	public Tuple2<Vector, Vector> call(Tuple2<Vector, Vector> pair) {
 
 		// pool over 1-d or 2-d input
 		Vector pooledVec = null;
 		if (this.poolOver2DInput == false)
-			pooledVec = poolOver1D(data._2);
+			pooledVec = poolOver1D(pair._2);
 		else
-			pooledVec = poolOver2D(data._2);
+			pooledVec = poolOver2D(pair._2);
 		
-		return new Tuple2<Vector, Vector>(data._1, pooledVec);
+		return new Tuple2<Vector, Vector>(pair._1, pooledVec);
 	}
 	
 	

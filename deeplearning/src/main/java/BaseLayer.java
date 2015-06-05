@@ -138,7 +138,7 @@ public class BaseLayer implements DeepLearningLayer {
 	 * @param input2 Second distributed dataset. In the first layer, it ill contain large patches.
 	 * For the next layers, it will be the same as the first input dataset.
 	 * @return Distributed dataset containing the final pooled representations for the current layer.
-	 * @throws Exception.
+	 * @throws Exception Standard Exception object.
 	 */
 	@Override
 	public JavaRDD<Tuple2<Vector, Vector>> train(JavaRDD<Tuple2<Vector, Vector>> input1, JavaRDD<Tuple2<Vector, Vector>> input2) throws Exception {
@@ -155,7 +155,7 @@ public class BaseLayer implements DeepLearningLayer {
 			
 			// save the mean and ZCA variables
 			if (saveModel == true) {
-				preprocess.saveToFile(pathPrefix + "_preprocess_" + System.currentTimeMillis(), sparkContext);
+				preprocess.saveToFile(pathPrefix + "_preprocess_layer_" + layerIndex +"_" + System.currentTimeMillis(), sparkContext);
 			}
 		} else {
 			input1Preprocessed = input1;
@@ -170,7 +170,7 @@ public class BaseLayer implements DeepLearningLayer {
 		// learn the features and save them to a file
 		features = learnFeatures(input1Preprocessed);
 		if (saveModel == true) {
-			learn.saveToFile(features, pathPrefix + "_features_" + System.currentTimeMillis(), sparkContext);
+			learn.saveToFile(features, pathPrefix + "_features_layer_" + layerIndex + "_" + System.currentTimeMillis(), sparkContext);
 		}
 		
 		// perform feature extraction
@@ -194,7 +194,7 @@ public class BaseLayer implements DeepLearningLayer {
 	 * @param data Input distributed dataset for the current layer.
 	 * @param featFile Array of input files that contain saved parameters of the trained model.
 	 * What is the convention here?
-	 * @throws Exception
+	 * @throws Exception Standard Exception object.
 	 */
     @Override
     public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data, String[] featFile) throws Exception {
