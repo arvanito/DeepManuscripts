@@ -76,13 +76,13 @@ public class KMeansLearner implements Learner {
 	/**
 	 * Method that loads the learned features from a file.
 	 * 
-	 * @param filename Input file name to load.
+	 * @param pathPrefix Path prefix to load the features.
 	 * @param sc Spark context.
 	 * @return Array of learned features.
 	 */
 	@Override
-	public Vector[] loadFromFile(String filename, JavaSparkContext sc) {
-		return LinAlgebraIOUtils.loadVectorArrayFromObject(filename, sc);
+	public Vector[] loadFromFile(String pathPrefix, JavaSparkContext sc) {
+		return LinAlgebraIOUtils.loadVectorArrayFromObject(pathPrefix, sc);
 	}
 	
 	
@@ -90,12 +90,12 @@ public class KMeansLearner implements Learner {
 	 * Method that saves the learned features to an object file.
 	 * 
 	 * @param features Input array of vectors to save.
-	 * @param filename Input file name to save.
+	 * @param pathPrefix Path prefix to load the features.
 	 * @param sc Spark context.
 	 */
 	@Override
-	public void saveToFile(Vector[] features, String filename, JavaSparkContext sc) {
-		LinAlgebraIOUtils.saveVectorArrayToObject(features, filename, sc);
+	public void saveToFile(Vector[] features, String pathPrefix, JavaSparkContext sc) {
+		LinAlgebraIOUtils.saveVectorArrayToObject(features, pathPrefix, sc);
 	}
 
 }

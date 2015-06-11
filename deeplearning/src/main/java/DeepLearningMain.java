@@ -1,10 +1,16 @@
 package main.java;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.conf.Configuration;
@@ -23,6 +29,8 @@ import scala.Tuple2;
 import com.google.protobuf.TextFormat;
 
 import main.java.DeepModelSettings.*;
+import static org.junit.Assert.*;
+
 
 /**
  * Main class that creates the layer configurations and performs training and testing. 
@@ -130,12 +138,12 @@ public class DeepLearningMain implements Serializable {
 	 * Main method that tests the trained model. 
 	 * 
 	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration.
-	 * @param featFile Array of input files to load the model from.
 	 * @param inputFile Input file that contains the test patches for comparison.
-	 * @param pathPrefix Path prefix for saving the model.
+	 * @param pathPrefix Path prefix for loading the trained model.
+	 * @param pathPrefixTest Path prefix for saving the test output.
 	 * @throws Exception Standard exception.
 	 */
-	public static void test(List<ConfigBaseLayer> globalConfig, String[] featFile, String inputFile, String pathPrefix) throws Exception {
+	public static void test(List<ConfigBaseLayer> globalConfig, String inputFile, String pathPrefix, String pathPrefixTest) throws Exception {
 		
 		// TODO:: do this more automatic!!
 		int numPartitions = 400*4; 	//Num-workers * cores_per_worker * succesive tasks
@@ -166,13 +174,17 @@ public class DeepLearningMain implements Serializable {
 			// the configLayer has configExtractor only if it convolutional,
 			// the multiply Extractor does not need any parameters.
 			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
-				result = layer.test(testPatches, featFile);
+				result = layer.test(testPatches);
 			} else {
-				result = layer.test(result, featFile);
+				result = layer.test(result);
 			}	
 	 	}
 	 	
-	 	//result.saveAsTextFile(outputFile);
+	 	// if specified, save the results
+	 	if (pathPrefixTest.length() != 0) {
+	 		result.saveAsTextFile(pathPrefixTest + "result");
+	 	}
+	 	
 		sc.close();
 	}
 	
@@ -181,13 +193,13 @@ public class DeepLearningMain implements Serializable {
 	 * Method that performs a word spotting experiments and ranks patches according to their similarity with the input query.
 	 * 
 	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration.
-	 * @param featFile Array of input files to load the model from.
 	 * @param queryFile Input file that contains the query's patches.
 	 * @param patchesFile Input file that contains the test patches.
-	 * @param pathPrefix Path prefix for saving the model.
+	 * @param pathPrefix Path prefix for loading the trained model.
+	 * @param pathPrefixTest Path prefix for saving the test output.
 	 * @throws Exception Standard exception.
 	 */
-	public static void rank(List<ConfigBaseLayer> globalConfig, String[] featFile, String queryFile, String patchesFile, String pathPrefix) throws Exception {
+	public static void rank(List<ConfigBaseLayer> globalConfig, String queryFile, String patchesFile, String pathPrefix, String pathPrefixTest) throws Exception {
 	
 		//TODO:: do this more automatic
 		int numPartitions = 400*4; 	//Num-workers * cores_per_worker * succesive tasks
@@ -232,25 +244,23 @@ public class DeepLearningMain implements Serializable {
 			// the multiply Extractor does not need any parameters.
 			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
 				
-				// query
-				resultQuery = layer.test(queryPatches, featFile);
-				//resultQuery.saveAsTextFile("/projects/deep-learning/" + pathPrefix + "_" + layerIndex);
-				
-				// test patches
-				resultImage = layer.test(imagePatches, featFile);
+				// query and test patches
+				resultQuery = layer.test(queryPatches);
+				resultImage = layer.test(imagePatches);
 			} else {
 				
-				// query 
-				resultQuery = layer.test(resultQuery, featFile);
-				//resultQuery.saveAsTextFile("/projects/deep-learning/" + pathPrefix + "_" + layerIndex);
-				
-				//test patches
-				resultImage = layer.test(resultImage, featFile);
+				// query and test patches
+				resultQuery = layer.test(resultQuery);
+				resultImage = layer.test(resultImage);
 			}	
 	 	}
-	 	//resultTest.saveAsTextFile("/projects/deep-learning/resultTest");
-	 	//resultImage.saveAsTextFile("/projects/deep-learning/resultImage");
- 	
+
+	 	// if specified, save the two test outputs
+	 	if (pathPrefixTest.length() != 0) {
+	 		resultQuery.saveAsTextFile(pathPrefixTest + "resultTest");
+	 		resultImage.saveAsTextFile(pathPrefixTest + "resultImage");
+	 	}
+	 	
 	 	Iterator<Tuple2<Vector, Vector>> queryPatchesList = resultQuery.collect().iterator();
 	 	
 	 	// for each query patch, compute its most similar one from the test image patches
@@ -272,42 +282,14 @@ public class DeepLearningMain implements Serializable {
 				}
 			}).takeOrdered(300, new VectorComparator());	//TODO:: change this!!!
  		
-	 		//decide how to save
-	 		sc.parallelize(sim).saveAsTextFile(pathPrefix + "_similarities_" + testPatch);
+	 		// if specified, save the similarities
+	 		if (pathPrefixTest.length() != 0) {
+	 			sc.parallelize(sim).saveAsTextFile(pathPrefixTest + "_similarities_" + testPatch);
+	 		}
 	 	}
  	
-	sc.close();
+	 	sc.close();
 	}
-
-	
-	/**
-	 * Main method for testing the trained model. 
-	 * 
-	 * @param globalConfig List of ConfigBaseLayer objects that represent the current configuration
-	 * @param testPatches JavaRDD<Tuple2<Vector, Vector>> which contains all the candidate patches
-	 * @return The resulting representations of the test patches
-	 */
-//	public static JavaRDD<Tuple2<Vector, Vector>> testRDD(List<ConfigBaseLayer> globalConfig, JavaRDD<Tuple2<Vector, Vector>> testPatches) throws Exception {
-//		
-//		// The main loop calls test() on each of the layers
-//		JavaRDD<Tuple2<Vector, Vector>> result = null;
-//	 	for (int layerIndex = 0; layerIndex < globalConfig.size(); ++layerIndex) {
-//	 		
-//	 		// set up the current layer 
-//			DeepLearningLayer layer = BaseLayerFactory.createBaseLayer(globalConfig.get(layerIndex), layerIndex, "x");
-//			
-//			// The configLayer has configExtractor only if it convolutional,
-//			// The multiply Extractor does not need any parameters.
-//			if (globalConfig.get(layerIndex).hasConfigFeatureExtractor()) {
-//				result = layer.test(testPatches);
-//			} else {
-//				result = layer.test(result);
-//			}	
-//	 	}
-//	 	
-//	 	// return the final representations of the test patches
-//	 	return result;
-//	}
 	
 	
 	/**
@@ -431,57 +413,110 @@ public class DeepLearningMain implements Serializable {
 //	}
 	
 	
+
+	
+	private static void checkArgIsProvided(OptionSet options, String necessaryFlag) throws IllegalArgumentException {
+		 if (!options.hasArgument(necessaryFlag)) 
+			 throw new IllegalArgumentException("Missing necessary flag " + necessaryFlag);
+	}
+
+	private static void checkArgValueIsInList(String value, List<String> l) throws IllegalArgumentException {
+		if (l.contains(value) == false) 
+			throw new IllegalArgumentException("Invalid value " + value); // TODO Print possible values
+	}
+	
 	/**
 	 * Main method.
 	 * 
 	 * @param args Input arguments.
 	 * @throws Exception Standard exception. 
 	 */
-	//TODO:: Make it clean enough!!!
 	public static void main(String[] args) throws Exception {
-		
+		 
 		SparkConf conf = new SparkConf().setAppName("DeepManuscript testing");
     	sc = new JavaSparkContext(conf);
-		
-    	// the user should provide at least an input configuration and a running mode
-    	if (args.length < 2) {
-    		throw new Exception("Too few input arguments! The algorithm accepts at least two, the input configuration and the running mode!");
-    	}
     	
-		// check if settings file .prototxt is provided, maybe do this better!
-		List<ConfigBaseLayer> globalConfig = null;
+		// create the option parser and make it accept the input options
+		OptionParser parser = new OptionParser();
+		parser.accepts("help");
+		parser.accepts("runningmode").withRequiredArg();
+		parser.accepts("protobuf").withRequiredArg();
+		parser.accepts("inputdataset1").withRequiredArg();
+		parser.accepts("inputdataset2").withRequiredArg();
+		parser.accepts("querydataset").withRequiredArg();
+		parser.accepts("testdataset").withRequiredArg();
+		parser.accepts("pathprefix").withOptionalArg();
+		parser.accepts("pathprefixtest").withOptionalArg();
+		 
+		OptionSet options = parser.parse(args);
 		
+		// the options "runningmode" and "protobuf" are required
+		checkArgIsProvided(options, "runningmode");
+		checkArgIsProvided(options, "protobuf");
 		
-		if (args.length == 9) {
-		    globalConfig = loadSettings(args[0]);
-		} else {
-			System.out.print("Usage: spark-submit --class main.java.DeepLearningMain --master local[1] target/DeepManuscriptLearning-0.0.1.jar  <config.prototxt> <option> <mean.txt> <zca.txt> <layer_1> <layer_2> <in> <test_id> <what> <test_images>");
-			throw new Exception("Missing command line arguments!");
+		// check valid string values for the "runningmode" option
+		String runningMode = (String) options.valueOf("runningmode"); 
+		checkArgValueIsInList(runningMode,
+	    	new ArrayList<String>(Arrays.asList("train","test","rank"))
+	    );
+		
+		// check if the protobuf file exists
+	    String protobufFile = (String) options.valueOf("protobuf");
+	    File f = new File(protobufFile);
+	    if(!f.exists() || f.isDirectory()) {
+	    	throw new IllegalArgumentException("Protobuf file does not exist or is a directory."); 
+	    }
+	    
+	    // load protobuf configuration
+	    List<ConfigBaseLayer> globalConfig = loadSettings(protobufFile);
+	    
+		// check if we save the trained model
+		//TODO:: check if pathprefix is part of some directories
+		String pathPrefix = (String) options.valueOf("pathprefix");
+		if (pathPrefix == null) {
+			pathPrefix = "";
+		}
+        
+		// check if we save the test output
+		String pathPrefixTest = (String) options.valueOf("pathprefixtest");
+		if (pathPrefixTest == null) {
+			pathPrefixTest = "";
 		}
 		
-		String[] featFiles = new String[4];
-		featFiles[0] = args[1];
-		featFiles[1] = args[2];
-		featFiles[2] = args[3];
-		featFiles[3] = args[4];
-		
-		//TODO add option for train/test/rank in main
-		int runningMode = Integer.parseInt(args[7]);
-		if (runningMode == 0){
-			//full test	
-			test(globalConfig, featFiles, args[5],"",args[6]);
-		}
-		if (runningMode == 1){
-			//first layer	
-			test0(globalConfig, featFiles, args[5],"",args[6]);
-		}
-		if (runningMode == 2){
-			//secondlayer	
-			test1(globalConfig, featFiles, args[5],"",args[6]);
-		}
-		if (runningMode == 3){
-			//rank	
-			rank(globalConfig, featFiles, args[5],args[8],args[6]);
-		}
+	    // depending on the running mode, we either train, test of rank
+	    switch (runningMode) {
+        	case "train":
+        		// in the "train" running mode, we require two datasets
+        		checkArgIsProvided(options, "inputdataset1");
+        		checkArgIsProvided(options, "inputdataset2");
+        		String inputDataset1 = (String) options.valueOf("inputdataset1");
+        		String inputDataset2 = (String) options.valueOf("inputdataset2");
+
+        		// train the model
+        		train(globalConfig, inputDataset1, inputDataset2, pathPrefix);
+        		break;
+        	case "test":
+        		// in the "test" mode, we require an input pathprefix and an input dataset
+        		checkArgIsProvided(options, "testdataset");
+        		String testFileTest = (String) options.valueOf("testdataset");
+
+        		//test the model
+        		test(globalConfig, testFileTest, pathPrefix, pathPrefixTest);
+        		break;
+        	case "rank":
+        		// in the "rank" running mode, we have the same arguments as in the test, but 
+        		// instead of one test file, we have two: one for the query(s) and another for the test patches
+        		checkArgIsProvided(options, "querydataset");
+        		checkArgIsProvided(options, "testdataset");
+        		String queryFile = (String) options.valueOf("querydataset");
+        		String testFileRank = (String) options.valueOf("testdataset");
+
+        		// rank
+        		rank(globalConfig, queryFile, testFileRank, pathPrefix, pathPrefixTest);
+        		break;
+         
+        	default: break;
+	    }
 	}
+	
 }

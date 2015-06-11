@@ -49,19 +49,19 @@ public interface PreProcessor extends Function<Vector, Vector>{
 	 * Method that loads the pre-processing parameters from files.
 	 * First file name is the mean vector, second file name is the ZCA matrix.
 	 *  
-	 * @param filename Array of files that contain pre-processing variables.
+	 * @param pathPrefix Path prefix to load the pre-processing variables.
 	 * @param sc Spark context variable.
 	 **/
-	public void loadFromFile(String[] filename, JavaSparkContext sc);
+	public void loadFromFile(String pathPrefix, JavaSparkContext sc);
 	
 	
 	/**
 	 * Saves the fields necessary to reconstruct a preprocessor object. 
 	 * First file name is the mean vector, second file name is the ZCA matrix.
 	 * 
-	 * @param filename File name.
+	 * @param pathPrefix Path prefix to save the pre-processing variables.
 	 * @param sc Spark context variable.
 	 **/
-	public void saveToFile(String filename, JavaSparkContext sc);
+	public void saveToFile(String pathPrefix, JavaSparkContext sc);
 	
 }

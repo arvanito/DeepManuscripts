@@ -68,11 +68,10 @@ public interface DeepLearningLayer {
 	 * Main method that performs a complete test pass through the data for the current layer.
 	 *
 	 * @param data Input distributed dataset to perform testing over.
-	 * @param featFile Array of files to load the trained model from.
 	 * @return Output pooled representations for the current layer.
 	 * @throws Exception Standard Exception object.
 	 */
-	 public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data,String[] featFile) throws Exception;
+	 public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data) throws Exception;
 	 
 	 
 	 /**

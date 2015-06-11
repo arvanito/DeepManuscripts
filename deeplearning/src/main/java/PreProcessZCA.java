@@ -260,17 +260,17 @@ public class PreProcessZCA implements PreProcessor {
 	 * Method that loads the pre-processing parameters from files.
 	 * First file name is the mean vector, second file name is the ZCA matrix.
 	 *  
-	 * @param filename Array of files that contain pre-processing variables.
+	 * @param pathPrefix Path prefix to load the pre-processing variables.
 	 * @param sc Spark context variable.
 	 **/
 	@Override
-	public void loadFromFile(String[] filename, JavaSparkContext sc) {
+	public void loadFromFile(String pathPrefix, JavaSparkContext sc) {
 
 		// first file name is the mean
-		mean = (DenseVector) LinAlgebraIOUtils.loadVectorFromObject(filename[0], sc);
+		mean = (DenseVector) LinAlgebraIOUtils.loadVectorFromObject(pathPrefix + "_mean", sc);
 		
 		// second file name is the ZCA
-		ZCA = (DenseMatrix) LinAlgebraIOUtils.loadMatrixFromObject(filename[1], sc);
+		ZCA = (DenseMatrix) LinAlgebraIOUtils.loadMatrixFromObject(pathPrefix + "_zca", sc);
 
 	}
 	
@@ -279,17 +279,17 @@ public class PreProcessZCA implements PreProcessor {
 	 * Saves the fields necessary to reconstruct a preprocessor object. 
 	 * First file name is the mean vector, second file name is the ZCA matrix.
 	 * 
-	 * @param filename File names.
+	 * @param pathPrefix Path prefix to save the pre-processing variables.
 	 * @param sc Spark context variable.
 	 **/
 	@Override
-	public void saveToFile(String filename, JavaSparkContext sc) {
+	public void saveToFile(String pathPrefix, JavaSparkContext sc) {
 
 		// first file name is the mean
-		LinAlgebraIOUtils.saveVectorToObject(this.mean, filename + "_mean", sc);
+		LinAlgebraIOUtils.saveVectorToObject(this.mean, pathPrefix + "_mean", sc);
 		
 		// second file name is the ZCA matrix
-		LinAlgebraIOUtils.saveMatrixToObject(this.ZCA, filename + "_zca", sc);
+		LinAlgebraIOUtils.saveMatrixToObject(this.ZCA, pathPrefix + "_zca", sc);
 	}
 }
 

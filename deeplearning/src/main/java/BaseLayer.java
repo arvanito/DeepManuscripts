@@ -155,7 +155,7 @@ public class BaseLayer implements DeepLearningLayer {
 			
 			// save the mean and ZCA variables
 			if (saveModel == true) {
-				preprocess.saveToFile(pathPrefix + "_preprocess_layer_" + layerIndex +"_" + System.currentTimeMillis(), sparkContext);
+				preprocess.saveToFile(pathPrefix + "_preprocess_layer_" + layerIndex + "_", sparkContext);
 			}
 		} else {
 			input1Preprocessed = input1;
@@ -170,7 +170,7 @@ public class BaseLayer implements DeepLearningLayer {
 		// learn the features and save them to a file
 		features = learnFeatures(input1Preprocessed);
 		if (saveModel == true) {
-			learn.saveToFile(features, pathPrefix + "_features_layer_" + layerIndex + "_" + System.currentTimeMillis(), sparkContext);
+			learn.saveToFile(features, pathPrefix + "_features_layer_" + layerIndex, sparkContext);
 		}
 		
 		// perform feature extraction
@@ -192,23 +192,23 @@ public class BaseLayer implements DeepLearningLayer {
 	 * Overriden method the performs a test pass through the data for the current layer.
 	 * 
 	 * @param data Input distributed dataset for the current layer.
-	 * @param featFile Array of input files that contain saved parameters of the trained model.
-	 * What is the convention here?
 	 * @throws Exception Standard Exception object.
 	 */
     @Override
-    public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data, String[] featFile) throws Exception {
+    public JavaRDD<Tuple2<Vector, Vector>> test(JavaRDD<Tuple2<Vector, Vector>> data) throws Exception {
     	
     	// TODO:: Make this more automatic!
     	int numPartitions = 400 * 4; 	// num-workers * cores_per_worker * succesive tasks
 
     	// setup the preprocessor
     	if (preprocess != null) {
-    		preprocess.loadFromFile(featFile, sparkContext); //this needs to be changed
+    		//pathPrefix + "_preprocess_layer_" + layerIndex +"_"
+    		preprocess.loadFromFile(pathPrefix + "_preprocess_layer_" + layerIndex + "_", sparkContext); //this needs to be changed
     	}
     	
     	// load the features from file
-    	Vector[] features = learn.loadFromFile(featFile[layerIndex+2], sparkContext);
+    	//pathPrefix + "_features_layer_" + layerIndex +"_"
+    	Vector[] features = learn.loadFromFile(pathPrefix + "_features_layer_" + layerIndex, sparkContext);
     	QuickSortVector.quickSort(features, 0, features.length-1);
     	
     	// perform feature extraction

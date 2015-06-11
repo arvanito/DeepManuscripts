@@ -171,7 +171,7 @@ public class FeatureExtractionTest implements Serializable {
 		
 		// create a MultiplyExtractor object
 		MultiplyExtractor multi = new MultiplyExtractor(conf);
-		multi.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
+		multi.setPreProcessZCA(preProcess.getMean(), preProcess.getZCA());
 		multi.setFeatures(vf);
 		
 		// call the feature extraction process
@@ -260,7 +260,7 @@ public class FeatureExtractionTest implements Serializable {
 		
 		// create a MultiplyExtractor object
 		ConvMultiplyExtractor multi = new ConvMultiplyExtractor(conf);
-		multi.setPreProcessZCA(preProcess.getZCA(), preProcess.getMean());
+		multi.setPreProcessZCA(preProcess.getMean(), preProcess.getZCA());
 		multi.setFeatures(vf);
 		
 		// call the feature extraction process
