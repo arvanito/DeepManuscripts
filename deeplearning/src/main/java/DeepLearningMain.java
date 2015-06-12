@@ -414,28 +414,40 @@ public class DeepLearningMain implements Serializable {
 	
 	
 
-	
+	/**
+	 * Method that checks if a required argument is provided in the command line.
+	 * 
+	 * @param options Options parsed.
+	 * @param necessaryFlag The required option.
+	 * @throws IllegalArgumentException
+	 */
 	private static void checkArgIsProvided(OptionSet options, String necessaryFlag) throws IllegalArgumentException {
 		 if (!options.hasArgument(necessaryFlag)) 
 			 throw new IllegalArgumentException("Missing necessary flag " + necessaryFlag);
 	}
 
+	
+	/**
+	 * Method that checks if the required option has a valid value.
+	 * 
+	 * @param value The input value from the command line.
+	 * @param l The list of valid values for the option.
+	 * @throws IllegalArgumentException
+	 */
 	private static void checkArgValueIsInList(String value, List<String> l) throws IllegalArgumentException {
 		if (l.contains(value) == false) 
 			throw new IllegalArgumentException("Invalid value " + value); // TODO Print possible values
 	}
 	
+	
 	/**
-	 * Main method.
+	 * Method that parses the input arguments from the command line and creates the necessary configuration objects.
 	 * 
-	 * @param args Input arguments.
-	 * @throws Exception Standard exception. 
+	 * @param args Input array of parameters from the command line.
+	 * @return A configuration object.
 	 */
-	public static void main(String[] args) throws Exception {
-		 
-		SparkConf conf = new SparkConf().setAppName("DeepManuscript testing");
-    	sc = new JavaSparkContext(conf);
-    	
+	private static DeepManuscriptConfig configure(String[] args) {
+		
 		// create the option parser and make it accept the input options
 		OptionParser parser = new OptionParser();
 		parser.accepts("help");
@@ -461,14 +473,14 @@ public class DeepLearningMain implements Serializable {
 	    );
 		
 		// check if the protobuf file exists
-	    String protobufFile = (String) options.valueOf("protobuf");
-	    File f = new File(protobufFile);
+	    String protoBufFile = (String) options.valueOf("protobuf");
+	    File f = new File(protoBufFile);
 	    if(!f.exists() || f.isDirectory()) {
 	    	throw new IllegalArgumentException("Protobuf file does not exist or is a directory."); 
 	    }
 	    
 	    // load protobuf configuration
-	    List<ConfigBaseLayer> globalConfig = loadSettings(protobufFile);
+	    List<ConfigBaseLayer> protoBufConfig = loadSettings(protoBufFile);
 	    
 		// check if we save the trained model
 		//TODO:: check if pathprefix is part of some directories
@@ -484,6 +496,7 @@ public class DeepLearningMain implements Serializable {
 		}
 		
 	    // depending on the running mode, we either train, test of rank
+		DeepManuscriptConfig config;
 	    switch (runningMode) {
         	case "train":
         		// in the "train" running mode, we require two datasets
@@ -491,17 +504,13 @@ public class DeepLearningMain implements Serializable {
         		checkArgIsProvided(options, "inputdataset2");
         		String inputDataset1 = (String) options.valueOf("inputdataset1");
         		String inputDataset2 = (String) options.valueOf("inputdataset2");
-
-        		// train the model
-        		train(globalConfig, inputDataset1, inputDataset2, pathPrefix);
+        		config = new DeepManuscriptConfig(runningMode, protoBufConfig, inputDataset1, inputDataset2, null, null, pathPrefix, pathPrefixTest);
         		break;
         	case "test":
         		// in the "test" mode, we require an input pathprefix and an input dataset
         		checkArgIsProvided(options, "testdataset");
         		String testFileTest = (String) options.valueOf("testdataset");
-
-        		//test the model
-        		test(globalConfig, testFileTest, pathPrefix, pathPrefixTest);
+        		config = new DeepManuscriptConfig(runningMode, protoBufConfig, null, null, null, testFileTest, pathPrefix, pathPrefixTest);
         		break;
         	case "rank":
         		// in the "rank" running mode, we have the same arguments as in the test, but 
@@ -510,13 +519,43 @@ public class DeepLearningMain implements Serializable {
         		checkArgIsProvided(options, "testdataset");
         		String queryFile = (String) options.valueOf("querydataset");
         		String testFileRank = (String) options.valueOf("testdataset");
-
-        		// rank
-        		rank(globalConfig, queryFile, testFileRank, pathPrefix, pathPrefixTest);
+        		config = new DeepManuscriptConfig(runningMode, protoBufConfig, null, null, queryFile, testFileRank, pathPrefix, pathPrefixTest);
         		break;
          
-        	default: break;
+        	default: 
+        		config = null;
+        		break;
 	    }
+	    
+	    return config;
+	}
+	
+	
+	/**
+	 * Main method.
+	 * 
+	 * @param args Input arguments.
+	 * @throws Exception Standard exception. 
+	 */
+	public static void main(String[] args) throws Exception {
+		 
+		SparkConf conf = new SparkConf().setAppName("DeepManuscript testing");
+    	sc = new JavaSparkContext(conf);
+    	
+    	// according to the running mode, run the corresponding method
+    	DeepManuscriptConfig config = configure(args);
+    	switch (config.getRunningMode()) {
+    		case "train":
+    			train(config.getProtoBufConfig(), config.getInputDataset1(), config.getInputDataset2(), config.getPathPrefixTrain());
+    			break;
+    		case "test":
+    			test(config.getProtoBufConfig(), config.getTestDataset(), config.getPathPrefixTrain(), config.getPathPrefixTest());
+    			break;
+    		case "rank":
+    			rank(config.getProtoBufConfig(), config.getQueryDataset(), config.getTestDataset(), config.getPathPrefixTrain(), config.getPathPrefixTest());
+    			break;
+    		default: break;
+    	}
 	}
 	
 }

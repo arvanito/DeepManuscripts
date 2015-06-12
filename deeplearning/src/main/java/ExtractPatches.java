@@ -22,6 +22,7 @@ public class ExtractPatches implements FlatMapFunction<Tuple2<Vector, Vector>	, 
 	private int[] vecSize;		// original size of the flat vector
 	private int[] patchSize; 	// patch size in each direction 
 	
+	
 	/**
 	 * Constructor to initialize vector and patch size.
 	 * 
@@ -33,7 +34,9 @@ public class ExtractPatches implements FlatMapFunction<Tuple2<Vector, Vector>	, 
 		this.patchSize = Arrays.copyOf(patchSize, patchSize.length);
 	}
 	
-	
+	/**
+	 * 
+	 */
 	@Override
 	public List<Tuple2<Vector,Vector>> call(Tuple2<Vector, Vector> v) {
 
