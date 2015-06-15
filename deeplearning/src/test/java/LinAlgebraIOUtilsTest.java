@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
-import main.java.LinAlgebraIOUtils;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -21,6 +20,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import ch.epfl.ivrl.deepmanuscripts.LinAlgebraIOUtils;
 
 public class LinAlgebraIOUtilsTest implements Serializable {
 	/**

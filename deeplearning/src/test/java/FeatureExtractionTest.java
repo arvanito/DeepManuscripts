@@ -5,16 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import main.java.ConvMultiplyExtractor;
-import main.java.DeepModelSettings.ConfigPreprocess;
-import main.java.MatrixOps;
-import main.java.DeepModelSettings.ConfigBaseLayer;
-import main.java.DeepModelSettings.ConfigFeatureExtractor;
-import main.java.DeepModelSettings.ConfigPooler;
-import main.java.DeepModelSettings.ConfigFeatureExtractor.NonLinearity;
-import main.java.MultiplyExtractor;
-import main.java.PreProcessZCA;
-
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.BLAS;
@@ -28,6 +18,15 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import ch.epfl.ivrl.deepmanuscripts.ConvMultiplyExtractor;
+import ch.epfl.ivrl.deepmanuscripts.MatrixOps;
+import ch.epfl.ivrl.deepmanuscripts.MultiplyExtractor;
+import ch.epfl.ivrl.deepmanuscripts.PreProcessZCA;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigBaseLayer;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigFeatureExtractor;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigPooler;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigPreprocess;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigFeatureExtractor.NonLinearity;
 import scala.Tuple2;
 
 public class FeatureExtractionTest implements Serializable {

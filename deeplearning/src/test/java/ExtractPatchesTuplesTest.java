@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.ComputeSimilarity;
-import main.java.ExtractPatchesOld;
-import main.java.ExtractPatches;
-
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
@@ -18,6 +14,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.epfl.ivrl.deepmanuscripts.ComputeSimilarity;
+import ch.epfl.ivrl.deepmanuscripts.ExtractPatches;
+import ch.epfl.ivrl.deepmanuscripts.ExtractPatchesOld;
 import scala.Tuple2;
 
 public class ExtractPatchesTuplesTest implements Serializable {

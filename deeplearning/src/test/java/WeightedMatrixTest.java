@@ -1,10 +1,10 @@
 package test.java;
 
-import main.java.KNearestNeighbor;
-
 import org.apache.spark.mllib.linalg.Matrix;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
+
+import ch.epfl.ivrl.deepmanuscripts.KNearestNeighbor;
 
 public class WeightedMatrixTest {
 

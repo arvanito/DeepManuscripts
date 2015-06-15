@@ -5,16 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import main.java.ContrastNormalization;
-import main.java.DeepModelSettings.ConfigFeatureExtractor;
-import main.java.DeepModelSettings.ConfigPooler;
-import main.java.MatrixOps;
-import main.java.PreProcessZCA;
-import main.java.PreProcessor;
-import main.java.SubtractMean;
-import main.java.DeepModelSettings.ConfigBaseLayer;
-import main.java.DeepModelSettings.ConfigPreprocess;
-
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.BLAS;
@@ -30,6 +20,15 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import ch.epfl.ivrl.deepmanuscripts.ContrastNormalization;
+import ch.epfl.ivrl.deepmanuscripts.MatrixOps;
+import ch.epfl.ivrl.deepmanuscripts.PreProcessZCA;
+import ch.epfl.ivrl.deepmanuscripts.PreProcessor;
+import ch.epfl.ivrl.deepmanuscripts.SubtractMean;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigBaseLayer;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigFeatureExtractor;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigPooler;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigPreprocess;
 import scala.Tuple2;
 
 public class PreProcessTest implements Serializable {

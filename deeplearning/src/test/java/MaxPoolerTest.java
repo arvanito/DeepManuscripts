@@ -7,11 +7,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-import main.java.DeepModelSettings.ConfigFeatureExtractor;
-import main.java.DeepModelSettings.ConfigPooler;
-import main.java.MaxPooler;
-import main.java.DeepModelSettings.ConfigBaseLayer;
-
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function2;
@@ -22,6 +17,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import ch.epfl.ivrl.deepmanuscripts.MaxPooler;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigBaseLayer;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigFeatureExtractor;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigPooler;
 
 /**
  * @author Viviana Petrescu

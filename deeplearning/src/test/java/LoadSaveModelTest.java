@@ -8,13 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
-import main.java.BaseLayerFactory;
-import main.java.DeepLearningLayer;
-import main.java.DeepModelSettings.ConfigBaseLayer;
-import main.java.DeepModelSettings.ConfigFeatureExtractor;
-import main.java.DeepModelSettings.ConfigKMeans;
-import main.java.DeepModelSettings.ConfigPooler;
-import main.java.DeepModelSettings.ConfigPreprocess;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -25,6 +18,13 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import ch.epfl.ivrl.deepmanuscripts.BaseLayerFactory;
+import ch.epfl.ivrl.deepmanuscripts.DeepLearningLayer;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigBaseLayer;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigFeatureExtractor;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigKMeans;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigPooler;
+import ch.epfl.ivrl.deepmanuscripts.DeepModelSettings.ConfigPreprocess;
 import scala.Tuple2;
 
 public class LoadSaveModelTest implements Serializable {
