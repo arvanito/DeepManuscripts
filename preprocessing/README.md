@@ -2,9 +2,7 @@
 
 ## Setup (by Benoit, on MacOS 10.9) ##
 
-Things are way simpler now!
-
-In the preprocessing directory, just run `mvn package`, this will download from [a repository I created](https://github.com/Atanahel/opencv-maven-repo) the jar and native library of OpenCV. Only the versions for MacOS-64 and Linux-64 are available though.
+In the preprocessing directory, run `mvn package`, this will download from [a repository I created](https://github.com/Atanahel/opencv-maven-repo) the jar and native library of OpenCV. Only the versions for MacOS-64 and Linux-64 are available though.
 
 The result is in `target` with the corresponding compiled self-sufficient jar containing native and jar dependencies.
 
@@ -35,6 +33,14 @@ When you program on your machine and you want to be able to debug/test etc... :
 1.  You should get some `part-*` files with the names of the images in the input folder and the number of pixels of each image.
 
 The IDE should get the jar from maven but needs help to find the native library hence the VM parameter.
+
+## Segment images ##
+
+Example on how to segment images on the cluster : 
+
+`spark-submit --master yarn-cluster --num-executors 300 --executor-memory 4g --class main.java.AndreaPipelineMain DeepManuscriptPreprocessing-0.0.1.jar /projects/deep-learning/data nouvelles/*/*  /projects/deep-learning/segmentation-output`
+
+This runs 300 executors on 4g of RAM each (necessary because of the heavy memory consumption of the binarization process). Incoming data is all the pages in the `nouvelles` sub-directory in the main data folder (`/projects/deep-learning/data`). The output is in `segmentation-output-cropped`, `segmentation-output-failed`, `segmentation-output-json`, and `segmentation-output-seg` for respectively the cropped pages, the pages where process failed, and the json description and image representation of successfull segmentation.
 
 ### Candidate Patch Extraction ###
 Example on how to extract patches from the manuscripts provided that the corresponding pages (tif images) and the JSON files are located on the cluster:
