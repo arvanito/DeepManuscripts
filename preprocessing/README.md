@@ -43,6 +43,7 @@ Example on how to segment images on the cluster :
 This runs 300 executors on 4g of RAM each (necessary because of the heavy memory consumption of the binarization process). Incoming data is all the pages in the `nouvelles` sub-directory in the main data folder (`/projects/deep-learning/data`). The output is in `segmentation-output-cropped`, `segmentation-output-failed`, `segmentation-output-json`, and `segmentation-output-seg` for respectively the cropped pages, the pages where process failed, and the json description and image representation of successfull segmentation.
 
 ### Candidate Patch Extraction ###
+
 Example on how to extract patches from the manuscripts provided that the corresponding pages (tif images) and the JSON files are located on the cluster:
 
 `spark-submit --class main.java.CandidatePatchesMain --master yarn-client --num-executors 100 --jars DeepManuscriptPreprocessing-0.0.1.jar original-DeepManuscriptPreprocessing-0.0.1.jar /projects/deep-learning/segmentation-output-cropped /projects/deep-learning/segmentation-output-json nouvelles/*/* /projects/deep-learning/patch_output/train/32X32/nouvelles`
