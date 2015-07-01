@@ -2,9 +2,7 @@
 
 ## Setup (by Benoit, on MacOS 10.9) ##
 
-Things are way simpler now!
-
-In the preprocessing directory, just run `mvn package`, this will download from [a repository I created](https://github.com/Atanahel/opencv-maven-repo) the jar and native library of OpenCV. Only the versions for MacOS-64 and Linux-64 are available though.
+In the preprocessing directory, run `mvn package`, this will download from [a repository I created](https://github.com/Atanahel/opencv-maven-repo) the jar and native library of OpenCV. Only the versions for MacOS-64 and Linux-64 are available though.
 
 The result is in `target` with the corresponding compiled self-sufficient jar containing native and jar dependencies.
 
@@ -36,13 +34,6 @@ When you program on your machine and you want to be able to debug/test etc... :
 
 The IDE should get the jar from maven but needs help to find the native library hence the VM parameter.
 
-### Candidate Patch Extraction ###
-Example on how to extract patches from the manuscripts provided that the corresponding pages (tif images) and the JSON files are located on the cluster:
-
-`spark-submit --class main.java.CandidatePatchesMain --master yarn-client --num-executors 100 --jars DeepManuscriptPreprocessing-0.0.1.jar original-DeepManuscriptPreprocessing-0.0.1.jar /projects/deep-learning/segmentation-output-cropped /projects/deep-learning/segmentation-output-json nouvelles/*/* /projects/deep-learning/patch_output/train/32X32/nouvelles`
-
-The first input argument is the path to the parent folder where manuscript pages are located (`/projects/deep-learning/segmentation-output-cropped`), the second argument is the path to the parent folder where json files are located (`/projects/deep-learning/segmentation-output-json`), the third argument is the directory regex, which is the same for both the manuscript pages and the json files (`nouvelles/*/*`) and the last argument is the path to the output folder where the extracted patches are produced as text file (`/projects/deep-learning/patch_output/train/32X32/nouvelles`). The code is run similarly for extracting patches of size 32X32 and 64x64.
-
 ### OpenCV compilation (DEPRECATED NOW) ###
 
 Because we need image processing tools, OpenCV is a very good choice. However we can not just add the library to the `pom.xml` of Maven (or if someone can find a way... tell me).
@@ -63,3 +54,19 @@ If you want to compile it yourself on Mac/Linux, you first need `cmake` and `ant
 1. `make -j8` to parallelize making process with 8 threads.
 
 You should have the jar as something like `opencv-build/bin/opencv-2411.jar` and the native library in `opencv-build/lib`.
+
+## Segment images ##
+
+Example on how to segment images on the cluster : 
+
+`spark-submit --master yarn-cluster --num-executors 300 --executor-memory 4g --class main.java.AndreaPipelineMain DeepManuscriptPreprocessing-0.0.1.jar /projects/deep-learning/data nouvelles/*/*  /projects/deep-learning/segmentation-output`
+
+This runs 300 executors on 4g of RAM each (necessary because of the heavy memory consumption of the binarization process). Incoming data is all the pages in the `nouvelles` sub-directory in the main data folder (`/projects/deep-learning/data`). The output is in `segmentation-output-cropped`, `segmentation-output-failed`, `segmentation-output-json`, and `segmentation-output-seg` for respectively the cropped pages, the pages where process failed, and the json description and image representation of successfull segmentation.
+
+## Candidate Patch Extraction ##
+
+Example on how to extract patches from the manuscripts provided that the corresponding pages (tif images) and the JSON files are located on the cluster:
+
+`spark-submit --class main.java.CandidatePatchesMain --master yarn-client --num-executors 100 --jars DeepManuscriptPreprocessing-0.0.1.jar original-DeepManuscriptPreprocessing-0.0.1.jar /projects/deep-learning/segmentation-output-cropped /projects/deep-learning/segmentation-output-json nouvelles/*/* /projects/deep-learning/patch_output/train/32X32/nouvelles`
+
+The first input argument is the path to the parent folder where manuscript pages are located (`/projects/deep-learning/segmentation-output-cropped`), the second argument is the path to the parent folder where json files are located (`/projects/deep-learning/segmentation-output-json`), the third argument is the directory regex, which is the same for both the manuscript pages and the json files (`nouvelles/*/*`) and the last argument is the path to the output folder where the extracted patches are produced as text file (`/projects/deep-learning/patch_output/train/32X32/nouvelles`). The code is run similarly for extracting patches of size 32X32 and 64x64.
